@@ -20,16 +20,6 @@
       </div>
     </header>
 
-    <section class="sl-readiness" aria-label="SoundLab component readiness" aria-live="polite">
-      <div id="sl-ready-manifest" class="sl-ready waiting"><span>Manifest</span><strong>loading</strong><small>SoundLab project data</small></div>
-      <div id="sl-ready-rom" class="sl-ready waiting"><span>RDX ROM</span><strong>checking</strong><small>shared verified ROM</small></div>
-      <div id="sl-ready-native" class="sl-ready waiting"><span>Native/WASM</span><strong>not started</strong><small>authoritative runtime</small></div>
-      <div id="sl-ready-audio" class="sl-ready waiting"><span>Browser audio</span><strong>locked</strong><small>gesture required</small></div>
-      <div id="sl-ready-service" class="sl-ready waiting"><span>Authoring service</span><strong>not configured</strong><small>optional canonical authoring</small></div>
-      <div id="sl-ready-canonical" class="sl-ready waiting"><span>Canonical build</span><strong>not connected</strong><small>optional production outputs</small></div>
-      <div id="sl-ready-scene" class="sl-ready waiting"><span>Native scene</span><strong>waiting</strong><small>binding fixture</small></div>
-    </section>
-
     <section class="sl-layout">
       <aside class="sl-cases panel">
         <div class="panel-title"><span>Cases</span><small id="sl-case-count"></small></div>
@@ -38,6 +28,41 @@
       </aside>
 
       <section class="sl-main">
+        <section id="sl-native-panel" class="panel preview-panel" data-collapsed="false">
+          <div class="panel-title native-title">
+            <div><span>Native context</span><small id="sl-native-status">Not started</small></div>
+            <div class="panel-actions">
+              <button id="sl-play-isolated" title="Audition the current isolated sound">Isolated</button>
+              <button id="sl-replay-draft" disabled title="Replay the native scene with the current draft replacing the promoted SoundLab cue">Draft in scene</button>
+              <button id="sl-replay-context" disabled title="Replay the native scene with the promoted/native SoundLab cue">Native in scene</button>
+              <button id="sl-reset-native">Reset</button>
+              <button id="sl-start-native" class="primary">Start</button>
+              <button id="sl-toggle-native" aria-expanded="false" aria-controls="sl-native-body">Hide</button>
+            </div>
+          </div>
+          <div id="sl-native-body" class="preview-body">
+            <div class="scene-stage">
+              <canvas id="sl-native-canvas" width="640" height="480" tabindex="0" aria-label="Native game preview"></canvas>
+              <canvas id="sl-scene-overlay" width="640" height="480" aria-hidden="true"></canvas>
+              <button id="sl-scene-contact" class="scene-contact" type="button" hidden aria-label="Select semantic contact event" title="Select semantic contact"></button>
+            </div>
+            <div class="scene-readout">
+              <div><strong id="sl-scene-title">Watch the scene</strong><small id="sl-scene-motion">Capture the semantic event to extract object motion.</small><small id="sl-scene-script" class="scene-script">Scene timing will appear here.</small></div>
+              <output id="sl-event-readout">No captured event</output>
+            </div>
+            <div class="scene-window">
+              <span>Sound interval</span>
+              <div id="sl-scene-window" class="scene-window-track" aria-label="Scene audition window">
+                <span id="sl-scene-selection" class="scene-selection"></span>
+                <i id="sl-event-marker" class="scene-proof" title="Semantic contact"></i>
+                <button id="sl-scene-start" class="scene-handle start" aria-label="Scene start frame"></button>
+                <button id="sl-scene-end" class="scene-handle end" aria-label="Scene end frame"></button>
+              </div>
+              <output id="sl-scene-window-readout">Waiting for scene</output>
+            </div>
+          </div>
+        </section>
+
         <section class="panel waveform-panel">
           <div class="panel-title waveform-title">
             <div><span>Audition</span><small id="sl-waveform-caption">Current browser preview</small></div>
@@ -55,43 +80,6 @@
             <span id="sl-metric-peak">peak —</span>
             <span id="sl-metric-rate">—</span>
             <span id="sl-metric-hash">hash —</span>
-          </div>
-        </section>
-
-        <section id="sl-native-panel" class="panel preview-panel" data-collapsed="false">
-          <div class="panel-title native-title">
-            <div><span>Native context</span><small id="sl-native-status">Not started</small></div>
-            <div class="panel-actions">
-              <button id="sl-play-isolated" title="Audition the current isolated sound">Isolated</button>
-              <button id="sl-replay-context" disabled title="Replay from just before the selected native event">Replay event</button>
-              <button id="sl-scene-pause" disabled>Pause</button>
-              <button id="sl-reset-native" disabled>Restart</button>
-              <button id="sl-start-native" class="primary" disabled>Start scene</button>
-              <button id="sl-toggle-native" aria-expanded="true" aria-controls="sl-native-body">Hide</button>
-            </div>
-          </div>
-          <div id="sl-native-body" class="preview-body">
-            <div class="native-setup">
-              <div class="rom-state"><strong id="sl-rom-state">RDX ROM not loaded</strong><small id="sl-rom-detail">Load Rick_Dangerous_DX_1.3.bin once; it is shared with Workbench and Level Editor.</small></div>
-              <label class="native-file-button">Load ROM<input id="sl-rom-file" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream"></label>
-              <button id="sl-rom-folder" type="button" hidden>Connect ROM folder</button>
-            </div>
-            <div class="scene-toolbar">
-              <div><strong id="sl-scene-name">No scene</strong><small id="sl-scene-status">Waiting for ROM</small></div>
-              <div class="scene-actions"><label class="loop-toggle"><input id="sl-scene-loop" type="checkbox" checked> Loop</label><button id="sl-scene-current" class="active" aria-pressed="true">Current draft</button><button id="sl-scene-native" aria-pressed="false">Promoted/native</button></div>
-            </div>
-            <canvas id="sl-native-canvas" width="320" height="200" tabindex="0" aria-label="Native game preview"></canvas>
-            <div class="live-route"><span id="sl-live-route">Native fallback</span><span id="sl-draft-revision">draft r0</span><button id="sl-export-draft">Export draft</button><label class="draft-import">Import draft<input id="sl-import-draft" type="file" accept="application/json,.json"></label></div>
-            <div class="timeline">
-              <span>scene window</span>
-              <div id="sl-event-timeline" class="timeline-track" aria-label="Native scene preview window">
-                <span id="sl-window-range" class="timeline-range"></span>
-                <button id="sl-window-start" class="timeline-handle start" aria-label="Preview window start" disabled></button>
-                <button id="sl-window-end" class="timeline-handle end" aria-label="Preview window end" disabled></button>
-                <i id="sl-event-marker"></i>
-              </div>
-              <output id="sl-event-readout">Play once to unlock trim handles</output>
-            </div>
           </div>
         </section>
 
@@ -120,22 +108,60 @@
         </div>
 
         <div class="author-fields focus-fields">
-          <div class="scene-sound-brief">
-            <span>Sound applies to</span><strong id="sl-brief-object">Scene object</strong>
-            <p id="sl-scene-read">Start the native scene to read its motion and contact.</p><p id="sl-sound-color" class="sound-color">Sound color: solid · deep · rocky · hard · medium ring</p>
-          </div>
           <div class="control-row" data-control="material">
-            <label>What does it hit?<select id="sl-material" aria-label="Surface material"></select></label><button class="reset-control" data-reset="material" title="Reset material">↺</button>
+            <label>Contact material<select id="sl-material"></select></label><button class="reset-control" data-reset="material" title="Reset material">↺</button>
           </div>
-          <div class="control-row" data-control="strength">
-            <label>Impact energy <span class="plain-hint">gentle → forceful</span>
-              <div class="range-row"><div id="sl-strength-surface" class="sl-range-surface" data-soundlab-essential="strength"><input id="sl-strength" type="range" min="0" max="1" step="0.01" aria-label="Impact energy"></div><output id="sl-strength-out"></output></div>
-            </label><button class="reset-control" data-reset="strength" title="Reset impact energy">↺</button>
+          <div class="control-row" data-control="energy">
+            <label><span id="sl-energy-label">Impact energy</span>
+              <div class="range-row"><div id="sl-energy-surface" class="sl-range-surface" data-soundlab-essential="energy"><input id="sl-energy" type="range" min="0" max="1" step="0.01" aria-label="Impact energy"></div><output id="sl-energy-out"></output></div>
+              <small class="range-ends"><span>gentle</span><span>forceful</span></small>
+            </label><button class="reset-control" data-reset="energy" title="Reset impact energy">↺</button>
           </div>
-          <div class="control-row" data-control="size"><label>Weight / depth <span class="plain-hint">lighter → deeper</span><div class="mini-range"><input id="sl-size" type="range" min="0.6" max="1.4" step="0.01"><output id="sl-size-out"></output></div></label><button class="reset-control" data-reset="size">↺</button></div>
-          <div class="control-row" data-control="roughness"><label>Rocky texture <span class="plain-hint">smooth → rough</span><div class="mini-range"><input id="sl-roughness" type="range" min="0" max="1" step="0.01"><output id="sl-roughness-out"></output></div></label><button class="reset-control" data-reset="roughness">↺</button></div>
-          <div class="control-row" data-control="hardness"><label>Attack <span class="plain-hint">soft → sharp</span><div class="mini-range"><input id="sl-hardness" type="range" min="0" max="1" step="0.01"><output id="sl-hardness-out"></output></div></label><button class="reset-control" data-reset="hardness">↺</button></div>
-          <div class="control-row" data-control="damping"><label>Ring / tail <span class="plain-hint">short → ringing</span><div class="mini-range"><input id="sl-damping" type="range" min="0.6" max="1.6" step="0.01"><output id="sl-damping-out"></output></div></label><button class="reset-control" data-reset="damping">↺</button></div>
+          <div class="control-row" data-control="depth">
+            <label>Weight / depth
+              <div class="range-row"><div id="sl-depth-surface" class="sl-range-surface"><input id="sl-depth" type="range" min="0" max="1" step="0.01" aria-label="Weight and depth"></div><output id="sl-depth-out"></output></div>
+              <small class="range-ends"><span>light · thin</span><span>heavy · deep</span></small>
+            </label><button class="reset-control" data-reset="depth" title="Reset weight and depth">↺</button>
+          </div>
+          <div class="control-row" data-control="texture">
+            <label>Rocky texture
+              <div class="range-row"><div id="sl-texture-surface" class="sl-range-surface"><input id="sl-texture" type="range" min="0" max="1" step="0.01" aria-label="Rocky texture"></div><output id="sl-texture-out"></output></div>
+              <small class="range-ends"><span>smooth</span><span>rocky · rough</span></small>
+            </label><button class="reset-control" data-reset="texture" title="Reset texture">↺</button>
+          </div>
+          <div class="control-row" data-control="attack">
+            <label>Attack
+              <div class="range-row"><div id="sl-attack-surface" class="sl-range-surface"><input id="sl-attack" type="range" min="0" max="1" step="0.01" aria-label="Attack hardness"></div><output id="sl-attack-out"></output></div>
+              <small class="range-ends"><span>soft · rounded</span><span>hard · sharp</span></small>
+            </label><button class="reset-control" data-reset="attack" title="Reset attack">↺</button>
+          </div>
+          <div class="control-row" data-control="ring">
+            <label>Ring / tail
+              <div class="range-row"><div id="sl-ring-surface" class="sl-range-surface"><input id="sl-ring" type="range" min="0" max="1" step="0.01" aria-label="Ring and tail"></div><output id="sl-ring-out"></output></div>
+              <small class="range-ends"><span>short · dead</span><span>ringing · long</span></small>
+            </label><button class="reset-control" data-reset="ring" title="Reset ring and tail">↺</button>
+          </div>
+          <details class="tone-space" data-persist-key="tone-space">
+            <summary>Color & space <small>plain-language tone</small></summary>
+            <div class="tone-space-grid">
+              <div class="control-row" data-control="boominess"><label>Boom / punch<div class="range-row"><div id="sl-boominess-surface" class="sl-range-surface"><input id="sl-boominess" type="range" min="0" max="1" step="0.01" aria-label="Boom and punch"></div><output id="sl-boominess-out"></output></div><small class="range-ends"><span>tight</span><span>boomy</span></small></label><button class="reset-control" data-reset="boominess" title="Reset boom and punch">↺</button></div>
+              <div class="control-row" data-control="brightness"><label>Brightness<div class="range-row"><div id="sl-brightness-surface" class="sl-range-surface"><input id="sl-brightness" type="range" min="0" max="1" step="0.01" aria-label="Brightness"></div><output id="sl-brightness-out"></output></div><small class="range-ends"><span>dark · dull</span><span>bright · crisp</span></small></label><button class="reset-control" data-reset="brightness" title="Reset brightness">↺</button></div>
+              <div class="control-row" data-control="warmth"><label>Warmth<div class="range-row"><div id="sl-warmth-surface" class="sl-range-surface"><input id="sl-warmth" type="range" min="0" max="1" step="0.01" aria-label="Warmth"></div><output id="sl-warmth-out"></output></div><small class="range-ends"><span>cold</span><span>warm</span></small></label><button class="reset-control" data-reset="warmth" title="Reset warmth">↺</button></div>
+              <div class="control-row" data-control="space"><label>Room / echo<div class="range-row"><div id="sl-space-surface" class="sl-range-surface"><input id="sl-space" type="range" min="0" max="1" step="0.01" aria-label="Room and echo"></div><output id="sl-space-out"></output></div><small class="range-ends"><span>dry · close</span><span>roomy · echoing</span></small></label><button class="reset-control" data-reset="space" title="Reset room and echo">↺</button></div>
+            </div>
+          </details>
+          <p id="sl-sound-summary" class="sound-summary">Sound color will appear here.</p>
+          <details class="describe-sound" data-persist-key="describe-sound">
+            <summary>Describe a change <small>optional · constrained</small></summary>
+            <div class="describe-sound-body">
+              <textarea id="sl-description" rows="2" placeholder="Make it heavier and deeper, but less ringy."></textarea>
+              <div class="describe-sound-actions"><button id="sl-apply-description" type="button">Apply description</button><small id="sl-description-result">Changes map to the visible controls and scene window.</small></div>
+            </div>
+          </details>
+          <div class="author-pair">
+            <label>Current seed<input id="sl-seed" type="number" min="1" max="4294967295" step="1"></label>
+            <label>Promoted variant<select id="sl-variant"></select></label>
+          </div>
         </div>
 
         <details id="sl-expert" class="expert" data-persist-key="expert">
@@ -143,19 +169,21 @@
           <div class="expert-sections">
             <details open data-persist-key="expert-object"><summary>Object & contact</summary><div class="expert-grid">
               <div class="control-row" data-control="object"><label>Object profile<select id="sl-object-profile"></select></label><button class="reset-control" data-reset="object">↺</button></div>
+              <div class="control-row" data-control="size"><label>Size / mass <div class="mini-range"><input id="sl-size" type="range" min="0.6" max="1.4" step="0.01"><output id="sl-size-out"></output></div></label><button class="reset-control" data-reset="size">↺</button></div>
+              <div class="control-row" data-control="roughness"><label>Roughness <div class="mini-range"><input id="sl-roughness" type="range" min="0" max="1" step="0.01"><output id="sl-roughness-out"></output></div></label><button class="reset-control" data-reset="roughness">↺</button></div>
             </div></details>
             <details data-persist-key="expert-transient"><summary>Transient & body</summary><div class="expert-grid">
+              <div class="control-row" data-control="hardness"><label>Hardness <div class="mini-range"><input id="sl-hardness" type="range" min="0" max="1" step="0.01"><output id="sl-hardness-out"></output></div></label><button class="reset-control" data-reset="hardness">↺</button></div>
               <div class="control-row" data-control="transient"><label>Transient balance <div class="mini-range"><input id="sl-transient" type="range" min="0" max="1.2" step="0.01"><output id="sl-transient-out"></output></div></label><button class="reset-control" data-reset="transient">↺</button></div>
               <div class="control-row" data-control="body"><label>Body balance <div class="mini-range"><input id="sl-body" type="range" min="0" max="1.2" step="0.01"><output id="sl-body-out"></output></div></label><button class="reset-control" data-reset="body">↺</button></div>
               <div class="control-row" data-control="residual"><label>Residual balance <div class="mini-range"><input id="sl-residual" type="range" min="0" max="1.2" step="0.01"><output id="sl-residual-out"></output></div></label><button class="reset-control" data-reset="residual">↺</button></div>
+              <div class="control-row" data-control="damping"><label>Modal damping <div class="mini-range"><input id="sl-damping" type="range" min="0.6" max="1.6" step="0.01"><output id="sl-damping-out"></output></div></label><button class="reset-control" data-reset="damping">↺</button></div>
             </div></details>
             <details data-persist-key="expert-style"><summary>Style & variation</summary><div class="expert-grid">
               <div class="control-row" data-control="style"><label>Style profile<select id="sl-style-profile"></select></label><button class="reset-control" data-reset="style">↺</button></div>
               <div class="control-row" data-control="style-amount"><label>Style amount <div class="mini-range"><input id="sl-style-amount" type="range" min="0" max="1.5" step="0.01"><output id="sl-style-amount-out"></output></div></label><button class="reset-control" data-reset="style-amount">↺</button></div>
               <div class="control-row" data-control="variants"><label>Variant count<input id="sl-variant-count" type="number" min="1" max="16" step="1"></label><button class="reset-control" data-reset="variants">↺</button></div>
               <div class="control-row" data-control="covariance"><label>Variation covariance <div class="mini-range"><input id="sl-covariance" type="range" min="0" max="2" step="0.05"><output id="sl-covariance-out"></output></div></label><button class="reset-control" data-reset="covariance">↺</button></div>
-              <label>Current seed<input id="sl-seed" type="number" min="1" max="4294967295" step="1"></label>
-              <label>Promoted variant<select id="sl-variant"></select></label>
               <div class="snapshot-bar"><span>Parameter A/B</span><button data-snapshot-save="A">Store A</button><button data-snapshot-load="A">Recall A</button><button data-snapshot-save="B">Store B</button><button data-snapshot-load="B">Recall B</button></div>
             </div></details>
             <details data-persist-key="expert-source"><summary>Source material</summary><div class="expert-grid">

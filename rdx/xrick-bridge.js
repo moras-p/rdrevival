@@ -129,6 +129,8 @@ export class XrickWasmBridge {
       soundSpatial: wrap0('xrick_rdx_sound_spatial'),
       soundSetSpatial: wrap1('xrick_rdx_sound_set_spatial'),
       soundLabEventSerial: wrap0('xrick_rdx_soundlab_event_serial'),
+      soundLabSetRuntimeSuppressed: wrap1('xrick_rdx_soundlab_set_runtime_suppressed', null),
+      soundLabRuntimeSuppressed: wrap0('xrick_rdx_soundlab_runtime_suppressed'),
       soundLabEventId: wrap1('xrick_rdx_soundlab_event_id'),
       soundLabEventTick: wrap1('xrick_rdx_soundlab_event_tick'),
       soundLabEventSubmap: wrap1('xrick_rdx_soundlab_event_submap'),
@@ -1472,6 +1474,14 @@ export class XrickWasmBridge {
 
   clearSoundLabEventSuppressions() { this.api.soundLabClearEventSuppressions(); }
 
+  setSoundLabRuntimeSuppressed(suppressed) {
+    this.api.soundLabSetRuntimeSuppressed(suppressed ? 1 : 0);
+  }
+
+  soundLabRuntimeSuppressed() {
+    return !!this.api.soundLabRuntimeSuppressed();
+  }
+
   soundLabEventsSince(afterSerial = 0, maxEvents = 64) {
     const latest = this.soundLabEventSerial();
     let cursor = Number(afterSerial) >>> 0;
@@ -1480,7 +1490,7 @@ export class XrickWasmBridge {
     if (!cursor || distance > 64) cursor = (latest - Math.min(64, latest)) >>> 0;
     const out = [];
     const limit = Math.max(1, Math.min(64, Number(maxEvents) || 64));
-    const eventNames = { 1: 'boulder.impact' };
+    const eventNames = { 1: 'boulder.impact', 2: 'boulder.roll' };
     while (cursor !== latest && out.length < limit) {
       cursor = (cursor + 1) >>> 0;
       const eventId = this.api.soundLabEventId(cursor) >>> 0;
