@@ -20,6 +20,27 @@ export function resourceOptions(manifest, kind) {
 export function materialOptions(manifest) { return resourceOptions(manifest,'materials'); }
 export function sourceOptions(manifest) { return [...(manifest.previewModel?.sources || [])].sort((a,b)=>String(a.id).localeCompare(String(b.id))); }
 
+
+export const PERCEPTUAL_FINGERPRINT_AXES=Object.freeze(['depth','hardness','roughness','boominess','brightness','warmth','ring','reverberance']);
+function fingerprintRmsRange(samples,start,end){let sum=0,count=0;const a=Math.max(0,Math.min(samples.length,Math.floor(start))),b=Math.max(a,Math.min(samples.length,Math.floor(end)));for(let i=a;i<b;i+=1){const x=Number(samples[i])||0;sum+=x*x;count+=1;}return Math.sqrt(sum/Math.max(1,count));}
+function fingerprintLowpassEnergy(samples,sampleRate,cutoffHz){const alpha=1-Math.exp(-2*Math.PI*Math.max(1,cutoffHz)/Math.max(1,sampleRate));let low=0,lowEnergy=0,highEnergy=0;for(let i=0;i<samples.length;i+=1){const x=Number(samples[i])||0;low+=alpha*(x-low);const high=x-low;lowEnergy+=low*low;highEnergy+=high*high;}return{low:lowEnergy/Math.max(1,samples.length),high:highEnergy/Math.max(1,samples.length)};}
+/** Browser parity copy of the canonical reference-navigation fingerprint. */
+export function perceptualFingerprint(samples,sampleRate){
+  const n=Math.max(1,samples?.length||0);if(!samples?.length)return Object.fromEntries(PERCEPTUAL_FINGERPRINT_AXES.map(axis=>[axis,0]));
+  let sum=0,zcr=0,prev=Number(samples[0])||0,onset=-1,last=-1,derivative=0;const threshold=.008;
+  for(let i=0;i<samples.length;i+=1){const x=Number(samples[i])||0,a=Math.abs(x);sum+=x*x;if(onset<0&&a>=threshold)onset=i;if(a>=threshold)last=i;if((x>=0)!==(prev>=0))zcr+=1;if(i){const d=x-prev;derivative+=d*d;}prev=x;}
+  const rms=Math.sqrt(sum/n),total=Math.max(1e-12,rms*rms),durationMs=(last>=onset&&onset>=0)?(last-onset+1)*1000/sampleRate:0,zeroCrossingRate=zcr/n;
+  derivative/=Math.max(1,n-1);const low300=fingerprintLowpassEnergy(samples,sampleRate,300),low1200=fingerprintLowpassEnergy(samples,sampleRate,1200),low2600=fingerprintLowpassEnergy(samples,sampleRate,2600),start=onset<0?0:onset,earlyEnd=Math.min(n,start+Math.max(1,Math.round(sampleRate*.045))),bodyEnd=Math.min(n,start+Math.max(1,Math.round(sampleRate*.18))),lateStart=Math.min(n,start+Math.max(1,Math.round((n-start)*.55))),early=fingerprintRmsRange(samples,start,earlyEnd),body=fingerprintRmsRange(samples,earlyEnd,bodyEnd),late=fingerprintRmsRange(samples,lateStart,n),lowRatio=Math.max(0,Math.min(1,low300.low/total)),midRatio=Math.max(0,Math.min(1,(low1200.low-low300.low)/total)),highRatio=Math.max(0,Math.min(1,low2600.high/total)),earlyRatio=Math.max(0,Math.min(4,(early*early)/(total+1e-12))),lateRatio=Math.max(0,Math.min(4,(late*late)/(total+1e-12))),bodyRatio=Math.max(0,Math.min(4,(body*body)/(total+1e-12))),brightness=Math.max(0,Math.min(1,Math.sqrt(highRatio)*1.12)),depth=Math.max(0,Math.min(1,.18+Math.sqrt(lowRatio)*.92-brightness*.26)),hardness=Math.max(0,Math.min(1,.12+Math.sqrt(earlyRatio)*.48+Math.sqrt(derivative/total)*.12)),roughness=Math.max(0,Math.min(1,zeroCrossingRate*5.2+Math.sqrt(Math.min(4,derivative/total))*.18)),boominess=Math.max(0,Math.min(1,Math.sqrt(lowRatio)*(.58+.3*Math.min(1,lateRatio)))),warmth=Math.max(0,Math.min(1,.2+Math.sqrt(Math.max(0,Math.min(1,lowRatio+midRatio*.7)))*.85-brightness*.28)),ring=Math.max(0,Math.min(1,Math.sqrt(lateRatio)*.7+Math.sqrt(Math.min(1,bodyRatio))*.12)),reverberance=Math.max(0,Math.min(1,Math.sqrt(lateRatio)*.55+(durationMs/Math.max(80,n*1000/sampleRate))*.18));
+  return Object.fromEntries(Object.entries({depth,hardness,roughness,boominess,brightness,warmth,ring,reverberance}).map(([key,value])=>[key,Number(value.toFixed(4))]));
+}
+export function fingerprintDistance(a,b,axes=PERCEPTUAL_FINGERPRINT_AXES){let sum=0,count=0;for(const axis of axes){if(!Number.isFinite(Number(a?.[axis]))||!Number.isFinite(Number(b?.[axis])))continue;const d=Number(a[axis])-Number(b[axis]);sum+=d*d;count+=1;}return count?Math.sqrt(sum/count):Infinity;}
+export function referenceLibrary(manifest){
+  const bindings=new Map((manifest?.bindings||[]).map(row=>[row.id,row]));
+  const promoted=(manifest?.outputs||[]).filter(row=>row.profile==='master'&&row.fingerprint).map(row=>({...row,kind:'promoted',label:`${bindings.get(row.binding)?.event||row.binding} · v${Number(row.variant)+1}`}));
+  const sources=(manifest?.previewModel?.sources||[]).filter(row=>row.fingerprint).map(row=>({...row,kind:'source',label:`${row.id} · ${row.role}`}));
+  return [...promoted,...sources];
+}
+
 export function environmentForBinding(manifest, binding) {
   const environments=manifest.previewModel?.environments||{};
   const submap=String(Number(binding?.match?.submap ?? -1));
@@ -198,7 +219,7 @@ function pathDistance(path,startFrame,endFrame){
 function playbackKind(recipe={}){
   const explicit=String(recipe.playback?.kind||'');
   if(['one-shot','repeated','looped','continuous'].includes(explicit))return explicit;
-  return ['roll','slide','scrape','mechanism'].includes(String(recipe.generator||''))?'continuous':'one-shot';
+  return ['roll','slide','scrape','mechanism','emitter'].includes(String(recipe.generator||''))?'continuous':'one-shot';
 }
 
 function directionOf(vector){

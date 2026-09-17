@@ -65,7 +65,7 @@ function sceneSegments(path, proofFrame, facts, action = 'impact') {
   const contactFrame = contact.frameSerial;
   const rows = [];
   if (first < contactFrame) rows.push({ id:'approach', label:'approach', startFrame:first, endFrame:contactFrame });
-  if (['roll','slide','scrape','mechanism'].includes(String(action))) {
+  if (['roll','slide','scrape','mechanism','emitter'].includes(String(action))) {
     if (contactFrame < last) rows.push({ id:String(action), label:String(action), startFrame:contactFrame, endFrame:last });
     return rows;
   }

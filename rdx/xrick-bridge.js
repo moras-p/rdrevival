@@ -1490,7 +1490,19 @@ export class XrickWasmBridge {
     if (!cursor || distance > 64) cursor = (latest - Math.min(64, latest)) >>> 0;
     const out = [];
     const limit = Math.max(1, Math.min(64, Number(maxEvents) || 64));
-    const eventNames = { 1: 'boulder.impact', 2: 'boulder.roll' };
+    const eventNames = {
+      1: 'boulder.impact',
+      2: 'boulder.roll',
+      3: 'player.step',
+      4: 'player.land',
+      5: 'projectile.launch',
+      6: 'dynamite.explosion',
+      7: 'platform.mechanism',
+      8: 'projectile.impact',
+      9: 'emitter.fire',
+      10: 'enemy.hit',
+      11: 'player.scrape'
+    };
     while (cursor !== latest && out.length < limit) {
       cursor = (cursor + 1) >>> 0;
       const eventId = this.api.soundLabEventId(cursor) >>> 0;

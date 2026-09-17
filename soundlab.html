@@ -83,6 +83,24 @@
           </div>
         </section>
 
+        <details class="panel reference-panel" data-persist-key="references">
+          <summary class="panel-title"><span>Reference sound color</span><small>approved library · perceptual axes</small></summary>
+          <div class="reference-body">
+            <div class="reference-toolbar">
+              <label>X axis<select id="sl-reference-axis-x" aria-label="Reference map horizontal axis"></select></label>
+              <label>Y axis<select id="sl-reference-axis-y" aria-label="Reference map vertical axis"></select></label>
+              <span id="sl-reference-current">Current draft fingerprint</span>
+            </div>
+            <canvas id="sl-reference-map" width="900" height="260" aria-label="Perceptual reference sound map"></canvas>
+            <div class="reference-selection">
+              <div><strong id="sl-reference-title">Choose a promoted sound or imported reference</strong><small id="sl-reference-delta">Nearest approved sounds update with the current draft.</small></div>
+              <div><button id="sl-reference-play" disabled>Play reference</button><button id="sl-reference-match" disabled>Match color</button></div>
+            </div>
+            <div id="sl-reference-nearest" class="reference-nearest" aria-label="Nearest sound references"></div>
+            <p class="sl-help">Matching changes only the explicit timbre controls (depth, hardness, roughness, boom, brightness, warmth, ring and room). Material, event timing and motion remain authoritative scene choices.</p>
+          </div>
+        </details>
+
         <details class="panel capture-panel" data-persist-key="diagnostics">
           <summary class="panel-title"><span>Telemetry & diagnostics</span><small>collapsed</small></summary>
           <div class="diagnostics-body">

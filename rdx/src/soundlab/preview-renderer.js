@@ -27,6 +27,7 @@ function sceneConditionedImpactStrength(strength,recipe,telemetry,binding=null){
   const ratio=clamp(Math.hypot(dx,dy)/reference,0,2),factor=(1-influence)+influence*Math.sqrt(ratio);
   return clamp(Number(strength)*factor,0,1);
 }
+function motionStrengthFactor(strength,recipe={}){const reference=Number(recipe?.mapping?.strengthReference??0),influence=clamp(Number(recipe?.mapping?.strengthInfluence??0),0,1);if(!(reference>0)||!(influence>0))return 1;return Math.pow(clamp(Number(strength??reference)/reference,0,2),influence);}
 function finishPreview(out,sampleRate,style={},environment=null,perceptual={}){
   applyEnvironment(out,sampleRate,environment||{},perceptual);highpass(out,Number(style.finishing?.highpassHz??22),sampleRate);lowpass(out,Number(style.finishing?.lowpassHz??sampleRate*.48),sampleRate);
   const drive=Number(style.finishing?.drive??1),clip=Number(style.finishing?.softClip??.75),master=Number(style.finishing?.masterGain??.9);let peak=0;
@@ -49,15 +50,15 @@ export function renderImpactPreview({sampleRate=48000,strength=.7,seed=1,materia
   return {samples:out,sampleRate};
 }
 
-export function renderRollPreview({sampleRate=48000,seed=1,material,object,recipe,style,environment=null,telemetry=[]}){
+export function renderRollPreview({sampleRate=48000,strength=.7,seed=1,material,object,recipe,style,environment=null,telemetry=[]}){
   const length=Math.max(1,Math.ceil(sampleRate*Number(recipe.durationMs||1000)/1000)),out=new Float32Array(length),rng=new Rng(seed),perceptual=perceptualState(recipe),ticks=telemetryMotionRows(telemetry);
   if(!ticks.length)return{samples:out,sampleRate,contacts:0};
-  const rough=clamp(Number(material.contact?.roughness??.5),0,1),speedRef=Math.max(.1,Number(recipe.mapping?.speedReference??4)),densityScale=Number(recipe.mapping?.contactDensity??6),maxContacts=Number(recipe.advanced?.maxContactsPerSecond??90),microN=Math.max(1,Math.round(Number(recipe.advanced?.microImpactMs??45)*sampleRate/1000));
+  const rough=clamp(Number(material.contact?.roughness??.5),0,1),speedRef=Math.max(.1,Number(recipe.mapping?.speedReference??4)),densityScale=Number(recipe.mapping?.contactDensity??6),maxContacts=Number(recipe.advanced?.maxContactsPerSecond??90),microN=Math.max(1,Math.round(Number(recipe.advanced?.microImpactMs??45)*sampleRate/1000)),energyFactor=motionStrengthFactor(strength,recipe);
   const speedAt=time=>{let row=ticks[0];for(const candidate of ticks){if(Number(candidate.time??0)>time)break;row=candidate;}return Math.hypot(Number(row.dx||0),Number(row.dy||0));};
   const baseMode=(material.modal?.modes||[])[0]||{frequencyHz:180,decayMs:45,gain:.6},freq=clamp(Number(baseMode.frequencyHz||180)*Number(object.modal?.frequencyScale??1),30,sampleRate*.42),bodyGain=Number(recipe.mapping?.bodyGain??.42)*Number(recipe.mix?.body??.68),residualGain=Number(recipe.mapping?.residualGain??.28)*Number(recipe.mix?.residual??.38),decayMs=Math.max(12,Math.min(Number(baseMode.decayMs||45),Number(recipe.advanced?.microImpactMs??45)));
   let next=0,contacts=0;
   while(next<length){
-    const speed=speedAt(next/sampleRate),normalized=clamp(speed/speedRef,0,3);
+    const speed=speedAt(next/sampleRate),normalized=clamp(speed/speedRef,0,3)*energyFactor;
     if(normalized<=1e-6){next+=Math.max(1,Math.round(sampleRate*.02));continue;}
     const perSecond=clamp(densityScale*(.3+rough*1.3)*normalized,1,maxContacts),mean=sampleRate/perSecond,jitter=.55+rough*.55;
     next+=Math.max(1,Math.round(mean*(1+rng.normal()*jitter)));if(next>=length)break;
@@ -72,5 +73,45 @@ export function renderRollPreview({sampleRate=48000,seed=1,material,object,recip
   return{samples:out,sampleRate,contacts};
 }
 
-export function renderSoundPreview(options){if(options?.recipe?.generator==='roll')return renderRollPreview(options);return renderImpactPreview({...options,strength:sceneConditionedImpactStrength(options?.strength,options?.recipe,options?.telemetry,options?.binding)});}
+export function renderFrictionPreview({sampleRate=48000,strength=.7,seed=1,material,object,recipe,style,environment=null,telemetry=[]}){
+  const length=Math.max(1,Math.ceil(sampleRate*Number(recipe.durationMs||1000)/1000)),out=new Float32Array(length),rng=new Rng(seed),perceptual=perceptualState(recipe),ticks=telemetryMotionRows(telemetry);
+  if(!ticks.length)return{samples:out,sampleRate,contacts:0};
+  const speedAt=time=>{let row=ticks[0];for(const candidate of ticks){if(Number(candidate.time??0)>time)break;row=candidate;}return Math.hypot(Number(row.dx||0),Number(row.dy||0));};
+  const speedRef=Math.max(.1,Number(recipe.mapping?.speedReference??4)),strengthFactor=motionStrengthFactor(strength,recipe),speedExponent=Math.max(.2,Number(recipe.mapping?.speedExponent??.8));
+  const rough=clamp(Number(material.contact?.roughness??.5)*Number(recipe.mapping?.roughnessDrive??1),0,1.5),frictionGain=Math.max(0,Number(recipe.mapping?.frictionGain??.35))*Number(recipe.mix?.residual??.65),bodyGain=Math.max(0,Number(recipe.mapping?.bodyGain??.12))*Number(recipe.mix?.body??.25);
+  const chatterDensity=Math.max(0,Number(recipe.mapping?.chatterDensity??2)),maxChatter=Math.max(0,Number(recipe.advanced?.maxChatterPerSecond??30)),chatterDecay=Math.exp(Math.log(.001)/Math.max(1,Number(recipe.advanced?.chatterMs??14)*sampleRate/1000));
+  const baseMode=(material.modal?.modes||[])[0]||{frequencyHz:180},bodyFreq=clamp(Number(baseMode.frequencyHz||180)*Number(object.modal?.frequencyScale??1)*Number(recipe.advanced?.bodyFrequencyScale??.7),25,sampleRate*.35);
+  let low=0,phase=0,chatter=0,contacts=0,envelope=0;
+  for(let i=0;i<length;i++){const normalized=clamp(speedAt(i/sampleRate)/speedRef,0,3),motion=Math.pow(normalized,speedExponent)*strengthFactor,target=clamp(motion,0,3),slew=target>envelope ? .018 : .006;envelope+=(target-envelope)*slew;if(envelope<=1e-7){chatter*=chatterDecay;continue;}const n=rng.signed();low=low*(.86-rough*.16)+n*(.14+rough*.16);const grain=(n-low)*(.35+rough*.75)+low*.24,chatterRate=Math.min(maxChatter,chatterDensity*(.25+rough*1.5)*envelope);if(chatterRate>0&&rng.unit()<chatterRate/sampleRate){chatter+=rng.signed()*(.12+.12*rough)*Math.min(1.5,envelope);contacts++;}chatter*=chatterDecay;phase+=TAU*bodyFreq*(.72+.13*Math.min(2,envelope))/sampleRate;out[i]+=grain*frictionGain*envelope+Math.sin(phase)*bodyGain*envelope*(.25+.35*rough)+chatter;}
+  finishPreview(out,sampleRate,style,environment,perceptual);return{samples:out,sampleRate,contacts};
+}
+
+export function renderLaunchPreview({sampleRate=48000,strength=.7,seed=1,material,object,recipe,style,environment=null}){
+  const length=Math.max(1,Math.ceil(sampleRate*Number(recipe.durationMs||160)/1000)),out=new Float32Array(length),rng=new Rng(seed),perceptual=perceptualState(recipe),raw=clamp(Number(strength)||0,0,1),s=Number(recipe.mapping?.minStrength??.1)+(1-Number(recipe.mapping?.minStrength??.1))*Math.sqrt(raw),hardness=clamp(Number(material.transient?.hardness??.55),0,1),baseHz=clamp(Number(recipe.mapping?.bodyFrequencyHz??420)*Number(object.modal?.frequencyScale??1),40,sampleRate*.4),sweep=Number(recipe.mapping?.sweepOctaves??.45),noiseGain=Number(recipe.mapping?.noiseGain??.62),bodyGain=Number(recipe.mapping?.bodyGain??.28);let phase=0,low=0;
+  for(let i=0;i<length;i++){const t=i/Math.max(1,length-1),env=(1-Math.exp(-t*70))*Math.exp(-t*Number(recipe.mapping?.decayShape??7.5)),n=rng.signed();low=low*.7+n*.3;const bright=n-low*(.35+.3*(1-hardness)),freq=baseHz*Math.pow(2,sweep*(.5-t));phase+=TAU*freq/sampleRate;out[i]+=env*s*(bright*noiseGain+Math.sin(phase)*bodyGain);}
+  finishPreview(out,sampleRate,style,environment,perceptual);return{samples:out,sampleRate};
+}
+
+export function renderMechanismPreview(options){
+  const {sampleRate=48000,strength=.7,seed=1,material,object,recipe,style,environment=null,telemetry=[]}=options,length=Math.max(1,Math.ceil(sampleRate*Number(recipe.durationMs||1000)/1000)),base=renderFrictionPreview({...options,style:{finishing:{drive:1,softClip:0,masterGain:1,highpassHz:0,lowpassHz:sampleRate*.48}},environment:null}),out=Float32Array.from(base.samples),rng=new Rng(seed^0x6d656368),ticks=telemetryMotionRows(telemetry),speedRef=Math.max(.1,Number(recipe.mapping?.speedReference??2));
+  const speedAt=time=>{let row=ticks[0]||{dx:0,dy:0};for(const candidate of ticks){if(Number(candidate.time??0)>time)break;row=candidate;}return Math.hypot(Number(row.dx||0),Number(row.dy||0));},cadence=Math.max(.5,Number(recipe.mapping?.cadenceHz??5)),clickN=Math.max(1,Math.round(Number(recipe.advanced?.clickMs??18)*sampleRate/1000)),mode=(material.modal?.modes||[])[0]||{frequencyHz:180},freq=clamp(Number(mode.frequencyHz||180)*Number(recipe.advanced?.clickFrequencyScale??1.4),50,sampleRate*.4),strengthFactor=motionStrengthFactor(strength,recipe),clickGain=Math.max(0,Number(recipe.mapping?.clickGain??.22))*strengthFactor;let contacts=base.contacts||0;
+  const addClick=(sampleIndex,gain,motion=1)=>{const start=Math.max(0,Math.min(length-1,Math.round(sampleIndex))),phase=rng.unit()*TAU,scaled=Math.max(0,gain)*strengthFactor*Math.min(1.5,Math.max(.35,motion));for(let i=0;i<clickN&&start+i<length;i++){const env=Math.exp(-5*i/clickN);out[start+i]+=Math.sin(phase+TAU*freq*i/sampleRate)*env*scaled+rng.signed()*env*scaled*.22;}contacts++;};
+  let moving=false;for(const row of ticks){const speed=Math.hypot(Number(row.dx||0),Number(row.dy||0)),isMoving=speed>1e-6,time=Math.max(0,Number(row.time??0));if(isMoving&&!moving)addClick(time*sampleRate,Number(recipe.mapping?.startClickGain??.18),clamp(speed/speedRef,0,3));else if(!isMoving&&moving)addClick(time*sampleRate,Number(recipe.mapping?.stopClickGain??.24),1);moving=isMoving;}
+  let next=0;while(next<length){const motion=clamp(speedAt(next/sampleRate)/speedRef,0,3);if(motion<=1e-6){next+=Math.max(1,Math.round(sampleRate*.02));continue;}next+=Math.max(1,Math.round(sampleRate/(cadence*(.55+.65*motion))));if(next>=length)break;const phase=rng.unit()*TAU;for(let i=0;i<clickN&&next+i<length;i++){const env=Math.exp(-5*i/clickN);out[next+i]+=Math.sin(phase+TAU*freq*i/sampleRate)*env*clickGain*Math.min(1.5,motion)+rng.signed()*env*clickGain*.22;}contacts++;}
+  finishPreview(out,sampleRate,style,environment,perceptualState(recipe));return{samples:out,sampleRate,contacts};
+}
+
+export function renderExplosionPreview({sampleRate=48000,strength=.8,seed=1,material,object,recipe,style,environment=null}){
+  const length=Math.max(1,Math.ceil(sampleRate*Number(recipe.durationMs||420)/1000)),out=new Float32Array(length),rng=new Rng(seed),perceptual=perceptualState(recipe),s=Number(recipe.mapping?.minStrength??.16)+(1-Number(recipe.mapping?.minStrength??.16))*Math.sqrt(clamp(Number(strength)||0,0,1)),crackGain=Number(recipe.mapping?.crackGain??.72),bodyGain=Number(recipe.mapping?.bodyGain??.48),debrisGain=Number(recipe.mapping?.debrisGain??.22),bodyHz=clamp(Number(recipe.mapping?.bodyFrequencyHz??115)*Number(object.modal?.frequencyScale??1),45,420);let low=0,phase=rng.unit()*TAU;
+  for(let i=0;i<length;i++){const t=i/sampleRate,fast=Math.exp(-t*24),body=Math.exp(-t*8.5),tail=Math.exp(-t*5.2),n=rng.signed();low=low*.92+n*.08;phase+=TAU*bodyHz/sampleRate;out[i]+=((n-low)*fast*crackGain+(Math.sin(phase)*.65+low*.35)*body*bodyGain+(rng.unit()<.0018?rng.signed()*1.4:0)*tail*debrisGain)*s;}
+  finishPreview(out,sampleRate,style,environment,perceptual);return{samples:out,sampleRate};
+}
+
+export function renderEmitterPreview({sampleRate=48000,strength=.55,seed=1,material,recipe,style,environment=null}){
+  const length=Math.max(1,Math.ceil(sampleRate*Number(recipe.durationMs||1200)/1000)),out=new Float32Array(length),rng=new Rng(seed),perceptual=perceptualState(recipe),gain=Math.max(0,Number(recipe.mapping?.noiseGain??.32))*clamp(strength,0,1),rough=clamp(Number(material.contact?.roughness??.5),0,1),pulseHz=Math.max(0,Number(recipe.mapping?.pulseHz??0)),brightness=clamp(Number(material.residual?.brightness??.6),0,1);let low=0;
+  for(let i=0;i<length;i++){const n=rng.signed();low=low*(.88-brightness*.2)+n*(.12+brightness*.2);const hiss=(n-low)*(.5+brightness*.7)+low*.15,pulse=pulseHz>0?.82+.18*Math.sin(TAU*pulseHz*i/sampleRate):1;out[i]=hiss*gain*pulse*(.7+.3*rough);}
+  finishPreview(out,sampleRate,style,environment,perceptual);return{samples:out,sampleRate};
+}
+
+export function renderSoundPreview(options){const generator=String(options?.recipe?.generator||'impact');if(generator==='roll')return renderRollPreview(options);if(generator==='slide'||generator==='scrape')return renderFrictionPreview(options);if(generator==='launch')return renderLaunchPreview(options);if(generator==='mechanism')return renderMechanismPreview(options);if(generator==='explosion')return renderExplosionPreview(options);if(generator==='emitter')return renderEmitterPreview(options);return renderImpactPreview({...options,strength:sceneConditionedImpactStrength(options?.strength,options?.recipe,options?.telemetry,options?.binding)});}
 export function audioBufferFrom(context,render){const buffer=context.createBuffer(1,render.samples.length,render.sampleRate);buffer.copyToChannel(render.samples,0);return buffer;}
