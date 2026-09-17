@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rick-dangerous-revival.juice-profile.v1",
+  "title": "Rick Dangerous Revival temporary game juice profile",
+  "type": "object",
+  "required": [
+    "schema",
+    "name",
+    "performancePreset",
+    "adaptiveBudget",
+    "actions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "rick-dangerous-revival.juice-profile.v1"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "performancePreset": {
+      "enum": [
+        "potato25",
+        "low30",
+        "desktop60"
+      ]
+    },
+    "adaptiveBudget": {
+      "type": "boolean"
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "gameplayFeel": {
+      "type": "object",
+      "properties": {
+        "coyoteFrames": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "fallBounceMinHeight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 192
+        }
+      },
+      "additionalProperties": false
+    },
+    "comparison": {
+      "type": "object"
+    }
+  }
+}

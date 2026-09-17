@@ -1,0 +1,135 @@
+{
+  "assets": [
+    {
+      "classicReference": {
+        "bank": 2,
+        "expectedCellFlags": 4,
+        "occurrences": [
+          {
+            "classicG8": [
+              25,
+              35
+            ],
+            "mapId": 30,
+            "rdxG8": [
+              29,
+              29
+            ],
+            "room": "SM17",
+            "submap": 23
+          },
+          {
+            "classicG8": [
+              13,
+              51
+            ],
+            "mapId": 41,
+            "rdxG8": [
+              17,
+              51
+            ],
+            "room": "SM22",
+            "submap": 34
+          },
+          {
+            "classicG8": [
+              13,
+              103
+            ],
+            "mapId": 41,
+            "rdxG8": [
+              17,
+              103
+            ],
+            "room": "SM22",
+            "submap": 34
+          },
+          {
+            "classicG8": [
+              9,
+              31
+            ],
+            "mapId": 43,
+            "rdxG8": [
+              13,
+              31
+            ],
+            "room": "SM24",
+            "submap": 36
+          },
+          {
+            "classicG8": [
+              13,
+              67
+            ],
+            "mapId": 43,
+            "rdxG8": [
+              17,
+              67
+            ],
+            "room": "SM24",
+            "submap": 36
+          },
+          {
+            "classicG8": [
+              9,
+              63
+            ],
+            "mapId": 44,
+            "rdxG8": [
+              13,
+              63
+            ],
+            "room": "SM25",
+            "submap": 37
+          }
+        ],
+        "paletteNibbleRemap": {
+          "7": "c",
+          "8": "4",
+          "f": "5"
+        },
+        "semantic": "broken-bottle floor hazard",
+        "tile": 60,
+        "tileHex": "0x3c"
+      },
+      "group": "castle",
+      "id": "castle-broken-bottle",
+      "kind": "rdx-tile8-pixel-edit",
+      "pixelEdits": [
+        ".0000...",
+        ".0000c..",
+        ".0c00c..",
+        ".040.c..",
+        "..454c..",
+        "c.454c..",
+        "c.454c..",
+        "c.454c.."
+      ],
+      "provenance": {
+        "placementPolicy": "Asset definition only. Do not place it or add lethal collision until the Castle bottle locations and neighboring scenery are reviewed.",
+        "reason": "Reshape the reviewed MD0041 g8:15:51 Plane-A RDX tile pixel-by-pixel to preserve the Classic bank-2 tile 0x3c broken-bottle silhouette while retaining the source tile's RDX palette/depth vocabulary."
+      },
+      "size": [
+        8,
+        8
+      ],
+      "source": {
+        "expectedGlobalTile": 10954,
+        "expectedHFlip": false,
+        "expectedPaletteLine": 3,
+        "expectedVFlip": false,
+        "g8": [
+          15,
+          51
+        ],
+        "mapId": 41,
+        "mapName": "MD0041",
+        "phase": 0,
+        "plane": "A"
+      }
+    }
+  ],
+  "schema": "rdr.authored_visual_assets.v1",
+  "version": 1
+}

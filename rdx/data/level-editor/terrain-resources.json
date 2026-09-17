@@ -1,0 +1,2466 @@
+{
+  "schema": "rdr.level_editor.terrain_resources.v1",
+  "revision": "1",
+  "coordinateModel": {
+    "visualCellPx": 16,
+    "gameplayCellPx": 8,
+    "logicCoordinates": "source-mt-ml-1-based"
+  },
+  "families": [
+    {
+      "id": "structural",
+      "label": "Structural solid",
+      "connectorGroup": "solid",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "solid",
+      "materialRole": "structural",
+      "topologyMode": "surface",
+      "description": "General coarse xrick/RDX solid terrain. Topology determines floor, wall, edge and corner presentation."
+    },
+    {
+      "id": "floor",
+      "label": "Floor",
+      "connectorGroup": "solid",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "solid",
+      "materialRole": "structural",
+      "topologyMode": "surface",
+      "description": "Authored floor intent sharing the structural-solid connector/material family."
+    },
+    {
+      "id": "wall",
+      "label": "Wall",
+      "connectorGroup": "solid",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "solid",
+      "materialRole": "structural",
+      "topologyMode": "surface",
+      "description": "Authored wall intent sharing the structural-solid connector/material family."
+    },
+    {
+      "id": "ceiling",
+      "label": "Ceiling",
+      "connectorGroup": "solid",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "solid",
+      "materialRole": "structural",
+      "topologyMode": "surface",
+      "description": "Authored ceiling intent sharing the structural-solid connector/material family."
+    },
+    {
+      "id": "filler",
+      "label": "Solid filler",
+      "connectorGroup": "solid",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "solid",
+      "materialRole": "structural",
+      "topologyMode": "fill",
+      "description": "Interior/filler terrain with the same coarse solid gameplay semantic."
+    },
+    {
+      "id": "platform",
+      "label": "One-way platform",
+      "connectorGroup": "platform",
+      "connectorAxes": [
+        "horizontal"
+      ],
+      "gameplaySemantic": "one-way",
+      "materialRole": "platform",
+      "topologyMode": "path",
+      "description": "Horizontal one-way construction intent; native xrick remains the resolver."
+    },
+    {
+      "id": "ladder",
+      "label": "Ladder",
+      "connectorGroup": "ladder",
+      "connectorAxes": [
+        "vertical"
+      ],
+      "gameplaySemantic": "climb-through",
+      "materialRole": "ladder",
+      "topologyMode": "path",
+      "description": "Vertical climb-through construction intent on the source 16x16 logic grid."
+    },
+    {
+      "id": "hazard-boundary",
+      "label": "Hazard boundary",
+      "connectorGroup": "hazard",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "hazard-boundary",
+      "materialRole": "hazard",
+      "topologyMode": "surface",
+      "description": "Semantic boundary for game-specific hazard ownership; no browser collision solver is implied."
+    },
+    {
+      "id": "transition",
+      "label": "Transition",
+      "connectorGroup": "transition",
+      "connectorAxes": [
+        "horizontal",
+        "vertical"
+      ],
+      "gameplaySemantic": "preserve",
+      "materialRole": "transition",
+      "topologyMode": "surface",
+      "description": "Presentation/structural transition that preserves existing native gameplay meaning unless separately authored."
+    }
+  ],
+  "sources": [
+    {
+      "id": "compat.jungle.structural-solid.isolated",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 0 (jungle.structural-solid.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            11,
+            16
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.end-n",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 1 (jungle.structural-solid.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            7,
+            26
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.end-e",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 2 (jungle.structural-solid.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 10,
+          "sourceCell": [
+            12,
+            35
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.outside-corner-ne",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 3 (jungle.structural-solid.m3.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 10,
+          "sourceCell": [
+            15,
+            2
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.end-s",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 4 (jungle.structural-solid.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            7,
+            25
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 5 (jungle.structural-solid.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            9,
+            46
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.outside-corner-es",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 6 (jungle.structural-solid.m6.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            16,
+            14
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.end-w",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 8 (jungle.structural-solid.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            11,
+            16
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.outside-corner-nw",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 9 (jungle.structural-solid.m9.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            5,
+            1
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 10 (jungle.structural-solid.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            9,
+            19
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.outside-corner-sw",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 12 (jungle.structural-solid.mc.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            9,
+            8
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.structural-solid.filler",
+      "provenance": "Curated compatibility anchor from legacy jungle.structural-solid mask 15 (jungle.structural-solid.mf.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 3,
+          "sourceCell": [
+            11,
+            2
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.platform.isolated",
+      "provenance": "Curated compatibility anchor from legacy jungle.platform mask 0 (jungle.platform.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            12,
+            4
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            12,
+            4
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.platform.end-e",
+      "provenance": "Curated compatibility anchor from legacy jungle.platform mask 2 (jungle.platform.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 6,
+          "sourceCell": [
+            10,
+            32
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 6,
+          "sourceCell": [
+            10,
+            32
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.platform.end-w",
+      "provenance": "Curated compatibility anchor from legacy jungle.platform mask 8 (jungle.platform.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 11,
+          "sourceCell": [
+            13,
+            32
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 11,
+          "sourceCell": [
+            13,
+            32
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.platform.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy jungle.platform mask 10 (jungle.platform.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 5,
+          "sourceCell": [
+            6,
+            5
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 5,
+          "sourceCell": [
+            6,
+            5
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.ladder.isolated",
+      "provenance": "Curated compatibility anchor from legacy jungle.ladder mask 0 (jungle.ladder.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 10,
+          "sourceCell": [
+            12,
+            39
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.ladder.end-n",
+      "provenance": "Curated compatibility anchor from legacy jungle.ladder mask 1 (jungle.ladder.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 9,
+          "sourceCell": [
+            11,
+            58
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.ladder.end-s",
+      "provenance": "Curated compatibility anchor from legacy jungle.ladder mask 4 (jungle.ladder.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 10,
+          "sourceCell": [
+            12,
+            39
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.jungle.ladder.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy jungle.ladder mask 5 (jungle.ladder.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 10,
+          "sourceCell": [
+            12,
+            52
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.isolated",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 0 (egypt.structural-solid.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 23,
+          "sourceCell": [
+            7,
+            35
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.end-n",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 1 (egypt.structural-solid.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 23,
+          "sourceCell": [
+            7,
+            35
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.end-e",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 2 (egypt.structural-solid.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 19,
+          "sourceCell": [
+            14,
+            46
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.outside-corner-ne",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 3 (egypt.structural-solid.m3.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 13,
+          "sourceCell": [
+            12,
+            29
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.end-s",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 4 (egypt.structural-solid.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 19,
+          "sourceCell": [
+            11,
+            1
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 5 (egypt.structural-solid.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 16,
+          "sourceCell": [
+            8,
+            20
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.outside-corner-es",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 6 (egypt.structural-solid.m6.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 22,
+          "sourceCell": [
+            8,
+            37
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.end-w",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 8 (egypt.structural-solid.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 20,
+          "sourceCell": [
+            11,
+            53
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.outside-corner-nw",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 9 (egypt.structural-solid.m9.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 19,
+          "sourceCell": [
+            13,
+            33
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 10 (egypt.structural-solid.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 23,
+          "sourceCell": [
+            7,
+            19
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.outside-corner-sw",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 12 (egypt.structural-solid.mc.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 19,
+          "sourceCell": [
+            11,
+            1
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.structural-solid.filler",
+      "provenance": "Curated compatibility anchor from legacy egypt.structural-solid mask 15 (egypt.structural-solid.mf.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 13,
+          "sourceCell": [
+            0,
+            0
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.platform.isolated",
+      "provenance": "Curated compatibility anchor from legacy egypt.platform mask 0 (egypt.platform.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 19,
+          "sourceCell": [
+            4,
+            36
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 19,
+          "sourceCell": [
+            4,
+            36
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.platform.end-e",
+      "provenance": "Curated compatibility anchor from legacy egypt.platform mask 2 (egypt.platform.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 20,
+          "sourceCell": [
+            3,
+            8
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 20,
+          "sourceCell": [
+            3,
+            8
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.platform.end-w",
+      "provenance": "Curated compatibility anchor from legacy egypt.platform mask 8 (egypt.platform.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 17,
+          "sourceCell": [
+            11,
+            6
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 17,
+          "sourceCell": [
+            11,
+            6
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.platform.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy egypt.platform mask 10 (egypt.platform.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 18,
+          "sourceCell": [
+            7,
+            3
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        },
+        {
+          "sourceMapId": 18,
+          "sourceCell": [
+            7,
+            3
+          ],
+          "sourceLayer": "A",
+          "layer": "A",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.ladder.isolated",
+      "provenance": "Curated compatibility anchor from legacy egypt.ladder mask 0 (egypt.ladder.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 15,
+          "sourceCell": [
+            14,
+            22
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.ladder.end-n",
+      "provenance": "Curated compatibility anchor from legacy egypt.ladder mask 1 (egypt.ladder.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 15,
+          "sourceCell": [
+            14,
+            22
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.ladder.end-s",
+      "provenance": "Curated compatibility anchor from legacy egypt.ladder mask 4 (egypt.ladder.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 23,
+          "sourceCell": [
+            10,
+            36
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.egypt.ladder.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy egypt.ladder mask 5 (egypt.ladder.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 23,
+          "sourceCell": [
+            11,
+            12
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.isolated",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 0 (castle.structural-solid.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 33,
+          "sourceCell": [
+            14,
+            15
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.end-n",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 1 (castle.structural-solid.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 35,
+          "sourceCell": [
+            10,
+            18
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.end-e",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 2 (castle.structural-solid.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 25,
+          "sourceCell": [
+            11,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.outside-corner-ne",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 3 (castle.structural-solid.m3.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 33,
+          "sourceCell": [
+            9,
+            2
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.end-s",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 4 (castle.structural-solid.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 36,
+          "sourceCell": [
+            13,
+            11
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 5 (castle.structural-solid.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 36,
+          "sourceCell": [
+            13,
+            12
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.outside-corner-es",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 6 (castle.structural-solid.m6.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 35,
+          "sourceCell": [
+            10,
+            35
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.end-w",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 8 (castle.structural-solid.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 44,
+          "sourceCell": [
+            13,
+            32
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.outside-corner-nw",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 9 (castle.structural-solid.m9.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 43,
+          "sourceCell": [
+            13,
+            2
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 10 (castle.structural-solid.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 42,
+          "sourceCell": [
+            6,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.outside-corner-sw",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 12 (castle.structural-solid.mc.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 31,
+          "sourceCell": [
+            12,
+            11
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.structural-solid.filler",
+      "provenance": "Curated compatibility anchor from legacy castle.structural-solid mask 15 (castle.structural-solid.mf.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 25,
+          "sourceCell": [
+            0,
+            0
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.platform.isolated",
+      "provenance": "Curated compatibility anchor from legacy castle.platform mask 0 (castle.platform.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 30,
+          "sourceCell": [
+            15,
+            7
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.platform.end-e",
+      "provenance": "Curated compatibility anchor from legacy castle.platform mask 2 (castle.platform.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 25,
+          "sourceCell": [
+            7,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.platform.end-w",
+      "provenance": "Curated compatibility anchor from legacy castle.platform mask 8 (castle.platform.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 30,
+          "sourceCell": [
+            13,
+            7
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.platform.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy castle.platform mask 10 (castle.platform.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 25,
+          "sourceCell": [
+            8,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.ladder.isolated",
+      "provenance": "Curated compatibility anchor from legacy castle.ladder mask 0 (castle.ladder.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 42,
+          "sourceCell": [
+            14,
+            30
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.ladder.end-n",
+      "provenance": "Curated compatibility anchor from legacy castle.ladder mask 1 (castle.ladder.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 33,
+          "sourceCell": [
+            7,
+            19
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.ladder.end-s",
+      "provenance": "Curated compatibility anchor from legacy castle.ladder mask 4 (castle.ladder.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 42,
+          "sourceCell": [
+            14,
+            30
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.castle.ladder.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy castle.ladder mask 5 (castle.ladder.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 30,
+          "sourceCell": [
+            14,
+            8
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.isolated",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 0 (missile-base.structural-solid.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            11,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.end-n",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 1 (missile-base.structural-solid.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            7,
+            3
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.end-e",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 2 (missile-base.structural-solid.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            11,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.outside-corner-ne",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 3 (missile-base.structural-solid.m3.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 53,
+          "sourceCell": [
+            10,
+            47
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.end-s",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 4 (missile-base.structural-solid.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            12,
+            9
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 5 (missile-base.structural-solid.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 54,
+          "sourceCell": [
+            18,
+            12
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.outside-corner-es",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 6 (missile-base.structural-solid.m6.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            12,
+            9
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.end-w",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 8 (missile-base.structural-solid.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            11,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.outside-corner-nw",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 9 (missile-base.structural-solid.m9.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            7,
+            3
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 10 (missile-base.structural-solid.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            11,
+            10
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.outside-corner-sw",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 12 (missile-base.structural-solid.mc.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 51,
+          "sourceCell": [
+            13,
+            9
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.structural-solid.filler",
+      "provenance": "Curated compatibility anchor from legacy missile-base.structural-solid mask 15 (missile-base.structural-solid.mf.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            19,
+            2
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.platform.isolated",
+      "provenance": "Curated compatibility anchor from legacy missile-base.platform mask 0 (missile-base.platform.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            6,
+            6
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.platform.end-e",
+      "provenance": "Curated compatibility anchor from legacy missile-base.platform mask 2 (missile-base.platform.m2.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            4,
+            12
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.platform.end-w",
+      "provenance": "Curated compatibility anchor from legacy missile-base.platform mask 8 (missile-base.platform.m8.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            15,
+            12
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.platform.horizontal-edge",
+      "provenance": "Curated compatibility anchor from legacy missile-base.platform mask 10 (missile-base.platform.ma.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            5,
+            12
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.ladder.isolated",
+      "provenance": "Curated compatibility anchor from legacy missile-base.ladder mask 0 (missile-base.ladder.m0.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 54,
+          "sourceCell": [
+            9,
+            7
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.ladder.end-n",
+      "provenance": "Curated compatibility anchor from legacy missile-base.ladder mask 1 (missile-base.ladder.m1.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            5,
+            7
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.ladder.end-s",
+      "provenance": "Curated compatibility anchor from legacy missile-base.ladder mask 4 (missile-base.ladder.m4.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 54,
+          "sourceCell": [
+            9,
+            7
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compat.missile-base.ladder.vertical-edge",
+      "provenance": "Curated compatibility anchor from legacy missile-base.ladder mask 5 (missile-base.ladder.m5.v0).",
+      "outputs": [
+        {
+          "sourceMapId": 46,
+          "sourceCell": [
+            5,
+            7
+          ],
+          "sourceLayer": "B",
+          "layer": "B",
+          "targetOffset": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "id": "jungle.structural-solid",
+      "label": "Jungle stone / earth",
+      "group": "south_america",
+      "role": "structural",
+      "familyIds": [
+        "structural",
+        "floor",
+        "wall",
+        "ceiling",
+        "filler"
+      ],
+      "legacySetId": "jungle.structural-solid",
+      "description": "Compact semantic material retaining representative production source choices from jungle.structural-solid; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.jungle.structural-solid.isolated"
+        ],
+        "end:n": [
+          "compat.jungle.structural-solid.end-n"
+        ],
+        "end:e": [
+          "compat.jungle.structural-solid.end-e"
+        ],
+        "outside-corner:ne": [
+          "compat.jungle.structural-solid.outside-corner-ne"
+        ],
+        "end:s": [
+          "compat.jungle.structural-solid.end-s"
+        ],
+        "vertical-edge": [
+          "compat.jungle.structural-solid.vertical-edge"
+        ],
+        "outside-corner:es": [
+          "compat.jungle.structural-solid.outside-corner-es"
+        ],
+        "end:w": [
+          "compat.jungle.structural-solid.end-w"
+        ],
+        "outside-corner:nw": [
+          "compat.jungle.structural-solid.outside-corner-nw"
+        ],
+        "horizontal-edge": [
+          "compat.jungle.structural-solid.horizontal-edge"
+        ],
+        "outside-corner:sw": [
+          "compat.jungle.structural-solid.outside-corner-sw"
+        ],
+        "filler": [
+          "compat.jungle.structural-solid.filler"
+        ]
+      },
+      "defaultVariants": [
+        "compat.jungle.structural-solid.filler"
+      ]
+    },
+    {
+      "id": "jungle.platform",
+      "label": "Jungle one-way ledge",
+      "group": "south_america",
+      "role": "platform",
+      "familyIds": [
+        "platform"
+      ],
+      "legacySetId": "jungle.platform",
+      "description": "Compact semantic material retaining representative production source choices from jungle.platform; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.jungle.platform.isolated"
+        ],
+        "end:e": [
+          "compat.jungle.platform.end-e"
+        ],
+        "end:w": [
+          "compat.jungle.platform.end-w"
+        ],
+        "horizontal-edge": [
+          "compat.jungle.platform.horizontal-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.jungle.platform.horizontal-edge"
+      ]
+    },
+    {
+      "id": "jungle.ladder",
+      "label": "Jungle ladder",
+      "group": "south_america",
+      "role": "ladder",
+      "familyIds": [
+        "ladder"
+      ],
+      "legacySetId": "jungle.ladder",
+      "description": "Compact semantic material retaining representative production source choices from jungle.ladder; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.jungle.ladder.isolated"
+        ],
+        "end:n": [
+          "compat.jungle.ladder.end-n"
+        ],
+        "end:s": [
+          "compat.jungle.ladder.end-s"
+        ],
+        "vertical-edge": [
+          "compat.jungle.ladder.vertical-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.jungle.ladder.vertical-edge"
+      ]
+    },
+    {
+      "id": "egypt.structural-solid",
+      "label": "Egypt sandstone",
+      "group": "egypt",
+      "role": "structural",
+      "familyIds": [
+        "structural",
+        "floor",
+        "wall",
+        "ceiling",
+        "filler"
+      ],
+      "legacySetId": "egypt.structural-solid",
+      "description": "Compact semantic material retaining representative production source choices from egypt.structural-solid; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.egypt.structural-solid.isolated"
+        ],
+        "end:n": [
+          "compat.egypt.structural-solid.end-n"
+        ],
+        "end:e": [
+          "compat.egypt.structural-solid.end-e"
+        ],
+        "outside-corner:ne": [
+          "compat.egypt.structural-solid.outside-corner-ne"
+        ],
+        "end:s": [
+          "compat.egypt.structural-solid.end-s"
+        ],
+        "vertical-edge": [
+          "compat.egypt.structural-solid.vertical-edge"
+        ],
+        "outside-corner:es": [
+          "compat.egypt.structural-solid.outside-corner-es"
+        ],
+        "end:w": [
+          "compat.egypt.structural-solid.end-w"
+        ],
+        "outside-corner:nw": [
+          "compat.egypt.structural-solid.outside-corner-nw"
+        ],
+        "horizontal-edge": [
+          "compat.egypt.structural-solid.horizontal-edge"
+        ],
+        "outside-corner:sw": [
+          "compat.egypt.structural-solid.outside-corner-sw"
+        ],
+        "filler": [
+          "compat.egypt.structural-solid.filler"
+        ]
+      },
+      "defaultVariants": [
+        "compat.egypt.structural-solid.filler"
+      ]
+    },
+    {
+      "id": "egypt.platform",
+      "label": "Egypt one-way stone ledge",
+      "group": "egypt",
+      "role": "platform",
+      "familyIds": [
+        "platform"
+      ],
+      "legacySetId": "egypt.platform",
+      "description": "Compact semantic material retaining representative production source choices from egypt.platform; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.egypt.platform.isolated"
+        ],
+        "end:e": [
+          "compat.egypt.platform.end-e"
+        ],
+        "end:w": [
+          "compat.egypt.platform.end-w"
+        ],
+        "horizontal-edge": [
+          "compat.egypt.platform.horizontal-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.egypt.platform.horizontal-edge"
+      ]
+    },
+    {
+      "id": "egypt.ladder",
+      "label": "Egypt ladder",
+      "group": "egypt",
+      "role": "ladder",
+      "familyIds": [
+        "ladder"
+      ],
+      "legacySetId": "egypt.ladder",
+      "description": "Compact semantic material retaining representative production source choices from egypt.ladder; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.egypt.ladder.isolated"
+        ],
+        "end:n": [
+          "compat.egypt.ladder.end-n"
+        ],
+        "end:s": [
+          "compat.egypt.ladder.end-s"
+        ],
+        "vertical-edge": [
+          "compat.egypt.ladder.vertical-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.egypt.ladder.vertical-edge"
+      ]
+    },
+    {
+      "id": "castle.structural-solid",
+      "label": "Castle stone",
+      "group": "castle",
+      "role": "structural",
+      "familyIds": [
+        "structural",
+        "floor",
+        "wall",
+        "ceiling",
+        "filler"
+      ],
+      "legacySetId": "castle.structural-solid",
+      "description": "Compact semantic material retaining representative production source choices from castle.structural-solid; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.castle.structural-solid.isolated"
+        ],
+        "end:n": [
+          "compat.castle.structural-solid.end-n"
+        ],
+        "end:e": [
+          "compat.castle.structural-solid.end-e"
+        ],
+        "outside-corner:ne": [
+          "compat.castle.structural-solid.outside-corner-ne"
+        ],
+        "end:s": [
+          "compat.castle.structural-solid.end-s"
+        ],
+        "vertical-edge": [
+          "compat.castle.structural-solid.vertical-edge"
+        ],
+        "outside-corner:es": [
+          "compat.castle.structural-solid.outside-corner-es"
+        ],
+        "end:w": [
+          "compat.castle.structural-solid.end-w"
+        ],
+        "outside-corner:nw": [
+          "compat.castle.structural-solid.outside-corner-nw"
+        ],
+        "horizontal-edge": [
+          "compat.castle.structural-solid.horizontal-edge"
+        ],
+        "outside-corner:sw": [
+          "compat.castle.structural-solid.outside-corner-sw"
+        ],
+        "filler": [
+          "compat.castle.structural-solid.filler"
+        ]
+      },
+      "defaultVariants": [
+        "compat.castle.structural-solid.filler"
+      ]
+    },
+    {
+      "id": "castle.platform",
+      "label": "Castle one-way ledge",
+      "group": "castle",
+      "role": "platform",
+      "familyIds": [
+        "platform"
+      ],
+      "legacySetId": "castle.platform",
+      "description": "Compact semantic material retaining representative production source choices from castle.platform; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.castle.platform.isolated"
+        ],
+        "end:e": [
+          "compat.castle.platform.end-e"
+        ],
+        "end:w": [
+          "compat.castle.platform.end-w"
+        ],
+        "horizontal-edge": [
+          "compat.castle.platform.horizontal-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.castle.platform.horizontal-edge"
+      ]
+    },
+    {
+      "id": "castle.ladder",
+      "label": "Castle ladder",
+      "group": "castle",
+      "role": "ladder",
+      "familyIds": [
+        "ladder"
+      ],
+      "legacySetId": "castle.ladder",
+      "description": "Compact semantic material retaining representative production source choices from castle.ladder; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.castle.ladder.isolated"
+        ],
+        "end:n": [
+          "compat.castle.ladder.end-n"
+        ],
+        "end:s": [
+          "compat.castle.ladder.end-s"
+        ],
+        "vertical-edge": [
+          "compat.castle.ladder.vertical-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.castle.ladder.vertical-edge"
+      ]
+    },
+    {
+      "id": "missile-base.structural-solid",
+      "label": "Missile Base wall / plate",
+      "group": "missile_base",
+      "role": "structural",
+      "familyIds": [
+        "structural",
+        "floor",
+        "wall",
+        "ceiling",
+        "filler"
+      ],
+      "legacySetId": "missile-base.structural-solid",
+      "description": "Compact semantic material retaining representative production source choices from missile-base.structural-solid; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.missile-base.structural-solid.isolated"
+        ],
+        "end:n": [
+          "compat.missile-base.structural-solid.end-n"
+        ],
+        "end:e": [
+          "compat.missile-base.structural-solid.end-e"
+        ],
+        "outside-corner:ne": [
+          "compat.missile-base.structural-solid.outside-corner-ne"
+        ],
+        "end:s": [
+          "compat.missile-base.structural-solid.end-s"
+        ],
+        "vertical-edge": [
+          "compat.missile-base.structural-solid.vertical-edge"
+        ],
+        "outside-corner:es": [
+          "compat.missile-base.structural-solid.outside-corner-es"
+        ],
+        "end:w": [
+          "compat.missile-base.structural-solid.end-w"
+        ],
+        "outside-corner:nw": [
+          "compat.missile-base.structural-solid.outside-corner-nw"
+        ],
+        "horizontal-edge": [
+          "compat.missile-base.structural-solid.horizontal-edge"
+        ],
+        "outside-corner:sw": [
+          "compat.missile-base.structural-solid.outside-corner-sw"
+        ],
+        "filler": [
+          "compat.missile-base.structural-solid.filler"
+        ]
+      },
+      "defaultVariants": [
+        "compat.missile-base.structural-solid.filler"
+      ]
+    },
+    {
+      "id": "missile-base.platform",
+      "label": "Missile Base one-way platform",
+      "group": "missile_base",
+      "role": "platform",
+      "familyIds": [
+        "platform"
+      ],
+      "legacySetId": "missile-base.platform",
+      "description": "Compact semantic material retaining representative production source choices from missile-base.platform; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.missile-base.platform.isolated"
+        ],
+        "end:e": [
+          "compat.missile-base.platform.end-e"
+        ],
+        "end:w": [
+          "compat.missile-base.platform.end-w"
+        ],
+        "horizontal-edge": [
+          "compat.missile-base.platform.horizontal-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.missile-base.platform.horizontal-edge"
+      ]
+    },
+    {
+      "id": "missile-base.ladder",
+      "label": "Missile Base ladder",
+      "group": "missile_base",
+      "role": "ladder",
+      "familyIds": [
+        "ladder"
+      ],
+      "legacySetId": "missile-base.ladder",
+      "description": "Compact semantic material retaining representative production source choices from missile-base.ladder; the legacy generated catalog remains regression evidence, not authority.",
+      "variants": {
+        "isolated": [
+          "compat.missile-base.ladder.isolated"
+        ],
+        "end:n": [
+          "compat.missile-base.ladder.end-n"
+        ],
+        "end:s": [
+          "compat.missile-base.ladder.end-s"
+        ],
+        "vertical-edge": [
+          "compat.missile-base.ladder.vertical-edge"
+        ]
+      },
+      "defaultVariants": [
+        "compat.missile-base.ladder.vertical-edge"
+      ]
+    }
+  ],
+  "motifs": [
+    {
+      "id": "terrain.platform-span",
+      "label": "Platform span",
+      "category": "terrain",
+      "description": "Reusable semantic one-way platform run; length is parameterized and presentation resolves from the room material.",
+      "parameters": {
+        "length": {
+          "min": 1,
+          "max": 32,
+          "default": 3
+        }
+      },
+      "components": [
+        {
+          "kind": "terrain-run",
+          "offset": [
+            0,
+            0
+          ],
+          "axis": "horizontal",
+          "lengthParameter": "length",
+          "defaultLength": 3,
+          "familyId": "platform",
+          "materialRole": "platform"
+        }
+      ]
+    },
+    {
+      "id": "terrain.ladder-run",
+      "label": "Ladder run",
+      "category": "terrain",
+      "description": "Reusable semantic ladder run; length is parameterized and remains coarse native terrain authoring.",
+      "parameters": {
+        "length": {
+          "min": 1,
+          "max": 48,
+          "default": 4
+        }
+      },
+      "components": [
+        {
+          "kind": "terrain-run",
+          "offset": [
+            0,
+            0
+          ],
+          "axis": "vertical",
+          "lengthParameter": "length",
+          "defaultLength": 4,
+          "familyId": "ladder",
+          "materialRole": "ladder"
+        }
+      ]
+    },
+    {
+      "id": "terrain.solid-corner",
+      "label": "Solid corner",
+      "category": "terrain",
+      "description": "Small authored structural motif used to exercise corner resolution without a flattened stamp payload.",
+      "components": [
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            1,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            1
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        }
+      ]
+    },
+    {
+      "id": "motif.jungle.stone-statue",
+      "label": "Jungle stone statue",
+      "group": "south_america",
+      "category": "statue",
+      "description": "Manually retained production motif from jungle.stamp.850; the large generated stamp catalog remains discovery/reference evidence.",
+      "components": [
+        {
+          "kind": "source-region",
+          "offset": [
+            0,
+            0
+          ],
+          "sourceMapId": 10,
+          "originCell": [
+            16,
+            2
+          ],
+          "sizeCells": [
+            3,
+            3
+          ],
+          "planes": [
+            "B"
+          ]
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            1,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            2,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            1
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            1,
+            1
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            2,
+            1
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            2
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            1,
+            2
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            2,
+            2
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        }
+      ]
+    },
+    {
+      "id": "motif.jungle.palm",
+      "label": "Jungle palm",
+      "group": "south_america",
+      "category": "palm",
+      "description": "Manually retained production motif from jungle.stamp.395; the large generated stamp catalog remains discovery/reference evidence.",
+      "components": [
+        {
+          "kind": "source-region",
+          "offset": [
+            0,
+            0
+          ],
+          "sourceMapId": 3,
+          "originCell": [
+            15,
+            1
+          ],
+          "sizeCells": [
+            2,
+            2
+          ],
+          "planes": [
+            "A"
+          ]
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            1,
+            0
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            0,
+            1
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        },
+        {
+          "kind": "terrain-cell",
+          "offset": [
+            1,
+            1
+          ],
+          "familyId": "structural",
+          "materialRole": "structural"
+        }
+      ]
+    }
+  ]
+}

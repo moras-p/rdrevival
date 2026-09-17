@@ -1,0 +1,1044 @@
+{
+  "schema": "rdx.no_overlap_presence.v2",
+  "version": "2.1.104",
+  "generatedFrom": "tools/rdx/audit_no_overlap_presence.mjs",
+  "policy": {
+    "exactSourceFirst": true,
+    "generalAreaRadiusPx": 56,
+    "terrainHazardRadiusPx": 40,
+    "sampledTicks": [
+      0,
+      31,
+      127
+    ],
+    "note": "No overlap intentionally reports unresolved visible/interactive Classic families; outstanding diagnostics are review work, not audit failures. The audit fails only when the diagnostic mechanism itself is inconsistent or a reviewed restored counterpart regresses."
+  },
+  "diagnostics": 25,
+  "byCategory": {
+    "collectible": 25
+  },
+  "byClassification": {
+    "missing-rdx-entity": 25
+  },
+  "rooms": [
+    {
+      "submap": 0,
+      "mapId": 3,
+      "group": "south_america",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:0",
+          "sourceKey": "mark:0",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            40,
+            67
+          ],
+          "bounds": {
+            "x": 28,
+            "y": 46,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 0 / entity 0x16 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:3",
+          "sourceKey": "mark:3",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            323
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 302,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 3 / entity 0x17 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 1,
+      "mapId": 4,
+      "group": "south_america",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 2,
+      "mapId": 5,
+      "group": "south_america",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:20",
+          "sourceKey": "mark:20",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            64,
+            147
+          ],
+          "bounds": {
+            "x": 52,
+            "y": 126,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 20 / entity 0x16 projected with room offset (32,-16); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:21",
+          "sourceKey": "mark:21",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            224,
+            147
+          ],
+          "bounds": {
+            "x": 212,
+            "y": 126,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 21 / entity 0x17 projected with room offset (32,-16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 3,
+      "mapId": 6,
+      "group": "south_america",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:24",
+          "sourceKey": "mark:24",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            32,
+            67
+          ],
+          "bounds": {
+            "x": 20,
+            "y": 46,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 24 / entity 0x16 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:38",
+          "sourceKey": "mark:38",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            899
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 878,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 38 / entity 0x17 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 4,
+      "mapId": 7,
+      "group": "south_america",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 5,
+      "mapId": 8,
+      "group": "south_america",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 6,
+      "mapId": 9,
+      "group": "south_america",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 7,
+      "mapId": 10,
+      "group": "south_america",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 8,
+      "mapId": 11,
+      "group": "south_america",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 9,
+      "mapId": 13,
+      "group": "egypt",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:101",
+          "sourceKey": "mark:101",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            83
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 62,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 101 / entity 0x17 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:119",
+          "sourceKey": "mark:119",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            64,
+            867
+          ],
+          "bounds": {
+            "x": 52,
+            "y": 846,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 119 / entity 0x16 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 10,
+      "mapId": 14,
+      "group": "egypt",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:121",
+          "sourceKey": "mark:121",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            83
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 62,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 121 / entity 0x17 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:132",
+          "sourceKey": "mark:132",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            160,
+            691
+          ],
+          "bounds": {
+            "x": 148,
+            "y": 670,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 132 / entity 0x16 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 11,
+      "mapId": 15,
+      "group": "egypt",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 12,
+      "mapId": 16,
+      "group": "egypt",
+      "missingCount": 1,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:150",
+          "sourceKey": "mark:150",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            144,
+            -37
+          ],
+          "bounds": {
+            "x": 132,
+            "y": -58,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 150 / entity 0x17 projected with room offset (32,-16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 13,
+      "mapId": 17,
+      "group": "egypt",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 14,
+      "mapId": 18,
+      "group": "egypt",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:170",
+          "sourceKey": "mark:170",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            64,
+            467
+          ],
+          "bounds": {
+            "x": 52,
+            "y": 446,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 170 / entity 0x16 projected with room offset (32,-16); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:175",
+          "sourceKey": "mark:175",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            627
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 606,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 175 / entity 0x17 projected with room offset (32,-16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 15,
+      "mapId": 19,
+      "group": "egypt",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:185",
+          "sourceKey": "mark:185",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            128,
+            443
+          ],
+          "bounds": {
+            "x": 116,
+            "y": 422,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 185 / entity 0x16 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:191",
+          "sourceKey": "mark:191",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            851
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 830,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 191 / entity 0x17 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 16,
+      "mapId": 20,
+      "group": "egypt",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 17,
+      "mapId": 21,
+      "group": "egypt",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 18,
+      "mapId": 22,
+      "group": "egypt",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 19,
+      "mapId": 23,
+      "group": "egypt",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 20,
+      "mapId": 25,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 21,
+      "mapId": 28,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 22,
+      "mapId": 29,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 23,
+      "mapId": 30,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 24,
+      "mapId": 31,
+      "group": "castle",
+      "missingCount": 1,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:279",
+          "sourceKey": "mark:279",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            32,
+            83
+          ],
+          "bounds": {
+            "x": 20,
+            "y": 62,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 279 / entity 0x16 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 25,
+      "mapId": 32,
+      "group": "castle",
+      "missingCount": 1,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:290",
+          "sourceKey": "mark:290",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            32,
+            67
+          ],
+          "bounds": {
+            "x": 20,
+            "y": 46,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 290 / entity 0x17 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 26,
+      "mapId": 33,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 27,
+      "mapId": 34,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 28,
+      "mapId": 35,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 29,
+      "mapId": 36,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 30,
+      "mapId": 37,
+      "group": "castle",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:331",
+          "sourceKey": "mark:331",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            32,
+            67
+          ],
+          "bounds": {
+            "x": 20,
+            "y": 46,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 331 / entity 0x16 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:341",
+          "sourceKey": "mark:341",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            323
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 302,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 341 / entity 0x17 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 31,
+      "mapId": 38,
+      "group": "castle",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:348",
+          "sourceKey": "mark:348",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            32,
+            131
+          ],
+          "bounds": {
+            "x": 20,
+            "y": 110,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 348 / entity 0x16 projected with room offset (32,64); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:349",
+          "sourceKey": "mark:349",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            131
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 110,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 349 / entity 0x17 projected with room offset (32,64); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 32,
+      "mapId": 39,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 33,
+      "mapId": 40,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 34,
+      "mapId": 41,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 35,
+      "mapId": 42,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 36,
+      "mapId": 43,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 37,
+      "mapId": 44,
+      "group": "castle",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 38,
+      "mapId": 46,
+      "group": "missile_base",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 39,
+      "mapId": 47,
+      "group": "missile_base",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 40,
+      "mapId": 48,
+      "group": "missile_base",
+      "missingCount": 1,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:447",
+          "sourceKey": "mark:447",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            240,
+            147
+          ],
+          "bounds": {
+            "x": 228,
+            "y": 126,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 447 / entity 0x16 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 41,
+      "mapId": 49,
+      "group": "missile_base",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 42,
+      "mapId": 50,
+      "group": "missile_base",
+      "missingCount": 1,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:469",
+          "sourceKey": "mark:469",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            192,
+            67
+          ],
+          "bounds": {
+            "x": 180,
+            "y": 46,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 469 / entity 0x17 projected with room offset (32,0); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 43,
+      "mapId": 51,
+      "group": "missile_base",
+      "missingCount": 2,
+      "missing": [
+        {
+          "debugId": "no-overlap:mark:476",
+          "sourceKey": "mark:476",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            256,
+            83
+          ],
+          "bounds": {
+            "x": 244,
+            "y": 62,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 476 / entity 0x17 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        },
+        {
+          "debugId": "no-overlap:mark:477",
+          "sourceKey": "mark:477",
+          "category": "no-overlap",
+          "subjectCategory": "collectible",
+          "classification": "missing-rdx-entity",
+          "counterpartState": "no-compatible-rdx-entity-nearby",
+          "overlayType": "missing-rdx-entity",
+          "current": [
+            64,
+            115
+          ],
+          "bounds": {
+            "x": 52,
+            "y": 94,
+            "width": 24,
+            "height": 21
+          },
+          "policy": {
+            "family": "no-overlap",
+            "label": "Classic collectible has no nearby RDX counterpart"
+          },
+          "authority": "classic-to-rdx-general-area-presence-audit",
+          "notes": [
+            "Classic mark 477 / entity 0x16 projected with room offset (32,16); no compatible RDX collectible within 56px."
+          ]
+        }
+      ]
+    },
+    {
+      "submap": 44,
+      "mapId": 52,
+      "group": "missile_base",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 45,
+      "mapId": 53,
+      "group": "missile_base",
+      "missingCount": 0,
+      "missing": []
+    },
+    {
+      "submap": 46,
+      "mapId": 54,
+      "group": "missile_base",
+      "missingCount": 0,
+      "missing": []
+    }
+  ]
+}

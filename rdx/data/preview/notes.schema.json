@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rdx.preview_notes.v1",
+  "title": "xrick/RDX whole-map sprite notes",
+  "type": "object",
+  "required": [
+    "schema",
+    "version",
+    "game",
+    "rooms"
+  ],
+  "properties": {
+    "schema": {
+      "const": "rdx.preview_notes.v1"
+    },
+    "version": {
+      "type": "string"
+    },
+    "game": {
+      "type": "object",
+      "required": [
+        "project",
+        "appVersion"
+      ],
+      "properties": {
+        "project": {
+          "const": "xrick/RDX Web"
+        },
+        "appVersion": {
+          "type": "string"
+        },
+        "rdxRomSha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "submap",
+          "mapId",
+          "assets"
+        ],
+        "properties": {
+          "submap": {
+            "type": "integer"
+          },
+          "submapName": {
+            "type": "string"
+          },
+          "mapId": {
+            "type": "integer"
+          },
+          "mapName": {
+            "type": "string"
+          },
+          "world": {
+            "type": "string"
+          },
+          "visualSource": {
+            "enum": [
+              "classic",
+              "rdx"
+            ]
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "assetKey",
+                "category",
+                "observed",
+                "notes",
+                "operations"
+              ],
+              "properties": {
+                "assetKey": {
+                  "type": "string"
+                },
+                "sourceKey": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "selectionType": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "observed": {
+                  "type": "object"
+                },
+                "notes": {
+                  "type": "array"
+                },
+                "rdxAssetOverride": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "states"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "states": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "label",
+                            "order",
+                            "x",
+                            "y",
+                            "visible",
+                            "coordinatePolicy"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "order": {
+                              "type": "number"
+                            },
+                            "tick": {
+                              "type": "number"
+                            },
+                            "x": {
+                              "type": "number"
+                            },
+                            "y": {
+                              "type": "number"
+                            },
+                            "coordinatePolicy": {
+                              "const": "world-origin-contact"
+                            },
+                            "visible": {
+                              "type": "boolean"
+                            },
+                            "pn": {
+                              "type": "number"
+                            },
+                            "actorId": {
+                              "type": "number"
+                            },
+                            "animationTick": {
+                              "type": "number"
+                            },
+                            "direction": {
+                              "type": "string"
+                            },
+                            "mirrorX": {
+                              "type": "boolean"
+                            },
+                            "front": {
+                              "type": "boolean"
+                            },
+                            "note": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "geometryNotes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "text",
+                "geometryIds",
+                "cells"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "text": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "geometryIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "cells": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "visualSource",
+                      "kind",
+                      "bounds"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "visualSource": {
+                        "enum": [
+                          "classic",
+                          "rdx"
+                        ]
+                      },
+                      "kind": {
+                        "type": "string"
+                      },
+                      "kindName": {
+                        "type": "string"
+                      },
+                      "bounds": {
+                        "type": "object"
+                      },
+                      "grid": {
+                        "type": "object"
+                      },
+                      "logicCell": {
+                        "type": "object"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "geometrySelectors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Optional compact geometry selector expressions; expands losslessly to geometryIds."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

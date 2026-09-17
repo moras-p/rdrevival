@@ -1,0 +1,1142 @@
+{
+  "schema": "rd.enemy_animation_frames.v1",
+  "version": "2026-06-06-sourcefix-v27",
+  "generatedAt": "2026-06-06T13:30:00.000Z",
+  "xrickEnemySets": [
+    {
+      "setId": "artbase_2F",
+      "name": "e_them art set 0x2F \u2014 entities 0x04/0x05/0x06",
+      "actorIds": [
+        "0x04",
+        "0x05",
+        "0x06"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_2F",
+        "t1",
+        "t2"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x2F, not entity id. Entities 0x04, 0x05, 0x06 are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. ",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x2F",
+            "0x30",
+            "0x2F",
+            "0x31"
+          ],
+          "frameIds": [
+            47,
+            48,
+            47,
+            49
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x32",
+            "0x33",
+            "0x32",
+            "0x34"
+          ],
+          "frameIds": [
+            50,
+            51,
+            50,
+            52
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x35",
+            "0x36"
+          ],
+          "frameIds": [
+            53,
+            54
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_right",
+          "label": "type-2 behavior gait, RIGHT; two frames because runtime samples only ent_sprseq[0..1]",
+          "direction": "right",
+          "frames": [
+            "0x2F",
+            "0x30"
+          ],
+          "frameIds": [
+            47,
+            48
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_left",
+          "label": "type-2 behavior gait, LEFT; two native frames from ent_sprseq[4..5]",
+          "direction": "left",
+          "frames": [
+            "0x34",
+            "0x32"
+          ],
+          "frameIds": [
+            52,
+            50
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "artbase_37",
+      "name": "e_them art set 0x37 \u2014 entities 0x07/0x08/0x09",
+      "actorIds": [
+        "0x07",
+        "0x08",
+        "0x09"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_37",
+        "t1",
+        "t2"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x37, not entity id. Entities 0x07, 0x08, 0x09 are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. ",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x37",
+            "0x38",
+            "0x37",
+            "0x39"
+          ],
+          "frameIds": [
+            55,
+            56,
+            55,
+            57
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x3A",
+            "0x3B",
+            "0x3A",
+            "0x3C"
+          ],
+          "frameIds": [
+            58,
+            59,
+            58,
+            60
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x3D",
+            "0x3E"
+          ],
+          "frameIds": [
+            61,
+            62
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_right",
+          "label": "type-2 behavior gait, RIGHT; two frames because runtime samples only ent_sprseq[0..1]",
+          "direction": "right",
+          "frames": [
+            "0x37",
+            "0x38"
+          ],
+          "frameIds": [
+            55,
+            56
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_left",
+          "label": "type-2 behavior gait, LEFT; two native frames from ent_sprseq[4..5]",
+          "direction": "left",
+          "frames": [
+            "0x3C",
+            "0x3A"
+          ],
+          "frameIds": [
+            60,
+            58
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_climb",
+          "label": "type-2 climb alternation; included only when sprbase+8/+9 do not alias another art set",
+          "direction": "neutral",
+          "frames": [
+            "0x3F",
+            "0x40"
+          ],
+          "frameIds": [
+            63,
+            64
+          ],
+          "source": "e_them_t2_action2 climb branch; alias-guarded in browser baseline",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "artbase_41",
+      "name": "e_them art set 0x41 \u2014 entities 0x0A/0x0B/0x0C",
+      "actorIds": [
+        "0x0A",
+        "0x0B",
+        "0x0C"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_41",
+        "t1",
+        "t2"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x41, not entity id. Entities 0x0A, 0x0B, 0x0C are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. ",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x41",
+            "0x42",
+            "0x41",
+            "0x43"
+          ],
+          "frameIds": [
+            65,
+            66,
+            65,
+            67
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x44",
+            "0x45",
+            "0x44",
+            "0x46"
+          ],
+          "frameIds": [
+            68,
+            69,
+            68,
+            70
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x47",
+            "0x48"
+          ],
+          "frameIds": [
+            71,
+            72
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_right",
+          "label": "type-2 behavior gait, RIGHT; two frames because runtime samples only ent_sprseq[0..1]",
+          "direction": "right",
+          "frames": [
+            "0x41",
+            "0x42"
+          ],
+          "frameIds": [
+            65,
+            66
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_left",
+          "label": "type-2 behavior gait, LEFT; two native frames from ent_sprseq[4..5]",
+          "direction": "left",
+          "frames": [
+            "0x46",
+            "0x44"
+          ],
+          "frameIds": [
+            70,
+            68
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_climb",
+          "label": "type-2 climb alternation; included only when sprbase+8/+9 do not alias another art set",
+          "direction": "neutral",
+          "frames": [
+            "0x49",
+            "0x4A"
+          ],
+          "frameIds": [
+            73,
+            74
+          ],
+          "source": "e_them_t2_action2 climb branch; alias-guarded in browser baseline",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "artbase_4B",
+      "name": "e_them art set 0x4B \u2014 entities 0x0D/0x0E/0x0F",
+      "actorIds": [
+        "0x0D",
+        "0x0E",
+        "0x0F"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_4B",
+        "t1",
+        "t2"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x4B, not entity id. Entities 0x0D, 0x0E, 0x0F are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. ",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x4B",
+            "0x4C",
+            "0x4B",
+            "0x4D"
+          ],
+          "frameIds": [
+            75,
+            76,
+            75,
+            77
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x4E",
+            "0x4F",
+            "0x4E",
+            "0x50"
+          ],
+          "frameIds": [
+            78,
+            79,
+            78,
+            80
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x51",
+            "0x52"
+          ],
+          "frameIds": [
+            81,
+            82
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_right",
+          "label": "type-2 behavior gait, RIGHT; two frames because runtime samples only ent_sprseq[0..1]",
+          "direction": "right",
+          "frames": [
+            "0x4B",
+            "0x4C"
+          ],
+          "frameIds": [
+            75,
+            76
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_patrol_left",
+          "label": "type-2 behavior gait, LEFT; two native frames from ent_sprseq[4..5]",
+          "direction": "left",
+          "frames": [
+            "0x50",
+            "0x4E"
+          ],
+          "frameIds": [
+            80,
+            78
+          ],
+          "source": "e_them_t2_action2 ground branch",
+          "confidence": "high"
+        },
+        {
+          "action": "type2_climb",
+          "label": "type-2 climb alternation; included only when sprbase+8/+9 do not alias another art set",
+          "direction": "neutral",
+          "frames": [
+            "0x53",
+            "0x54"
+          ],
+          "frameIds": [
+            83,
+            84
+          ],
+          "source": "e_them_t2_action2 climb branch; alias-guarded in browser baseline",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "artbase_7E",
+      "name": "e_them art set 0x7E \u2014 entities 0x07/0x08",
+      "actorIds": [
+        "0x07",
+        "0x08"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_7E",
+        "t1"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x7E, not entity id. Entities 0x07, 0x08 are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. Override cases: 0x07 via trigger sprbase override from sni=0x007E; 0x08 via trigger sprbase override from sni=0x007E.",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x7E",
+            "0x7F",
+            "0x7E",
+            "0x80"
+          ],
+          "frameIds": [
+            126,
+            127,
+            126,
+            128
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x81",
+            "0x82",
+            "0x81",
+            "0x83"
+          ],
+          "frameIds": [
+            129,
+            130,
+            129,
+            131
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x84",
+            "0x85"
+          ],
+          "frameIds": [
+            132,
+            133
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "artbase_86",
+      "name": "e_them art set 0x86 \u2014 entities 0x0A/0x0B/0x0D/0x0E",
+      "actorIds": [
+        "0x0A",
+        "0x0B",
+        "0x0D",
+        "0x0E"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_86",
+        "t1"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x86, not entity id. Entities 0x0A, 0x0B, 0x0D, 0x0E are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. Override cases: 0x0A via trigger sprbase override from sni=0x0086; 0x0B via trigger sprbase override from sni=0x0086; 0x0D via trigger sprbase override from sni=0x0086; 0x0E via trigger sprbase override from sni=0x0086.",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x86",
+            "0x87",
+            "0x86",
+            "0x88"
+          ],
+          "frameIds": [
+            134,
+            135,
+            134,
+            136
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x89",
+            "0x8A",
+            "0x89",
+            "0x8B"
+          ],
+          "frameIds": [
+            137,
+            138,
+            137,
+            139
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x8C",
+            "0x8D"
+          ],
+          "frameIds": [
+            140,
+            141
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "artbase_8E",
+      "name": "e_them art set 0x8E \u2014 entities 0x04/0x05",
+      "actorIds": [
+        "0x04",
+        "0x05"
+      ],
+      "tags": [
+        "enemy",
+        "e_them",
+        "artbase",
+        "sprbase_8E",
+        "t1"
+      ],
+      "notes": "Grouped by actual runtime sprite base 0x8E, not entity id. Entities 0x04, 0x05 are behavior variants using this art. Type-2 patrol really is two frames in e_them_t2_action2; it is a behavior-specific row, not a separate character. Climb rows are suppressed when sprbase+8/+9 aliases another known artbase (for example 0x2F+8=0x37), because that is another character block rather than a valid climb animation. Override cases: 0x04 via trigger sprbase override from sni=0x008E; 0x05 via trigger sprbase override from sni=0x008E.",
+      "animations": [
+        {
+          "action": "walk_right",
+          "label": "type-1 ground gait, RIGHT/native frames",
+          "direction": "right",
+          "frames": [
+            "0x8E",
+            "0x8F",
+            "0x8E",
+            "0x90"
+          ],
+          "frameIds": [
+            142,
+            143,
+            142,
+            144
+          ],
+          "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+          "confidence": "high"
+        },
+        {
+          "action": "walk_left",
+          "label": "type-1 ground gait, LEFT/native frames",
+          "direction": "left",
+          "frames": [
+            "0x91",
+            "0x92",
+            "0x91",
+            "0x93"
+          ],
+          "frameIds": [
+            145,
+            146,
+            145,
+            147
+          ],
+          "source": "e_them_t1_action2: +3 when offsx<0",
+          "confidence": "high"
+        },
+        {
+          "action": "die_zombie",
+          "label": "killed e_them zombie/fall frames",
+          "direction": "neutral",
+          "frames": [
+            "0x94",
+            "0x95"
+          ],
+          "frameIds": [
+            148,
+            149
+          ],
+          "source": "e_them_z_action: sprbase+6/7",
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "setId": "entity_47",
+      "name": "Entity 0x47 \u2014 zombie",
+      "actorIds": [
+        "0x47"
+      ],
+      "tags": [
+        "trap",
+        "zombie",
+        "source-derived",
+        "scripted-block",
+        "separate-tab"
+      ],
+      "notes": "Derived from ent_entdata[47] = w:18 h:21 spr:0x003C sni:0x00F4 trigger:24/4 snd:0x1A. Spawned in SM25. Grouping follows the C action code; no contiguous sprite-range inference.",
+      "animations": [
+        {
+          "action": "zombie_formula",
+          "label": "special entity 0x47 runtime formula: sprbase+6/7",
+          "direction": "neutral",
+          "frames": [
+            "0x42",
+            "0x43"
+          ],
+          "frameIds": [
+            66,
+            67
+          ],
+          "source": "ent_action dispatches k==0x47 directly to e_them_z_action",
+          "confidence": "high"
+        }
+      ]
+    }
+  ],
+  "rdxEnemySets": [
+    {
+      "setId": "jungle_enemy_a",
+      "displayName": "MD0003 Jungle \u2014 enemy walk set A",
+      "actorIds": [
+        "0x03",
+        "0x05"
+      ],
+      "tags": [
+        "jungle",
+        "enemy",
+        "directional"
+      ],
+      "notes": "Actors 0x03 and 0x05 share PN004/PN005. Death PN003 is visually associated but not present in the PA slots.",
+      "animations": [
+        {
+          "action": "die",
+          "label": "death / front-facing collapse",
+          "direction": "neutral",
+          "pn": "PN0x03",
+          "pnDec": 3,
+          "pfRange": "PF4-7",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk right",
+          "direction": "right",
+          "pn": "PN0x04",
+          "pnDec": 4,
+          "pfRange": "PF8-12",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk left",
+          "direction": "left",
+          "pn": "PN0x05",
+          "pnDec": 5,
+          "pfRange": "PF13-17",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": []
+    },
+    {
+      "setId": "jungle_enemy_b",
+      "displayName": "MD0004 Jungle \u2014 enemy walk set B",
+      "actorIds": [
+        "0x06"
+      ],
+      "tags": [
+        "jungle",
+        "enemy",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "die",
+          "label": "death / front-facing collapse",
+          "direction": "neutral",
+          "pn": "PN0x06",
+          "pnDec": 6,
+          "pfRange": "PF18-21",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk right",
+          "direction": "right",
+          "pn": "PN0x07",
+          "pnDec": 7,
+          "pfRange": "PF22-26",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk left",
+          "direction": "left",
+          "pn": "PN0x08",
+          "pnDec": 8,
+          "pfRange": "PF27-31",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": []
+    },
+    {
+      "setId": "egypt_mummy_guard",
+      "displayName": "MD0013 Egypt \u2014 mummy/guard",
+      "actorIds": [
+        "0x27",
+        "0x29"
+      ],
+      "tags": [
+        "egypt",
+        "enemy",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "walk",
+          "label": "run/walk right",
+          "direction": "right",
+          "pn": "PN0x26",
+          "pnDec": 38,
+          "pfRange": "PF95-100",
+          "frameCount": 6,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "run/walk left",
+          "direction": "left",
+          "pn": "PN0x27",
+          "pnDec": 39,
+          "pfRange": "PF101-106",
+          "frameCount": 6,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": [
+        "r:pn_009"
+      ]
+    },
+    {
+      "setId": "egypt_large_guard",
+      "displayName": "MD0013 Egypt \u2014 large guard/enemy",
+      "actorIds": [
+        "0x2E"
+      ],
+      "tags": [
+        "egypt",
+        "enemy",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "walk",
+          "label": "run/walk right",
+          "direction": "right",
+          "pn": "PN0x2C",
+          "pnDec": 44,
+          "pfRange": "PF124-127",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "run/walk left",
+          "direction": "left",
+          "pn": "PN0x2D",
+          "pnDec": 45,
+          "pfRange": "PF128-131",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": [
+        "r:pn_00A"
+      ]
+    },
+    {
+      "setId": "castle_dog",
+      "displayName": "MD0025 Castle \u2014 dog enemy",
+      "actorIds": [
+        "0x20"
+      ],
+      "tags": [
+        "castle",
+        "enemy",
+        "dog",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "walk",
+          "label": "dog walk right",
+          "direction": "right",
+          "pn": "PN0x1F",
+          "pnDec": 31,
+          "pfRange": "PF74-77",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "dog walk left",
+          "direction": "left",
+          "pn": "PN0x20",
+          "pnDec": 32,
+          "pfRange": "PF78-81",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": [
+        "r:pn_021"
+      ]
+    },
+    {
+      "setId": "castle_guard",
+      "displayName": "MD0026 Castle \u2014 guard",
+      "actorIds": [
+        "0x3A",
+        "0x3C"
+      ],
+      "tags": [
+        "castle",
+        "enemy",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "die",
+          "label": "short death animation",
+          "direction": "neutral",
+          "pn": "PN0x37",
+          "pnDec": 55,
+          "pfRange": "PF153-154",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "guard walk right",
+          "direction": "right",
+          "pn": "PN0x38",
+          "pnDec": 56,
+          "pfRange": "PF155-157",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "guard walk left",
+          "direction": "left",
+          "pn": "PN0x39",
+          "pnDec": 57,
+          "pfRange": "PF158-160",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "die_variant",
+          "label": "short death variant",
+          "direction": "neutral",
+          "pn": "PN0x3A",
+          "pnDec": 58,
+          "pfRange": "PF161-162",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": []
+    },
+    {
+      "setId": "castle_missile_guard",
+      "displayName": "MD0025 Castle/Missile \u2014 guard walk",
+      "actorIds": [
+        "0x6B"
+      ],
+      "tags": [
+        "castle",
+        "missile_base",
+        "enemy",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "walk",
+          "label": "guard walk right",
+          "direction": "right",
+          "pn": "PN0x70",
+          "pnDec": 112,
+          "pfRange": "PF321-323",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "guard walk left",
+          "direction": "left",
+          "pn": "PN0x71",
+          "pnDec": 113,
+          "pfRange": "PF324-326",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": [
+        "r:pn_06F"
+      ]
+    },
+    {
+      "setId": "missile_soldier_guard",
+      "displayName": "MD0047 Missile Base \u2014 soldier/guard",
+      "actorIds": [
+        "0x3D",
+        "0x3F"
+      ],
+      "tags": [
+        "missile_base",
+        "enemy",
+        "directional"
+      ],
+      "notes": "",
+      "animations": [
+        {
+          "action": "walk",
+          "label": "soldier/guard walk right",
+          "direction": "right",
+          "pn": "PN0x3B",
+          "pnDec": 59,
+          "pfRange": "PF163-167",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "soldier/guard walk left",
+          "direction": "left",
+          "pn": "PN0x3C",
+          "pnDec": 60,
+          "pfRange": "PF168-172",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "joinedPnOrAssets": []
+    },
+    {
+      "setId": "pn040_robot_enemy",
+      "displayName": "PN040/PN041 robot enemy",
+      "actorIds": [],
+      "tags": [
+        "PN-only",
+        "robot",
+        "enemy"
+      ],
+      "notes": "Promoted PN-only enemy from PN0x40/PN0x41. Needs runtime owner/level trigger confirmation.",
+      "animations": [
+        {
+          "action": "robot_motion",
+          "label": "robot enemy PN0x40",
+          "direction": "neutral",
+          "pn": "PN0x40",
+          "pnDec": 64,
+          "pfRange": "PF177-178",
+          "frameCount": 2,
+          "source": "PN-only special promotion",
+          "confidence": "high",
+          "notes": "Robot enemy bundle."
+        },
+        {
+          "action": "robot_motion_variant",
+          "label": "robot enemy companion PN0x41",
+          "direction": "neutral",
+          "pn": "PN0x41",
+          "pnDec": 65,
+          "pfRange": "PF179-180",
+          "frameCount": 2,
+          "source": "PN-only special promotion",
+          "confidence": "high",
+          "notes": "Companion robot frames."
+        }
+      ],
+      "joinedPnOrAssets": [
+        "r:pn040_robot_enemy",
+        "r:pn_040",
+        "r:pn_041"
+      ]
+    }
+  ],
+  "findings": {
+    "xrickEnemyRule": "Type-1 enemy walk uses native right frames sprbase+[0,1,0,2] and left sprbase+[3,4,3,5]; death uses sprbase+6/+7. Type-2 patrol uses two frames per direction; climb exists only when sprbase+8/+9 do not alias another art set.",
+    "rdxEnemyRule": "RDX enemy actions are PN records with PF ranges; sidecar exposes walk/die variants for several enemies, but some death/rest/climb actions are PN-only and must be joined or traced from runtime PA/PN usage.",
+    "ladderFinding": "RDX player ladder is PN0x5D/dec93. No separate enemy ladder or up/down player ladder assets are confirmed yet."
+  }
+}

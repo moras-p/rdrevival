@@ -1,0 +1,39 @@
+{
+  "schema": "rdx.logic_puzzles.v1",
+  "version": "0.14.9",
+  "entries": [
+    {
+      "id": "md0006-moving-blockage",
+      "title": "MD0006 — dynamite blockage",
+      "submap": 3,
+      "mapId": 6,
+      "cameraFrow": 88,
+      "start": { "x": 140, "y": 752, "crawling": false },
+      "endBounds": { "left": 208, "top": 744, "right": 240, "bottom": 800 },
+      "expectedActions": ["removed-by-dynamite", "collision-removed"],
+      "description": "Plant dynamite beside the large stone blockage, wait for it to move away, then cross the opened passage."
+    },
+    {
+      "id": "md0006-paired-rubble",
+      "title": "MD0006 — paired rubble passage",
+      "submap": 3,
+      "mapId": 6,
+      "cameraFrow": 106,
+      "start": { "x": 144, "y": 848, "crawling": false },
+      "endBounds": { "left": 208, "top": 848, "right": 248, "bottom": 912 },
+      "expectedActions": ["removed-by-dynamite", "become-rubble", "collision-removed"],
+      "description": "One dynamite blast must activate both adjacent rubble piles and leave a traversable corridor."
+    },
+    {
+      "id": "md0008-moving-platform",
+      "title": "MD0008 — moving block carrier",
+      "submap": 5,
+      "mapId": 8,
+      "cameraFrow": 16,
+      "start": { "x": 208, "y": 128, "crawling": false },
+      "endBounds": { "left": 224, "top": 176, "right": 272, "bottom": 232 },
+      "expectedActions": ["moved", "carried-player"],
+      "description": "Use the visible moving block to reach the destination area without falling through it."
+    }
+  ]
+}

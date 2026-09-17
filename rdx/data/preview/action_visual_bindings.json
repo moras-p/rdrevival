@@ -1,0 +1,284 @@
+{
+  "bindings": [
+    {
+      "aliasSourceKey": "mark:30",
+      "authority": "production-linked-source-alias:same-wide-ceiling-spike",
+      "classicAction": {
+        "backTicks": 8,
+        "holdTicks": 6,
+        "idleTicks": 8,
+        "kind": "bounded-eject-loop",
+        "outTicks": 8,
+        "vector": [
+          0,
+          16
+        ]
+      },
+      "mapId": 6,
+      "sourceKey": "mark:29",
+      "submap": 3,
+      "validatedBy": [
+        "linked-classic-trigger-pair:marks29-30"
+      ]
+    },
+    {
+      "action": {
+        "backTicks": 8,
+        "holdTicks": 6,
+        "idleTicks": 8,
+        "kind": "bounded-eject-loop",
+        "outTicks": 8,
+        "vector": [
+          0,
+          16
+        ]
+      },
+      "actorId": 83,
+      "anchor": [
+        28,
+        11
+      ],
+      "authority": "verified-rdx-action:wide-spike-short-drop",
+      "classicAction": {
+        "backTicks": 8,
+        "holdTicks": 6,
+        "idleTicks": 8,
+        "kind": "bounded-eject-loop",
+        "outTicks": 8,
+        "vector": [
+          0,
+          16
+        ]
+      },
+      "draw": [
+        140,
+        396
+      ],
+      "mapId": 6,
+      "origin": [
+        168,
+        407
+      ],
+      "pn": 80,
+      "role": "trap",
+      "size": [
+        56,
+        32
+      ],
+      "snapshotVisible": true,
+      "sourceKey": "mark:30",
+      "submap": 3,
+      "validatedBy": [
+        "corrected-sprite-anims:floor_spike_traps:PN080-wide-moving",
+        "production-owner:MD0006-actor0x53",
+        "user-gameplay:bounded-to-walkway"
+      ]
+    },
+    {
+      "action": {
+        "hiddenTicks": 8,
+        "holdTicks": 4,
+        "kind": "linear-one-shot-loop",
+        "outTicks": 20,
+        "vector": [
+          -120,
+          0
+        ]
+      },
+      "actorId": 114,
+      "anchor": [
+        19,
+        12
+      ],
+      "authority": "verified-rdx-action:boulder-trigger-envelope",
+      "draw": [
+        156,
+        749
+      ],
+      "mapId": 6,
+      "origin": [
+        175,
+        761
+      ],
+      "pn": 66,
+      "role": "actor",
+      "size": [
+        40,
+        24
+      ],
+      "snapshotVisible": false,
+      "sourceKey": "mark:35",
+      "submap": 3,
+      "validatedBy": [
+        "production-static-actor:MD0006-actor0x72-PN066",
+        "classic-trigger-envelope:mark35",
+        "reviewed-notes-v0.16.4:manual-position",
+        "reviewed-notes-v0.16.5:manual-position"
+      ]
+    },
+    {
+      "action": {
+        "kind": "state-swap-on-trigger",
+        "period": 32,
+        "states": [
+          {
+            "name": "unexploded",
+            "pn": 85,
+            "visibleTicks": 2
+          },
+          {
+            "name": "exploded",
+            "pn": 86,
+            "visibleTicks": 30
+          }
+        ]
+      },
+      "actorId": 86,
+      "anchor": [
+        15,
+        19
+      ],
+      "authority": "reviewed-rdx-action:rubble-state-swap-corrected-geometry",
+      "draw": [
+        161,
+        845
+      ],
+      "mapId": 6,
+      "origin": [
+        176,
+        864
+      ],
+      "pn": 85,
+      "role": "blockage",
+      "size": [
+        32,
+        24
+      ],
+      "snapshotVisible": true,
+      "sourceKey": "mark:36",
+      "submap": 3,
+      "validatedBy": [
+        "production-removable-rubble:MD0006-mark36",
+        "decoded-ROM-opaque-height:PN85-tall-PN86-short",
+        "reviewed-runtime-comparison:unexploded-exploded-PN-pair"
+      ]
+    },
+    {
+      "action": {
+        "kind": "state-swap-on-trigger",
+        "period": 32,
+        "states": [
+          {
+            "name": "unexploded",
+            "pn": 87,
+            "visibleTicks": 2
+          },
+          {
+            "name": "exploded",
+            "pn": 88,
+            "visibleTicks": 30
+          }
+        ]
+      },
+      "actorId": 86,
+      "anchor": [
+        15,
+        19
+      ],
+      "authority": "reviewed-rdx-action:rubble-state-swap-corrected-geometry",
+      "draw": [
+        177,
+        845
+      ],
+      "mapId": 6,
+      "origin": [
+        192,
+        864
+      ],
+      "pn": 87,
+      "role": "blockage",
+      "size": [
+        32,
+        24
+      ],
+      "snapshotVisible": true,
+      "sourceKey": "mark:37",
+      "submap": 3,
+      "validatedBy": [
+        "production-removable-rubble:MD0006-mark37",
+        "decoded-ROM-opaque-height:PN87-tall-PN88-short",
+        "reviewed-runtime-comparison:unexploded-exploded-PN-pair"
+      ]
+    },
+    {
+      "action": {
+        "kind": "state-swap-on-trigger",
+        "period": 32,
+        "states": [
+          {
+            "name": "unexploded",
+            "pn": 85,
+            "visibleTicks": 2
+          },
+          {
+            "name": "exploded",
+            "pn": 86,
+            "visibleTicks": 30
+          }
+        ]
+      },
+      "actorId": 86,
+      "anchor": [
+        15,
+        19
+      ],
+      "authority": "reviewed-rdx-action:independent-rubble-component-left",
+      "componentKind": "first-class-rubble-hazard",
+      "draw": [
+        209,
+        589
+      ],
+      "hazardBounds": [
+        214,
+        594,
+        22,
+        14
+      ],
+      "hazardLabel": "hazard",
+      "mapId": 7,
+      "origin": [
+        224,
+        608
+      ],
+      "pn": 85,
+      "role": "blockage",
+      "size": [
+        32,
+        24
+      ],
+      "snapshotVisible": true,
+      "sourceKey": "mark:51",
+      "submap": 4,
+      "validatedBy": [
+        "production-removable-rubble:MD0007-component-mark51",
+        "generated-rubble-component-table:left-trigger-and-lifecycle",
+        "decoded-ROM-opaque-height:PN85-tall-PN86-short",
+        "decoded-ROM-opaque-bounds:PN85-black-key-[214,594,22,14]"
+      ]
+    }
+  ],
+  "purpose": "Small, evidence-backed action overrides only. Production C trigger tracks own identity and motion by default. Overrides may select a recovered RDX action PN and a bounded visibility/motion contract, but may not borrow an unrelated MA actor or the aggregate displacement inventory.",
+  "schema": "rdx.preview_action_bindings.v2",
+  "trapFamilyPolicy": {
+    "activePassivePairs": [
+      "PN76/77",
+      "PN78/79",
+      "PN80/81",
+      "PN83/84"
+    ],
+    "authority": "ROM PA/PN/MA plus production C planner",
+    "noteDerivedPlacementAllowed": false,
+    "retiredBindings": 6
+  },
+  "version": "2.1.17"
+}

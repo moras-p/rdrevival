@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rdx.preview_patches.v1",
+  "title": "xrick/RDX single-element preview patches",
+  "description": "Review-only corrections exported by the whole-map Patches view. The document is deliberately separate from ROM-decoded layout and production presentation data.",
+  "type": "object",
+  "required": [
+    "schema",
+    "version",
+    "game",
+    "rooms"
+  ],
+  "properties": {
+    "schema": {
+      "const": "rdx.preview_patches.v1"
+    },
+    "version": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "string"
+    },
+    "updatedAt": {
+      "type": "string"
+    },
+    "game": {
+      "type": "object",
+      "required": [
+        "project",
+        "appVersion"
+      ],
+      "properties": {
+        "project": {
+          "const": "xrick/RDX Web"
+        },
+        "appVersion": {
+          "type": "string"
+        },
+        "rdxRomSha256": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "submap",
+          "mapId",
+          "patches"
+        ],
+        "properties": {
+          "submap": {
+            "type": "integer"
+          },
+          "submapName": {
+            "type": "string"
+          },
+          "mapId": {
+            "type": "integer"
+          },
+          "mapName": {
+            "type": "string"
+          },
+          "world": {
+            "type": "string"
+          },
+          "visualSource": {
+            "type": "string"
+          },
+          "patches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "elementId",
+                "elementKind",
+                "category",
+                "debugOnly",
+                "observed",
+                "change"
+              ],
+              "properties": {
+                "elementId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sourceKey": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "instanceKey": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "traceCollection": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "elementKind": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": "string"
+                },
+                "debugOnly": {
+                  "type": "boolean"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "observed": {
+                  "type": "object",
+                  "required": [
+                    "x",
+                    "y",
+                    "bounds",
+                    "visible"
+                  ],
+                  "properties": {
+                    "x": {
+                      "type": "number"
+                    },
+                    "y": {
+                      "type": "number"
+                    },
+                    "bounds": {
+                      "type": "array",
+                      "minItems": 4,
+                      "maxItems": 4,
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "visible": {
+                      "type": "boolean"
+                    },
+                    "authority": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  }
+                },
+                "change": {
+                  "type": "object",
+                  "required": [
+                    "dx",
+                    "dy",
+                    "enabled",
+                    "bugged"
+                  ],
+                  "properties": {
+                    "dx": {
+                      "type": "integer"
+                    },
+                    "dy": {
+                      "type": "integer"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    },
+                    "bugged": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "introducedInVersion": {
+                  "type": "string"
+                },
+                "operation": {
+                  "type": "string",
+                  "enum": [
+                    "upsert",
+                    "remove"
+                  ]
+                },
+                "removedInVersion": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "diffBase": {
+      "type": "object",
+      "properties": {
+        "appVersion": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

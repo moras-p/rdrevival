@@ -1,0 +1,737 @@
+{
+  "schema": "rick-dangerous-revival.audio.v1",
+  "version": "2.1.104",
+  "defaultSource": "cd32",
+  "runtimeRateHz": 22050,
+  "sources": {
+    "cd32": {
+      "label": "Amiga original (CD32 collection)",
+      "runtimeEngine": "core-design-paula-native",
+      "runtimeManifest": "cd32/original/rick1/manifest.json",
+      "runtimeRoutes": [
+        {
+          "logical": "tune0.wav",
+          "internalSong": 0,
+          "command": 0,
+          "name": "South America",
+          "status": "native-exact-sequence"
+        },
+        {
+          "logical": "tune1.wav",
+          "internalSong": 1,
+          "command": 1,
+          "name": "Egypt",
+          "status": "native-exact-sequence"
+        },
+        {
+          "logical": "tune2.wav",
+          "internalSong": 2,
+          "command": 2,
+          "name": "Schwarzendumpf Castle",
+          "status": "native-exact-sequence"
+        },
+        {
+          "logical": "tune3.wav",
+          "internalSong": 3,
+          "command": 3,
+          "name": "Missile Base",
+          "status": "native-exact-sequence"
+        },
+        {
+          "logical": "tune4.wav",
+          "internalSong": 7,
+          "command": 4,
+          "name": "London / Victory Ending",
+          "status": "native-exact-sequence"
+        },
+        {
+          "logical": "tune5.wav",
+          "internalSong": 4,
+          "command": 5,
+          "name": "Title Theme",
+          "status": "native-exact-sequence"
+        },
+        {
+          "logical": "gameover.wav",
+          "internalSong": 5,
+          "command": 6,
+          "name": "Game Over",
+          "status": "native-exact-sequence"
+        }
+      ],
+      "runtimeSfx": {
+        "commands": "7 and 27 use the native sequencer; 8..26 are exact signed 8-bit Paula samples at period 0x02CC; command 28/entity8 does not exist in original Rick 1",
+        "fallback": "none; original Rick 1 has no command 28/entity8, so that logical sound is silent in Amiga Original mode."
+      },
+      "goldReferenceRole": "Rick Dangerous RC Gold Enhanced tracker material is reference-only for audition/comparison; never substitute these five modules for the original Rick 1 cinematics.",
+      "music": [
+        {
+          "id": "1_prophecy1",
+          "title": "prophecy1",
+          "path": "cd32/library/music/1_prophecy1.wav",
+          "sourceSha256": "37f9f9dc9d6e474953f526a90773b5f9e82c209d9a9e6b73d658254194adc287"
+        },
+        {
+          "id": "2_military",
+          "title": "military",
+          "path": "cd32/library/music/2_military.wav",
+          "sourceSha256": "971c8f4dd3dfc817c576953ec9de7b5141485e6e1917eb35d9a93b9b380bfa1f"
+        },
+        {
+          "id": "3_egypt2",
+          "title": "egypt2",
+          "path": "cd32/library/music/3_egypt2.wav",
+          "sourceSha256": "585a032fee5fd33f7b1e62611e2c12969351e15b48798d8546f3684529f09d3c"
+        },
+        {
+          "id": "4_jungle",
+          "title": "jungle",
+          "path": "cd32/library/music/4_jungle.wav",
+          "sourceSha256": "d82a0bfadab5a8ba5e1f390b572a50a56509d0341d15538f117f2e2ba86bd31e"
+        },
+        {
+          "id": "5_penguin_in_pink",
+          "title": "penguin_in_pink",
+          "path": "cd32/library/music/5_penguin_in_pink.wav",
+          "sourceSha256": "576df385d80405205c2b19a1f4fdcb8ed9fec976722f90bdefb3fc060ac1c976"
+        }
+      ],
+      "samples": [
+        {
+          "module": "1_prophecy1",
+          "index": 1,
+          "name": "ST-00:damage",
+          "path": "cd32/library/samples/1_prophecy1/01_ST-00_damage.wav",
+          "bytes": 1250,
+          "sha256": "401328e10354fd2b0cc971ee43d58cda2f796cd8eb87b3290a59b4b9e8300ffd"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 2,
+          "name": "ST-00:atmosphere",
+          "path": "cd32/library/samples/1_prophecy1/02_ST-00_atmosphere.wav",
+          "bytes": 9916,
+          "sha256": "620f83358cfa80ceae16987fe9460f54c215bf82c803dde4395a8c744b617e2c"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 4,
+          "name": "ST-00:synlead7",
+          "path": "cd32/library/samples/1_prophecy1/04_ST-00_synlead7.wav",
+          "bytes": 7636,
+          "sha256": "5e0495a944d8f8ae65be752680a9633c60e9b644dab26823f0480b0c341083ea"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 5,
+          "name": "ST-00:bassdrum15",
+          "path": "cd32/library/samples/1_prophecy1/05_ST-00_bassdrum15.wav",
+          "bytes": 5506,
+          "sha256": "e29f2167e3431fbec82c6561bb90471875de4135915d8ab612b927cc9752881e"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 6,
+          "name": "ST-00:bongo1",
+          "path": "cd32/library/samples/1_prophecy1/06_ST-00_bongo1.wav",
+          "bytes": 2206,
+          "sha256": "9c5a8b5deac2990ac7c306d6476a461d5979a98ccf4d5fd1f31261946164470d"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 7,
+          "name": "ST-00:tambo1",
+          "path": "cd32/library/samples/1_prophecy1/07_ST-00_tambo1.wav",
+          "bytes": 4006,
+          "sha256": "8654e6f156bee04ca4b8ac60bcc32a1417f32c5f42a6d2bc5c78d77cf66ea5ce"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 8,
+          "name": "ST-00:snare33",
+          "path": "cd32/library/samples/1_prophecy1/08_ST-00_snare33.wav",
+          "bytes": 7306,
+          "sha256": "e9715e6cbf8e6ad5fcd51e2ed68c2d80e414b72648836a49b2e24c0c35e42399"
+        },
+        {
+          "module": "1_prophecy1",
+          "index": 9,
+          "name": "ST-00:beastflute6",
+          "path": "cd32/library/samples/1_prophecy1/09_ST-00_beastflute6.wav",
+          "bytes": 18694,
+          "sha256": "ccfa39ea5b418882248f816f7dca7683f9833a1f6953025cf03c93870e145fd2"
+        },
+        {
+          "module": "2_military",
+          "index": 1,
+          "name": "by bernard sumner/lsd",
+          "path": "cd32/library/samples/2_military/01_by_bernard_sumner_lsd.wav",
+          "bytes": 11596,
+          "sha256": "20901ce590f99926205327b8123c844ea95d47aac469aaa3cedb0feebaf84029"
+        },
+        {
+          "module": "2_military",
+          "index": 2,
+          "name": "written in nov91",
+          "path": "cd32/library/samples/2_military/02_written_in_nov91.wav",
+          "bytes": 6246,
+          "sha256": "5216940e8a183407ba1a1321ed54291febcf89362cc50d12557413ae7642624d"
+        },
+        {
+          "module": "2_military",
+          "index": 3,
+          "name": "sample 3",
+          "path": "cd32/library/samples/2_military/03_sample.wav",
+          "bytes": 3990,
+          "sha256": "e5fd0b9efa6631e00e1bf9f9afe948ead29bcb1d0a1c78d6ecb140fabb83a216"
+        },
+        {
+          "module": "2_military",
+          "index": 5,
+          "name": "sample 5",
+          "path": "cd32/library/samples/2_military/05_sample.wav",
+          "bytes": 5920,
+          "sha256": "6996030602cb68956fef7b0df73d4f092f1c1cbf0072e20c05f41b7dbf9f5e93"
+        },
+        {
+          "module": "2_military",
+          "index": 6,
+          "name": "sample 6",
+          "path": "cd32/library/samples/2_military/06_sample.wav",
+          "bytes": 5358,
+          "sha256": "590b7cb3925cf23e830be42f7b6abc8ec8ff9679f3aef5953a27f96ff184cf0a"
+        },
+        {
+          "module": "2_military",
+          "index": 7,
+          "name": "sample 7",
+          "path": "cd32/library/samples/2_military/07_sample.wav",
+          "bytes": 2966,
+          "sha256": "f21ba12f77e9e98b5025f17ce5c2d012848c9fdb72117a8df40acf1cdced15b8"
+        },
+        {
+          "module": "2_military",
+          "index": 8,
+          "name": "sample 8",
+          "path": "cd32/library/samples/2_military/08_sample.wav",
+          "bytes": 3276,
+          "sha256": "d1a39c441d9195a8c6da153c97e0a7a2abb311ec03b3e010c9d80a62c7ae67bf"
+        },
+        {
+          "module": "2_military",
+          "index": 9,
+          "name": "sample 9",
+          "path": "cd32/library/samples/2_military/09_sample.wav",
+          "bytes": 1182,
+          "sha256": "d4cc955015e61dec332d4147dd200fa4d762d105d8164a556c0dac382ed5dc0c"
+        },
+        {
+          "module": "2_military",
+          "index": 10,
+          "name": "sample 10",
+          "path": "cd32/library/samples/2_military/10_sample.wav",
+          "bytes": 1620,
+          "sha256": "9063b0abba2dfa7c2e72ca280254f1a9d96d70453f34ac820b9a07e9cc8fc952"
+        },
+        {
+          "module": "2_military",
+          "index": 11,
+          "name": "sample 11",
+          "path": "cd32/library/samples/2_military/11_sample.wav",
+          "bytes": 6472,
+          "sha256": "4e42c4227fc0da376897a94c3016f30d62deb51c9d335c916411159ab43ce4ad"
+        },
+        {
+          "module": "2_military",
+          "index": 12,
+          "name": "sample 12",
+          "path": "cd32/library/samples/2_military/12_sample.wav",
+          "bytes": 4204,
+          "sha256": "4456df786bc205cefc93922786b3980b7352cfeba7ad0125028fdedc6f3d29e7"
+        },
+        {
+          "module": "2_military",
+          "index": 13,
+          "name": "sample 13",
+          "path": "cd32/library/samples/2_military/13_sample.wav",
+          "bytes": 5750,
+          "sha256": "bdde5fdf185b98f9075a201a9882abfa823e5201234d9e5be1d2b907f55dc7ee"
+        },
+        {
+          "module": "2_military",
+          "index": 14,
+          "name": "sample 14",
+          "path": "cd32/library/samples/2_military/14_sample.wav",
+          "bytes": 2880,
+          "sha256": "3c073c175e4cef7840a291677be14b108a93f19dde0d108ab405d75e35661b1c"
+        },
+        {
+          "module": "2_military",
+          "index": 15,
+          "name": "sample 15",
+          "path": "cd32/library/samples/2_military/15_sample.wav",
+          "bytes": 2658,
+          "sha256": "0f3c2898618253e454af60db74927ebe50d488579109962af8ff3eb09c1070f7"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 1,
+          "name": "sample 1",
+          "path": "cd32/library/samples/3_egypt2/01_sample.wav",
+          "bytes": 12642,
+          "sha256": "c8bee9cd6fc3e7ca00fa73bc503ae36f51642084a4d2ac4866e5c7765b7ece79"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 2,
+          "name": "sample 2",
+          "path": "cd32/library/samples/3_egypt2/02_sample.wav",
+          "bytes": 9374,
+          "sha256": "c42b3a0c2548e5bef2fd8a8726a567730333c2a7f94704e5fafeb25ff2480d37"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 3,
+          "name": "sample 3",
+          "path": "cd32/library/samples/3_egypt2/03_sample.wav",
+          "bytes": 7814,
+          "sha256": "469e47aaebb9ead87d35d3149ae9b7977ec6598b2d3b37089d00819e6bd90541"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 5,
+          "name": "sample 5",
+          "path": "cd32/library/samples/3_egypt2/05_sample.wav",
+          "bytes": 11726,
+          "sha256": "4325d5415972f4204564629b2018e2d3396f04a1d792ab003b0c254a0d235bf0"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 6,
+          "name": "sample 6",
+          "path": "cd32/library/samples/3_egypt2/06_sample.wav",
+          "bytes": 6244,
+          "sha256": "e0b6d15e8ad6da348e1c778befb9e2f491bec31352d5e95b9b1d7916f83f6f13"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 7,
+          "name": "sample 7",
+          "path": "cd32/library/samples/3_egypt2/07_sample.wav",
+          "bytes": 7664,
+          "sha256": "420288d851b2954bab80d8e5dd4ed7b0d4ea100f5221aaa34068f3579d5b40d7"
+        },
+        {
+          "module": "3_egypt2",
+          "index": 8,
+          "name": "sample 8",
+          "path": "cd32/library/samples/3_egypt2/08_sample.wav",
+          "bytes": 12464,
+          "sha256": "d1558de2a4ea9e1dfa0371ffee40739bde4272185c827198eeed7f9700df70eb"
+        },
+        {
+          "module": "4_jungle",
+          "index": 2,
+          "name": "d20-cowbell",
+          "path": "cd32/library/samples/4_jungle/02_d20-cowbell.wav",
+          "bytes": 550,
+          "sha256": "0ddb0df8f4f50924978dc41e62e3b061e166dcc6c17b81ad28ecc4cf2fa3c231"
+        },
+        {
+          "module": "4_jungle",
+          "index": 3,
+          "name": "sample 3",
+          "path": "cd32/library/samples/4_jungle/03_sample.wav",
+          "bytes": 30548,
+          "sha256": "61d1ba350e8ee5aeab39237feaac8a5f29ae520087a4b7f3c3c3b7ae620acf43"
+        },
+        {
+          "module": "4_jungle",
+          "index": 4,
+          "name": "u20b.clang",
+          "path": "cd32/library/samples/4_jungle/04_u20b.clang.wav",
+          "bytes": 7398,
+          "sha256": "f50b0f9e82d13a767cc9aae64c3c8407ca9067c81900962ed5a6e70e31f08d81"
+        },
+        {
+          "module": "4_jungle",
+          "index": 5,
+          "name": "u20b.native3",
+          "path": "cd32/library/samples/4_jungle/05_u20b.native3.wav",
+          "bytes": 15162,
+          "sha256": "50733a919c38f294562d3a526b770548c0f9b59993c75989b7f1c254b5d4c1f5"
+        },
+        {
+          "module": "4_jungle",
+          "index": 9,
+          "name": "tam3",
+          "path": "cd32/library/samples/4_jungle/09_tam3.wav",
+          "bytes": 1106,
+          "sha256": "0040d4a3869671b38140548cb67d851de31af98577c5d2ec59ac70db847e1263"
+        },
+        {
+          "module": "4_jungle",
+          "index": 10,
+          "name": "tam6",
+          "path": "cd32/library/samples/4_jungle/10_tam6.wav",
+          "bytes": 2920,
+          "sha256": "8a40dc895aa7672ea5da001536e4683967952554a8aaa86bb0c62b204830c009"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 1,
+          "name": "tk_cleanbass",
+          "path": "cd32/library/samples/5_penguin_in_pink/01_tk_cleanbass.wav",
+          "bytes": 5530,
+          "sha256": "1516f9f646d05ad72c84c45d7bae14142c52b47d2f2cdd4783e97610539ea575"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 2,
+          "name": "jv-80.whee-xylead(hi)",
+          "path": "cd32/library/samples/5_penguin_in_pink/02_jv-80.whee-xylead_hi.wav",
+          "bytes": 5608,
+          "sha256": "1620da78bba4309d170b35af8a168dddde7ce9f7eef963d90d5e0ca070cd6827"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 3,
+          "name": "38",
+          "path": "cd32/library/samples/5_penguin_in_pink/03_38.wav",
+          "bytes": 3850,
+          "sha256": "6ea6a6aa1fb358cc33bd981ec024bdd434b599551c1afdd3b060b8def046132f"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 4,
+          "name": "wee.snare2",
+          "path": "cd32/library/samples/5_penguin_in_pink/04_wee.snare2.wav",
+          "bytes": 4112,
+          "sha256": "bc07bd0144f393a81cb493895eac9214f73cbcbcd5fd0ab70c7b4b78d1c903f4"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 6,
+          "name": "47",
+          "path": "cd32/library/samples/5_penguin_in_pink/06_47.wav",
+          "bytes": 4134,
+          "sha256": "bb1fdc1095e3baf72639124f3e5a34b5c843eabd6ab53c3acb88a43916487017"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 7,
+          "name": "59",
+          "path": "cd32/library/samples/5_penguin_in_pink/07_59.wav",
+          "bytes": 3740,
+          "sha256": "3286479edca7c955cf4849a2696f8e58c2f51613ca847a57698d1949f813ee48"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 8,
+          "name": "wee.bassdrum1",
+          "path": "cd32/library/samples/5_penguin_in_pink/08_wee.bassdrum1.wav",
+          "bytes": 4354,
+          "sha256": "9a0dd32d7442aaf2a60e26f29f0e9818b87154d7666e504f70916f69745597aa"
+        },
+        {
+          "module": "5_penguin_in_pink",
+          "index": 9,
+          "name": "wee.tom1",
+          "path": "cd32/library/samples/5_penguin_in_pink/09_wee.tom1.wav",
+          "bytes": 3756,
+          "sha256": "bd96cc04c6cee26f5285dd246a805f08a5bb46308833af09bd53788065b3b64b"
+        }
+      ]
+    },
+    "classic": {
+      "label": "XRICK FAST",
+      "role": "lower-cost compatibility backend",
+      "assets": [
+        {
+          "id": "bombshht",
+          "path": "classic/bombshht.wav",
+          "sourcePath": "data/sounds/bombshht.wav",
+          "sha256": "2d1682017d82988bbac391c035c988483ef2a912f5f526be3bc57d59ee2a37f1"
+        },
+        {
+          "id": "bonus",
+          "path": "classic/bonus.wav",
+          "sourcePath": "data/sounds/bonus.wav",
+          "sha256": "cad732d76e441203a4108b813d66e67e031d4d110d64d26d18e4e4be0b92f764"
+        },
+        {
+          "id": "box",
+          "path": "classic/box.wav",
+          "sourcePath": "data/sounds/box.wav",
+          "sha256": "2b860e00433dae369919ac6342b4fe9ff6349d451dbb7f200af676ba18715e41"
+        },
+        {
+          "id": "bullet",
+          "path": "classic/bullet.wav",
+          "sourcePath": "data/sounds/bullet.wav",
+          "sha256": "1141c8255ec4c083022fdc0ad5561df7c4cd4ecc7b0be808c7e3ef86736945b7"
+        },
+        {
+          "id": "crawl",
+          "path": "classic/crawl.wav",
+          "sourcePath": "data/sounds/crawl.wav",
+          "sha256": "cf7890a48a4b8e14f0473e807c03c7b31242e7bd1cfb4da8a297614cdaf1eb54"
+        },
+        {
+          "id": "die",
+          "path": "classic/die.wav",
+          "sourcePath": "data/sounds/die.wav",
+          "sha256": "f1dc1c0315b11b1eb0e124fd8e71034f8d6cd253db9ef370b03013d18426efd4"
+        },
+        {
+          "id": "ent0",
+          "path": "classic/ent0.wav",
+          "sourcePath": "data/sounds/ent0.wav",
+          "sha256": "9eba3aac6d53171cfcffbd3c26afd9c858f34c1154868c31506f0cabfdf341b1"
+        },
+        {
+          "id": "ent1",
+          "path": "classic/ent1.wav",
+          "sourcePath": "data/sounds/ent1.wav",
+          "sha256": "3261018b3bd76590b7bc5909d8b2eaeb152962589b054a2bd62967b91fcfc452"
+        },
+        {
+          "id": "ent2",
+          "path": "classic/ent2.wav",
+          "sourcePath": "data/sounds/ent2.wav",
+          "sha256": "5cf01bfc27b91b91ad9296e7e843e73567df62c78e81db1e3f7feecabffbb684"
+        },
+        {
+          "id": "ent3",
+          "path": "classic/ent3.wav",
+          "sourcePath": "data/sounds/ent3.wav",
+          "sha256": "13db4da5bed640e98a27fa2b9875abee3a56216ca1a5c2f8a0556ddff16ff8a6"
+        },
+        {
+          "id": "ent4",
+          "path": "classic/ent4.wav",
+          "sourcePath": "data/sounds/ent4.wav",
+          "sha256": "eafc4b28211357d072d4c11a677b3eb713cf514df336e3068cd376c0c8407c2f"
+        },
+        {
+          "id": "ent5",
+          "path": "classic/ent5.wav",
+          "sourcePath": "data/sounds/ent5.wav",
+          "sha256": "b52978faa329b941fa84762b7b5e93d4137da87043fd121a833020452a66a3de"
+        },
+        {
+          "id": "ent6",
+          "path": "classic/ent6.wav",
+          "sourcePath": "data/sounds/ent6.wav",
+          "sha256": "62bff5f40442a4d9658309e7da805d1cd6692abf7fc48b98605c89bbe3dfb709"
+        },
+        {
+          "id": "ent7",
+          "path": "classic/ent7.wav",
+          "sourcePath": "data/sounds/ent7.wav",
+          "sha256": "7488185659c20a0f88d8c4554e96b13dce52cb8683bddb4b3e874e5266c1731a"
+        },
+        {
+          "id": "ent8",
+          "path": "classic/ent8.wav",
+          "sourcePath": "data/sounds/ent8.wav",
+          "sha256": "746ceeec48f9f37ba68d6e49fd24e24d01cec05127e9014d679ef5b924b25c00"
+        },
+        {
+          "id": "explode",
+          "path": "classic/explode.wav",
+          "sourcePath": "data/sounds/explode.wav",
+          "sha256": "5e7d0b0ae2b80aab09ecd927c7d081c9aafae2efbb817144e3e6cc8c7ecb871a"
+        },
+        {
+          "id": "gameover",
+          "path": "classic/gameover.wav",
+          "sourcePath": "data/sounds/gameover.wav",
+          "sha256": "e4819281f5c1be074de4be546be07a6394152cffb29ac616e107f6e835ee1954"
+        },
+        {
+          "id": "jump",
+          "path": "classic/jump.wav",
+          "sourcePath": "data/sounds/jump.wav",
+          "sha256": "27edaef678371e7bb35d7a6d5845197f4191cf56febf4000f7de2faa1af22234"
+        },
+        {
+          "id": "pad",
+          "path": "classic/pad.wav",
+          "sourcePath": "data/sounds/pad.wav",
+          "sha256": "3171e604a949cd9628f4d8833ca355554ab42e22ce4fc939ce5e496f87ce8a97"
+        },
+        {
+          "id": "sbonus1",
+          "path": "classic/sbonus1.wav",
+          "sourcePath": "data/sounds/sbonus1.wav",
+          "sha256": "c9866793de7949c63563df82a6e630dbbba71c7596925dd1a0f4e2657264d937"
+        },
+        {
+          "id": "sbonus2",
+          "path": "classic/sbonus2.wav",
+          "sourcePath": "data/sounds/sbonus2.wav",
+          "sha256": "29a80a7f33b4ee1f02b63aa76ceba5e231ec3e3b4f6b9092516fdf3555deda7a"
+        },
+        {
+          "id": "stick",
+          "path": "classic/stick.wav",
+          "sourcePath": "data/sounds/stick.wav",
+          "sha256": "61fed01596a4084af81aa90d22faaf2bdd70a6866c27e2d2d99e1ac84899c924"
+        },
+        {
+          "id": "tune0",
+          "path": "classic/tune0.wav",
+          "sourcePath": "data/sounds/tune0.wav",
+          "sha256": "e5228c0c28859ece590ac53034f5924a95053ac3b504af68e506de9656b577d3"
+        },
+        {
+          "id": "tune1",
+          "path": "classic/tune1.wav",
+          "sourcePath": "data/sounds/tune1.wav",
+          "sha256": "cc572de8655316abf969329ebf92ff075a4feff8a8608534de492d6dcbbf653a"
+        },
+        {
+          "id": "tune2",
+          "path": "classic/tune2.wav",
+          "sourcePath": "data/sounds/tune2.wav",
+          "sha256": "757b66ec8691830fc5928de342033fb8968aa8d134f11fdadb3fa2f746270123"
+        },
+        {
+          "id": "tune3",
+          "path": "classic/tune3.wav",
+          "sourcePath": "data/sounds/tune3.wav",
+          "sha256": "055da7fa87f70d8d39454f817a1e9fe1f258abb2527bd0cfae5bd07428750228"
+        },
+        {
+          "id": "tune4",
+          "path": "classic/tune4.wav",
+          "sourcePath": "data/sounds/tune4.wav",
+          "sha256": "8b2df94e9e5923ffbd84c241b8fb60af69b1ec5c0bd14b8377ce80d63fcae590"
+        },
+        {
+          "id": "tune5",
+          "path": "classic/tune5.wav",
+          "sourcePath": "data/sounds/tune5.wav",
+          "sha256": "78558dc51619ba8575c6a38c7b07c62bda223ec9ea6948be109792be9988c937"
+        },
+        {
+          "id": "walk",
+          "path": "classic/walk.wav",
+          "sourcePath": "data/sounds/walk.wav",
+          "sha256": "51f80d0fa5d1f86b49a4196f0a6f56d1fd9121a40dcbb625a5f4616f88e75cb2"
+        }
+      ],
+      "runtimeRoutes": "direct data/sounds logical WAVs"
+    }
+  },
+  "logicalSfxFallback": "classic",
+  "revivalExtensions": [
+    {
+      "id": "platform_cog_low",
+      "label": "Moving-platform cog CLACK-chunk \u00b7 Low",
+      "path": "sounds/platform_cog_low.wav",
+      "sourcePath": "data/sounds/platform_cog_low.wav",
+      "sha256": "83499eef29f7db3fc1c32eee531996da75b70d4e78b2c57f58e5a37053ae1e50",
+      "format": "mono unsigned 8-bit PCM, 22050 Hz",
+      "role": "optional Revival-authored gameplay SFX shared by both runtime providers",
+      "generator": "tools/audio/generate_platform_cog_sfx.py"
+    },
+    {
+      "id": "platform_cog_mid",
+      "label": "Moving-platform cog CLACK-chunk \u00b7 Mid",
+      "path": "sounds/platform_cog.wav",
+      "sourcePath": "data/sounds/platform_cog.wav",
+      "sha256": "6ad3190424aa7d0d7e37011acd969471f6edd27b527bc0d26a8abc9b3cbb7ba2",
+      "format": "mono unsigned 8-bit PCM, 22050 Hz",
+      "role": "optional Revival-authored gameplay SFX shared by both runtime providers",
+      "generator": "tools/audio/generate_platform_cog_sfx.py"
+    },
+    {
+      "id": "platform_cog_high",
+      "label": "Moving-platform cog CLACK-chunk \u00b7 High",
+      "path": "sounds/platform_cog_high.wav",
+      "sourcePath": "data/sounds/platform_cog_high.wav",
+      "sha256": "6fa4a466933c26d91469038165205f4c1e8040d63d1e4642a5a593c05a10c95e",
+      "format": "mono unsigned 8-bit PCM, 22050 Hz",
+      "role": "optional Revival-authored gameplay SFX shared by both runtime providers",
+      "generator": "tools/audio/generate_platform_cog_sfx.py"
+    },
+    {
+      "id": "stick_hit",
+      "label": "Enemy stick hit \u00b7 low contact thud",
+      "path": "sounds/stick_hit.wav",
+      "sourcePath": "data/sounds/stick_hit.wav",
+      "sha256": "a206ca15b497cb35c625ffe63853d7aa969fedbfaf75ef59ed59e093473d975e",
+      "format": "mono unsigned 8-bit PCM, 22050 Hz",
+      "role": "optional Revival-authored gameplay SFX shared by both runtime providers",
+      "generator": "tools/audio/generate_stick_hit_sfx.py"
+    }
+  ],
+  "mappingWorkbench": {
+    "schema": "rick-dangerous-revival.audio-mapping-workbench.v1",
+    "primaryProvider": "cd32",
+    "providerAssessment": {
+      "cd32": {
+        "rank": 1,
+        "actionSfxCandidateCount": 19,
+        "musicCandidateCount": 7,
+        "structure": "native-core-design-paula",
+        "reason": "Authoritative default: original Rick 1 samples, periods and 50 Hz sequences recovered from the CD32 collection game payload."
+      },
+      "classic": {
+        "rank": 2,
+        "structure": "pre-rendered-xrick-wav",
+        "reason": "Retained only as XRICK FAST for lower CPU cost and compatibility."
+      }
+    },
+    "workflow": "Amiga Original is authoritative for runtime mapping. Gold Enhanced tracker material remains reference-only.",
+    "logicalLabels": {
+      "bombshht": "Dynamite fuse / hiss",
+      "bonus": "Bonus pickup",
+      "box": "Box / crate interaction",
+      "bullet": "Rick fires bullet",
+      "crawl": "Rick crawl step",
+      "die": "Rick / entity death",
+      "explode": "Explosion",
+      "gameover": "Game over music",
+      "jump": "Rick jump",
+      "pad": "Bounce / launch pad",
+      "sbonus1": "Secret bonus start",
+      "sbonus2": "Secret bonus complete",
+      "stick": "Rick stopped / impact state",
+      "walk": "Rick walk / climb step",
+      "ent0": "Triggered entity sound 0",
+      "ent1": "Triggered entity sound 1",
+      "ent2": "Triggered entity sound 2",
+      "ent3": "Triggered entity sound 3",
+      "ent4": "Triggered entity sound 4",
+      "ent5": "Triggered entity sound 5",
+      "ent6": "Triggered entity sound 6",
+      "ent7": "Triggered entity sound 7",
+      "ent8": "Triggered entity sound 8",
+      "tune0": "Logical music slot 0",
+      "tune1": "Logical music slot 1",
+      "tune2": "Logical music slot 2",
+      "tune3": "Logical music slot 3",
+      "tune4": "Logical music slot 4",
+      "tune5": "Logical music slot 5"
+    },
+    "draftSchema": "rick-dangerous-revival.audio-manual-map.v1"
+  },
+  "provenance": {
+    "cd32ModuleCatalog": "research/cd32/data/audio/cd32_static_audio_catalog.json",
+    "amigaRick1SourceSha256": "d50dd6d0e261280d5fbf03faf4a6fb24da26fbbb53ec0131f9fdb83228a5c2fc",
+    "amigaRick1RuntimeManifest": "cd32/original/rick1/manifest.json",
+    "amigaRick1Runtime": "Native Core Design 50 Hz sequencer plus virtualized one-shot Paula channel; no MOD conversion and no pre-rendered music.",
+    "cd32GoldIsoSha256": "8578bfbb434bfa334687ed8a5e9a8282672d1fd7fd8fec11d2653dc2d033857c",
+    "cd32GoldVerification": "The five retained .mus payload hashes are byte-identical to the supplied Rick Dangerous RC Gold CD32 ISO and are reference-only for original Rick 1 routing.",
+    "notes": "Derived audio only; no CD32 ISO/game binary is copied into revival/data/audio. Runtime audio providers are Amiga Original and XRICK FAST only."
+  },
+  "soundlab": {
+    "manifest": "soundlab-manifest.json",
+    "runtimePath": "sounds/soundlab",
+    "role": "generated deterministic Revival-authored semantic SFX; Classic behavior remains unchanged",
+    "generator": "tools/soundlab/cli/soundlab.mjs build --project rdr"
+  }
+}

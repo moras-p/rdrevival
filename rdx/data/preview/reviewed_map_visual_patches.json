@@ -1,0 +1,1147 @@
+{
+  "patches": [
+    {
+      "action": "suppress",
+      "authority": "classic-cardinality-reviewed-rdx-static-hazard-deduplication",
+      "bounds": [
+        248,
+        160,
+        8,
+        16
+      ],
+      "id": "md0006-extra-wall-blade-160-dedupe",
+      "introducedInVersion": "2.1.62",
+      "layer": "AB",
+      "mapId": 6,
+      "provenance": "Remove an unmatched duplicate wall-blade decoration so RDX hazard cardinality follows the Classic source mapping.",
+      "reason": "Remove an unmatched duplicate wall-blade decoration so RDX hazard cardinality follows the Classic source mapping.",
+      "sourceBounds": null,
+      "sourceKey": "rdx-hazard:md0006-wall-blades-160",
+      "submap": 3
+    },
+    {
+      "action": "suppress",
+      "authority": "classic-cardinality-reviewed-rdx-static-hazard-deduplication",
+      "bounds": [
+        248,
+        176,
+        8,
+        16
+      ],
+      "id": "md0006-extra-wall-blade-176-dedupe",
+      "introducedInVersion": "2.1.62",
+      "layer": "AB",
+      "mapId": 6,
+      "provenance": "Remove an unmatched duplicate wall-blade decoration so RDX hazard cardinality follows the Classic source mapping.",
+      "reason": "Remove an unmatched duplicate wall-blade decoration so RDX hazard cardinality follows the Classic source mapping.",
+      "sourceBounds": null,
+      "sourceKey": "rdx-hazard:md0006-wall-blades-176",
+      "submap": 3
+    },
+    {
+      "action": "suppress",
+      "authority": "reviewed-single-map-patch",
+      "bounds": [
+        64,
+        904,
+        16,
+        8
+      ],
+      "id": "md0011-floor-spikes-904",
+      "introducedInVersion": "2.1.31",
+      "layer": "AB",
+      "mapId": 11,
+      "provenance": "Erase the exact MD0011 16x8 decoded spike decoration at x=64,y=904 from both map planes. Plane B falls back to CRAM palette index 0 and Plane A becomes transparent; neighboring decoded pixels remain unchanged.",
+      "reason": "Erase the exact MD0011 16x8 decoded spike decoration at x=64,y=904 from both map planes. Plane B falls back to CRAM palette index 0 and Plane A becomes transparent; neighboring decoded pixels remain unchanged.",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:md0011-floor-spikes-904",
+      "submap": 8
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "user-reviewed-md0015-hazard-visual-reuse",
+      "bounds": [
+        80,
+        760,
+        8,
+        8
+      ],
+      "clearLayer": "AB",
+      "id": "md0013-sm09-0-md0015-hazard-tiles",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 13,
+      "provenance": "Replace only the single 8x8 SM09 lethal cell with one arrow/spike cell extracted from the middle of the MD0015 terrain-hazard:classic-sm11-1 strip; leave all neighboring MD0013 map art untouched.",
+      "reason": "Replace only the single 8x8 SM09 lethal cell with one arrow/spike cell extracted from the middle of the MD0015 terrain-hazard:classic-sm11-1 strip; leave all neighboring MD0013 map art untouched.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm09-0",
+      "submap": 9,
+      "tiles": [
+        {
+          "globalTile": 9153,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B"
+        }
+      ]
+    },
+    {
+      "action": "overlay-color",
+      "authority": "classic-stick-trigger-visual-cue-transfer",
+      "bounds": [
+        123,
+        409,
+        5,
+        1
+      ],
+      "id": "md0013-sm09-stick-slot-11-49",
+      "introducedInVersion": "2.1.104",
+      "layer": "B",
+      "mapId": 13,
+      "provenance": "Classic bank-1 tile 0x01 at SM09 g8:11:49 overlaps stick-trigger mark:109, but the aligned Revival host is bespoke statue/mechanism art rather than a reusable brick face. Keep the original 5x1 black slot instead of substituting PN20.",
+      "reason": "Special case: keep the 5x1 black cue because this trigger lands on bespoke statue art, not on a replaceable brick face.",
+      "rgba": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "role": "interaction-cue",
+      "sourceBounds": null,
+      "sourceKey": "classic-stick-slot:sm09:bank1:tile01:g8:11:49",
+      "submap": 9
+    },
+    {
+      "action": "overlay-pn",
+      "authority": "classic-stick-trigger-visual-cue-transfer",
+      "front": false,
+      "id": "md0013-sm09-stick-slot-19-53",
+      "introducedInVersion": "2.1.104",
+      "mapId": 13,
+      "mirrorX": false,
+      "mirrorY": false,
+      "origin": [
+        176,
+        432
+      ],
+      "pn": 20,
+      "provenance": "Classic bank-1 tile 0x01 at SM09 g8:19:53 overlaps stick-trigger mark:110. In Revival the cue sits on ordinary Egypt brick; place PN20 one 8x8 cell left of the prior draft so its artwork stays within the original reviewed brick footprint instead of extending into the adjacent opening.",
+      "reason": "Use PN20 on the reviewed Revival brick, shifted one 8x8 cell left so the slot artwork does not extend beyond the brick footprint.",
+      "role": "interaction-cue",
+      "sourceBounds": null,
+      "sourceKey": "classic-stick-slot:sm09:bank1:tile01:g8:19:53",
+      "submap": 9
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "level-editor-smart-scissors-user-reviewed",
+      "bounds": [
+        144,
+        432,
+        32,
+        16
+      ],
+      "clearLayer": null,
+      "id": "md0013-sm09-stick-pn20-left-brick-blend",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "provenance": "The reviewed SM09 PN20 follow-up reuses the adjacent same-room joined sandstone pair at MD0013 px [128,432,32,16] so the two bricks immediately left of mark:110's cue read as one continuous masonry run and meet PN20 without a detached seam.",
+      "reason": "Blend the two sandstone bricks immediately left of the SM09 PN20 stick cue with the reviewed joined donor so the left neighbour and seam brick read as one continuous run into PN20.",
+      "role": "scenery",
+      "sourceBounds": [
+        128,
+        432,
+        32,
+        16
+      ],
+      "sourceKey": "smart-scissors:md0013:128:432:144:432:32:16",
+      "tiles": [
+        {
+          "globalTile": 8700,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8701,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8704,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8705,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8702,
+          "offset": [
+            0,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8703,
+          "offset": [
+            8,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8706,
+          "offset": [
+            16,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 468,
+          "offset": [
+            24,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        }
+      ],
+      "submap": 9,
+      "mapId": 13
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+      "bounds": [
+        64,
+        360,
+        32,
+        8
+      ],
+      "clearLayer": null,
+      "id": "md0017-sm0d-classic-floor-spike-0",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 17,
+      "provenance": "Classic terrain-hazard:classic-sm13-0 visibly contains a 32x8 floor-spike strip at [32, 344, 32, 8]; restore the missing Egypt spike motif at its reviewed RDX projection without altering underlying Plane B scenery.",
+      "reason": "Restore Classic-confirmed Egypt floor spikes where RDX retained collision semantics but lost the trap artwork.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm13-0",
+      "submap": 13,
+      "tiles": [
+        {
+          "globalTile": 9196,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+      "bounds": [
+        128,
+        712,
+        32,
+        8
+      ],
+      "clearLayer": null,
+      "id": "md0019-sm0f-classic-floor-spike-7",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 19,
+      "provenance": "Classic terrain-hazard:classic-sm15-7 visibly contains a 32x8 floor-spike strip at [96, 696, 32, 8]; restore the missing Egypt spike motif at its reviewed RDX projection without altering underlying Plane B scenery.",
+      "reason": "Restore Classic-confirmed Egypt floor spikes where RDX retained collision semantics but lost the trap artwork.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm15-7",
+      "submap": 15,
+      "tiles": [
+        {
+          "globalTile": 9196,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-pn",
+      "authority": "classic-stick-trigger-visual-cue-transfer",
+      "front": false,
+      "id": "md0021-sm11-stick-slot-3-25",
+      "introducedInVersion": "2.1.104",
+      "mapId": 21,
+      "mirrorX": false,
+      "mirrorY": false,
+      "origin": [
+        48,
+        192
+      ],
+      "pn": 20,
+      "provenance": "Classic bank-1 tile 0x01 at SM11 g8:3:25 nominally maps into the MD0021 trigger volume for mark:212, but the reviewed Layer-F host is the empty black 16x16 box at g8:6:24. Fill that box with PN20 instead of drawing a synthetic 5x1 line on the neighbouring brick.",
+      "reason": "Special case: add PN20 into the empty black box inside the same stick-trigger volume; this cue is a reviewed room-art addition, not just a replacement of the previous 5x1 overlay.",
+      "role": "interaction-cue",
+      "sourceBounds": null,
+      "sourceKey": "classic-stick-slot:sm11:bank1:tile01:g8:3:25",
+      "submap": 17
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "level-editor-smart-scissors-user-reviewed",
+      "bounds": [
+        16,
+        176,
+        32,
+        32
+      ],
+      "clearLayer": null,
+      "id": "md0021-sm11-stick-pn20-smart-brick-blend",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "provenance": "Level Editor Smart Scissors ranked MD0015 px [272,320,32,32] fourth for target px [16,176,32,32] (score 337.5, context 133.5, seam 102). User visual review selected that donor over the top-ranked same-map result because the brick immediately left of PN20 must read as the left half of the slot-bearing brick without detached right-edge shading.",
+      "reason": "Blend the two columns of sandstone immediately left of the SM11 PN20 stick cue with the user-reviewed Smart Scissors donor so the neighbouring brick continues seamlessly into PN20.",
+      "role": "scenery",
+      "sourceBounds": [
+        272,
+        320,
+        32,
+        32
+      ],
+      "sourceKey": "smart-scissors:md0015:272:320:16:176:32:32",
+      "tiles": [
+        {
+          "globalTile": 8737,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8738,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 9018,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8712,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 470,
+          "offset": [
+            0,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 472,
+          "offset": [
+            8,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8713,
+          "offset": [
+            16,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8714,
+          "offset": [
+            24,
+            8
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 465,
+          "offset": [
+            0,
+            16
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 467,
+          "offset": [
+            8,
+            16
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8737,
+          "offset": [
+            16,
+            16
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 8738,
+          "offset": [
+            24,
+            16
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 466,
+          "offset": [
+            0,
+            24
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 468,
+          "offset": [
+            8,
+            24
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 470,
+          "offset": [
+            16,
+            24
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        },
+        {
+          "globalTile": 472,
+          "offset": [
+            24,
+            24
+          ],
+          "paletteLine": 0,
+          "plane": "B"
+        }
+      ],
+      "submap": 17,
+      "mapId": 21
+    },
+    {
+      "action": "overlay-pn",
+      "authority": "classic-stick-trigger-visual-cue-transfer",
+      "front": true,
+      "id": "md0022-sm12-stick-slot-19-53",
+      "introducedInVersion": "2.1.104",
+      "mapId": 22,
+      "mirrorX": false,
+      "mirrorY": false,
+      "origin": [
+        160,
+        400
+      ],
+      "pn": 20,
+      "provenance": "Classic bank-1 tile 0x01 at SM12 g8:19:53 overlaps stick-trigger marks:221/222. Replace the former 5x1 groove on the same visible Plane-A brick host at MD0022 px [160,400] with PN20; render it in front so foreground Plane A does not occlude the replacement sprite.",
+      "reason": "Replace the former black groove with PN20 on the exact same visible Plane-A brick host.",
+      "role": "interaction-cue",
+      "sourceBounds": null,
+      "sourceKey": "classic-stick-slot:sm12:bank1:tile01:g8:19:53",
+      "submap": 18
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+      "bounds": [
+        64,
+        136,
+        32,
+        8
+      ],
+      "clearLayer": null,
+      "id": "md0022-sm12-classic-floor-spike-1",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 22,
+      "provenance": "Classic terrain-hazard:classic-sm18-1 visibly contains a 32x8 floor-spike strip at [32, 152, 32, 8]; restore the missing Egypt spike motif at its reviewed RDX projection without altering underlying Plane B scenery.",
+      "reason": "Restore Classic-confirmed Egypt floor spikes where RDX retained collision semantics but lost the trap artwork.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm18-1",
+      "submap": 18,
+      "tiles": [
+        {
+          "globalTile": 9196,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+      "bounds": [
+        224,
+        136,
+        32,
+        8
+      ],
+      "clearLayer": null,
+      "id": "md0022-sm12-classic-floor-spike-2",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 22,
+      "provenance": "Classic terrain-hazard:classic-sm18-2 visibly contains a 32x8 floor-spike strip at [192, 152, 32, 8]; restore the missing Egypt spike motif at its reviewed RDX projection without altering underlying Plane B scenery.",
+      "reason": "Restore Classic-confirmed Egypt floor spikes where RDX retained collision semantics but lost the trap artwork.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm18-2",
+      "submap": 18,
+      "tiles": [
+        {
+          "globalTile": 9196,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+      "bounds": [
+        192,
+        200,
+        32,
+        8
+      ],
+      "clearLayer": null,
+      "id": "md0022-sm12-classic-floor-spike-3",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 22,
+      "provenance": "Classic terrain-hazard:classic-sm18-3 visibly contains a 32x8 floor-spike strip at [160, 216, 32, 8]; restore the missing Egypt spike motif at its reviewed RDX projection without altering underlying Plane B scenery.",
+      "reason": "Restore Classic-confirmed Egypt floor spikes where RDX retained collision semantics but lost the trap artwork.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm18-3",
+      "submap": 18,
+      "tiles": [
+        {
+          "globalTile": 9196,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+      "bounds": [
+        128,
+        264,
+        32,
+        8
+      ],
+      "clearLayer": null,
+      "id": "md0022-sm12-classic-floor-spike-4",
+      "introducedInVersion": "2.1.104",
+      "layer": null,
+      "mapId": 22,
+      "provenance": "Classic terrain-hazard:classic-sm18-4 visibly contains a 32x8 floor-spike strip at [96, 280, 32, 8]; restore the missing Egypt spike motif at its reviewed RDX projection without altering underlying Plane B scenery.",
+      "reason": "Restore Classic-confirmed Egypt floor spikes where RDX retained collision semantics but lost the trap artwork.",
+      "role": "trap",
+      "sourceBounds": null,
+      "sourceKey": "terrain-hazard:classic-sm18-4",
+      "submap": 18,
+      "tiles": [
+        {
+          "globalTile": 9196,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        },
+        {
+          "globalTile": 9196,
+          "offset": [
+            24,
+            0
+          ],
+          "paletteLine": 0,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-pn",
+      "authority": "classic-stick-trigger-visual-cue-transfer",
+      "front": false,
+      "id": "md0034-sm1b-castle-stick-slot",
+      "introducedInVersion": "2.1.104",
+      "mapId": 34,
+      "mirrorX": false,
+      "mirrorY": false,
+      "origin": [
+        128,
+        112
+      ],
+      "pn": 118,
+      "provenance": "SM1B retains a castle stick-activator cue in Layer C, but Layer F lacks the matching castle-wall slot artwork. Add PN118 at the reviewed 16x16 black-box host beginning at g8:16:14 so Revival visibly carries the cue into the final room art.",
+      "reason": "Restore the missing castle stick-slot cue with PN118 on the reviewed Layer-F host cell.",
+      "role": "interaction-cue",
+      "sourceBounds": null,
+      "sourceKey": "castle-stick-slot:sm1b:reviewed-host:g8:16:14",
+      "submap": 27
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "level-editor-reviewed-fix",
+      "bounds": [
+        120,
+        400,
+        24,
+        16
+      ],
+      "clearLayer": "B",
+      "id": "SM22.editor.visual-plane.room-SM22-smart-scissors-smart-scissors-37-120-240-120-400-24-16-B.1",
+      "mapId": 41,
+      "provenance": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 245.75",
+      "reason": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 245.75",
+      "sourceKey": "room:SM22:smart-scissors:smart-scissors-37-120-240-120-400-24-16:B",
+      "submap": 34,
+      "tiles": [
+        {
+          "globalTile": 10608,
+          "hFlip": false,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 11887,
+          "hFlip": false,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 11774,
+          "hFlip": false,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 10610,
+          "hFlip": false,
+          "offset": [
+            0,
+            8
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 10708,
+          "hFlip": false,
+          "offset": [
+            8,
+            8
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 11888,
+          "hFlip": false,
+          "offset": [
+            16,
+            8
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        }
+      ]
+    },
+    {
+      "action": "suppress",
+      "authority": "level-editor-reviewed-fix",
+      "bounds": [
+        120,
+        400,
+        24,
+        16
+      ],
+      "id": "SM22.editor.visual-plane.room-SM22-smart-scissors-smart-scissors-37-120-240-120-400-24-16-A.1",
+      "layer": "A",
+      "mapId": 41,
+      "provenance": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 245.75",
+      "reason": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 245.75",
+      "sourceKey": "room:SM22:smart-scissors:smart-scissors-37-120-240-120-400-24-16:A",
+      "submap": 34
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "level-editor-reviewed-fix",
+      "bounds": [
+        120,
+        816,
+        24,
+        16
+      ],
+      "clearLayer": "B",
+      "id": "SM22.editor.visual-plane.room-SM22-smart-scissors-smart-scissors-37-120-240-120-816-24-16-B.1",
+      "mapId": 41,
+      "provenance": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 222.50",
+      "reason": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 222.50",
+      "sourceKey": "room:SM22:smart-scissors:smart-scissors-37-120-240-120-816-24-16:B",
+      "submap": 34,
+      "tiles": [
+        {
+          "globalTile": 10608,
+          "hFlip": false,
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 11887,
+          "hFlip": false,
+          "offset": [
+            8,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 11774,
+          "hFlip": false,
+          "offset": [
+            16,
+            0
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 10610,
+          "hFlip": false,
+          "offset": [
+            0,
+            8
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 10708,
+          "hFlip": false,
+          "offset": [
+            8,
+            8
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        },
+        {
+          "globalTile": 11888,
+          "hFlip": false,
+          "offset": [
+            16,
+            8
+          ],
+          "paletteLine": 2,
+          "plane": "B",
+          "vFlip": false
+        }
+      ]
+    },
+    {
+      "action": "suppress",
+      "authority": "level-editor-reviewed-fix",
+      "bounds": [
+        120,
+        816,
+        24,
+        16
+      ],
+      "id": "SM22.editor.visual-plane.room-SM22-smart-scissors-smart-scissors-37-120-240-120-816-24-16-A.1",
+      "layer": "A",
+      "mapId": 41,
+      "provenance": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 222.50",
+      "reason": "Smart Scissors scenery repair from MD0037 120,240,24,16; seam score 222.50",
+      "sourceKey": "room:SM22:smart-scissors:smart-scissors-37-120-240-120-816-24-16:A",
+      "submap": 34
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-broken-bottle-visual-restoration",
+      "bounds": [
+        136,
+        408,
+        8,
+        8
+      ],
+      "clearLayer": "A",
+      "id": "sm22-broken-bottle-upper-bottle",
+      "mapId": 41,
+      "provenance": "Overlay the reviewed broken revival bottle at the Classic-projected SM22 g8:17:51 cell, adjacent to the bottle rack, after Smart Scissors reconstructs the surrounding Castle scenery.",
+      "reason": "Overlay the reviewed broken revival bottle at the Classic-projected SM22 g8:17:51 cell, adjacent to the bottle rack, after Smart Scissors reconstructs the surrounding Castle scenery.",
+      "sourceKey": "room:SM22",
+      "submap": 34,
+      "tiles": [
+        {
+          "assetId": "castle-broken-bottle",
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 3,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-broken-bottle-visual-restoration",
+      "bounds": [
+        136,
+        824,
+        8,
+        8
+      ],
+      "clearLayer": "A",
+      "id": "sm22-broken-bottle-lower-bottle",
+      "mapId": 41,
+      "provenance": "Overlay the reviewed broken revival bottle at the Classic-projected SM22 g8:17:103 cell, adjacent to the bottle rack, after Smart Scissors reconstructs the surrounding Castle scenery.",
+      "reason": "Overlay the reviewed broken revival bottle at the Classic-projected SM22 g8:17:103 cell, adjacent to the bottle rack, after Smart Scissors reconstructs the surrounding Castle scenery.",
+      "sourceKey": "room:SM22",
+      "submap": 34,
+      "tiles": [
+        {
+          "assetId": "castle-broken-bottle",
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 3,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-broken-bottle-visual-restoration",
+      "bounds": [
+        104,
+        248,
+        8,
+        8
+      ],
+      "clearLayer": "A",
+      "id": "sm24-broken-bottle-visual",
+      "mapId": 43,
+      "provenance": "Place the reviewed broken revival bottle at SM24 g8:13:31.",
+      "reason": "Place the reviewed broken revival bottle at SM24 g8:13:31.",
+      "sourceKey": "room:SM24",
+      "submap": 36,
+      "tiles": [
+        {
+          "assetId": "castle-broken-bottle",
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 3,
+          "plane": "A"
+        }
+      ]
+    },
+    {
+      "action": "overlay-tiles",
+      "authority": "classic-broken-bottle-visual-restoration",
+      "bounds": [
+        104,
+        504,
+        8,
+        8
+      ],
+      "clearLayer": "A",
+      "id": "sm25-broken-bottle-visual",
+      "mapId": 44,
+      "provenance": "Place the reviewed broken revival bottle at the Classic-projected SM25 g8:13:63 cell so the foreground trap art matches the restored lethal 8x8 hazard.",
+      "reason": "Place the reviewed broken revival bottle at the Classic-projected SM25 g8:13:63 cell so the foreground trap art matches the restored lethal 8x8 hazard.",
+      "sourceKey": "room:SM25",
+      "submap": 37,
+      "tiles": [
+        {
+          "assetId": "castle-broken-bottle",
+          "offset": [
+            0,
+            0
+          ],
+          "paletteLine": 3,
+          "plane": "A"
+        }
+      ]
+    }
+  ],
+  "schema": "rdx.reviewed_map_visual_patches.v1",
+  "version": "2.1.104"
+}

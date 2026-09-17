@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rick Dangerous: Revival · Level Editor</title>
+  <link rel="stylesheet" href="map-editor.css">
+</head>
+<body>
+  <div id="editor-app" class="editor-app" data-ready="false">
+    <header class="topbar">
+      <div class="brand-block">
+        <a class="brand-mark" href="index.html" aria-label="Back to Rick Dangerous Revival">RDR</a>
+        <div><strong>Level Editor</strong><span>RDX descriptor + xrick authority workspace · v2.1.104</span></div>
+      </div>
+      <div class="document-block">
+        <label class="project-name-label" for="level-name">Level</label>
+        <input id="level-name" class="project-name" value="Untitled level" autocomplete="off">
+        <span id="save-state" class="save-state">Loading engine…</span>
+      </div>
+      <nav class="top-actions" aria-label="Project actions">
+        <button id="new-level" type="button" title="New level (Ctrl/Cmd+N)">＋ New</button>
+        <div class="room-stepper" aria-label="Room navigation">
+          <button id="previous-room" type="button" title="Open previous production room">‹</button>
+          <button id="open-room" type="button">Open room</button>
+          <button id="next-room" type="button" title="Open next production room">›</button>
+        </div>
+        <button id="reset-rdx" type="button" title="Reset the current selection to decoded RDX; with no selection, reset the whole map">Reset</button>
+        <button id="import-level" type="button">Import</button>
+        <div id="export-control" class="export-control">
+          <button id="export-level" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="export-menu" title="Export current implementation or compact manual changes">Export <span aria-hidden="true">▾</span></button>
+          <div id="export-menu" class="export-menu" role="menu" hidden>
+            <button type="button" role="menuitem" data-export-mode="implementation"><strong>Current implementation</strong><small>Full editor document + exact native draft plan</small></button>
+            <button type="button" role="menuitem" data-export-mode="changes"><strong>Changes only</strong><small>Compact manual edits for code implementation</small></button>
+            <button type="button" role="menuitem" data-export-mode="reviewed-fixes"><strong>Export Reviewed Fixes</strong><small>Canonical room correction ledger · native-tested semantics</small></button>
+            <button type="button" role="menuitem" data-export-mode="layer-draft"><strong>Advanced layer draft</strong><small>Production-only C-F edits that require promote + reload</small></button>
+          </div>
+        </div>
+        <button id="validate-level" type="button">Validate</button>
+        <button id="play-level" class="primary" type="button">▶ Playtest</button>
+        <a href="juice-editor.html" class="nav-link">Game Juice</a>
+        <a href="index.html" class="nav-link">Game</a>
+      </nav>
+      <input id="import-file" type="file" accept="application/json,.json" hidden>
+    </header>
+
+    <div class="commandbar" role="toolbar" aria-label="Level editing tools">
+      <div class="tool-group history-group">
+        <button id="undo" class="icon-button" type="button" title="Undo · Ctrl/Cmd+Z" disabled>↶</button>
+        <button id="redo" class="icon-button" type="button" title="Redo · Ctrl/Cmd+Shift+Z" disabled>↷</button>
+      </div>
+      <div id="tool-buttons" class="tool-group tool-selector" aria-label="Tools">
+        <button type="button" data-tool="select" data-select-mode="object" class="active" title="Select objects · click again to cycle BG / FG / All"><span>↖</span><small>Select</small></button>
+        <button type="button" data-tool="hand" title="Pan · H or Space"><span>✋</span><small>Pan</small></button>
+        <button type="button" data-tool="brush" title="Tile brush · B"><span>✎</span><small>Brush</small></button>
+        <button type="button" data-tool="rectangle" title="Rectangle paint · R"><span>▭</span><small>Rect</small></button>
+        <button type="button" data-tool="scissors" title="Smart Scissors · S"><span>✂</span><small>Scissors</small></button>
+        <button type="button" data-tool="fill" title="Fill · G"><span>▨</span><small>Fill</small></button>
+        <button type="button" data-tool="eyedropper" title="Pick tile · I"><span>⌾</span><small>Pick</small></button>
+        <button type="button" data-tool="collision" title="Collision paint · C"><span>▦</span><small>Collision</small></button>
+        <button type="button" data-tool="entity" title="Select/edit entities · E"><span>♟</span><small>Entity</small></button>
+        <button type="button" data-tool="hero" title="Place hero start"><span>◆</span><small>Hero</small></button>
+        <button type="button" data-tool="erase" title="Erase · X"><span>⌫</span><small>Erase</small></button>
+      </div>
+      <div class="tool-group view-group">
+        <label class="compact-check simulate-check" title="Animate native actors and presentation timelines in the editor viewport"><input id="simulate-toggle" type="checkbox"> Simulate</label>
+        <button id="presentation-view-toggle" class="icon-button presentation-view-toggle" type="button" aria-pressed="false" title="Show aligned Classic presentation" aria-label="Show aligned Classic presentation"><span aria-hidden="true">◩</span></button>
+        <label class="compact-check"><input id="snap-toggle" type="checkbox" checked> Snap</label>
+        <label class="compact-check"><input id="grid-toggle" type="checkbox"> Grid</label>
+        <label class="compact-check" title="Show the fully resolved A–F level instead of raw decoded RDX"><input id="system-modifications-toggle" type="checkbox" checked> Effective layers</label>
+        <button id="zoom-out" class="icon-button" type="button" title="Zoom out">−</button>
+        <output id="zoom-label">100%</output>
+        <button id="zoom-in" class="icon-button" type="button" title="Zoom in">＋</button>
+        <button id="frame-width" class="icon-button" type="button" title="Fit room to viewport width">↔</button>
+        <button id="frame-height" class="icon-button" type="button" title="Fit room to viewport height">↕</button>
+      </div>
+    </div>
+
+    <main class="workspace">
+      <aside class="left-dock panel">
+        <div class="panel-tabs" role="tablist">
+          <button class="active" data-left-tab="scene" type="button">Scene</button>
+          <button data-left-tab="library" type="button">Library</button>
+          <button data-left-tab="diagnostics" type="button">Diagnostics</button>
+        </div>
+        <section id="scene-tab" class="left-tab active">
+          <div class="panel-heading"><div><strong>Scene</strong><span id="scene-summary">4 layers</span></div><button id="expand-scene" class="icon-button" type="button">⌄</button></div>
+          <div id="scene-tree" class="scene-tree"></div>
+          <details id="changes-panel" class="changes-panel">
+            <summary><span>Changes</span><b id="changes-count">0</b></summary>
+            <div id="changes-list" class="changes-list"><div class="empty-mini">No authored changes yet.</div></div>
+          </details>
+          <div class="panel-section level-structure">
+            <div class="section-title"><span>Level structure</span><button id="level-settings-button" type="button">Edit</button></div>
+            <dl class="mini-kv"><div><dt>Host</dt><dd id="host-room-label">—</dd></div><div><dt>Size</dt><dd id="level-size-label">—</dd></div><div><dt>Hero</dt><dd id="hero-label">—</dd></div></dl>
+          </div>
+        </section>
+        <section id="library-tab" class="left-tab">
+          <label class="search-box"><span>⌕</span><input id="library-search" placeholder="Search tiles, enemies, traps…" autocomplete="off"></label>
+          <div class="library-tabs">
+            <button class="active" data-library-tab="tiles" type="button">Tiles</button>
+            <button data-library-tab="entities" type="button">Entities</button>
+          </div>
+          <section id="tile-library" class="library-pane active">
+            <div class="tile-authoring-tabs" role="tablist">
+              <button type="button" class="active" data-tile-authoring="terrain">Terrain</button>
+              <button type="button" data-tile-authoring="stamp">Stamps</button>
+              <button type="button" data-tile-authoring="raw">Raw tiles</button>
+            </div>
+            <div id="terrain-library-pane" class="terrain-library-pane">
+              <div class="library-controls">
+                <label>Terrain behavior<select id="terrain-collision-mode"><option value="catalog">Visual + gameplay</option><option value="visual-only">Visual only</option><option value="preserve">Preserve collision</option></select></label>
+              </div>
+              <div id="terrain-catalog" class="terrain-catalog"></div>
+              <div class="asset-caption"><strong id="selected-terrain-label">No terrain selected</strong><span>16×16 semantic terrain automatically resolves edges and neighboring cells.</span></div>
+              <label class="autotile-debug-toggle"><input id="autotile-debug-toggle" type="checkbox"> Show rule masks on map</label>
+              <label class="autotile-debug-toggle"><input id="terrain-assist-ambiguity" type="checkbox" checked> Ask when smart construction or stamp placement has multiple good matches</label>
+            </div>
+            <div id="stamp-library-pane" class="stamp-library-pane" hidden>
+              <div class="category-pills" id="stamp-categories"></div>
+              <div id="stamp-catalog" class="stamp-catalog"></div>
+              <div class="asset-caption"><strong id="selected-stamp-label">No stamp selected</strong><span>Multi-cell production motifs. Placement can adapt semantic terrain underneath to match the sampled source footprint.</span></div>
+            </div>
+            <div id="raw-tile-library-pane" class="raw-tile-library-pane" hidden>
+              <div class="library-controls two-col">
+                <label>Source map<select id="tile-source-map"></select></label>
+                <label>Source mode<select id="tile-source-plane"><option value="SMART">Smart presentation cells</option><option value="COMPOSITE">Composite A+B cells</option><option value="SAFE_B">Standalone B cells</option><option value="B">Exact 8×8 · Plane B</option><option value="A">Exact 8×8 · Plane A</option></select></label>
+              </div>
+              <div class="tile-palette-wrap"><canvas id="tile-palette" width="320" height="200"></canvas><div id="tile-palette-selection"></div></div>
+              <div class="asset-caption"><strong id="selected-tile-label">No tile selected</strong><span>Smart cells reproduce the complete source presentation (A+B when required). Exact 8×8 plane editing remains available for surgical overrides.</span></div>
+              <div id="tile-rotation-variants" class="tile-rotation-variants" hidden></div>
+            </div>
+          </section>
+          <section id="entity-library" class="library-pane">
+            <div class="category-pills" id="entity-categories"></div>
+            <div id="entity-catalog" class="entity-catalog"></div>
+          </section>
+        </section>
+        <section id="diagnostics-tab" class="left-tab diagnostics-tab">
+          <div class="diagnostics-heading"><div><strong>Diagnostics</strong><span>Inspect RDX + Classic source legs, alignment, corrections, semantics, effective state and live native runtime in-place.</span></div><span id="diagnostics-count" class="diagnostics-count">0</span></div>
+          <div class="diagnostics-section">
+            <div class="diagnostics-label">View</div>
+            <div id="diagnostics-views" class="diagnostics-segments" role="group" aria-label="Diagnostic view">
+              <button class="active" type="button" data-diagnostic-view="runtime">Runtime</button><button type="button" data-diagnostic-view="layers">Layers</button><button type="button" data-diagnostic-view="structure">Structure</button><button type="button" data-diagnostic-view="draft">Draft</button><button type="button" data-diagnostic-view="shift">Classic ↔ RDX shift</button>
+            </div>
+          </div>
+          <div id="diagnostics-shift-mode-section" class="diagnostics-section" hidden>
+            <div class="diagnostics-label">Shift display</div>
+            <div id="diagnostics-shift-modes" class="diagnostics-segments diagnostics-shift-modes" role="group" aria-label="Classic to RDX shift display">
+              <button class="active" type="button" data-shift-mode="heatmap">Displacement heatmap</button><button type="button" data-shift-mode="vectors">Cell vectors</button>
+            </div>
+            <p class="diagnostics-layer-stage-help">Heatmap matches the established main-branch view: red = RDX above Classic, blue = below, purple = horizontal-only shift. Cell vectors retain the newer per-cell representation.</p>
+          </div>
+          <div id="diagnostics-layer-stage-section" class="diagnostics-section" hidden>
+            <div class="diagnostics-label-row"><span class="diagnostics-label">Layer stage</span><span id="diagnostics-layer-stage-caption">F · effective</span></div>
+            <div id="diagnostics-layer-stages" class="diagnostics-layer-stages" role="group" aria-label="Show level through layer">
+              <button type="button" data-layer-stage="A">A · raw RDX</button>
+              <button type="button" data-layer-stage="B">B · Classic</button>
+              <button type="button" data-layer-stage="C">C · alignment</button>
+              <button type="button" data-layer-stage="D">D · structure</button>
+              <button type="button" data-layer-stage="E">E · semantics</button>
+              <button class="active" type="button" data-layer-stage="F">F · effective</button>
+            </div>
+            <p id="diagnostics-layer-stage-help" class="diagnostics-layer-stage-help">Canonical A–F result. Draft edits are withheld in Layers view so each production stage can be inspected independently.</p>
+          </div>
+          <div class="diagnostics-section">
+            <div class="diagnostics-label-row"><span class="diagnostics-label">Overlay</span><button id="diagnostics-clear-selection" class="text-button" type="button">Clear selection</button></div>
+            <div id="diagnostics-filters" class="diagnostics-filter-grid" role="group" aria-label="Diagnostic overlay filter">
+              <button class="active" type="button" data-diagnostic-filter="all">All</button><button type="button" data-diagnostic-filter="hazard">Hazards</button><button type="button" data-diagnostic-filter="enemy">Enemies</button><button type="button" data-diagnostic-filter="collectible">Collectibles</button><button type="button" data-diagnostic-filter="projectile">Projectiles</button><button type="button" data-diagnostic-filter="activator">Triggers</button><button type="button" data-diagnostic-filter="blockage">Blockages</button><button type="button" data-diagnostic-filter="action">Actions</button><button type="button" data-diagnostic-filter="patch">Patches</button>
+            </div>
+            <div class="diagnostics-overlay-switches">
+              <label><input id="diagnostics-geometry-toggle" type="checkbox"> Geometry</label>
+              <label><input id="diagnostics-unresolved-toggle" type="checkbox"> Unresolved</label>
+              <label><input id="diagnostics-trajectory-toggle" type="checkbox"> Full paths</label>
+            </div>
+            <div id="diagnostics-trajectory-legend" class="diagnostics-trajectory-legend" hidden>
+              <span data-path-source="stage">Shown stage</span><span data-path-source="classic">Layer B / Classic</span><span data-path-source="effective">Layer F / effective</span><span data-path-source="native">Native xrick</span>
+            </div>
+            <div id="diagnostics-geometry-legend" class="diagnostics-geometry-legend" hidden>
+              <span data-geometry-type="super-pad">Super pad / bouncy floor</span>
+            </div>
+          </div>
+          <div class="diagnostics-section diagnostics-selector">
+            <div class="diagnostics-label">Instance selector</div>
+            <label class="diagnostics-select">Type<select id="diagnostics-instance-type"><option value="enemy">Enemy</option><option value="platform">Platform</option><option value="projectile-shooter">Projectile shooter</option><option value="projectile">Projectile</option><option value="trap">Trap / hazard</option><option value="collectible">Collectible</option><option value="activator">Trigger</option><option value="blockage">Blockage</option></select></label>
+            <div class="instance-nav"><button id="diagnostics-prev" type="button" title="Previous instance">←</button><output id="diagnostics-instance-status">0 / 0</output><button id="diagnostics-next" type="button" title="Next instance">→</button></div>
+          </div>
+          <div class="diagnostics-section diagnostics-queue-section">
+            <div class="diagnostics-label-row"><span class="diagnostics-label">Review queue</span><span id="diagnostics-queue-caption">Runtime · All</span></div>
+            <div id="diagnostics-queue" class="diagnostics-queue"><div class="empty-mini">No diagnostic rows in this view.</div></div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="viewport-column">
+        <div class="viewport-topline">
+          <div class="breadcrumbs"><span id="level-breadcrumb">RDX</span><b>›</b><span id="room-breadcrumb">—</span></div>
+          <div class="layer-quick-toggles">
+            <select id="depth-preview-mode" aria-label="Presentation depth preview">
+              <option value="full">Full composite</option>
+              <option value="backdrop">Solo backdrop</option>
+              <option value="midground">Solo midground</option>
+              <option value="foreground">Solo foreground</option>
+              <option value="behind">Backdrop + midground</option>
+              <option value="actors">All actors</option>
+              <option value="embeddedActors">Embedded actors only</option>
+              <option value="frontActors">Front actors only</option>
+              <option value="split">Band tint</option>
+              <option value="seed">Open / close seed</option>
+            </select>
+            <button id="depth-view-toggle" type="button" aria-pressed="false" title="Toggle band tint">Depth</button>
+            <button id="collision-overlay-toggle" type="button">Collision</button>
+          </div>
+        </div>
+        <div id="viewport-shell" class="viewport-shell">
+          <div id="viewport-scroll" class="viewport-scroll">
+            <div id="scene-stage" class="scene-stage" tabindex="0" aria-label="Level editing canvas">
+              <canvas id="background-canvas"></canvas>
+              <canvas id="embedded-actors-canvas"></canvas>
+              <canvas id="foreground-behind-canvas"></canvas>
+              <canvas id="actors-canvas"></canvas>
+              <canvas id="foreground-canvas"></canvas>
+              <canvas id="front-actors-canvas"></canvas>
+              <canvas id="editor-canvas"></canvas>
+            </div>
+          </div>
+          <div class="viewport-float viewport-info">
+            <span id="tool-hint">Select · click an object, Shift-click to add, or drag a marquee</span>
+            <span id="selection-count">No selection</span>
+          </div>
+          <div class="navigator viewport-float">
+            <canvas id="navigator-canvas" width="160" height="100"></canvas>
+            <div id="navigator-window"></div>
+          </div>
+          <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+        </div>
+
+        <section id="entity-debug-dock" class="entity-debug-dock" hidden>
+          <div class="debug-note-context"><span>Debug note</span><strong id="debug-note-entity">No entity selected</strong><small id="debug-note-meta">Select a source or editable entity to annotate it.</small></div>
+          <label class="debug-note-kind">Issue<select id="debug-note-kind"><option value="sprite-association">Sprite association</option><option value="entity-type">Entity type</option><option value="annotation">Annotation/name</option><option value="rendering">Rendering/placement</option><option value="behavior">Behavior/properties</option><option value="other">Other</option></select></label>
+          <label class="debug-note-text"><span>Note</span><input id="debug-note-input" autocomplete="off" placeholder="Describe what is wrong and what it should be…"></label>
+          <button id="save-debug-note" class="primary" type="button">Add note</button>
+          <button id="download-debug-notes" type="button">Download notes <b id="debug-note-count">0</b></button>
+        </section>
+
+        <section id="playtest-dock" class="playtest-dock" hidden>
+          <div class="playtest-head">
+            <div><span class="live-dot"></span><strong>RDX descriptor / xrick playtest</strong><span id="playtest-status">Starting…</span></div>
+            <div class="playtest-actions">
+              <label class="compact-check"><input id="playtest-sound" type="checkbox" checked> Sound</label>
+              <label class="compact-check"><input id="playtest-invulnerable" type="checkbox" checked> Immortal</label>
+              <label class="compact-check"><input id="playtest-resources" type="checkbox" checked> Infinite ammo</label>
+              <label class="compact-check"><input id="playtest-debug" type="checkbox" checked> Debug overlay</label>
+              <label class="playtest-scale-control">Render <select id="playtest-scale" aria-label="Playtest render size"><option value="1">1×</option><option value="2" selected>2×</option><option value="4">4×</option></select></label>
+              <button id="restart-playtest" type="button">↻ Restart</button>
+              <button id="stop-playtest" type="button">■ Stop</button>
+            </div>
+          </div>
+          <div class="playtest-body">
+            <div id="playtest-canvas-wrap" class="playtest-canvas-wrap" data-scale="2"><canvas id="playtest-canvas" width="320" height="200" tabindex="0" aria-label="RDX descriptor xrick level playtest"></canvas></div>
+            <div class="playtest-help"><strong>Click to capture controls</strong><span>← → / Z X move · ↑ / O jump · ↓ / K crawl · Space fire/use</span><span>Playtest runs the shared xrick Rick solver against the same edited RDX MT/ML descriptors, entities and presentation draft visible above.</span></div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="right-dock panel">
+        <div class="panel-tabs inspector-tabs" role="tablist">
+          <button class="active" data-inspector-tab="inspector" type="button">Inspector</button>
+          <button data-inspector-tab="level" type="button">Level</button>
+          <button data-inspector-tab="validation" type="button">Checks <span id="validation-badge">0</span></button>
+          <button data-inspector-tab="diagnostics" type="button">Diagnostics</button>
+        </div>
+        <section id="inspector-tab" class="inspector-pane active"><div class="selection-reference-bar"><span>Stable reference</span><button id="copy-selection-id" type="button" title="Copy the stable level-data reference for the current selection">Copy selected ID</button></div><div id="inspector-content" class="inspector-content"><div class="empty-inspector"><span>◇</span><strong>Nothing selected</strong><p>Select a tile, collision cell, actor or hero start to edit it.</p></div></div></section>
+        <section id="level-tab" class="inspector-pane"><div id="level-settings" class="inspector-content"></div></section>
+        <section id="validation-tab" class="inspector-pane"><div class="validation-header"><button id="run-checks" type="button">Run checks</button><span>Document + host compatibility checks</span></div><div class="validation-scope"><strong>What this validates</strong><span>Draft schema and bounds, host-room availability, custom entity presentation assignments, terrain/stamp references and theme mismatches, reviewed-patch retractions, and exit targets.</span><span>It does <b>not</b> prove gameplay correctness, native trigger timing, pixel parity, or that every reviewed placement is visually correct. Use Simulate/Playtest and Diagnostics for those.</span></div><div id="validation-list" class="validation-list"></div></section>
+        <section id="diagnostics-inspector-tab" class="inspector-pane diagnostics-inspector-pane">
+          <div id="diagnostics-inspector" class="inspector-content"><div class="empty-inspector"><span>⌖</span><strong>Inspect production truth</strong><p>Choose a diagnostic view, select an instance, or click geometry on the map.</p></div></div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="statusbar">
+      <div><span id="engine-status" class="status-chip loading">Loading RDX ROM…</span><span id="parity-status" class="status-chip">Parity gate ready</span><button id="rdx-rom-load" type="button">Load ROM</button><input id="rdx-rom-file" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream" hidden><button id="rdx-rom-folder" type="button" hidden title="Choose a folder once so supporting browsers can re-read Rick_Dangerous_DX_1.3.bin automatically when permission remains granted">Connect ROM folder</button><span class="status-group"><span class="authority-dot"></span><span id="authority-label">Preview = production systems + draft</span><span id="cursor-readout">x — · y —</span></span></div>
+      <div><span id="doc-stats">0 edits · 0 entities</span><span>Grid 8 px · Logic 16 px</span><span>Ctrl/Cmd+S export · P playtest</span></div>
+    </footer>
+  </div>
+
+  <dialog id="new-level-dialog" class="editor-dialog">
+    <form method="dialog">
+      <header><div><strong>Create a level</strong><span>Start from an existing production room or a native blank host.</span></div><button value="cancel" class="icon-button">×</button></header>
+      <div class="dialog-body">
+        <label>Name<input id="new-name" value="New level"></label>
+        <label>Start from<select id="new-mode"><option value="room">Existing production room</option><option value="blank">Blank native canvas</option></select></label>
+        <label>Native host room<select id="new-host"></select><small>The host supplies native dimensions, palette, camera topology and connection envelope for playtest.</small></label>
+        <div class="two-col"><label>Width<input id="new-width" type="number" min="16" max="320" step="16" value="320"></label><label>Height<input id="new-height" type="number" min="160" step="16" value="896"></label></div>
+      </div>
+      <footer><button value="cancel">Cancel</button><button id="create-level" value="default" class="primary">Create level</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="open-room-dialog" class="editor-dialog room-dialog">
+    <form method="dialog">
+      <header><div><strong>Open production room</strong><span>Load its native RDX presentation as an editable non-destructive draft.</span></div><button value="cancel" class="icon-button">×</button></header>
+      <div class="dialog-body"><label class="search-box"><span>⌕</span><input id="room-search" placeholder="Search SM / MD / theme"></label><div id="room-grid" class="room-grid"></div></div>
+      <footer><button value="cancel">Cancel</button></footer>
+    </form>
+  </dialog>
+
+
+  <dialog id="terrain-choice-dialog" class="editor-dialog terrain-choice-dialog">
+    <form method="dialog">
+      <header><div><strong>Choose best matching example</strong><span id="terrain-choice-summary">Several production examples fit this area. The recommended choice matches the surrounding context best.</span></div><button value="cancel" class="icon-button">×</button></header>
+      <div class="dialog-body"><div id="terrain-choice-options" class="terrain-choice-options"></div><label class="autotile-debug-toggle"><input id="terrain-choice-dont-ask" type="checkbox"> Do not ask again</label></div>
+      <footer><button value="cancel">Use recommended</button></footer>
+    </form>
+  </dialog>
+
+  <dialog id="smart-scissors-dialog" class="editor-dialog smart-scissors-dialog">
+    <form method="dialog">
+      <header><div><strong>Smart Scissors</strong><span id="smart-scissors-summary">Choose a matching donor patch from this level theme.</span></div><button value="cancel" class="icon-button" type="submit" aria-label="Cancel">×</button></header>
+      <div class="dialog-body">
+        <label id="smart-scissors-seed-control" class="smart-scissors-seed-control"><input id="smart-scissors-seed-toggle" type="checkbox"><span id="smart-scissors-seed-label">Use selected raw tile as an anchor</span></label>
+        <div id="smart-scissors-options" class="smart-scissors-options"></div>
+      </div>
+      <footer><button value="cancel" type="submit">Cancel</button><button id="smart-scissors-apply" type="button" disabled>Apply donor</button></footer>
+    </form>
+  </dialog>
+
+  <!-- SDL/xrick owns this hidden engine surface. The Level Editor copies the
+       authoritative compositor output into #playtest-canvas itself. -->
+  <div class="engine-source" aria-hidden="true"><canvas id="canvas" width="320" height="200"></canvas></div>
+  <script src="map-editor-host.js"></script>
+  <script src="xrick.js"></script>
+  <script type="module" src="map-editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>SoundLab</title>
+  <link rel="stylesheet" href="soundlab.css">
+</head>
+<body>
+  <main id="soundlab-app" class="sl-shell">
+    <header class="sl-header">
+      <div class="sl-brand">
+        <div class="sl-kicker">Deterministic game-audio authoring</div>
+        <div class="sl-title-row"><h1>SoundLab</h1><p id="sl-project">Loading project…</p></div>
+      </div>
+      <div class="sl-header-context">
+        <label class="sl-case-picker">Case<select id="sl-case-picker" aria-label="Authoring case"></select></label>
+        <span id="sl-authoring-mode" class="sl-pill neutral">standalone preview</span>
+        <span id="sl-build-state" class="sl-pill">manifest</span>
+      </div>
+    </header>
+
+    <section class="sl-readiness" aria-label="SoundLab component readiness" aria-live="polite">
+      <div id="sl-ready-manifest" class="sl-ready waiting"><span>Manifest</span><strong>loading</strong><small>SoundLab project data</small></div>
+      <div id="sl-ready-rom" class="sl-ready waiting"><span>RDX ROM</span><strong>checking</strong><small>shared verified ROM</small></div>
+      <div id="sl-ready-native" class="sl-ready waiting"><span>Native/WASM</span><strong>not started</strong><small>authoritative runtime</small></div>
+      <div id="sl-ready-audio" class="sl-ready waiting"><span>Browser audio</span><strong>locked</strong><small>gesture required</small></div>
+      <div id="sl-ready-service" class="sl-ready waiting"><span>Authoring service</span><strong>not configured</strong><small>optional canonical authoring</small></div>
+      <div id="sl-ready-canonical" class="sl-ready waiting"><span>Canonical build</span><strong>not connected</strong><small>optional production outputs</small></div>
+      <div id="sl-ready-scene" class="sl-ready waiting"><span>Native scene</span><strong>waiting</strong><small>binding fixture</small></div>
+    </section>
+
+    <section class="sl-layout">
+      <aside class="sl-cases panel">
+        <div class="panel-title"><span>Cases</span><small id="sl-case-count"></small></div>
+        <div id="sl-case-list" class="case-list"></div>
+        <div class="sl-note">Manifest-defined authoring cases. Project semantics stay outside the reusable SoundLab core.</div>
+      </aside>
+
+      <section class="sl-main">
+        <section class="panel waveform-panel">
+          <div class="panel-title waveform-title">
+            <div><span>Audition</span><small id="sl-waveform-caption">Current browser preview</small></div>
+            <div class="segmented" aria-label="Audition source">
+              <button data-profile="preview" class="active">Current preview</button>
+              <button data-profile="current-master" disabled>Current canonical</button>
+              <button data-profile="current-runtime" disabled>Current runtime</button>
+              <button data-profile="master">Promoted master</button>
+              <button data-profile="runtime">Promoted runtime</button>
+            </div>
+          </div>
+          <canvas id="sl-waveform" width="900" height="180" aria-label="Sound waveform"></canvas>
+          <div class="metrics">
+            <span id="sl-metric-duration">— ms</span>
+            <span id="sl-metric-peak">peak —</span>
+            <span id="sl-metric-rate">—</span>
+            <span id="sl-metric-hash">hash —</span>
+          </div>
+        </section>
+
+        <section id="sl-native-panel" class="panel preview-panel" data-collapsed="false">
+          <div class="panel-title native-title">
+            <div><span>Native context</span><small id="sl-native-status">Not started</small></div>
+            <div class="panel-actions">
+              <button id="sl-play-isolated" title="Audition the current isolated sound">Isolated</button>
+              <button id="sl-replay-context" disabled title="Replay from just before the selected native event">Replay event</button>
+              <button id="sl-scene-pause" disabled>Pause</button>
+              <button id="sl-reset-native" disabled>Restart</button>
+              <button id="sl-start-native" class="primary" disabled>Start scene</button>
+              <button id="sl-toggle-native" aria-expanded="true" aria-controls="sl-native-body">Hide</button>
+            </div>
+          </div>
+          <div id="sl-native-body" class="preview-body">
+            <div class="native-setup">
+              <div class="rom-state"><strong id="sl-rom-state">RDX ROM not loaded</strong><small id="sl-rom-detail">Load Rick_Dangerous_DX_1.3.bin once; it is shared with Workbench and Level Editor.</small></div>
+              <label class="native-file-button">Load ROM<input id="sl-rom-file" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream"></label>
+              <button id="sl-rom-folder" type="button" hidden>Connect ROM folder</button>
+            </div>
+            <div class="scene-toolbar">
+              <div><strong id="sl-scene-name">No scene</strong><small id="sl-scene-status">Waiting for ROM</small></div>
+              <div class="scene-actions"><label class="loop-toggle"><input id="sl-scene-loop" type="checkbox" checked> Loop</label><button id="sl-scene-current" class="active" aria-pressed="true">Current draft</button><button id="sl-scene-native" aria-pressed="false">Promoted/native</button></div>
+            </div>
+            <canvas id="sl-native-canvas" width="320" height="200" tabindex="0" aria-label="Native game preview"></canvas>
+            <div class="live-route"><span id="sl-live-route">Native fallback</span><span id="sl-draft-revision">draft r0</span><button id="sl-export-draft">Export draft</button><label class="draft-import">Import draft<input id="sl-import-draft" type="file" accept="application/json,.json"></label></div>
+            <div class="timeline">
+              <span>scene window</span>
+              <div id="sl-event-timeline" class="timeline-track" aria-label="Native scene preview window">
+                <span id="sl-window-range" class="timeline-range"></span>
+                <button id="sl-window-start" class="timeline-handle start" aria-label="Preview window start" disabled></button>
+                <button id="sl-window-end" class="timeline-handle end" aria-label="Preview window end" disabled></button>
+                <i id="sl-event-marker"></i>
+              </div>
+              <output id="sl-event-readout">Play once to unlock trim handles</output>
+            </div>
+          </div>
+        </section>
+
+        <details class="panel capture-panel" data-persist-key="diagnostics">
+          <summary class="panel-title"><span>Telemetry & diagnostics</span><small>collapsed</small></summary>
+          <div class="diagnostics-body">
+            <div class="diagnostics-toolbar"><span>Exact native telemetry</span><div><button id="sl-use-capture" aria-pressed="false">Use trace</button><button id="sl-clear-capture">Clear</button><button id="sl-export-capture">Export trace</button></div></div>
+            <pre id="sl-telemetry">Capture the authoritative game event; no browser collision inference is used.</pre>
+            <div class="semantic-facts">
+              <div><span>Recipe</span><strong id="sl-recipe"></strong></div>
+              <div><span>Style</span><strong id="sl-style"></strong></div>
+              <div><span>Event</span><strong id="sl-event"></strong></div>
+              <div><span>Renderer</span><strong id="sl-renderer"></strong></div>
+              <div><span>Browser playback</span><strong id="sl-browser-rate">not started</strong></div>
+              <div><span>Canonical build</span><strong id="sl-canonical-state">not connected</strong></div>
+            </div>
+            <p class="sl-help">The browser renderer is a low-latency, non-authoritative preview. Connected canonical render, export conversion, hashes, stale detection, and promotion remain owned by the local SoundLab renderer.</p>
+          </div>
+        </details>
+      </section>
+
+      <aside class="sl-author panel">
+        <div class="panel-title author-title">
+          <div><span>Shape current sound</span><small id="sl-author-mode-caption">browser preview</small></div>
+          <div class="object-chip">Object <strong id="sl-object"></strong></div>
+        </div>
+
+        <div class="author-fields focus-fields">
+          <div class="scene-sound-brief">
+            <span>Sound applies to</span><strong id="sl-brief-object">Scene object</strong>
+            <p id="sl-scene-read">Start the native scene to read its motion and contact.</p><p id="sl-sound-color" class="sound-color">Sound color: solid · deep · rocky · hard · medium ring</p>
+          </div>
+          <div class="control-row" data-control="material">
+            <label>What does it hit?<select id="sl-material" aria-label="Surface material"></select></label><button class="reset-control" data-reset="material" title="Reset material">↺</button>
+          </div>
+          <div class="control-row" data-control="strength">
+            <label>Impact energy <span class="plain-hint">gentle → forceful</span>
+              <div class="range-row"><div id="sl-strength-surface" class="sl-range-surface" data-soundlab-essential="strength"><input id="sl-strength" type="range" min="0" max="1" step="0.01" aria-label="Impact energy"></div><output id="sl-strength-out"></output></div>
+            </label><button class="reset-control" data-reset="strength" title="Reset impact energy">↺</button>
+          </div>
+          <div class="control-row" data-control="size"><label>Weight / depth <span class="plain-hint">lighter → deeper</span><div class="mini-range"><input id="sl-size" type="range" min="0.6" max="1.4" step="0.01"><output id="sl-size-out"></output></div></label><button class="reset-control" data-reset="size">↺</button></div>
+          <div class="control-row" data-control="roughness"><label>Rocky texture <span class="plain-hint">smooth → rough</span><div class="mini-range"><input id="sl-roughness" type="range" min="0" max="1" step="0.01"><output id="sl-roughness-out"></output></div></label><button class="reset-control" data-reset="roughness">↺</button></div>
+          <div class="control-row" data-control="hardness"><label>Attack <span class="plain-hint">soft → sharp</span><div class="mini-range"><input id="sl-hardness" type="range" min="0" max="1" step="0.01"><output id="sl-hardness-out"></output></div></label><button class="reset-control" data-reset="hardness">↺</button></div>
+          <div class="control-row" data-control="damping"><label>Ring / tail <span class="plain-hint">short → ringing</span><div class="mini-range"><input id="sl-damping" type="range" min="0.6" max="1.6" step="0.01"><output id="sl-damping-out"></output></div></label><button class="reset-control" data-reset="damping">↺</button></div>
+        </div>
+
+        <details id="sl-expert" class="expert" data-persist-key="expert">
+          <summary>Expert controls <small id="sl-changed-count">profile defaults</small></summary>
+          <div class="expert-sections">
+            <details open data-persist-key="expert-object"><summary>Object & contact</summary><div class="expert-grid">
+              <div class="control-row" data-control="object"><label>Object profile<select id="sl-object-profile"></select></label><button class="reset-control" data-reset="object">↺</button></div>
+            </div></details>
+            <details data-persist-key="expert-transient"><summary>Transient & body</summary><div class="expert-grid">
+              <div class="control-row" data-control="transient"><label>Transient balance <div class="mini-range"><input id="sl-transient" type="range" min="0" max="1.2" step="0.01"><output id="sl-transient-out"></output></div></label><button class="reset-control" data-reset="transient">↺</button></div>
+              <div class="control-row" data-control="body"><label>Body balance <div class="mini-range"><input id="sl-body" type="range" min="0" max="1.2" step="0.01"><output id="sl-body-out"></output></div></label><button class="reset-control" data-reset="body">↺</button></div>
+              <div class="control-row" data-control="residual"><label>Residual balance <div class="mini-range"><input id="sl-residual" type="range" min="0" max="1.2" step="0.01"><output id="sl-residual-out"></output></div></label><button class="reset-control" data-reset="residual">↺</button></div>
+            </div></details>
+            <details data-persist-key="expert-style"><summary>Style & variation</summary><div class="expert-grid">
+              <div class="control-row" data-control="style"><label>Style profile<select id="sl-style-profile"></select></label><button class="reset-control" data-reset="style">↺</button></div>
+              <div class="control-row" data-control="style-amount"><label>Style amount <div class="mini-range"><input id="sl-style-amount" type="range" min="0" max="1.5" step="0.01"><output id="sl-style-amount-out"></output></div></label><button class="reset-control" data-reset="style-amount">↺</button></div>
+              <div class="control-row" data-control="variants"><label>Variant count<input id="sl-variant-count" type="number" min="1" max="16" step="1"></label><button class="reset-control" data-reset="variants">↺</button></div>
+              <div class="control-row" data-control="covariance"><label>Variation covariance <div class="mini-range"><input id="sl-covariance" type="range" min="0" max="2" step="0.05"><output id="sl-covariance-out"></output></div></label><button class="reset-control" data-reset="covariance">↺</button></div>
+              <label>Current seed<input id="sl-seed" type="number" min="1" max="4294967295" step="1"></label>
+              <label>Promoted variant<select id="sl-variant"></select></label>
+              <div class="snapshot-bar"><span>Parameter A/B</span><button data-snapshot-save="A">Store A</button><button data-snapshot-load="A">Recall A</button><button data-snapshot-save="B">Store B</button><button data-snapshot-load="B">Recall B</button></div>
+            </div></details>
+            <details data-persist-key="expert-source"><summary>Source material</summary><div class="expert-grid">
+              <div class="control-row" data-control="source"><label>Residual source<select id="sl-source"><option value="">Procedural residual</option></select></label><button class="reset-control" data-reset="source">↺</button></div>
+              <div id="sl-source-meta" class="source-meta">No frozen source selected.</div>
+              <div class="source-import">
+                <label>Import WAV<input id="sl-source-file" type="file" accept="audio/wav,.wav"></label>
+                <label>Source ID<input id="sl-source-id" type="text" placeholder="stone-residual-01"></label>
+                <label>Role<select id="sl-source-role"><option value="residual">residual</option><option value="transient">transient</option><option value="body-reference">body reference</option><option value="texture">texture</option></select></label>
+                <label>Provider<input id="sl-source-provider" type="text" value="recorded"></label>
+                <button id="sl-import-source" disabled>Import frozen source</button>
+              </div>
+            </div></details>
+          </div>
+        </details>
+
+        <div class="button-grid" aria-label="Audition actions">
+          <button id="sl-render-preview" class="primary">Refresh preview</button>
+          <button id="sl-play-preview">▶ Current</button>
+          <button id="sl-play-master">▶ Master</button>
+          <button id="sl-play-runtime">▶ Runtime</button>
+        </div>
+
+        <section id="sl-canonical-panel" class="canonical-card" aria-label="Canonical authoring" hidden>
+          <div class="canonical-head"><strong>Canonical authoring</strong><small id="sl-service-detail">Connect by opening SoundLab through the local authoring service.</small></div>
+          <div class="canonical-actions">
+            <button id="sl-render-canonical" disabled>Render current</button>
+            <button id="sl-render-variants" disabled>Variants</button>
+            <button id="sl-render-materials" disabled>Materials</button>
+            <button id="sl-render-sweep" disabled>Strength sweep</button>
+            <button id="sl-promote" class="primary" disabled>Promote…</button>
+          </div>
+          <div id="sl-batch-strip" class="batch-strip" aria-live="polite"></div>
+          <div id="sl-promotion-state" class="promotion-state">Standalone mode: canonical filesystem operations are unavailable.</div>
+        </section>
+        <p class="author-note">Focus mode stays browser-fast. Expert controls remain one disclosure away; connected canonical render/promotion never changes browser preview into production authority.</p>
+      </aside>
+    </section>
+  </main>
+  <canvas id="sl-engine-canvas" width="320" height="200" hidden aria-hidden="true"></canvas>
+  <script src="soundlab-host.js"></script>
+  <script src="xrick.js"></script>
+  <script type="module" src="soundlab.js"></script>
+</body>
+</html>

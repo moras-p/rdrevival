@@ -1,0 +1,6675 @@
+{
+  "schema": "rdx.sprite_anims.v1",
+  "version": "2.1.10",
+  "rom": {
+    "file": "Rick_Dangerous_DX_1.3x.bin",
+    "sha256": "06ba20d676fe3ded0f79ace313cb8379e6fe30a4cc9794fffdb392b585180a00"
+  },
+  "directionRule": {
+    "right": "PN speed high byte 0x10",
+    "left": "PN speed high byte 0x20",
+    "neutral": "all other high bytes; preview not mirrored unless manually edited"
+  },
+  "purpose": "External editable animation categorization sidecar. The ROM provides PN/PF/PA/MA linkage, but friendly character/action names are curated here.",
+  "catalog": {
+    "pn": [
+      {
+        "pn": 0,
+        "pfStart": 1,
+        "pfEndInclusive": 1,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0000",
+        "speedHex": "0x0B00",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 1,
+        "pfStart": 2,
+        "pfEndInclusive": 2,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0001",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 2,
+        "pfStart": 3,
+        "pfEndInclusive": 3,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0002",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x01"
+        ],
+        "spawnLinkedMaps": [
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0054",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 3,
+        "pfStart": 4,
+        "pfEndInclusive": 7,
+        "frameCount": 4,
+        "loopOffset": 2,
+        "flagsHex": "0x0003",
+        "speedHex": "0x0020",
+        "direction": "neutral",
+        "hint": "death / camera-facing collapse",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 4,
+        "pfStart": 8,
+        "pfEndInclusive": 12,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x007E",
+        "speedHex": "0x1019",
+        "direction": "right",
+        "hint": "Jungle enemy walk set A",
+        "actors": [
+          "0x03",
+          "0x05"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 5,
+        "pfStart": 13,
+        "pfEndInclusive": 17,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x007E",
+        "speedHex": "0x2019",
+        "direction": "left",
+        "hint": "Jungle enemy walk set A",
+        "actors": [
+          "0x03",
+          "0x05"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 6,
+        "pfStart": 18,
+        "pfEndInclusive": 21,
+        "frameCount": 4,
+        "loopOffset": 2,
+        "flagsHex": "0x0006",
+        "speedHex": "0x0020",
+        "direction": "neutral",
+        "hint": "death / camera-facing collapse",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 7,
+        "pfStart": 22,
+        "pfEndInclusive": 26,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x0080",
+        "speedHex": "0x1019",
+        "direction": "right",
+        "hint": "Jungle enemy walk set B",
+        "actors": [
+          "0x06"
+        ],
+        "spawnLinkedMaps": [
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010"
+        ],
+        "firstSpawnMap": "MD0004",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 8,
+        "pfStart": 27,
+        "pfEndInclusive": 31,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x0080",
+        "speedHex": "0x2019",
+        "direction": "left",
+        "hint": "Jungle enemy walk set B",
+        "actors": [
+          "0x06"
+        ],
+        "spawnLinkedMaps": [
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010"
+        ],
+        "firstSpawnMap": "MD0004",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 9,
+        "pfStart": 32,
+        "pfEndInclusive": 35,
+        "frameCount": 4,
+        "loopOffset": 2,
+        "flagsHex": "0x0009",
+        "speedHex": "0x0020",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 10,
+        "pfStart": 36,
+        "pfEndInclusive": 39,
+        "frameCount": 4,
+        "loopOffset": 2,
+        "flagsHex": "0x000A",
+        "speedHex": "0x0020",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 11,
+        "pfStart": 40,
+        "pfEndInclusive": 40,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x000B",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 12,
+        "pfStart": 41,
+        "pfEndInclusive": 41,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x000C",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 13,
+        "pfStart": 42,
+        "pfEndInclusive": 42,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0085",
+        "speedHex": "0x1005",
+        "direction": "right",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 14,
+        "pfStart": 43,
+        "pfEndInclusive": 43,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0085",
+        "speedHex": "0x2005",
+        "direction": "left",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 15,
+        "pfStart": 44,
+        "pfEndInclusive": 44,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x000F",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "bat idle",
+        "actors": [
+          "0x0C"
+        ],
+        "spawnLinkedMaps": [
+          "MD0006"
+        ],
+        "firstSpawnMap": "MD0006",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 16,
+        "pfStart": 45,
+        "pfEndInclusive": 46,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x0010",
+        "speedHex": "0x000A",
+        "direction": "neutral",
+        "hint": "bat flying",
+        "actors": [
+          "0x0C"
+        ],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 17,
+        "pfStart": 47,
+        "pfEndInclusive": 47,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0011",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x0E"
+        ],
+        "spawnLinkedMaps": [
+          "MD0025",
+          "MD0031",
+          "MD0046"
+        ],
+        "firstSpawnMap": "MD0025",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 18,
+        "pfStart": 48,
+        "pfEndInclusive": 51,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x0012",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "boulder rolling animation",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 19,
+        "pfStart": 52,
+        "pfEndInclusive": 52,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x008A",
+        "speedHex": "0x1005",
+        "direction": "right",
+        "hint": "",
+        "actors": [
+          "0x11",
+          "0x12"
+        ],
+        "spawnLinkedMaps": [
+          "MD0018",
+          "MD0019"
+        ],
+        "firstSpawnMap": "MD0018",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 20,
+        "pfStart": 53,
+        "pfEndInclusive": 53,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x008A",
+        "speedHex": "0x2005",
+        "direction": "left",
+        "hint": "",
+        "actors": [
+          "0x10",
+          "0x11",
+          "0x12"
+        ],
+        "spawnLinkedMaps": [
+          "MD0018",
+          "MD0019",
+          "MD0021"
+        ],
+        "firstSpawnMap": "MD0018",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 21,
+        "pfStart": 54,
+        "pfEndInclusive": 64,
+        "frameCount": 11,
+        "loopOffset": 0,
+        "flagsHex": "0x0015",
+        "speedHex": "0x008C",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 22,
+        "pfStart": 65,
+        "pfEndInclusive": 65,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0016",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x73",
+          "0x75"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0015",
+          "MD0019",
+          "MD0020",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 23,
+        "pfStart": 66,
+        "pfEndInclusive": 66,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0017",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x75"
+        ],
+        "spawnLinkedMaps": [
+          "MD0015",
+          "MD0020",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0015",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 24,
+        "pfStart": 67,
+        "pfEndInclusive": 67,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0018",
+        "speedHex": "0x0001",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 25,
+        "pfStart": 68,
+        "pfEndInclusive": 68,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0019",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 26,
+        "pfStart": 69,
+        "pfEndInclusive": 69,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x001A",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x1B"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0017",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 27,
+        "pfStart": 70,
+        "pfEndInclusive": 70,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x001B",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x1C"
+        ],
+        "spawnLinkedMaps": [
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "firstSpawnMap": "MD0004",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 28,
+        "pfStart": 71,
+        "pfEndInclusive": 71,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x001C",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 29,
+        "pfStart": 72,
+        "pfEndInclusive": 72,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x001D",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 30,
+        "pfStart": 73,
+        "pfEndInclusive": 73,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x001E",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x1F"
+        ],
+        "spawnLinkedMaps": [
+          "MD0049",
+          "MD0053"
+        ],
+        "firstSpawnMap": "MD0049",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 31,
+        "pfStart": 74,
+        "pfEndInclusive": 77,
+        "frameCount": 4,
+        "loopOffset": 1,
+        "flagsHex": "0x0095",
+        "speedHex": "0x1014",
+        "direction": "right",
+        "hint": "Castle dog walk",
+        "actors": [
+          "0x20"
+        ],
+        "spawnLinkedMaps": [
+          "MD0025",
+          "MD0030",
+          "MD0031",
+          "MD0034",
+          "MD0038",
+          "MD0041",
+          "MD0044"
+        ],
+        "firstSpawnMap": "MD0025",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 32,
+        "pfStart": 78,
+        "pfEndInclusive": 81,
+        "frameCount": 4,
+        "loopOffset": 1,
+        "flagsHex": "0x0095",
+        "speedHex": "0x2014",
+        "direction": "left",
+        "hint": "Castle dog walk",
+        "actors": [
+          "0x20"
+        ],
+        "spawnLinkedMaps": [
+          "MD0025",
+          "MD0030",
+          "MD0031",
+          "MD0034",
+          "MD0038",
+          "MD0041",
+          "MD0044"
+        ],
+        "firstSpawnMap": "MD0025",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 33,
+        "pfStart": 82,
+        "pfEndInclusive": 82,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0021",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 34,
+        "pfStart": 83,
+        "pfEndInclusive": 83,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0022",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x22"
+        ],
+        "spawnLinkedMaps": [
+          "MD0025",
+          "MD0030",
+          "MD0035",
+          "MD0037"
+        ],
+        "firstSpawnMap": "MD0025",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 35,
+        "pfStart": 84,
+        "pfEndInclusive": 84,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0023",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x24"
+        ],
+        "spawnLinkedMaps": [
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0054",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 36,
+        "pfStart": 85,
+        "pfEndInclusive": 89,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x0024",
+        "speedHex": "0x004E",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 37,
+        "pfStart": 90,
+        "pfEndInclusive": 94,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x0025",
+        "speedHex": "0x004E",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 38,
+        "pfStart": 95,
+        "pfEndInclusive": 100,
+        "frameCount": 6,
+        "loopOffset": 0,
+        "flagsHex": "0x009B",
+        "speedHex": "0x101E",
+        "direction": "right",
+        "hint": "Egypt mummy/guard run-walk",
+        "actors": [
+          "0x27",
+          "0x29"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 39,
+        "pfStart": 101,
+        "pfEndInclusive": 106,
+        "frameCount": 6,
+        "loopOffset": 0,
+        "flagsHex": "0x009B",
+        "speedHex": "0x201E",
+        "direction": "left",
+        "hint": "Egypt mummy/guard run-walk",
+        "actors": [
+          "0x27",
+          "0x29"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 40,
+        "pfStart": 107,
+        "pfEndInclusive": 107,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0028",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 41,
+        "pfStart": 108,
+        "pfEndInclusive": 113,
+        "frameCount": 6,
+        "loopOffset": 0,
+        "flagsHex": "0x0029",
+        "speedHex": "0x001E",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 42,
+        "pfStart": 114,
+        "pfEndInclusive": 119,
+        "frameCount": 6,
+        "loopOffset": 0,
+        "flagsHex": "0x002A",
+        "speedHex": "0x001E",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 43,
+        "pfStart": 120,
+        "pfEndInclusive": 123,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x002B",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 44,
+        "pfStart": 124,
+        "pfEndInclusive": 127,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x00A0",
+        "speedHex": "0x1021",
+        "direction": "right",
+        "hint": "Egypt large guard/enemy run-walk",
+        "actors": [
+          "0x2E"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0017",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 45,
+        "pfStart": 128,
+        "pfEndInclusive": 131,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x00A0",
+        "speedHex": "0x2021",
+        "direction": "left",
+        "hint": "Egypt large guard/enemy run-walk",
+        "actors": [
+          "0x2E"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0017",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 46,
+        "pfStart": 132,
+        "pfEndInclusive": 132,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x002E",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x30"
+        ],
+        "spawnLinkedMaps": [
+          "MD0031",
+          "MD0032",
+          "MD0035",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043"
+        ],
+        "firstSpawnMap": "MD0031",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 47,
+        "pfStart": 133,
+        "pfEndInclusive": 133,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x002F",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x31"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 48,
+        "pfStart": 134,
+        "pfEndInclusive": 134,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0030",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x32"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0016",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 49,
+        "pfStart": 135,
+        "pfEndInclusive": 135,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0031",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x33",
+          "0x34"
+        ],
+        "spawnLinkedMaps": [
+          "MD0005",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "firstSpawnMap": "MD0005",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 50,
+        "pfStart": 136,
+        "pfEndInclusive": 136,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0032",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x35",
+          "0x36"
+        ],
+        "spawnLinkedMaps": [
+          "MD0004",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "firstSpawnMap": "MD0004",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 51,
+        "pfStart": 137,
+        "pfEndInclusive": 143,
+        "frameCount": 7,
+        "loopOffset": 0,
+        "flagsHex": "0x00A6",
+        "speedHex": "0x1048",
+        "direction": "right",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 52,
+        "pfStart": 144,
+        "pfEndInclusive": 150,
+        "frameCount": 7,
+        "loopOffset": 0,
+        "flagsHex": "0x00A6",
+        "speedHex": "0x2048",
+        "direction": "left",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 53,
+        "pfStart": 151,
+        "pfEndInclusive": 151,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0035",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x39"
+        ],
+        "spawnLinkedMaps": [
+          "MD0016"
+        ],
+        "firstSpawnMap": "MD0016",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 54,
+        "pfStart": 152,
+        "pfEndInclusive": 152,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0036",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x42"
+        ],
+        "spawnLinkedMaps": [
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0051",
+          "MD0053"
+        ],
+        "firstSpawnMap": "MD0046",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 55,
+        "pfStart": 153,
+        "pfEndInclusive": 154,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x0037",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 56,
+        "pfStart": 155,
+        "pfEndInclusive": 157,
+        "frameCount": 3,
+        "loopOffset": 0,
+        "flagsHex": "0x00AB",
+        "speedHex": "0x101E",
+        "direction": "right",
+        "hint": "Castle guard run-walk",
+        "actors": [
+          "0x3A",
+          "0x3C"
+        ],
+        "spawnLinkedMaps": [
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0035",
+          "MD0036",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0046",
+          "MD0047",
+          "MD0049",
+          "MD0050",
+          "MD0053"
+        ],
+        "firstSpawnMap": "MD0026",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 57,
+        "pfStart": 158,
+        "pfEndInclusive": 160,
+        "frameCount": 3,
+        "loopOffset": 0,
+        "flagsHex": "0x00AB",
+        "speedHex": "0x201E",
+        "direction": "left",
+        "hint": "Castle guard run-walk",
+        "actors": [
+          "0x3A",
+          "0x3C"
+        ],
+        "spawnLinkedMaps": [
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0035",
+          "MD0036",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0046",
+          "MD0047",
+          "MD0049",
+          "MD0050",
+          "MD0053"
+        ],
+        "firstSpawnMap": "MD0026",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 58,
+        "pfStart": 161,
+        "pfEndInclusive": 162,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x003A",
+        "speedHex": "0x000A",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 59,
+        "pfStart": 163,
+        "pfEndInclusive": 167,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x00AD",
+        "speedHex": "0x1019",
+        "direction": "right",
+        "hint": "Missile Base soldier/guard walk",
+        "actors": [
+          "0x3D",
+          "0x3F"
+        ],
+        "spawnLinkedMaps": [
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0047",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 60,
+        "pfStart": 168,
+        "pfEndInclusive": 172,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x00AD",
+        "speedHex": "0x2019",
+        "direction": "left",
+        "hint": "Missile Base soldier/guard walk",
+        "actors": [
+          "0x3D",
+          "0x3F"
+        ],
+        "spawnLinkedMaps": [
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0047",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 61,
+        "pfStart": 173,
+        "pfEndInclusive": 173,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x003D",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x41"
+        ],
+        "spawnLinkedMaps": [
+          "MD0047",
+          "MD0049",
+          "MD0051"
+        ],
+        "firstSpawnMap": "MD0047",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 62,
+        "pfStart": 174,
+        "pfEndInclusive": 175,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x003E",
+        "speedHex": "0x000A",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x40"
+        ],
+        "spawnLinkedMaps": [
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0051",
+          "MD0053"
+        ],
+        "firstSpawnMap": "MD0046",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 63,
+        "pfStart": 176,
+        "pfEndInclusive": 176,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x003F",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 64,
+        "pfStart": 177,
+        "pfEndInclusive": 178,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x0040",
+        "speedHex": "0x0028",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 65,
+        "pfStart": 179,
+        "pfEndInclusive": 180,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x0041",
+        "speedHex": "0x0028",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 66,
+        "pfStart": 181,
+        "pfEndInclusive": 181,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0042",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "boulder/object",
+        "actors": [
+          "0x72",
+          "0x76"
+        ],
+        "spawnLinkedMaps": [
+          "MD0006",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "firstSpawnMap": "MD0006",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 67,
+        "pfStart": 182,
+        "pfEndInclusive": 182,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0043",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "MD0006 stationary top collectible / theme-shared frame",
+        "actors": [
+          "0x45"
+        ],
+        "spawnLinkedMaps": [
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0013",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0022",
+          "MD0023",
+          "MD0026",
+          "MD0028",
+          "MD0033",
+          "MD0035",
+          "MD0039",
+          "MD0041",
+          "MD0042",
+          "MD0044"
+        ],
+        "firstSpawnMap": "MD0006",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 68,
+        "pfStart": 183,
+        "pfEndInclusive": 183,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0044",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x46"
+        ],
+        "spawnLinkedMaps": [
+          "MD0049"
+        ],
+        "firstSpawnMap": "MD0049",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 69,
+        "pfStart": 184,
+        "pfEndInclusive": 187,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x0045",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 70,
+        "pfStart": 188,
+        "pfEndInclusive": 188,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0046",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 71,
+        "pfStart": 189,
+        "pfEndInclusive": 189,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0047",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x49"
+        ],
+        "spawnLinkedMaps": [
+          "MD0045"
+        ],
+        "firstSpawnMap": "MD0045",
+        "firstLevelGroup": "missile_transition",
+        "firstLevelLabel": "Missile transition",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 72,
+        "pfStart": 190,
+        "pfEndInclusive": 190,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0048",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 73,
+        "pfStart": 191,
+        "pfEndInclusive": 194,
+        "frameCount": 4,
+        "loopOffset": 3,
+        "flagsHex": "0x0049",
+        "speedHex": "0x0020",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 74,
+        "pfStart": 195,
+        "pfEndInclusive": 195,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x004A",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x4C"
+        ],
+        "spawnLinkedMaps": [
+          "MD0034"
+        ],
+        "firstSpawnMap": "MD0034",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 75,
+        "pfStart": 196,
+        "pfEndInclusive": 198,
+        "frameCount": 3,
+        "loopOffset": 2,
+        "flagsHex": "0x004B",
+        "speedHex": "0x0018",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 76,
+        "pfStart": 199,
+        "pfEndInclusive": 210,
+        "frameCount": 12,
+        "loopOffset": 0,
+        "flagsHex": "0x004C",
+        "speedHex": "0x00B4",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 77,
+        "pfStart": 211,
+        "pfEndInclusive": 211,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x004D",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "floor spike trap",
+        "actors": [
+          "0x51"
+        ],
+        "spawnLinkedMaps": [
+          "MD0007"
+        ],
+        "firstSpawnMap": "MD0007",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 78,
+        "pfStart": 212,
+        "pfEndInclusive": 223,
+        "frameCount": 12,
+        "loopOffset": 0,
+        "flagsHex": "0x004E",
+        "speedHex": "0x00B4",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 79,
+        "pfStart": 224,
+        "pfEndInclusive": 224,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x004F",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x50"
+        ],
+        "spawnLinkedMaps": [
+          "MD0033",
+          "MD0037",
+          "MD0040"
+        ],
+        "firstSpawnMap": "MD0033",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 80,
+        "pfStart": 225,
+        "pfEndInclusive": 235,
+        "frameCount": 11,
+        "loopOffset": 0,
+        "flagsHex": "0x0050",
+        "speedHex": "0x00AA",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 81,
+        "pfStart": 236,
+        "pfEndInclusive": 236,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0051",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "wide floor spike trap",
+        "actors": [
+          "0x53"
+        ],
+        "spawnLinkedMaps": [
+          "MD0006"
+        ],
+        "firstSpawnMap": "MD0006",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 82,
+        "pfStart": 237,
+        "pfEndInclusive": 237,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0052",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 83,
+        "pfStart": 238,
+        "pfEndInclusive": 248,
+        "frameCount": 11,
+        "loopOffset": 0,
+        "flagsHex": "0x0053",
+        "speedHex": "0x00B4",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 84,
+        "pfStart": 249,
+        "pfEndInclusive": 249,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0054",
+        "speedHex": "0x0000",
+        "direction": "neutral",
+        "hint": "MD0006 falling dagger bank",
+        "actors": [
+          "0x55"
+        ],
+        "spawnLinkedMaps": [
+          "MD0006",
+          "MD0014",
+          "MD0017"
+        ],
+        "firstSpawnMap": "MD0006",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 85,
+        "pfStart": 250,
+        "pfEndInclusive": 250,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0055",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x56"
+        ],
+        "spawnLinkedMaps": [
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009"
+        ],
+        "firstSpawnMap": "MD0006",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 86,
+        "pfStart": 251,
+        "pfEndInclusive": 251,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0056",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 87,
+        "pfStart": 252,
+        "pfEndInclusive": 252,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0057",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x58"
+        ],
+        "spawnLinkedMaps": [
+          "MD0030",
+          "MD0035"
+        ],
+        "firstSpawnMap": "MD0030",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 88,
+        "pfStart": 253,
+        "pfEndInclusive": 253,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0058",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 89,
+        "pfStart": 254,
+        "pfEndInclusive": 254,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0059",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x5A",
+          "0x5B"
+        ],
+        "spawnLinkedMaps": [
+          "MD0049",
+          "MD0053"
+        ],
+        "firstSpawnMap": "MD0049",
+        "firstLevelGroup": "missile_base",
+        "firstLevelLabel": "Missile Base",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 90,
+        "pfStart": 255,
+        "pfEndInclusive": 262,
+        "frameCount": 8,
+        "loopOffset": 0,
+        "flagsHex": "0x005A",
+        "speedHex": "0x0038",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x5C"
+        ],
+        "spawnLinkedMaps": [
+          "MD0001"
+        ],
+        "firstSpawnMap": "MD0001",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 91,
+        "pfStart": 263,
+        "pfEndInclusive": 263,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x00CC",
+        "speedHex": "0x1005",
+        "direction": "right",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 92,
+        "pfStart": 264,
+        "pfEndInclusive": 264,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x00CC",
+        "speedHex": "0x2005",
+        "direction": "left",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 93,
+        "pfStart": 265,
+        "pfEndInclusive": 266,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x005D",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 94,
+        "pfStart": 267,
+        "pfEndInclusive": 268,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x0060",
+        "speedHex": "0x1014",
+        "direction": "right",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 95,
+        "pfStart": 269,
+        "pfEndInclusive": 270,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x0060",
+        "speedHex": "0x2014",
+        "direction": "left",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 96,
+        "pfStart": 271,
+        "pfEndInclusive": 274,
+        "frameCount": 4,
+        "loopOffset": 2,
+        "flagsHex": "0x0060",
+        "speedHex": "0x0020",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 97,
+        "pfStart": 275,
+        "pfEndInclusive": 275,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x00CF",
+        "speedHex": "0x1005",
+        "direction": "right",
+        "hint": "Rick jump/shoot direction set",
+        "actors": [
+          "0x5D",
+          "0x64"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0012",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0045",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 98,
+        "pfStart": 276,
+        "pfEndInclusive": 276,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x00CF",
+        "speedHex": "0x2005",
+        "direction": "left",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 99,
+        "pfStart": 277,
+        "pfEndInclusive": 278,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x00D0",
+        "speedHex": "0x106E",
+        "direction": "right",
+        "hint": "Rick stand/shoot direction set",
+        "actors": [
+          "0x5D",
+          "0x64"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0012",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0045",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 100,
+        "pfStart": 279,
+        "pfEndInclusive": 280,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x00D0",
+        "speedHex": "0x206E",
+        "direction": "left",
+        "hint": "Rick stand/shoot direction set",
+        "actors": [
+          "0x5D",
+          "0x64"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0012",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0045",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 101,
+        "pfStart": 281,
+        "pfEndInclusive": 281,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x00D1",
+        "speedHex": "0x1005",
+        "direction": "right",
+        "hint": "Rick alternate jump direction set",
+        "actors": [
+          "0x5D"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 102,
+        "pfStart": 282,
+        "pfEndInclusive": 282,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x00D1",
+        "speedHex": "0x2005",
+        "direction": "left",
+        "hint": "Rick alternate jump direction set",
+        "actors": [
+          "0x5D"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 103,
+        "pfStart": 283,
+        "pfEndInclusive": 287,
+        "frameCount": 5,
+        "loopOffset": 0,
+        "flagsHex": "0x0067",
+        "speedHex": "0x0081",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 104,
+        "pfStart": 288,
+        "pfEndInclusive": 288,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0068",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 105,
+        "pfStart": 289,
+        "pfEndInclusive": 297,
+        "frameCount": 9,
+        "loopOffset": 0,
+        "flagsHex": "0x0069",
+        "speedHex": "0x00A5",
+        "direction": "neutral",
+        "hint": "Rick parachute/fall cinematic",
+        "actors": [
+          "0x67"
+        ],
+        "spawnLinkedMaps": [
+          "MD0002"
+        ],
+        "firstSpawnMap": "MD0002",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 106,
+        "pfStart": 298,
+        "pfEndInclusive": 304,
+        "frameCount": 7,
+        "loopOffset": 6,
+        "flagsHex": "0x006A",
+        "speedHex": "0x0054",
+        "direction": "neutral",
+        "hint": "Rick parachute/fall cinematic scaled/alternate",
+        "actors": [
+          "0x68"
+        ],
+        "spawnLinkedMaps": [
+          "MD0024"
+        ],
+        "firstSpawnMap": "MD0024",
+        "firstLevelGroup": "castle_transition",
+        "firstLevelLabel": "Castle transition",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 107,
+        "pfStart": 305,
+        "pfEndInclusive": 310,
+        "frameCount": 6,
+        "loopOffset": 0,
+        "flagsHex": "0x00D6",
+        "speedHex": "0x1024",
+        "direction": "right",
+        "hint": "Rick walking",
+        "actors": [
+          "0x5D",
+          "0x64"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0012",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0045",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 108,
+        "pfStart": 311,
+        "pfEndInclusive": 316,
+        "frameCount": 6,
+        "loopOffset": 0,
+        "flagsHex": "0x00D6",
+        "speedHex": "0x2024",
+        "direction": "left",
+        "hint": "Rick walking",
+        "actors": [
+          "0x5D",
+          "0x64"
+        ],
+        "spawnLinkedMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0012",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0045",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "firstSpawnMap": "MD0003",
+        "firstLevelGroup": "south_america",
+        "firstLevelLabel": "Jungle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 109,
+        "pfStart": 317,
+        "pfEndInclusive": 317,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x006D",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 110,
+        "pfStart": 318,
+        "pfEndInclusive": 318,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x006E",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 111,
+        "pfStart": 319,
+        "pfEndInclusive": 320,
+        "frameCount": 2,
+        "loopOffset": 0,
+        "flagsHex": "0x006F",
+        "speedHex": "0x0014",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [],
+        "spawnLinkedMaps": [],
+        "firstSpawnMap": null,
+        "firstLevelGroup": null,
+        "firstLevelLabel": null,
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 112,
+        "pfStart": 321,
+        "pfEndInclusive": 323,
+        "frameCount": 3,
+        "loopOffset": 0,
+        "flagsHex": "0x00DA",
+        "speedHex": "0x101E",
+        "direction": "right",
+        "hint": "Castle/Missile guard walk",
+        "actors": [
+          "0x6B"
+        ],
+        "spawnLinkedMaps": [
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0033",
+          "MD0035",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0046",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052"
+        ],
+        "firstSpawnMap": "MD0025",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 113,
+        "pfStart": 324,
+        "pfEndInclusive": 326,
+        "frameCount": 3,
+        "loopOffset": 0,
+        "flagsHex": "0x00DA",
+        "speedHex": "0x201E",
+        "direction": "left",
+        "hint": "Castle/Missile guard walk",
+        "actors": [
+          "0x6B"
+        ],
+        "spawnLinkedMaps": [
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0033",
+          "MD0035",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0046",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052"
+        ],
+        "firstSpawnMap": "MD0025",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 114,
+        "pfStart": 327,
+        "pfEndInclusive": 330,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x00DB",
+        "speedHex": "0x101D",
+        "direction": "right",
+        "hint": "barrel roll trap",
+        "actors": [
+          "0x6D",
+          "0x6F"
+        ],
+        "spawnLinkedMaps": [
+          "MD0033",
+          "MD0044"
+        ],
+        "firstSpawnMap": "MD0033",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 115,
+        "pfStart": 331,
+        "pfEndInclusive": 334,
+        "frameCount": 4,
+        "loopOffset": 0,
+        "flagsHex": "0x00DB",
+        "speedHex": "0x201D",
+        "direction": "left",
+        "hint": "barrel roll trap",
+        "actors": [
+          "0x6D",
+          "0x6F"
+        ],
+        "spawnLinkedMaps": [
+          "MD0033",
+          "MD0044"
+        ],
+        "firstSpawnMap": "MD0033",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 116,
+        "pfStart": 335,
+        "pfEndInclusive": 335,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0074",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x6E"
+        ],
+        "spawnLinkedMaps": [
+          "MD0030"
+        ],
+        "firstSpawnMap": "MD0030",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 117,
+        "pfStart": 336,
+        "pfEndInclusive": 347,
+        "frameCount": 12,
+        "loopOffset": 0,
+        "flagsHex": "0x0075",
+        "speedHex": "0x0048",
+        "direction": "neutral",
+        "hint": "candle/torch animation",
+        "actors": [
+          "0x70"
+        ],
+        "spawnLinkedMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "firstSpawnMap": "MD0013",
+        "firstLevelGroup": "egypt",
+        "firstLevelLabel": "Egypt",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      },
+      {
+        "pn": 118,
+        "pfStart": 348,
+        "pfEndInclusive": 348,
+        "frameCount": 1,
+        "loopOffset": 0,
+        "flagsHex": "0x0076",
+        "speedHex": "0x0005",
+        "direction": "neutral",
+        "hint": "",
+        "actors": [
+          "0x71"
+        ],
+        "spawnLinkedMaps": [
+          "MD0034"
+        ],
+        "firstSpawnMap": "MD0034",
+        "firstLevelGroup": "castle",
+        "firstLevelLabel": "Castle",
+        "source": "ROM PN/PF table; actor/map usage from PA/MA when present"
+      }
+    ],
+    "actors": [
+      {
+        "actorId": "0x01",
+        "displayName": "Missile Base small block/utility actor",
+        "pnRefs": [
+          2
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0054"
+        ],
+        "introducedAt": {
+          "mapId": 54,
+          "mapName": "MD0054",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x03",
+        "displayName": "Jungle enemy walk set A",
+        "pnRefs": [
+          4,
+          5
+        ],
+        "spawnCount": 11,
+        "spawnMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0009",
+          "MD0010"
+        ],
+        "introducedAt": {
+          "mapId": 3,
+          "mapName": "MD0003",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x05",
+        "displayName": "Jungle enemy walk set A variant",
+        "pnRefs": [
+          4,
+          5
+        ],
+        "spawnCount": 8,
+        "spawnMaps": [
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 7
+        }
+      },
+      {
+        "actorId": "0x06",
+        "displayName": "Jungle enemy walk set B",
+        "pnRefs": [
+          7,
+          8
+        ],
+        "spawnCount": 8,
+        "spawnMaps": [
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010"
+        ],
+        "introducedAt": {
+          "mapId": 4,
+          "mapName": "MD0004",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 6
+        }
+      },
+      {
+        "actorId": "0x0C",
+        "displayName": "Jungle static idol/vase-like object",
+        "pnRefs": [
+          15
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0006"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 6
+        }
+      },
+      {
+        "actorId": "0x0E",
+        "displayName": "Castle/Missile single-frame enemy/object",
+        "pnRefs": [
+          17
+        ],
+        "spawnCount": 3,
+        "spawnMaps": [
+          "MD0025",
+          "MD0031",
+          "MD0046"
+        ],
+        "introducedAt": {
+          "mapId": 25,
+          "mapName": "MD0025",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 4
+        }
+      },
+      {
+        "actorId": "0x10",
+        "displayName": "Egypt block/hazard variant",
+        "pnRefs": [
+          20
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0018",
+          "MD0021"
+        ],
+        "introducedAt": {
+          "mapId": 18,
+          "mapName": "MD0018",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x11",
+        "displayName": "Egypt block/hazard directional pair",
+        "pnRefs": [
+          19,
+          20
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0018",
+          "MD0019"
+        ],
+        "introducedAt": {
+          "mapId": 18,
+          "mapName": "MD0018",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 13
+        }
+      },
+      {
+        "actorId": "0x12",
+        "displayName": "Egypt block/hazard directional pair",
+        "pnRefs": [
+          19,
+          20
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0018"
+        ],
+        "introducedAt": {
+          "mapId": 18,
+          "mapName": "MD0018",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 14
+        }
+      },
+      {
+        "actorId": "0x1B",
+        "displayName": "Egypt tomb/sarcophagus-like hazard",
+        "pnRefs": [
+          26
+        ],
+        "spawnCount": 7,
+        "spawnMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0017",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 2
+        }
+      },
+      {
+        "actorId": "0x1C",
+        "displayName": "Golden idol/object",
+        "pnRefs": [
+          27
+        ],
+        "spawnCount": 9,
+        "spawnMaps": [
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "introducedAt": {
+          "mapId": 4,
+          "mapName": "MD0004",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x1F",
+        "displayName": "Missile Base low platform/object",
+        "pnRefs": [
+          30
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0049",
+          "MD0053"
+        ],
+        "introducedAt": {
+          "mapId": 49,
+          "mapName": "MD0049",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 13
+        }
+      },
+      {
+        "actorId": "0x20",
+        "displayName": "Castle dog enemy walk",
+        "pnRefs": [
+          31,
+          32
+        ],
+        "spawnCount": 7,
+        "spawnMaps": [
+          "MD0025",
+          "MD0030",
+          "MD0031",
+          "MD0034",
+          "MD0038",
+          "MD0041",
+          "MD0044"
+        ],
+        "introducedAt": {
+          "mapId": 25,
+          "mapName": "MD0025",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x22",
+        "displayName": "Castle tall door/coffin-like object",
+        "pnRefs": [
+          34
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0025",
+          "MD0030",
+          "MD0035",
+          "MD0037"
+        ],
+        "introducedAt": {
+          "mapId": 25,
+          "mapName": "MD0025",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x24",
+        "displayName": "Missile/Base tall door/coffin-like object",
+        "pnRefs": [
+          35
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0054"
+        ],
+        "introducedAt": {
+          "mapId": 54,
+          "mapName": "MD0054",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 5
+        }
+      },
+      {
+        "actorId": "0x27",
+        "displayName": "Egypt mummy/guard walk",
+        "pnRefs": [
+          38,
+          39
+        ],
+        "spawnCount": 19,
+        "spawnMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0016",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 6
+        }
+      },
+      {
+        "actorId": "0x29",
+        "displayName": "Egypt mummy/guard walk variant",
+        "pnRefs": [
+          38,
+          39
+        ],
+        "spawnCount": 10,
+        "spawnMaps": [
+          "MD0013",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0022"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 14
+        }
+      },
+      {
+        "actorId": "0x2E",
+        "displayName": "Egypt large guard/enemy directional walk",
+        "pnRefs": [
+          44,
+          45
+        ],
+        "spawnCount": 13,
+        "spawnMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0017",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 7
+        }
+      },
+      {
+        "actorId": "0x30",
+        "displayName": "Castle small crawl/creature object",
+        "pnRefs": [
+          46
+        ],
+        "spawnCount": 16,
+        "spawnMaps": [
+          "MD0031",
+          "MD0032",
+          "MD0035",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043"
+        ],
+        "introducedAt": {
+          "mapId": 31,
+          "mapName": "MD0031",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x31",
+        "displayName": "Egypt small creature/hazard",
+        "pnRefs": [
+          47
+        ],
+        "spawnCount": 14,
+        "spawnMaps": [
+          "MD0013",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 22
+        }
+      },
+      {
+        "actorId": "0x32",
+        "displayName": "Egypt small creature/hazard variant",
+        "pnRefs": [
+          48
+        ],
+        "spawnCount": 9,
+        "spawnMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0016",
+          "MD0020",
+          "MD0022",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 0
+        }
+      },
+      {
+        "actorId": "0x33",
+        "displayName": "Jungle small floor/plant hazard",
+        "pnRefs": [
+          49
+        ],
+        "spawnCount": 5,
+        "spawnMaps": [
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "introducedAt": {
+          "mapId": 9,
+          "mapName": "MD0009",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 17
+        }
+      },
+      {
+        "actorId": "0x34",
+        "displayName": "Jungle small floor/plant hazard variant",
+        "pnRefs": [
+          49
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0005",
+          "MD0008"
+        ],
+        "introducedAt": {
+          "mapId": 5,
+          "mapName": "MD0005",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 5
+        }
+      },
+      {
+        "actorId": "0x35",
+        "displayName": "Jungle small spike/plant hazard",
+        "pnRefs": [
+          50
+        ],
+        "spawnCount": 14,
+        "spawnMaps": [
+          "MD0004",
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "introducedAt": {
+          "mapId": 4,
+          "mapName": "MD0004",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x36",
+        "displayName": "Jungle small spike/plant hazard variant",
+        "pnRefs": [
+          50
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0009",
+          "MD0010"
+        ],
+        "introducedAt": {
+          "mapId": 9,
+          "mapName": "MD0009",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x39",
+        "displayName": "Egypt gem/orb-like object",
+        "pnRefs": [
+          53
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0016"
+        ],
+        "introducedAt": {
+          "mapId": 16,
+          "mapName": "MD0016",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 4
+        }
+      },
+      {
+        "actorId": "0x3A",
+        "displayName": "Castle guard walk",
+        "pnRefs": [
+          56,
+          57
+        ],
+        "spawnCount": 21,
+        "spawnMaps": [
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0031",
+          "MD0032",
+          "MD0036",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0047",
+          "MD0049",
+          "MD0050"
+        ],
+        "introducedAt": {
+          "mapId": 26,
+          "mapName": "MD0026",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 2
+        }
+      },
+      {
+        "actorId": "0x3C",
+        "displayName": "Castle/Missile guard walk variant",
+        "pnRefs": [
+          56,
+          57
+        ],
+        "spawnCount": 19,
+        "spawnMaps": [
+          "MD0030",
+          "MD0032",
+          "MD0033",
+          "MD0035",
+          "MD0036",
+          "MD0039",
+          "MD0042",
+          "MD0043",
+          "MD0046",
+          "MD0047",
+          "MD0049",
+          "MD0053"
+        ],
+        "introducedAt": {
+          "mapId": 30,
+          "mapName": "MD0030",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 2
+        }
+      },
+      {
+        "actorId": "0x3D",
+        "displayName": "Missile Base soldier/guard walk",
+        "pnRefs": [
+          59,
+          60
+        ],
+        "spawnCount": 9,
+        "spawnMaps": [
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0051",
+          "MD0052"
+        ],
+        "introducedAt": {
+          "mapId": 47,
+          "mapName": "MD0047",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 2
+        }
+      },
+      {
+        "actorId": "0x3F",
+        "displayName": "Missile Base soldier/guard walk variant",
+        "pnRefs": [
+          59,
+          60
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0053",
+          "MD0054"
+        ],
+        "introducedAt": {
+          "mapId": 53,
+          "mapName": "MD0053",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 4
+        }
+      },
+      {
+        "actorId": "0x40",
+        "displayName": "Missile Base rocket/missile hazard",
+        "pnRefs": [
+          62
+        ],
+        "spawnCount": 9,
+        "spawnMaps": [
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0051",
+          "MD0053"
+        ],
+        "introducedAt": {
+          "mapId": 46,
+          "mapName": "MD0046",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x41",
+        "displayName": "Missile Base rocket/missile hazard variant",
+        "pnRefs": [
+          61
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0047",
+          "MD0049",
+          "MD0051"
+        ],
+        "introducedAt": {
+          "mapId": 47,
+          "mapName": "MD0047",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 7
+        }
+      },
+      {
+        "actorId": "0x42",
+        "displayName": "Missile Base crate/platform hazard",
+        "pnRefs": [
+          54
+        ],
+        "spawnCount": 11,
+        "spawnMaps": [
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0051",
+          "MD0053"
+        ],
+        "introducedAt": {
+          "mapId": 46,
+          "mapName": "MD0046",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 5
+        }
+      },
+      {
+        "actorId": "0x45",
+        "displayName": "Theme-shared flying/rolling trap object",
+        "pnRefs": [
+          67
+        ],
+        "spawnCount": 21,
+        "spawnMaps": [
+          "MD0006",
+          "MD0007",
+          "MD0009",
+          "MD0010",
+          "MD0013",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0022",
+          "MD0023",
+          "MD0026",
+          "MD0028",
+          "MD0033",
+          "MD0035",
+          "MD0039",
+          "MD0041",
+          "MD0042",
+          "MD0044"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 11
+        }
+      },
+      {
+        "actorId": "0x46",
+        "displayName": "Missile Base flying/rolling trap object variant",
+        "pnRefs": [
+          68
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0049"
+        ],
+        "introducedAt": {
+          "mapId": 49,
+          "mapName": "MD0049",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 4
+        }
+      },
+      {
+        "actorId": "0x49",
+        "displayName": "Missile transition large lift/gate actor",
+        "pnRefs": [
+          71
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0045"
+        ],
+        "introducedAt": {
+          "mapId": 45,
+          "mapName": "MD0045",
+          "levelGroup": "missile_transition",
+          "levelLabel": "Missile transition",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x4C",
+        "displayName": "Castle short floor trap",
+        "pnRefs": [
+          74
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0034"
+        ],
+        "introducedAt": {
+          "mapId": 34,
+          "mapName": "MD0034",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x50",
+        "displayName": "Castle floor spike/trap",
+        "pnRefs": [
+          79
+        ],
+        "spawnCount": 3,
+        "spawnMaps": [
+          "MD0033",
+          "MD0037",
+          "MD0040"
+        ],
+        "introducedAt": {
+          "mapId": 33,
+          "mapName": "MD0033",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 5
+        }
+      },
+      {
+        "actorId": "0x51",
+        "displayName": "Floor spike trap",
+        "pnRefs": [
+          77
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0007"
+        ],
+        "introducedAt": {
+          "mapId": 7,
+          "mapName": "MD0007",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 5
+        }
+      },
+      {
+        "actorId": "0x53",
+        "displayName": "Wide floor spike trap",
+        "pnRefs": [
+          81
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0006"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 8
+        }
+      },
+      {
+        "actorId": "0x55",
+        "displayName": "Jungle/Egypt small object/trap",
+        "pnRefs": [
+          84
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0006",
+          "MD0014",
+          "MD0017"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x56",
+        "displayName": "Jungle creature/trap",
+        "pnRefs": [
+          85
+        ],
+        "spawnCount": 8,
+        "spawnMaps": [
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 10
+        }
+      },
+      {
+        "actorId": "0x58",
+        "displayName": "Castle rock/rubble object",
+        "pnRefs": [
+          87
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0030",
+          "MD0035"
+        ],
+        "introducedAt": {
+          "mapId": 30,
+          "mapName": "MD0030",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 8
+        }
+      },
+      {
+        "actorId": "0x5A",
+        "displayName": "Missile Base crawl/fall object variant",
+        "pnRefs": [
+          89
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0049"
+        ],
+        "introducedAt": {
+          "mapId": 49,
+          "mapName": "MD0049",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x5B",
+        "displayName": "Missile Base crawl/fall object",
+        "pnRefs": [
+          89
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0053"
+        ],
+        "introducedAt": {
+          "mapId": 53,
+          "mapName": "MD0053",
+          "levelGroup": "missile_base",
+          "levelLabel": "Missile Base",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x5C",
+        "displayName": "Jungle opening utility/object",
+        "pnRefs": [
+          90
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0001"
+        ],
+        "introducedAt": {
+          "mapId": 1,
+          "mapName": "MD0001",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 0
+        }
+      },
+      {
+        "actorId": "0x5D",
+        "displayName": "Rick/player runtime actor",
+        "pnRefs": [
+          97,
+          99,
+          100,
+          101,
+          102,
+          107,
+          108
+        ],
+        "spawnCount": 49,
+        "spawnMaps": [
+          "MD0003",
+          "MD0004",
+          "MD0005",
+          "MD0006",
+          "MD0007",
+          "MD0008",
+          "MD0009",
+          "MD0010",
+          "MD0011",
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023",
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0032",
+          "MD0033",
+          "MD0034",
+          "MD0035",
+          "MD0036",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0046",
+          "MD0047",
+          "MD0048",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052",
+          "MD0053",
+          "MD0054"
+        ],
+        "introducedAt": {
+          "mapId": 3,
+          "mapName": "MD0003",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 0
+        }
+      },
+      {
+        "actorId": "0x64",
+        "displayName": "Rick transition/playable variant",
+        "pnRefs": [
+          97,
+          99,
+          100,
+          107,
+          108
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0012",
+          "MD0045"
+        ],
+        "introducedAt": {
+          "mapId": 12,
+          "mapName": "MD0012",
+          "levelGroup": "egypt_transition",
+          "levelLabel": "Egypt transition",
+          "spawnIndex": 0
+        }
+      },
+      {
+        "actorId": "0x67",
+        "displayName": "Rick parachute transition actor",
+        "pnRefs": [
+          105
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0002"
+        ],
+        "introducedAt": {
+          "mapId": 2,
+          "mapName": "MD0002",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 0
+        }
+      },
+      {
+        "actorId": "0x68",
+        "displayName": "Rick parachute transition actor",
+        "pnRefs": [
+          106
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0024"
+        ],
+        "introducedAt": {
+          "mapId": 24,
+          "mapName": "MD0024",
+          "levelGroup": "castle_transition",
+          "levelLabel": "Castle transition",
+          "spawnIndex": 0
+        }
+      },
+      {
+        "actorId": "0x6B",
+        "displayName": "Castle/Missile guard directional walk",
+        "pnRefs": [
+          112,
+          113
+        ],
+        "spawnCount": 45,
+        "spawnMaps": [
+          "MD0025",
+          "MD0026",
+          "MD0027",
+          "MD0028",
+          "MD0029",
+          "MD0030",
+          "MD0031",
+          "MD0033",
+          "MD0035",
+          "MD0037",
+          "MD0038",
+          "MD0039",
+          "MD0040",
+          "MD0041",
+          "MD0042",
+          "MD0043",
+          "MD0044",
+          "MD0046",
+          "MD0049",
+          "MD0050",
+          "MD0051",
+          "MD0052"
+        ],
+        "introducedAt": {
+          "mapId": 25,
+          "mapName": "MD0025",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 2
+        }
+      },
+      {
+        "actorId": "0x6D",
+        "displayName": "Barrel roll trap",
+        "pnRefs": [
+          114,
+          115
+        ],
+        "spawnCount": 2,
+        "spawnMaps": [
+          "MD0033",
+          "MD0044"
+        ],
+        "introducedAt": {
+          "mapId": 33,
+          "mapName": "MD0033",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 2
+        }
+      },
+      {
+        "actorId": "0x6E",
+        "displayName": "Castle round static object",
+        "pnRefs": [
+          116
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0030"
+        ],
+        "introducedAt": {
+          "mapId": 30,
+          "mapName": "MD0030",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 7
+        }
+      },
+      {
+        "actorId": "0x6F",
+        "displayName": "Barrel roll trap variant",
+        "pnRefs": [
+          114,
+          115
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0033"
+        ],
+        "introducedAt": {
+          "mapId": 33,
+          "mapName": "MD0033",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 7
+        }
+      },
+      {
+        "actorId": "0x70",
+        "displayName": "Candle/torch animation",
+        "pnRefs": [
+          117
+        ],
+        "spawnCount": 41,
+        "spawnMaps": [
+          "MD0013",
+          "MD0014",
+          "MD0015",
+          "MD0016",
+          "MD0017",
+          "MD0018",
+          "MD0019",
+          "MD0020",
+          "MD0021",
+          "MD0022",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x71",
+        "displayName": "Castle red block/object",
+        "pnRefs": [
+          118
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0034"
+        ],
+        "introducedAt": {
+          "mapId": 34,
+          "mapName": "MD0034",
+          "levelGroup": "castle",
+          "levelLabel": "Castle",
+          "spawnIndex": 3
+        }
+      },
+      {
+        "actorId": "0x72",
+        "displayName": "Boulder/object",
+        "pnRefs": [
+          66
+        ],
+        "spawnCount": 4,
+        "spawnMaps": [
+          "MD0006",
+          "MD0009",
+          "MD0010",
+          "MD0011"
+        ],
+        "introducedAt": {
+          "mapId": 6,
+          "mapName": "MD0006",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 9
+        }
+      },
+      {
+        "actorId": "0x73",
+        "displayName": "Egypt long floor hazard",
+        "pnRefs": [
+          22
+        ],
+        "spawnCount": 3,
+        "spawnMaps": [
+          "MD0013",
+          "MD0019"
+        ],
+        "introducedAt": {
+          "mapId": 13,
+          "mapName": "MD0013",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 4
+        }
+      },
+      {
+        "actorId": "0x75",
+        "displayName": "Egypt long floor hazard variant",
+        "pnRefs": [
+          22,
+          23
+        ],
+        "spawnCount": 3,
+        "spawnMaps": [
+          "MD0015",
+          "MD0020",
+          "MD0023"
+        ],
+        "introducedAt": {
+          "mapId": 15,
+          "mapName": "MD0015",
+          "levelGroup": "egypt",
+          "levelLabel": "Egypt",
+          "spawnIndex": 1
+        }
+      },
+      {
+        "actorId": "0x76",
+        "displayName": "Boulder/object variant",
+        "pnRefs": [
+          66
+        ],
+        "spawnCount": 1,
+        "spawnMaps": [
+          "MD0011"
+        ],
+        "introducedAt": {
+          "mapId": 11,
+          "mapName": "MD0011",
+          "levelGroup": "south_america",
+          "levelLabel": "Jungle",
+          "spawnIndex": 6
+        }
+      }
+    ]
+  },
+  "sets": [
+    {
+      "setId": "rick_player",
+      "displayName": "Rick / player",
+      "type": "player",
+      "actorIds": [
+        "0x5D",
+        "0x64",
+        "0x67",
+        "0x68"
+      ],
+      "introducedAt": {
+        "mapId": 2,
+        "mapName": "MD0002",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 0
+      },
+      "tags": [
+        "rick",
+        "player",
+        "cinematic",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "shoot",
+          "label": "shoot right",
+          "direction": "right",
+          "pn": 91,
+          "pfRange": "PF263-263",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "User finding: PF263; image is visually duplicated with left."
+        },
+        {
+          "action": "shoot",
+          "label": "shoot left",
+          "direction": "left",
+          "pn": 92,
+          "pfRange": "PF264-264",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "User finding: PF264; browser mirrors left PN for preview."
+        },
+        {
+          "action": "ladder_climb",
+          "label": "ladder climb",
+          "direction": "neutral",
+          "pn": 93,
+          "pfRange": "PF265-266",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "PF265-PF266."
+        },
+        {
+          "action": "crawl",
+          "label": "crawl right",
+          "direction": "right",
+          "pn": 94,
+          "pfRange": "PF267-268",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "PF267-PF268."
+        },
+        {
+          "action": "crawl",
+          "label": "crawl left",
+          "direction": "left",
+          "pn": 95,
+          "pfRange": "PF269-270",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "PF269-PF270; mirrored in browser preview."
+        },
+        {
+          "action": "die",
+          "label": "die / front-facing collapse",
+          "direction": "neutral",
+          "pn": 96,
+          "pfRange": "PF271-274",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "PF271-PF274."
+        },
+        {
+          "action": "jump",
+          "label": "jump right",
+          "direction": "right",
+          "pn": 97,
+          "pfRange": "PF275-275",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "jump",
+          "label": "jump left",
+          "direction": "left",
+          "pn": 98,
+          "pfRange": "PF276-276",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "stand",
+          "label": "stand right",
+          "direction": "right",
+          "pn": 99,
+          "pfRange": "PF277-278",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "stand",
+          "label": "stand left",
+          "direction": "left",
+          "pn": 100,
+          "pfRange": "PF279-280",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "jump_alt",
+          "label": "alternate jump right",
+          "direction": "right",
+          "pn": 101,
+          "pfRange": "PF281-281",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "jump_alt",
+          "label": "alternate jump left",
+          "direction": "left",
+          "pn": 102,
+          "pfRange": "PF282-282",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "parachute_folding_cinematic",
+          "label": "parachute folding cinematic",
+          "direction": "neutral",
+          "pn": 103,
+          "pfRange": "PF283-287",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "ladder_cinematic",
+          "label": "ladder cinematic candidate",
+          "direction": "neutral",
+          "pn": 104,
+          "pfRange": "PF288-288",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "parachute_fall_cinematic",
+          "label": "parachute falling cinematic",
+          "direction": "neutral",
+          "pn": 105,
+          "pfRange": "PF289-297",
+          "frameCount": 9,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "parachute_fall_scaled_cinematic",
+          "label": "scaled parachute falling cinematic",
+          "direction": "neutral",
+          "pn": 106,
+          "pfRange": "PF298-304",
+          "frameCount": 7,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk right",
+          "direction": "right",
+          "pn": 107,
+          "pfRange": "PF305-310",
+          "frameCount": 6,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk left",
+          "direction": "left",
+          "pn": 108,
+          "pfRange": "PF311-316",
+          "frameCount": 6,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": "Rick has more action states than normal actors. Some Rick PN records are not directly exposed by actor 0x5D PA slots but are included from collected PF/PN findings."
+    },
+    {
+      "setId": "player_weapon",
+      "displayName": "Rick utility — bullets, lit dynamite, and explosions",
+      "type": "utility",
+      "actorIds": [],
+      "introducedAt": {
+        "mapId": 3,
+        "mapName": "MD0003",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": null
+      },
+      "tags": [
+        "player",
+        "weapon",
+        "dynamite",
+        "projectile",
+        "sourcefix-manual"
+      ],
+      "animations": [
+        {
+          "action": "bullet",
+          "label": "bullet right",
+          "direction": "right",
+          "pn": 13,
+          "pfRange": "PF42-42",
+          "frameCount": 1,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "bullet",
+          "label": "bullet left",
+          "direction": "left",
+          "pn": 14,
+          "pfRange": "PF43-43",
+          "frameCount": 1,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "dynamite_fuse",
+          "label": "lit dynamite / fuse, Jungle palette",
+          "direction": "neutral",
+          "pn": 36,
+          "pfRange": "PF85-89",
+          "frameCount": 5,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": "Runtime mapping for xrick bomb entity 0x03 fuse sprites."
+        },
+        {
+          "action": "dynamite_fuse_variant",
+          "label": "lit dynamite / fuse palette variant",
+          "direction": "neutral",
+          "pn": 37,
+          "pfRange": "PF90-94",
+          "frameCount": 5,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "dynamite_explosion",
+          "label": "dynamite explosion, Jungle palette",
+          "direction": "neutral",
+          "pn": 41,
+          "pfRange": "PF108-113",
+          "frameCount": 6,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": "Runtime mapping for xrick bomb entity 0x03 explosion sprites."
+        },
+        {
+          "action": "dynamite_explosion_variant",
+          "label": "dynamite explosion palette variant",
+          "direction": "neutral",
+          "pn": 42,
+          "pfRange": "PF114-119",
+          "frameCount": 6,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "dynamite_explosion_variant_2",
+          "label": "dynamite explosion palette variant 2",
+          "direction": "neutral",
+          "pn": 43,
+          "pfRange": "PF120-123",
+          "frameCount": 4,
+          "source": "manual weapon correction + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "sourcefix manual weapon audit; ROM provides PN/PF records",
+      "confidence": "high",
+      "notes": "PN numbers are decimal catalogue indices. v0.7.8 uses PN36 and PN41 across all Level 1 Jungle rooms and synchronizes their stages to the xrick bomb ticker."
+    },
+    {
+      "setId": "jungle_enemy_a",
+      "displayName": "MD0003 Jungle — enemy walk set A",
+      "type": "enemy",
+      "actorIds": [
+        "0x03",
+        "0x05"
+      ],
+      "introducedAt": {
+        "mapId": 3,
+        "mapName": "MD0003",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "jungle",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "die",
+          "label": "death / front-facing collapse",
+          "direction": "neutral",
+          "pn": 3,
+          "pfRange": "PF4-7",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk right",
+          "direction": "right",
+          "pn": 4,
+          "pfRange": "PF8-12",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk left",
+          "direction": "left",
+          "pn": 5,
+          "pfRange": "PF13-17",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": "Actors 0x03 and 0x05 share PN004/PN005. Death PN003 is visually associated but not present in the PA slots."
+    },
+    {
+      "setId": "jungle_enemy_b",
+      "displayName": "MD0004 Jungle — enemy walk set B",
+      "type": "enemy",
+      "actorIds": [
+        "0x06"
+      ],
+      "introducedAt": {
+        "mapId": 4,
+        "mapName": "MD0004",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 6
+      },
+      "tags": [
+        "jungle",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "die",
+          "label": "death / front-facing collapse",
+          "direction": "neutral",
+          "pn": 6,
+          "pfRange": "PF18-21",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk right",
+          "direction": "right",
+          "pn": 7,
+          "pfRange": "PF22-26",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "walk left",
+          "direction": "left",
+          "pn": 8,
+          "pfRange": "PF27-31",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "jungle_idol_object",
+      "displayName": "MD0004 Jungle — golden idol/object",
+      "type": "object",
+      "actorIds": [
+        "0x1C"
+      ],
+      "introducedAt": {
+        "mapId": 4,
+        "mapName": "MD0004",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "jungle",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "static idol/object frame",
+          "direction": "neutral",
+          "pn": 27,
+          "pfRange": "PF70-70",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "jungle_floor_plant_hazard",
+      "displayName": "MD0004 Jungle — small floor/plant hazard",
+      "type": "trap",
+      "actorIds": [
+        "0x33",
+        "0x34",
+        "0x35",
+        "0x36"
+      ],
+      "introducedAt": {
+        "mapId": 4,
+        "mapName": "MD0004",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "jungle",
+        "trap",
+        "hazard"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "small floor/plant hazard",
+          "direction": "neutral",
+          "pn": 49,
+          "pfRange": "PF135-135",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "idle_variant",
+          "label": "small spike/plant hazard variant",
+          "direction": "neutral",
+          "pn": 50,
+          "pfRange": "PF136-136",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "projectile",
+          "label": "shooter projectile for PN49 body",
+          "direction": "neutral",
+          "pn": 11,
+          "pfRange": "PF40-40",
+          "frameCount": 1,
+          "source": "June-1 projectile correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": "PN0x0B/11 is fired by PN0x31/49; facing comes from PA actor variant."
+        },
+        {
+          "action": "projectile_variant",
+          "label": "shooter projectile for PN50 body",
+          "direction": "neutral",
+          "pn": 12,
+          "pfRange": "PF41-41",
+          "frameCount": 1,
+          "source": "June-1 projectile correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": "PN0x0C/12 is fired by PN0x32/50; facing comes from PA actor variant."
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "jungle_opening_utility",
+      "displayName": "MD0001 Jungle — opening utility/object",
+      "type": "utility",
+      "actorIds": [
+        "0x5C"
+      ],
+      "introducedAt": {
+        "mapId": 1,
+        "mapName": "MD0001",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 0
+      },
+      "tags": [
+        "jungle",
+        "utility"
+      ],
+      "animations": [
+        {
+          "action": "activate",
+          "label": "opening utility animation",
+          "direction": "neutral",
+          "pn": 90,
+          "pfRange": "PF255-262",
+          "frameCount": 8,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "boulder_object",
+      "displayName": "MD0006 Jungle — boulder/object",
+      "type": "trap",
+      "actorIds": [
+        "0x72",
+        "0x76"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 9
+      },
+      "tags": [
+        "jungle",
+        "boulder",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "roll",
+          "label": "boulder rolling animation",
+          "direction": "neutral",
+          "pn": 18,
+          "pfRange": "PF48-51",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": "User finding: PF48-PF51 / PN012 boulder rolling."
+        },
+        {
+          "action": "idle",
+          "label": "static boulder/object",
+          "direction": "neutral",
+          "pn": 66,
+          "pfRange": "PF181-181",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "jungle_theme_flying_trap",
+      "displayName": "MD0006 Jungle — flying/rolling trap object",
+      "type": "trap",
+      "actorIds": [
+        "0x46"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 11
+      },
+      "tags": [
+        "jungle",
+        "missile_base",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "move",
+          "label": "theme-shared flying/rolling trap",
+          "direction": "neutral",
+          "pn": 67,
+          "pfRange": "PF182-182",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "move_variant",
+          "label": "missile-base flying/rolling trap variant",
+          "direction": "neutral",
+          "pn": 68,
+          "pfRange": "PF183-183",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": "Actor 0x45 is split into a stationary collectible by runtime preview evidence."
+    },
+    {
+      "setId": "jungle_creature_trap",
+      "displayName": "MD0006 Jungle — creature/trap",
+      "type": "trap",
+      "actorIds": [
+        "0x56"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 10
+      },
+      "tags": [
+        "jungle",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "rubble_unexploded_left",
+          "label": "left unexploded rubble/blockage",
+          "direction": "neutral",
+          "pn": 85,
+          "pfRange": "PF250-250",
+          "frameCount": 1,
+          "source": "decoded ROM geometry + reviewed runtime comparison",
+          "confidence": "high",
+          "notes": "Tall rubble state; dynamite switches this component to PN86."
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "jungle_rubble_state_pairs",
+      "displayName": "Jungle dynamite rubble state pairs",
+      "type": "object",
+      "actorIds": [
+        "0x56"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle"
+      },
+      "tags": [
+        "jungle",
+        "rubble",
+        "blockage",
+        "dynamite",
+        "reviewed-runtime"
+      ],
+      "animations": [
+        {
+          "action": "rubble_exploded_left",
+          "label": "left exploded rubble/remnant",
+          "direction": "neutral",
+          "pn": 86,
+          "pfRange": "PF251-251",
+          "frameCount": 1,
+          "source": "decoded ROM geometry + reviewed runtime comparison",
+          "confidence": "high",
+          "notes": "Short rubble state after dynamite; paired with PN85."
+        },
+        {
+          "action": "rubble_exploded_right",
+          "label": "right exploded rubble/remnant",
+          "direction": "neutral",
+          "pn": 88,
+          "pfRange": "PF253-253",
+          "frameCount": 1,
+          "source": "decoded ROM geometry + reviewed runtime comparison",
+          "confidence": "high",
+          "notes": "Short rubble state after dynamite; paired with PN87."
+        }
+      ],
+      "source": "reviewed runtime comparison + decoded ROM PN/PF",
+      "confidence": "high",
+      "notes": "PN85/PN87 are tall unexploded components; PN86/PN88 are short exploded remnants."
+    },
+    {
+      "setId": "jungle_egypt_small_object",
+      "displayName": "MD0006 Jungle — falling dagger bank",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "jungle",
+        "dagger",
+        "falling",
+        "trap",
+        "superseded"
+      ],
+      "animations": [],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": "MA actor 0x55 / PN84 is a stationary bank sprite whose activated preview motion is a repeated downward fall from the MA origin. Superseded: actor 0x55 / PN84 is the recovered horizontal side-spike action and is owned by floor_spike_traps."
+    },
+    {
+      "setId": "floor_spike_traps",
+      "displayName": "MD0006 Jungle — floor spike traps",
+      "type": "trap",
+      "actorIds": [
+        "0x51",
+        "0x53",
+        "0x50",
+        "0x55"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 8
+      },
+      "tags": [
+        "trap",
+        "spikes"
+      ],
+      "animations": [
+        {
+          "action": "spikes_moving",
+          "label": "spikes moving",
+          "direction": "neutral",
+          "pn": 76,
+          "pfRange": "PF210-210",
+          "frameCount": 1,
+          "source": "corrected June-1 RDX mapping",
+          "confidence": "high",
+          "notes": "Moving companion for PN077."
+        },
+        {
+          "action": "idle",
+          "label": "floor spike trap",
+          "direction": "neutral",
+          "pn": 77,
+          "pfRange": "PF211-211",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "spikes_variant_moving",
+          "label": "spikes variant moving",
+          "direction": "neutral",
+          "pn": 78,
+          "pfRange": "PF223-223",
+          "frameCount": 1,
+          "source": "corrected June-1 RDX mapping",
+          "confidence": "high",
+          "notes": "Moving companion for PN079."
+        },
+        {
+          "action": "idle_castle",
+          "label": "castle floor spike/trap",
+          "direction": "neutral",
+          "pn": 79,
+          "pfRange": "PF224-224",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "spikes_wide_moving",
+          "label": "spikes wide moving",
+          "direction": "neutral",
+          "pn": 80,
+          "pfRange": "PF235-235",
+          "frameCount": 1,
+          "source": "corrected June-1 RDX mapping",
+          "confidence": "high",
+          "notes": "Moving companion for PN081."
+        },
+        {
+          "action": "idle_wide",
+          "label": "wide floor spike trap",
+          "direction": "neutral",
+          "pn": 81,
+          "pfRange": "PF236-236",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "floor_blade_bank",
+          "label": "Jungle floor blade/spike bank",
+          "direction": "neutral",
+          "pn": 82,
+          "pfRange": "PF237-237",
+          "frameCount": 1,
+          "source": "decoded ROM geometry + original RDX on-console comparison",
+          "confidence": "high",
+          "notes": "Fixed floor-mounted hazard used by the four MD0008 banks; not the PN76 falling-dagger family."
+        },
+        {
+          "action": "spikes_side_moving",
+          "label": "spikes side moving",
+          "direction": "neutral",
+          "pn": 83,
+          "pfRange": "PF250-250",
+          "frameCount": 1,
+          "source": "corrected June-1 RDX mapping",
+          "confidence": "high",
+          "notes": "Side-spike moving state."
+        },
+        {
+          "action": "spikes_side",
+          "label": "spike trap right",
+          "direction": "neutral",
+          "pn": 84,
+          "pfRange": "PF251-251",
+          "frameCount": 1,
+          "source": "corrected June-1 RDX mapping",
+          "confidence": "high",
+          "notes": "Horizontal side spike; use source orientation/mirror from action binding."
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_tomb_hazard",
+      "displayName": "MD0013 Egypt — tomb/sarcophagus hazard",
+      "type": "trap",
+      "actorIds": [
+        "0x1B"
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "egypt",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "tomb/sarcophagus-like hazard",
+          "direction": "neutral",
+          "pn": 26,
+          "pfRange": "PF69-69",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_mummy_guard",
+      "displayName": "MD0013 Egypt — mummy/guard",
+      "type": "enemy",
+      "actorIds": [
+        "0x27",
+        "0x29"
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 6
+      },
+      "tags": [
+        "egypt",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "walk",
+          "label": "run/walk right",
+          "direction": "right",
+          "pn": 38,
+          "pfRange": "PF95-100",
+          "frameCount": 6,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "run/walk left",
+          "direction": "left",
+          "pn": 39,
+          "pfRange": "PF101-106",
+          "frameCount": 6,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_large_guard",
+      "displayName": "MD0013 Egypt — large guard/enemy",
+      "type": "enemy",
+      "actorIds": [
+        "0x2E"
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 7
+      },
+      "tags": [
+        "egypt",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "walk",
+          "label": "run/walk right",
+          "direction": "right",
+          "pn": 44,
+          "pfRange": "PF124-127",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "run/walk left",
+          "direction": "left",
+          "pn": 45,
+          "pfRange": "PF128-131",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_small_creatures",
+      "displayName": "MD0013 Egypt — small creature/hazards",
+      "type": "trap",
+      "actorIds": [
+        "0x31",
+        "0x32"
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 0
+      },
+      "tags": [
+        "egypt",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "small creature/hazard",
+          "direction": "neutral",
+          "pn": 47,
+          "pfRange": "PF133-133",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "idle_variant",
+          "label": "small creature/hazard variant",
+          "direction": "neutral",
+          "pn": 48,
+          "pfRange": "PF134-134",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_long_floor_hazard",
+      "displayName": "MD0013 Egypt — long floor hazard",
+      "type": "trap",
+      "actorIds": [
+        "0x73",
+        "0x75"
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 4
+      },
+      "tags": [
+        "egypt",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "long floor hazard",
+          "direction": "neutral",
+          "pn": 22,
+          "pfRange": "PF65-65",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "idle_variant",
+          "label": "long floor hazard variant",
+          "direction": "neutral",
+          "pn": 23,
+          "pfRange": "PF66-66",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_block_hazard",
+      "displayName": "MD0018 Egypt — block/hazard directional pair",
+      "type": "trap",
+      "actorIds": [
+        "0x10",
+        "0x11",
+        "0x12"
+      ],
+      "introducedAt": {
+        "mapId": 18,
+        "mapName": "MD0018",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "egypt",
+        "trap",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "move",
+          "label": "block/hazard right slot",
+          "direction": "right",
+          "pn": 19,
+          "pfRange": "PF52-52",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "move",
+          "label": "block/hazard left slot",
+          "direction": "left",
+          "pn": 20,
+          "pfRange": "PF53-53",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "egypt_gem_orb_object",
+      "displayName": "MD0016 Egypt — gem/orb-like object",
+      "type": "object",
+      "actorIds": [
+        "0x39"
+      ],
+      "introducedAt": {
+        "mapId": 16,
+        "mapName": "MD0016",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 4
+      },
+      "tags": [
+        "egypt",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "gem/orb-like object",
+          "direction": "neutral",
+          "pn": 53,
+          "pfRange": "PF151-151",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_dog",
+      "displayName": "MD0025 Castle — dog enemy",
+      "type": "enemy",
+      "actorIds": [
+        "0x20"
+      ],
+      "introducedAt": {
+        "mapId": 25,
+        "mapName": "MD0025",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "castle",
+        "enemy",
+        "dog",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "walk",
+          "label": "dog walk right",
+          "direction": "right",
+          "pn": 31,
+          "pfRange": "PF74-77",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "dog walk left",
+          "direction": "left",
+          "pn": 32,
+          "pfRange": "PF78-81",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_guard",
+      "displayName": "MD0026 Castle — guard",
+      "type": "enemy",
+      "actorIds": [
+        "0x3A",
+        "0x3C"
+      ],
+      "introducedAt": {
+        "mapId": 26,
+        "mapName": "MD0026",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "castle",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "die",
+          "label": "short death animation",
+          "direction": "neutral",
+          "pn": 55,
+          "pfRange": "PF153-154",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "guard walk right",
+          "direction": "right",
+          "pn": 56,
+          "pfRange": "PF155-157",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "guard walk left",
+          "direction": "left",
+          "pn": 57,
+          "pfRange": "PF158-160",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "die_variant",
+          "label": "short death variant",
+          "direction": "neutral",
+          "pn": 58,
+          "pfRange": "PF161-162",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_missile_guard",
+      "displayName": "MD0025 Castle/Missile — guard walk",
+      "type": "enemy",
+      "actorIds": [
+        "0x6B"
+      ],
+      "introducedAt": {
+        "mapId": 25,
+        "mapName": "MD0025",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "castle",
+        "missile_base",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "walk",
+          "label": "guard walk right",
+          "direction": "right",
+          "pn": 112,
+          "pfRange": "PF321-323",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "guard walk left",
+          "direction": "left",
+          "pn": 113,
+          "pfRange": "PF324-326",
+          "frameCount": 3,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_barrel_roll",
+      "displayName": "MD0033 Castle — barrel roll trap",
+      "type": "trap",
+      "actorIds": [
+        "0x6D",
+        "0x6F"
+      ],
+      "introducedAt": {
+        "mapId": 33,
+        "mapName": "MD0033",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "castle",
+        "trap",
+        "barrel",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "roll",
+          "label": "barrel roll right",
+          "direction": "right",
+          "pn": 114,
+          "pfRange": "PF327-330",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "roll",
+          "label": "barrel roll left",
+          "direction": "left",
+          "pn": 115,
+          "pfRange": "PF331-334",
+          "frameCount": 4,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_small_crawl_creature",
+      "displayName": "MD0031 Castle — small crawl/creature object",
+      "type": "trap",
+      "actorIds": [
+        "0x30"
+      ],
+      "introducedAt": {
+        "mapId": 31,
+        "mapName": "MD0031",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "castle",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "small crawl/creature object",
+          "direction": "neutral",
+          "pn": 46,
+          "pfRange": "PF132-132",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_short_floor_trap",
+      "displayName": "MD0034 Castle — short floor trap",
+      "type": "trap",
+      "actorIds": [
+        "0x4C"
+      ],
+      "introducedAt": {
+        "mapId": 34,
+        "mapName": "MD0034",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "castle",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "short floor trap",
+          "direction": "neutral",
+          "pn": 74,
+          "pfRange": "PF195-195",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_door_static_objects",
+      "displayName": "MD0025 Castle — tall door/coffin-like objects",
+      "type": "object",
+      "actorIds": [
+        "0x22",
+        "0x24"
+      ],
+      "introducedAt": {
+        "mapId": 25,
+        "mapName": "MD0025",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "castle",
+        "missile_base",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "castle tall door/coffin-like object",
+          "direction": "neutral",
+          "pn": 34,
+          "pfRange": "PF83-83",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        },
+        {
+          "action": "idle_variant",
+          "label": "missile/base tall door/coffin-like object",
+          "direction": "neutral",
+          "pn": 35,
+          "pfRange": "PF84-84",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "castle_static_objects",
+      "displayName": "MD0025 Castle — static single-frame objects",
+      "type": "object",
+      "actorIds": [
+        "0x0E",
+        "0x58",
+        "0x6E",
+        "0x71"
+      ],
+      "introducedAt": {
+        "mapId": 25,
+        "mapName": "MD0025",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 4
+      },
+      "tags": [
+        "castle",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "castle/missile single-frame enemy/object",
+          "direction": "neutral",
+          "pn": 17,
+          "pfRange": "PF47-47",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        },
+        {
+          "action": "rubble_unexploded_right",
+          "label": "right unexploded rubble/blockage",
+          "direction": "neutral",
+          "pn": 87,
+          "pfRange": "PF252-252",
+          "frameCount": 1,
+          "source": "decoded ROM geometry + reviewed runtime comparison",
+          "confidence": "high",
+          "notes": "Tall rubble state; dynamite switches this component to PN88."
+        },
+        {
+          "action": "round_object",
+          "label": "castle round static object",
+          "direction": "neutral",
+          "pn": 116,
+          "pfRange": "PF335-335",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        },
+        {
+          "action": "red_block",
+          "label": "castle red block/object",
+          "direction": "neutral",
+          "pn": 118,
+          "pfRange": "PF348-348",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_soldier_guard",
+      "displayName": "MD0047 Missile Base — soldier/guard",
+      "type": "enemy",
+      "actorIds": [
+        "0x3D",
+        "0x3F"
+      ],
+      "introducedAt": {
+        "mapId": 47,
+        "mapName": "MD0047",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "missile_base",
+        "enemy",
+        "directional"
+      ],
+      "animations": [
+        {
+          "action": "walk",
+          "label": "soldier/guard walk right",
+          "direction": "right",
+          "pn": 59,
+          "pfRange": "PF163-167",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        },
+        {
+          "action": "walk",
+          "label": "soldier/guard walk left",
+          "direction": "left",
+          "pn": 60,
+          "pfRange": "PF168-172",
+          "frameCount": 5,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_rocket_hazards",
+      "displayName": "MD0046 Missile Base — rocket/missile hazards",
+      "type": "trap",
+      "actorIds": [
+        "0x40",
+        "0x41"
+      ],
+      "introducedAt": {
+        "mapId": 46,
+        "mapName": "MD0046",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "missile_base",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "rocket/missile hazard",
+          "direction": "neutral",
+          "pn": 62,
+          "pfRange": "PF174-175",
+          "frameCount": 2,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        },
+        {
+          "action": "idle_variant",
+          "label": "rocket/missile hazard variant",
+          "direction": "neutral",
+          "pn": 61,
+          "pfRange": "PF173-173",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_crate_platform",
+      "displayName": "MD0046 Missile Base — crate/platform hazard",
+      "type": "trap",
+      "actorIds": [
+        "0x42"
+      ],
+      "introducedAt": {
+        "mapId": 46,
+        "mapName": "MD0046",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 5
+      },
+      "tags": [
+        "missile_base",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "crate/platform hazard",
+          "direction": "neutral",
+          "pn": 54,
+          "pfRange": "PF152-152",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_low_platform",
+      "displayName": "MD0049 Missile Base — low platform/object",
+      "type": "object",
+      "actorIds": [
+        "0x1F"
+      ],
+      "introducedAt": {
+        "mapId": 49,
+        "mapName": "MD0049",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 13
+      },
+      "tags": [
+        "missile_base",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "low platform/object",
+          "direction": "neutral",
+          "pn": 30,
+          "pfRange": "PF73-73",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_crawl_fall_object",
+      "displayName": "MD0049 Missile Base — crawl/fall object",
+      "type": "trap",
+      "actorIds": [
+        "0x5A",
+        "0x5B"
+      ],
+      "introducedAt": {
+        "mapId": 49,
+        "mapName": "MD0049",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "missile_base",
+        "trap"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "crawl/fall object",
+          "direction": "neutral",
+          "pn": 89,
+          "pfRange": "PF254-254",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_small_block_utility",
+      "displayName": "MD0054 Missile Base — small block/utility actor",
+      "type": "utility",
+      "actorIds": [
+        "0x01"
+      ],
+      "introducedAt": {
+        "mapId": 54,
+        "mapName": "MD0054",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "missile_base",
+        "utility"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "small block/utility actor",
+          "direction": "neutral",
+          "pn": 2,
+          "pfRange": "PF3-3",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "missile_transition_lift_gate",
+      "displayName": "MD0045 Missile transition — large lift/gate actor",
+      "type": "object",
+      "actorIds": [
+        "0x49"
+      ],
+      "introducedAt": {
+        "mapId": 45,
+        "mapName": "MD0045",
+        "levelGroup": "missile_transition",
+        "levelLabel": "Missile transition",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "missile_transition",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "large lift/gate actor",
+          "direction": "neutral",
+          "pn": 71,
+          "pfRange": "PF189-189",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "low",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "torch_candle",
+      "displayName": "MD0013 Egypt — candle/torch animation",
+      "type": "object",
+      "actorIds": [
+        "0x70"
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "egypt",
+        "castle",
+        "object",
+        "animated"
+      ],
+      "animations": [
+        {
+          "action": "burn",
+          "label": "candle/torch animation",
+          "direction": "neutral",
+          "pn": 117,
+          "pfRange": "PF336-347",
+          "frameCount": 12,
+          "source": "curated + ROM PN/PF",
+          "confidence": "high",
+          "notes": ""
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "setId": "unmapped_or_utility_pn_records",
+      "displayName": "Unmapped / utility PN records",
+      "type": "utility",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "low-confidence-assigned",
+        "needs-review",
+        "unmapped",
+        "utility"
+      ],
+      "animations": [
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN000",
+          "direction": "neutral",
+          "pn": 0,
+          "pfRange": "PF1-1",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN001",
+          "direction": "neutral",
+          "pn": 1,
+          "pfRange": "PF2-2",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN009",
+          "direction": "neutral",
+          "pn": 9,
+          "pfRange": "PF32-35",
+          "frameCount": 4,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN010",
+          "direction": "neutral",
+          "pn": 10,
+          "pfRange": "PF36-39",
+          "frameCount": 4,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN011",
+          "direction": "neutral",
+          "pn": 11,
+          "pfRange": "PF40-40",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN012",
+          "direction": "neutral",
+          "pn": 12,
+          "pfRange": "PF41-41",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN015",
+          "direction": "neutral",
+          "pn": 15,
+          "pfRange": "PF44-44",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN016",
+          "direction": "neutral",
+          "pn": 16,
+          "pfRange": "PF45-46",
+          "frameCount": 2,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN021",
+          "direction": "neutral",
+          "pn": 21,
+          "pfRange": "PF54-64",
+          "frameCount": 11,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN024",
+          "direction": "neutral",
+          "pn": 24,
+          "pfRange": "PF67-67",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN025",
+          "direction": "neutral",
+          "pn": 25,
+          "pfRange": "PF68-68",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN028",
+          "direction": "neutral",
+          "pn": 28,
+          "pfRange": "PF71-71",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN029",
+          "direction": "neutral",
+          "pn": 29,
+          "pfRange": "PF72-72",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN033",
+          "direction": "neutral",
+          "pn": 33,
+          "pfRange": "PF82-82",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN040",
+          "direction": "neutral",
+          "pn": 40,
+          "pfRange": "PF107-107",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN051",
+          "direction": "right",
+          "pn": 51,
+          "pfRange": "PF137-143",
+          "frameCount": 7,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN052",
+          "direction": "left",
+          "pn": 52,
+          "pfRange": "PF144-150",
+          "frameCount": 7,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN063",
+          "direction": "neutral",
+          "pn": 63,
+          "pfRange": "PF176-176",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN064",
+          "direction": "neutral",
+          "pn": 64,
+          "pfRange": "PF177-178",
+          "frameCount": 2,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN065",
+          "direction": "neutral",
+          "pn": 65,
+          "pfRange": "PF179-180",
+          "frameCount": 2,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN069",
+          "direction": "neutral",
+          "pn": 69,
+          "pfRange": "PF184-187",
+          "frameCount": 4,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN070",
+          "direction": "neutral",
+          "pn": 70,
+          "pfRange": "PF188-188",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN072",
+          "direction": "neutral",
+          "pn": 72,
+          "pfRange": "PF190-190",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN073",
+          "direction": "neutral",
+          "pn": 73,
+          "pfRange": "PF191-194",
+          "frameCount": 4,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN075",
+          "direction": "neutral",
+          "pn": 75,
+          "pfRange": "PF196-198",
+          "frameCount": 3,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN109",
+          "direction": "neutral",
+          "pn": 109,
+          "pfRange": "PF317-317",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN110",
+          "direction": "neutral",
+          "pn": 110,
+          "pfRange": "PF318-318",
+          "frameCount": 1,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        },
+        {
+          "action": "uncategorized",
+          "label": "unmapped PN111",
+          "direction": "neutral",
+          "pn": 111,
+          "pfRange": "PF319-320",
+          "frameCount": 2,
+          "source": "ROM PN/PF only",
+          "confidence": "low",
+          "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "low",
+      "notes": "Catch-all for PN records not yet assigned to a character/enemy/trap set. Many may be project utility, cinematic, or unused records."
+    },
+    {
+      "setId": "collectibles_golden_idol",
+      "displayName": "Collectibles — golden idol",
+      "type": "collectible",
+      "actorIds": [
+        "0x1C"
+      ],
+      "introducedAt": {
+        "mapId": 4,
+        "mapName": "MD0004",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "collectible",
+        "golden_idol",
+        "jungle",
+        "object"
+      ],
+      "animations": [
+        {
+          "action": "collectible_idle",
+          "label": "golden idol collectible",
+          "direction": "neutral",
+          "pn": 27,
+          "pfRange": "PF70-70",
+          "frameCount": 1,
+          "source": "curated + ROM PN/PF",
+          "confidence": "medium",
+          "notes": "Separate collectible grouping requested; PN also appears in the Jungle golden-idol object set."
+        }
+      ],
+      "source": "external categorization sidecar; ROM provides PN/PF/PA/MA references but not friendly action names",
+      "confidence": "medium",
+      "notes": "Created as a separate collectibles set so collectible objects can be curated independently from map-object sets."
+    },
+    {
+      "setId": "bat",
+      "displayName": "MD0006 Jungle — bat",
+      "type": "enemy",
+      "actorIds": [
+        "0x0C"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 6
+      },
+      "tags": [
+        "jungle",
+        "bat",
+        "flying",
+        "enemy"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "bat idle",
+          "direction": "neutral",
+          "pn": 15,
+          "pfRange": "PF44-44",
+          "frameCount": 1,
+          "source": "June-1 manual correction + ROM PA/PN/PF",
+          "confidence": "high",
+          "notes": "PA actor 0x0C owns PN15."
+        },
+        {
+          "action": "flying",
+          "label": "bat flying",
+          "direction": "neutral",
+          "pn": 16,
+          "pfRange": "PF45-46",
+          "frameCount": 2,
+          "source": "June-1 manual correction + ROM PN/PF",
+          "confidence": "high",
+          "notes": "Activated whole-map preview uses PN16 at the MA actor 0x0C origin."
+        }
+      ],
+      "source": "user-confirmed runtime role + ROM PA/PN/PF",
+      "confidence": "high",
+      "notes": "Use PI-origin placement; do not foot-anchor this flying actor."
+    },
+    {
+      "setId": "jungle_top_collectible",
+      "displayName": "MD0006 Jungle — stationary top collectible",
+      "type": "collectible",
+      "actorIds": [
+        "0x45"
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 11
+      },
+      "tags": [
+        "jungle",
+        "collectible",
+        "stationary"
+      ],
+      "animations": [
+        {
+          "action": "idle",
+          "label": "stationary collectible",
+          "direction": "neutral",
+          "pn": 67,
+          "pfRange": "PF182-182",
+          "frameCount": 1,
+          "source": "user-confirmed runtime role + ROM PA/PN/PF",
+          "confidence": "high",
+          "notes": "Never patrol or receive a trap trajectory in preview."
+        }
+      ],
+      "source": "user-confirmed runtime role + ROM PA/PN/PF",
+      "confidence": "high",
+      "notes": "Actor 0x45 remains fixed at its MA spawn."
+    }
+  ],
+  "mergeInfo": {
+    "previewRuntimeCorrections": "0.15.5: actor 0x0C bat PN15/16, actor 0x45 stationary collectible, actor 0x55 falling-dagger bank, PA-owned neutral shooter orientation.",
+    "previewTrapSemanticsFix": "2.1.8: PN85/PN87 are reviewed tall unexploded rubble states; PN86/PN88 are their short exploded remnants. Classic ent_mvstep owns movement; RDX PA/PN owns visual state."
+  }
+}

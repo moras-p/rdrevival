@@ -1,0 +1,2307 @@
+{
+  "resolverVersion": 1,
+  "room": {
+    "effective": {
+      "mapping": {
+        "group": "castle",
+        "mapId": 25,
+        "mapName": "MD0025",
+        "pixelOffset": {
+          "dxPx": 48,
+          "dyPx": -32
+        },
+        "runtimeViewportBias": {
+          "dxPx": 0,
+          "dyPx": 0
+        },
+        "submap": 20,
+        "submapName": "SM14"
+      },
+      "nativeControllerAuthority": "xrick-runtime"
+    },
+    "fingerprints": {
+      "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
+      "alignment": "83fb1ffb3bab1a1c5302bd643cdad38e16a5234d7b1da2aec2cef3f289e55c8a",
+      "presentationDepth": "8676101c014c9e38eb2b1332ee35ac84207de11873f6c11f894db8359bb08c47",
+      "resolved": "ae130b5dbb5765bdb2a8933b1e9cb1f40d8fdd0ac5f04b050e3cfad2668b1955",
+      "semantic": "c01b10d9f975634594c86c67d7684b2d67eac8a9dbe965087be82de2913aba39",
+      "sourceClassic": "756c3602322778645b56bb319e570cdf565bdfff628caa2a29a0ddc3d19eb81a",
+      "sourceRdx": "b3e2e93761d5ba054afe56d2b9f574ecaed3219a3b28757b5be1523446bff17f",
+      "structural": "1284ecac68786d78cbbecec34e333588432ffcc6519eb3a4e6df4f0ac42b967c",
+      "transitions": "291741be7122c190c2fce3b728f25d58a5eebba0e6c9e9814bd1e6ebc84996d7"
+    },
+    "group": "castle",
+    "id": "SM14",
+    "layers": {
+      "adjustments": {
+        "operations": [],
+        "schema": "rdr.adjustments_resolved.v1"
+      },
+      "alignment": {
+        "regions": [
+          {
+            "authority": "reviewed-room-correspondence",
+            "classicBoundsPx": [
+              0,
+              0,
+              448,
+              256
+            ],
+            "confidence": 0.9077329622240814,
+            "id": "SM14.whole-room",
+            "rdxBoundsPx": [
+              0,
+              0,
+              416,
+              320
+            ],
+            "status": "reviewed",
+            "transform": {
+              "dxPx": 48,
+              "dyPx": -32,
+              "type": "translate"
+            }
+          }
+        ],
+        "room": {
+          "mapId": 25,
+          "submap": 20
+        },
+        "schema": "rdr.level_alignment.v1"
+      },
+      "presentationDepth": {
+        "classes": [
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              8793,
+              8794,
+              8796,
+              8798,
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
+            ],
+            "id": "egypt.decorative-strips-plane-a",
+            "label": "Egypt decorative strips and ladder highlights",
+            "plane": "A",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Backdrop-authored Egypt ladder/strip motifs must not occlude behind-midground trap actors."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              8768,
+              8769,
+              8792,
+              8794,
+              8795,
+              8797,
+              8801,
+              8833,
+              9045,
+              9047,
+              9069,
+              9070
+            ],
+            "id": "egypt.decorative-strips-plane-b",
+            "label": "Egypt decorative strips, ladders, and backplates",
+            "plane": "B",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              1287,
+              1288
+            ],
+            "id": "castle.window-trim-plane-a",
+            "label": "Castle window trim",
+            "plane": "A",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Castle window trim is backdrop scenery and must not occlude behind-midground trap actors."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              11635,
+              11636
+            ],
+            "id": "castle.window-trim-plane-b",
+            "label": "Castle window backing",
+            "plane": "B",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Castle window backing belongs to the backdrop so trap sprites stay unobscured."
+            }
+          }
+        ],
+        "overrides": [],
+        "planeDefaults": {
+          "A": "foreground",
+          "B": "midground"
+        },
+        "schema": "rdr.presentation_depth_resolved.v2",
+        "seedBaseline": {
+          "authority": "generated-open-close-seed-v2",
+          "backdropBits": "00fcff030000fcff030000fcffff0300fcffff0300ffffff0300ffffff0300ffffff0300ff2ffd030000000000000000fc03000000f803000000f80300000038000000003800000000fc03000000fc0300ffffff0300ffffff0300ffffff0300ffffff03000000000000fc3f000000fcff030000fcff030000fcffc33f00fcffc33f00fcffc33f00fcffff2f000000000000003f000000003f000000003f000000e0ff030000e0ff030000e0ffc30300f0ffc303003000c0ff003000c0ff00f003fcff00f003fc4b00f8ffff0100f8ffff0000fcff3f0000bcb4340000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+          "gridHeight": 52,
+          "gridWidth": 40,
+          "openCellCount": 685,
+          "schema": "rdr.presentation_depth_seed_baseline.v1",
+          "sourcePlane": "B",
+          "version": 1
+        },
+        "version": 2
+      },
+      "semanticCorpus": {
+        "objects": [
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                240,
+                43
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                48,
+                35,
+                248,
+                32
+              ],
+              "regionId": "SM14.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                0,
+                67,
+                248,
+                32
+              ]
+            },
+            "authority": "classic-type3-state+rdx-rom-pn",
+            "baseline": {
+              "origin": [
+                256,
+                64
+              ],
+              "runtimeDraw": [
+                235,
+                42
+              ],
+              "runtimeOrigin": [
+                256,
+                64
+              ],
+              "visualAnchor": [
+                238,
+                39
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:242:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 113,
+                "role": "actor",
+                "sourceKey": "mark:242"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 66
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                240,
+                43
+              ],
+              "presentationOrigin": [
+                256,
+                64
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                48,
+                35,
+                248,
+                32
+              ],
+              "visualAnchor": [
+                235,
+                42
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "xrick type-3 sproffs 0 uses source sprite 109 until native activation",
+              "RDX PN33 is the ROM-verified sleeping dog; PN31/PN32 are the directional running cycles",
+              "facing remains native-motion-owned and is not a room-specific mirror override"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm14:mark:242",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "familyMappingId": "castle-dog-scripted-state",
+              "layer": "normal",
+              "mirrorPolicy": "native-motion",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 31,
+                "snapshot": 33
+              },
+              "provenance": "classic-type3-state+rdx-rom-pn"
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "scriptedPresentation": {
+              "activePnByDirection": {
+                "left": 32,
+                "right": 31
+              },
+              "directionAuthority": "native-motion",
+              "dormantPn": 33,
+              "id": "castle-dog-scripted-state"
+            },
+            "semanticId": "SM14.actor.mark-242",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 66,
+                "flags": 137,
+                "h": 21,
+                "mark": 242,
+                "sprbase": 70,
+                "sprite": 70,
+                "spriteSequence": {
+                  "active": [
+                    110,
+                    111,
+                    112
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 109
+                },
+                "triggerBounds": [
+                  0,
+                  67,
+                  248,
+                  32
+                ],
+                "w": 24,
+                "x": 192,
+                "y": 75
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-242",
+            "sources": {
+              "classic": {
+                "entity": 66,
+                "mark": 242,
+                "ref": "classic:SM14:mark:242",
+                "slot": 4
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:242",
+                "sourceKey": "mark:242"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                238,
+                39
+              ],
+              "baseOrigin": [
+                256,
+                64
+              ],
+              "originAuthority": "production-c-rdx-trigger+same-run-classic-envelope",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  232,
+                  42
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  250,
+                  64
+                ],
+                "pn": 31,
+                "visible": true,
+                "visualState": "active"
+              },
+              "snapshot": {
+                "draw": [
+                  235,
+                  42
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  256,
+                  64
+                ],
+                "pn": 33,
+                "renderOrder": 1,
+                "visible": true,
+                "visualState": "dormant"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                240,
+                139
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                208,
+                131,
+                32,
+                32
+              ],
+              "regionId": "SM14.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                160,
+                163,
+                32,
+                32
+              ]
+            },
+            "authority": "classic-type3-state+rdx-rom-pn",
+            "baseline": {
+              "origin": [
+                256,
+                160
+              ],
+              "runtimeDraw": [
+                235,
+                138
+              ],
+              "runtimeOrigin": [
+                256,
+                160
+              ],
+              "visualAnchor": [
+                238,
+                135
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:243:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 113,
+                "role": "actor",
+                "sourceKey": "mark:243"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 53
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                240,
+                139
+              ],
+              "presentationOrigin": [
+                256,
+                160
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                208,
+                131,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                235,
+                138
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "xrick type-3 sproffs 0 uses source sprite 109 until native activation",
+              "RDX PN33 is the ROM-verified sleeping dog; PN31/PN32 are the directional running cycles",
+              "facing remains native-motion-owned and is not a room-specific mirror override"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm14:mark:243",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "familyMappingId": "castle-dog-scripted-state",
+              "layer": "normal",
+              "mirrorPolicy": "native-motion",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 31,
+                "snapshot": 33
+              },
+              "provenance": "classic-type3-state+rdx-rom-pn"
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "scriptedPresentation": {
+              "activePnByDirection": {
+                "left": 32,
+                "right": 31
+              },
+              "directionAuthority": "native-motion",
+              "dormantPn": 33,
+              "id": "castle-dog-scripted-state"
+            },
+            "semanticId": "SM14.actor.mark-243",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 53,
+                "flags": 137,
+                "h": 21,
+                "mark": 243,
+                "sprbase": 70,
+                "sprite": 70,
+                "spriteSequence": {
+                  "active": [
+                    110,
+                    111,
+                    112
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 109
+                },
+                "triggerBounds": [
+                  160,
+                  163,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 192,
+                "y": 171
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-243",
+            "sources": {
+              "classic": {
+                "entity": 53,
+                "mark": 243,
+                "ref": "classic:SM14:mark:243",
+                "slot": 5
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:243",
+                "sourceKey": "mark:243"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                238,
+                135
+              ],
+              "baseOrigin": [
+                256,
+                160
+              ],
+              "originAuthority": "production-c-rdx-trigger+same-run-classic-envelope",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  235,
+                  138
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  256,
+                  160
+                ],
+                "pn": 31,
+                "visible": true,
+                "visualState": "active"
+              },
+              "snapshot": {
+                "draw": [
+                  235,
+                  138
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  256,
+                  160
+                ],
+                "pn": 33,
+                "renderOrder": 2,
+                "visible": true,
+                "visualState": "dormant"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                248,
+                203
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "classic-type3+rdx-rom-pa-pn",
+            "baseline": {
+              "origin": [
+                264,
+                224
+              ],
+              "runtimeDraw": [
+                249,
+                200
+              ],
+              "runtimeOrigin": [
+                264,
+                224
+              ],
+              "visualAnchor": [
+                249,
+                200
+              ]
+            },
+            "class": "shooter",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 14,
+                "key": "rdx:MD0025:actor:14:spawn:4:shooter-body",
+                "owner": "rdx",
+                "pn": 17,
+                "role": "shooter-body",
+                "sourceKey": "rdx:MD0025:actor:14:spawn:4"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 56
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                248,
+                203
+              ],
+              "presentationOrigin": [
+                264,
+                224
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                249,
+                200
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "xrick entity 0x38 is the stationary scripted body paired with hostile projectile entity 0x39",
+              "RDX actor 0x0E / PN17 is the matching Castle/Missile gun in MD0025, MD0031, and MD0046",
+              "PN17 native presentation resolves its reviewed origin to a 15x24 visual anchor for this family",
+              "PN14 ROM artwork requires the family directional mirror when travelling left"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "projectile-shooter-body",
+            "groupId": "sm14:mark:244",
+            "implementationDisposition": null,
+            "mounting": "wall-mounted",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 14,
+              "familyMappingId": "castle-missile-classic-38-39-gun",
+              "layer": "normal",
+              "mirrorPolicy": "native-topology",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 17,
+                "snapshot": 17
+              },
+              "provenance": "classic-type3+rdx-rom-pa-pn"
+            },
+            "previewStateCycle": null,
+            "projectileEmitter": {
+              "actorId": 14,
+              "authority": "classic-type3+rdx-rom-pa-pn",
+              "direction": "left",
+              "familyId": "castle-missile-classic-38-39-gun",
+              "linked": true,
+              "nativeLink": false,
+              "origin": [
+                264,
+                224
+              ],
+              "projectileMirrorX": true,
+              "projectileMirrorY": false,
+              "projectilePn": 14,
+              "provenance": "castle-missile-classic-38-39-gun shared Castle/Missile shooter topology",
+              "spawnIndex": 4
+            },
+            "projectileEmitterResolved": {
+              "actorId": 14,
+              "authority": "classic-type3+rdx-rom-pa-pn",
+              "bodyOffset": [
+                0,
+                0
+              ],
+              "cadence": {
+                "activationMode": "native-xrick-projectile-state",
+                "authority": "native-xrick-projectile-state",
+                "speedPxPerUpdate": 8
+              },
+              "corrections": [
+                "explicit-emitter-link",
+                "emitter-mouth-offset",
+                "presentation-only-projectile-projection",
+                "native-displacement-preserved"
+              ],
+              "direction": "left",
+              "familyId": "castle-missile-classic-38-39-gun",
+              "linked": true,
+              "mouth": [
+                253,
+                217
+              ],
+              "muzzleOffset": [
+                -11,
+                -7
+              ],
+              "nativeDisplacementPreserved": true,
+              "nativeLink": false,
+              "origin": [
+                264,
+                224
+              ],
+              "projectileMirrorX": true,
+              "projectileMirrorY": false,
+              "projectilePn": 14,
+              "projectionPolicy": {
+                "collision": "classic-c-5x3-projectile-core",
+                "motion": "native-displacement-preserved",
+                "presentation": "emitter-mouth-offset"
+              },
+              "provenance": "castle-missile-classic-38-39-gun shared Castle/Missile shooter topology",
+              "spawnIndex": 4
+            },
+            "projectileShooterFamily": {
+              "actorId": 14,
+              "id": "castle-missile-classic-38-39-gun",
+              "projectilePn": 14,
+              "role": "body",
+              "spawnIndex": 4
+            },
+            "projectileTopologyResolved": {
+              "bodySourceKey": "mark:244",
+              "emitter": {
+                "actorId": 14,
+                "authority": "classic-type3+rdx-rom-pa-pn",
+                "bodyOffset": [
+                  0,
+                  0
+                ],
+                "cadence": {
+                  "activationMode": "native-xrick-projectile-state",
+                  "authority": "native-xrick-projectile-state",
+                  "speedPxPerUpdate": 8
+                },
+                "corrections": [
+                  "explicit-emitter-link",
+                  "emitter-mouth-offset",
+                  "presentation-only-projectile-projection",
+                  "native-displacement-preserved"
+                ],
+                "direction": "left",
+                "familyId": "castle-missile-classic-38-39-gun",
+                "linked": true,
+                "mouth": [
+                  253,
+                  217
+                ],
+                "muzzleOffset": [
+                  -11,
+                  -7
+                ],
+                "nativeDisplacementPreserved": true,
+                "nativeLink": false,
+                "origin": [
+                  264,
+                  224
+                ],
+                "projectileMirrorX": true,
+                "projectileMirrorY": false,
+                "projectilePn": 14,
+                "projectionPolicy": {
+                  "collision": "classic-c-5x3-projectile-core",
+                  "motion": "native-displacement-preserved",
+                  "presentation": "emitter-mouth-offset"
+                },
+                "provenance": "castle-missile-classic-38-39-gun shared Castle/Missile shooter topology",
+                "spawnIndex": 4
+              },
+              "lane": {
+                "authority": "native-displacement-preserved",
+                "collisionSize": [
+                  5,
+                  3
+                ],
+                "direction": "left",
+                "endpointPolicy": "room-edge",
+                "projectileMirrorX": true,
+                "projectileMirrorY": false,
+                "projectilePn": 14,
+                "speedPxPerUpdate": 8
+              },
+              "logicalShooterSemanticId": "SM14.actor.mark-244",
+              "nativeProjectileSourceKeys": [
+                "mark:245"
+              ],
+              "shooter": {
+                "actorId": 14,
+                "authority": "canonical-static-projectile-shooter",
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  264,
+                  224
+                ],
+                "pn": 17,
+                "sourceActorId": 14,
+                "spawnIndex": 4
+              },
+              "topologyRole": "logical-shooter"
+            },
+            "relationships": [],
+            "semanticId": "SM14.actor.mark-244",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 56,
+                "flags": 0,
+                "h": 21,
+                "mark": 244,
+                "sprbase": 83,
+                "sprite": 83,
+                "spriteSequence": {
+                  "active": [
+                    71,
+                    72
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 115
+                },
+                "triggerBounds": [
+                  200,
+                  235,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 200,
+                "y": 235
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-244",
+            "sources": {
+              "classic": {
+                "entity": 56,
+                "mark": 244,
+                "ref": "classic:SM14:mark:244",
+                "slot": 6
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:244",
+                "sourceKey": "mark:244"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                248,
+                203
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  249,
+                  200
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  264,
+                  224
+                ],
+                "pn": 17,
+                "visible": true,
+                "visualState": "stationary-shooter"
+              },
+              "snapshot": {
+                "draw": [
+                  249,
+                  200
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  264,
+                  224
+                ],
+                "pn": 17,
+                "renderOrder": 3,
+                "visible": true,
+                "visualState": "stationary-shooter"
+              }
+            },
+            "staticReplacement": {
+              "actorId": 14,
+              "confidence": 3,
+              "pn": 17,
+              "provenance": "castle-missile-classic-38-39-gun body identity verified against RDX actor 14/PN17",
+              "rdxX": 264,
+              "rdxY": 224,
+              "spawnIndex": 4,
+              "xrickX": 200,
+              "xrickY": 235
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                240,
+                219
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "classic-rdx-ladder-local-mask",
+              "bomb": false,
+              "rect": [
+                72,
+                195,
+                128,
+                32
+              ],
+              "regionId": "SM14.whole-room",
+              "semanticOffset": [
+                -8,
+                0
+              ],
+              "sourceRect": [
+                32,
+                227,
+                128,
+                32
+              ]
+            },
+            "authority": "classic-type3+rdx-rom-pa-pn",
+            "baseline": {
+              "runtimeDraw": [
+                192,
+                251
+              ],
+              "visualAnchor": [
+                192,
+                251
+              ]
+            },
+            "class": "projectile",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "child:mark:245:actor:0:front:0:projectile:trigger:245",
+                "owner": "rdx",
+                "pn": 14,
+                "role": "projectile",
+                "sourceKey": "mark:245"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 57
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                240,
+                219
+              ],
+              "presentationOrigin": [
+                240,
+                219
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                72,
+                195,
+                128,
+                32
+              ],
+              "visualAnchor": [
+                192,
+                251
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "xrick entity 0x38 is the stationary scripted body paired with hostile projectile entity 0x39",
+              "RDX actor 0x0E / PN17 is the matching Castle/Missile gun in MD0025, MD0031, and MD0046",
+              "PN17 native presentation resolves its reviewed origin to a 15x24 visual anchor for this family",
+              "PN14 ROM artwork requires the family directional mirror when travelling left"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "projectile-emitter-child",
+            "groupId": "sm14:mark:245",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "familyMappingId": "castle-missile-classic-38-39-gun",
+              "layer": "normal",
+              "mirrorPolicy": "native-topology",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 14,
+                "snapshot": 14
+              },
+              "provenance": "classic-type3+rdx-rom-pa-pn"
+            },
+            "previewStateCycle": null,
+            "projectileEmitter": {
+              "actorId": 14,
+              "authority": "classic-type3+rdx-rom-pa-pn",
+              "direction": "left",
+              "familyId": "castle-missile-classic-38-39-gun",
+              "linked": true,
+              "nativeLink": true,
+              "origin": [
+                264,
+                224
+              ],
+              "projectileMirrorX": true,
+              "projectileMirrorY": false,
+              "projectilePn": 14,
+              "provenance": "castle-missile-classic-38-39-gun shared Castle/Missile shooter topology",
+              "spawnIndex": 4
+            },
+            "projectileEmitterResolved": {
+              "actorId": 14,
+              "authority": "classic-type3+rdx-rom-pa-pn",
+              "bodyOffset": [
+                0,
+                0
+              ],
+              "cadence": {
+                "activationMode": "native-xrick-projectile-state",
+                "authority": "native-xrick-projectile-state",
+                "speedPxPerUpdate": 8
+              },
+              "corrections": [
+                "explicit-emitter-link",
+                "emitter-mouth-offset",
+                "presentation-only-projectile-projection",
+                "native-displacement-preserved"
+              ],
+              "direction": "left",
+              "familyId": "castle-missile-classic-38-39-gun",
+              "linked": true,
+              "mouth": [
+                253,
+                217
+              ],
+              "muzzleOffset": [
+                -11,
+                -7
+              ],
+              "nativeDisplacementPreserved": true,
+              "nativeLink": true,
+              "origin": [
+                264,
+                224
+              ],
+              "projectileMirrorX": true,
+              "projectileMirrorY": false,
+              "projectilePn": 14,
+              "projectionPolicy": {
+                "collision": "classic-c-5x3-projectile-core",
+                "motion": "native-displacement-preserved",
+                "presentation": "emitter-mouth-offset"
+              },
+              "provenance": "castle-missile-classic-38-39-gun shared Castle/Missile shooter topology",
+              "spawnIndex": 4
+            },
+            "projectileShooterFamily": {
+              "actorId": 14,
+              "id": "castle-missile-classic-38-39-gun",
+              "projectilePn": 14,
+              "role": "projectile-child",
+              "spawnIndex": 4
+            },
+            "projectileTopologyResolved": {
+              "bodySourceKey": "mark:244",
+              "emitter": {
+                "actorId": 14,
+                "authority": "classic-type3+rdx-rom-pa-pn",
+                "bodyOffset": [
+                  0,
+                  0
+                ],
+                "cadence": {
+                  "activationMode": "native-xrick-projectile-state",
+                  "authority": "native-xrick-projectile-state",
+                  "speedPxPerUpdate": 8
+                },
+                "corrections": [
+                  "explicit-emitter-link",
+                  "emitter-mouth-offset",
+                  "presentation-only-projectile-projection",
+                  "native-displacement-preserved"
+                ],
+                "direction": "left",
+                "familyId": "castle-missile-classic-38-39-gun",
+                "linked": true,
+                "mouth": [
+                  253,
+                  217
+                ],
+                "muzzleOffset": [
+                  -11,
+                  -7
+                ],
+                "nativeDisplacementPreserved": true,
+                "nativeLink": true,
+                "origin": [
+                  264,
+                  224
+                ],
+                "projectileMirrorX": true,
+                "projectileMirrorY": false,
+                "projectilePn": 14,
+                "projectionPolicy": {
+                  "collision": "classic-c-5x3-projectile-core",
+                  "motion": "native-displacement-preserved",
+                  "presentation": "emitter-mouth-offset"
+                },
+                "provenance": "castle-missile-classic-38-39-gun shared Castle/Missile shooter topology",
+                "spawnIndex": 4
+              },
+              "lane": {
+                "authority": "native-displacement-preserved",
+                "collisionSize": [
+                  5,
+                  3
+                ],
+                "direction": "left",
+                "endpointPolicy": "room-edge",
+                "projectileMirrorX": true,
+                "projectileMirrorY": false,
+                "projectilePn": 14,
+                "speedPxPerUpdate": 8
+              },
+              "logicalShooterSemanticId": "SM14.actor.mark-244",
+              "nativeProjectileSourceKeys": [
+                "mark:245"
+              ],
+              "shooter": {
+                "actorId": 14,
+                "authority": "canonical-static-projectile-shooter",
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  264,
+                  224
+                ],
+                "pn": 17,
+                "sourceActorId": 14,
+                "spawnIndex": 4
+              },
+              "topologyRole": "native-projectile-carrier"
+            },
+            "relationships": [],
+            "semanticId": "SM14.projectile.mark-245",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 57,
+                "flags": 140,
+                "h": 8,
+                "mark": 245,
+                "sprbase": 87,
+                "sprite": 87,
+                "spriteSequence": {
+                  "active": [
+                    116
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 0
+                },
+                "triggerBounds": [
+                  32,
+                  227,
+                  128,
+                  32
+                ],
+                "w": 16,
+                "x": 192,
+                "y": 251
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-245",
+            "sources": {
+              "classic": {
+                "entity": 57,
+                "mark": 245,
+                "ref": "classic:SM14:mark:245",
+                "slot": 7
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:245",
+                "sourceKey": "mark:245"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                192,
+                251
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  184,
+                  251
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": null,
+                "pn": 14,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  192,
+                  251
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": null,
+                "pn": 14,
+                "renderOrder": 4,
+                "visible": false,
+                "visualState": "snapshot"
+              }
+            },
+            "triggerSemantics": {
+              "dx": -8,
+              "dy": 0,
+              "placementAuthority": "classic-rdx-ladder-local-mask",
+              "provenance": "2026-08-26 deterministic Classic-to-RDX ladder-local-mask placement: preserve the authored activator relationship to the corresponding RDX ladder/mechanism instead of applying a generic nearby-corridor fit."
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                160,
+                315
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": true,
+              "rect": [
+                144,
+                339,
+                32,
+                32
+              ],
+              "regionId": "SM14.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                96,
+                371,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-runtime",
+            "baseline": {
+              "runtimeDraw": [
+                160,
+                315
+              ],
+              "visualAnchor": [
+                160,
+                315
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": null,
+                "key": "fallback:mark:246",
+                "owner": "classic",
+                "pn": null,
+                "role": "actor",
+                "sourceKey": "mark:246"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 54
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                160,
+                315
+              ],
+              "presentationOrigin": [
+                160,
+                315
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                144,
+                339,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                160,
+                315
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": {
+              "policy": "explicit-classic-fallback",
+              "reason": "production-renderer-no-drawable-rdx-plan"
+            },
+            "family": "role-actor",
+            "groupId": "sm14:mark:246",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": null,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "classic-fallback",
+              "pnByState": {
+                "simulated": null,
+                "snapshot": null
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM14.actor.mark-246",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 54,
+                "flags": 17,
+                "h": 16,
+                "mark": 246,
+                "sprbase": 75,
+                "sprite": 75,
+                "spriteSequence": {
+                  "active": [
+                    0,
+                    0
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 113
+                },
+                "triggerBounds": [
+                  96,
+                  371,
+                  32,
+                  32
+                ],
+                "w": 18,
+                "x": 112,
+                "y": 347
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-246",
+            "sources": {
+              "classic": {
+                "entity": 54,
+                "mark": 246,
+                "ref": "classic:SM14:mark:246",
+                "slot": 8
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:246",
+                "sourceKey": "mark:246"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                160,
+                315
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  160,
+                  315
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  160,
+                  315
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "renderOrder": 6,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                160,
+                336
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": true,
+              "rect": [
+                144,
+                339,
+                32,
+                32
+              ],
+              "regionId": "SM14.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                96,
+                371,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-runtime",
+            "baseline": {
+              "runtimeDraw": [
+                160,
+                336
+              ],
+              "visualAnchor": [
+                160,
+                336
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": null,
+                "key": "fallback:mark:247",
+                "owner": "classic",
+                "pn": null,
+                "role": "actor",
+                "sourceKey": "mark:247"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 55
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                160,
+                336
+              ],
+              "presentationOrigin": [
+                160,
+                336
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                144,
+                339,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                160,
+                336
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": {
+              "policy": "explicit-classic-fallback",
+              "reason": "production-renderer-no-drawable-rdx-plan"
+            },
+            "family": "role-actor",
+            "groupId": "sm14:mark:247",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": null,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "classic-fallback",
+              "pnByState": {
+                "simulated": null,
+                "snapshot": null
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM14.actor.mark-247",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 55,
+                "flags": 31,
+                "h": 16,
+                "mark": 247,
+                "sprbase": 79,
+                "sprite": 79,
+                "spriteSequence": {
+                  "active": [
+                    0,
+                    0
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 114
+                },
+                "triggerBounds": [
+                  96,
+                  371,
+                  32,
+                  32
+                ],
+                "w": 18,
+                "x": 112,
+                "y": 368
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-247",
+            "sources": {
+              "classic": {
+                "entity": 55,
+                "mark": 247,
+                "ref": "classic:SM14:mark:247",
+                "slot": 0
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:247",
+                "sourceKey": "mark:247"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                160,
+                336
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  160,
+                  336
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  160,
+                  336
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "renderOrder": 7,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                256,
+                299
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                272,
+                320
+              ],
+              "runtimeDraw": [
+                259,
+                295
+              ],
+              "runtimeOrigin": [
+                272,
+                320
+              ],
+              "visualAnchor": [
+                259,
+                295
+              ]
+            },
+            "class": "enemy",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:248:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 112,
+                "role": "enemy",
+                "sourceKey": "mark:248"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 12
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                256,
+                299
+              ],
+              "presentationOrigin": [
+                272,
+                320
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                259,
+                295
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-enemy",
+            "groupId": "sm14:mark:248",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 112,
+                "snapshot": 112
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM14.enemy.mark-248",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 12,
+                "flags": 0,
+                "h": 21,
+                "mark": 248,
+                "sprbase": 65,
+                "sprite": 65,
+                "w": 24,
+                "x": 208,
+                "y": 331
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-mark-248",
+            "sources": {
+              "classic": {
+                "entity": 12,
+                "mark": 248,
+                "ref": "classic:SM14:mark:248",
+                "slot": 9
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:mark:248",
+                "sourceKey": "mark:248"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                259,
+                295
+              ],
+              "baseOrigin": [
+                272,
+                320
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  259,
+                  295
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  272,
+                  320
+                ],
+                "pn": 112,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  259,
+                  295
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  272,
+                  320
+                ],
+                "pn": 112,
+                "renderOrder": 5,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM14.whole-room",
+              "origin": [
+                64,
+                43
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                75,
+                127
+              ],
+              "runtimeDraw": [
+                63,
+                103
+              ],
+              "runtimeOrigin": [
+                75,
+                127
+              ],
+              "visualAnchor": [
+                63,
+                103
+              ]
+            },
+            "class": "player",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 93,
+                "key": "player",
+                "owner": "rdx",
+                "pn": 99,
+                "role": "player",
+                "sourceKey": "player"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 1
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                64,
+                43
+              ],
+              "presentationOrigin": [
+                75,
+                127
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                63,
+                103
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-player",
+            "groupId": "sm14:player",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "playerEntry": {
+              "alignedEntityOrigin": [
+                64,
+                43
+              ],
+              "authority": "xrick-map_maps-direct-entry+rick-bottom-centre-contact",
+              "classicEntityOrigin": [
+                16,
+                75
+              ],
+              "phaseZeroAuthority": true,
+              "phaseZeroMode": "xrick-direct-entry",
+              "rdxInitializerCount": 1,
+              "rdxInitializerExpectedOrigin": [
+                72,
+                64
+              ],
+              "rdxInitializerOrigin": [
+                72,
+                64
+              ],
+              "rdxInitializerRole": "same-contact-initializer",
+              "rdxInitializerSourceRef": "rdx:MD0025:actor:93:spawn:0",
+              "sourceAgreement": "exact",
+              "worldContact": [
+                75,
+                63
+              ]
+            },
+            "presentation": {
+              "actorId": 93,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 99,
+                "snapshot": 99
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM14.player.player",
+            "sourceEvidence": {
+              "classic": {
+                "authority": "xrick-map_maps-direct-entry",
+                "entity": 1,
+                "mark": 0,
+                "role": "player",
+                "slot": 1,
+                "sourceKey": "player",
+                "sprite": 1,
+                "x": 16,
+                "y": 75
+              }
+            },
+            "sourceRecordId": "source-sm14-md0025-player",
+            "sources": {
+              "classic": {
+                "entity": 1,
+                "mark": 0,
+                "ref": "classic:SM14:player",
+                "slot": 1
+              },
+              "rdx": {
+                "mapId": 25,
+                "ref": "rdx:MD0025:player",
+                "sourceKey": "player"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                63,
+                103
+              ],
+              "baseOrigin": [
+                75,
+                127
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  63,
+                  103
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  75,
+                  127
+                ],
+                "pn": 99,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  63,
+                  103
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  75,
+                  127
+                ],
+                "pn": 99,
+                "renderOrder": 0,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          }
+        ],
+        "reviewedCorrections": [],
+        "schema": "rdr.semantic_corpus_resolved.v1",
+        "terrainHazards": []
+      },
+      "source": {
+        "classic": {
+          "fingerprint": "756c3602322778645b56bb319e570cdf565bdfff628caa2a29a0ddc3d19eb81a",
+          "playerStart": {
+            "sprite": 1,
+            "x": 16,
+            "y": 75
+          },
+          "ref": "static/levels/classic/source.json",
+          "shapeTiles": [
+            56,
+            32
+          ],
+          "startRow": 24,
+          "submap": 20,
+          "submapName": "SM14",
+          "transitions": {
+            "connectors": [
+              {
+                "connectorId": "xrick-connect-60",
+                "connectorIndex": 60,
+                "direction": "left",
+                "rowin": 0,
+                "rowout": 32,
+                "targetSubmap": 255
+              },
+              {
+                "connectorId": "xrick-connect-61",
+                "connectorIndex": 61,
+                "direction": "right",
+                "rowin": 24,
+                "rowout": 64,
+                "targetSubmap": 21
+              }
+            ]
+          }
+        },
+        "rdx": {
+          "actors": [
+            {
+              "actorId": 93,
+              "index": 0,
+              "offset": 0,
+              "sourceRef": "rdx:MD0025:actor:93:spawn:0",
+              "x": 72,
+              "y": 64
+            },
+            {
+              "actorId": 34,
+              "index": 1,
+              "offset": 28,
+              "sourceRef": "rdx:MD0025:actor:34:spawn:1",
+              "x": 168,
+              "y": 349
+            },
+            {
+              "actorId": 107,
+              "index": 2,
+              "offset": 56,
+              "sourceRef": "rdx:MD0025:actor:107:spawn:2",
+              "x": 216,
+              "y": 352
+            },
+            {
+              "actorId": 32,
+              "index": 3,
+              "offset": 84,
+              "sourceRef": "rdx:MD0025:actor:32:spawn:3",
+              "x": 249,
+              "y": 64
+            },
+            {
+              "actorId": 14,
+              "index": 4,
+              "offset": 112,
+              "sourceRef": "rdx:MD0025:actor:14:spawn:4",
+              "x": 264,
+              "y": 224
+            }
+          ],
+          "dimensions": {
+            "cellHeight": 26,
+            "cellWidth": 20,
+            "height": 416,
+            "width": 320
+          },
+          "fingerprint": "b3e2e93761d5ba054afe56d2b9f574ecaed3219a3b28757b5be1523446bff17f",
+          "logicRef": "static/collision/rooms/MD0025.json",
+          "mapId": 25,
+          "mapName": "MD0025",
+          "ref": "static/levels/rdx/source.json",
+          "shapeTiles": [
+            52,
+            40
+          ],
+          "visualAuthority": "decoded-rom-plane-a+b"
+        }
+      },
+      "structuralCorrections": {
+        "operations": [
+          {
+            "action": "exit",
+            "authority": "xrick-connector+rdx-ml20-reviewed",
+            "contactRow": 64,
+            "direction": "right",
+            "g8Bounds": [
+              38,
+              38,
+              2,
+              2
+            ],
+            "id": "sm14-right-exit-row40",
+            "reason": "Bind the existing right-side ML20 contact to xrick row 0x40 so the first-ladder route chains to SM15 without deriving connector identity from a mismatched viewport phase.",
+            "rowIn": 24,
+            "sourceKey": "rdx:MD0025:logic:20:20",
+            "targetSubmap": 21,
+            "type": "gameplay-cell-override"
+          }
+        ],
+        "schema": "rdr.structural_corrections_resolved.v1"
+      }
+    },
+    "mapId": 25,
+    "mapName": "MD0025",
+    "provenance": {
+      "migrationStatus": "canonical-layered"
+    },
+    "submap": 20,
+    "transitions": {
+      "connectors": [
+        {
+          "alignmentRegionId": "SM14.whole-room",
+          "classicPosition": [
+            0,
+            64
+          ],
+          "connectorId": "xrick-connect-60",
+          "connectorIndex": 60,
+          "contactSource": "classic-projection",
+          "direction": "left",
+          "rdxPosition": [
+            48,
+            32
+          ],
+          "rowin": 0,
+          "rowout": 32,
+          "sourceRef": "classic:left:row:32",
+          "status": "projected",
+          "targetSubmap": 255
+        },
+        {
+          "connectorId": "xrick-connect-61",
+          "connectorIndex": 61,
+          "contactSource": "reviewed-layer-d",
+          "direction": "right",
+          "rdxBounds": [
+            304,
+            304,
+            16,
+            16
+          ],
+          "rdxPosition": [
+            312,
+            312
+          ],
+          "rowin": 24,
+          "rowout": 64,
+          "sourceRef": "sm14-right-exit-row40",
+          "status": "reviewed",
+          "targetSubmap": 21
+        }
+      ],
+      "schema": "rdr.native_transitions_resolved.v1"
+    }
+  },
+  "schema": "rdr.resolved_level_room.v2",
+  "version": "2.1.104"
+}

@@ -1,0 +1,1643 @@
+{
+  "schema": "rdx.trap_action_inventory.v1",
+  "version": "0.15.5-rdx-audit-preview-fix",
+  "generatedFrom": {
+    "generator": {
+      "file": "tools/rdx/generate_trap_inventory.mjs",
+      "sha256": "d9e07e86d6e3c509149dd0560d942464a67a76077f809a9c404a7e7a343c138f"
+    },
+    "spriteAnims": {
+      "file": "web/rdx/data/sprite_anims.json",
+      "sha256": "7dead72e72a789d30f800a76624fecd964120374398af4defa47237a99299aa0"
+    },
+    "semanticMapping": {
+      "file": "web/rdx/data/rd_asset_mapping_v1.json",
+      "sha256": "15ac6504bfa173ba4eab7295e626d9180058f6c239ff1109d10c44a2e2346b6d"
+    },
+    "assetEvidence": {
+      "file": "docs/release-polish/ASSET_EVIDENCE.json",
+      "sha256": "c4d1a8d3b936c34b1a1777c7f8258f012637d8f0e507b22f8d9ab5bee83b65c2"
+    }
+  },
+  "rules": {
+    "noUnclassifiedActiveTrap": true,
+    "activeTrapMustProduceVisibleEffect": true,
+    "unresolvedMappingPolicy": "visible diagnostic or explicit classic fallback",
+    "candidatesDoNotOverrideVerifiedFacts": true
+  },
+  "verifiedFacts": [
+    {
+      "id": "rdx_actor_72_default",
+      "status": "verified-rom-derived",
+      "actorId": 114,
+      "actorHex": "0x72",
+      "defaultPn": 66,
+      "defaultPnHex": "0x42",
+      "role": "boulder_object_static",
+      "separateAnimationPn": 18,
+      "separateAnimationPnHex": "0x12",
+      "notes": "PA default and curated boulder rolling sequence are distinct."
+    },
+    {
+      "id": "rdx_actor_56_default",
+      "status": "verified-rom-derived",
+      "actorId": 86,
+      "actorHex": "0x56",
+      "defaultPn": 85,
+      "defaultPnHex": "0x55",
+      "role": "jungle_creature_trap_or_rubble_visual",
+      "notes": "Production links this actor to entity 0x2e only for the confirmed MD0006 rubble lifecycle."
+    },
+    {
+      "id": "rdx_actor_4c_default",
+      "status": "verified-rom-derived",
+      "actorId": 76,
+      "actorHex": "0x4c",
+      "defaultPn": 74,
+      "defaultPnHex": "0x4a",
+      "role": "castle_short_floor_trap",
+      "notes": "Current sidecar introduces the actor in MD0034."
+    }
+  ],
+  "candidates": [
+    {
+      "id": "entity_2e_destroyed_state_pn_052_056_058",
+      "status": "candidate-unverified",
+      "classicEntities": [
+        46
+      ],
+      "candidateActorIds": [
+        86
+      ],
+      "candidatePnLabels": [
+        "pn_052",
+        "pn_056",
+        "pn_058"
+      ],
+      "question": "Are these level-dependent active/destroyed state PNs, decimal/hex naming mismatches, or unrelated rows?"
+    },
+    {
+      "id": "entity_2c_30_48_to_actor_72",
+      "status": "candidate-partially-supported",
+      "classicEntities": [
+        44,
+        48,
+        72
+      ],
+      "candidateActorIds": [
+        114
+      ],
+      "question": "Which classic entity variants use actor 0x72 static PN66 versus rolling PN18, and in which rooms?"
+    },
+    {
+      "id": "entity_27_to_actor_4c",
+      "status": "candidate-unverified",
+      "classicEntities": [
+        39
+      ],
+      "candidateActorIds": [
+        76
+      ],
+      "question": "Is this a global mapping, a Castle-only mapping, or a visual similarity without behavior equivalence?"
+    }
+  ],
+  "coverage": {
+    "rows": 50,
+    "classifications": {
+      "flying hazard": 1,
+      "moving platform/object": 6,
+      "explosive/removable blocker": 2,
+      "static hazard": 7,
+      "visual-only decoration": 4,
+      "falling/ejected hazard": 2,
+      "wall/floor emitter": 2,
+      "scripted multi-frame trap": 13,
+      "explicit classic fallback": 13
+    },
+    "unclassified": 0,
+    "visibleEffectGuaranteed": 50
+  },
+  "rows": [
+    {
+      "id": "bat",
+      "displayName": "MD0006 Jungle — bat",
+      "type": "trap",
+      "actorIds": [
+        12
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 6
+      },
+      "tags": [
+        "jungle",
+        "bat",
+        "flying",
+        "trap"
+      ],
+      "classification": "flying hazard",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 15,
+          "confidence": "high"
+        },
+        {
+          "action": "flying",
+          "direction": "neutral",
+          "pn": 16,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "boulder_object",
+      "displayName": "MD0006 Jungle — boulder/object",
+      "type": "trap",
+      "actorIds": [
+        114,
+        118
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 9
+      },
+      "tags": [
+        "jungle",
+        "boulder",
+        "trap"
+      ],
+      "classification": "moving platform/object",
+      "effectStrategy": "trajectory-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "neutral",
+          "pn": 18,
+          "confidence": "high"
+        },
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 66,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "castle_barrel_roll",
+      "displayName": "MD0033 Castle — barrel roll trap",
+      "type": "trap",
+      "actorIds": [
+        109,
+        111
+      ],
+      "introducedAt": {
+        "mapId": 33,
+        "mapName": "MD0033",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "castle",
+        "trap",
+        "barrel",
+        "directional"
+      ],
+      "classification": "moving platform/object",
+      "effectStrategy": "trajectory-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "right",
+          "pn": 114,
+          "confidence": "high"
+        },
+        {
+          "action": "roll",
+          "direction": "left",
+          "pn": 115,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "castle_door_static_objects",
+      "displayName": "MD0025 Castle — tall door/coffin-like objects",
+      "type": "object",
+      "actorIds": [
+        34,
+        36
+      ],
+      "introducedAt": {
+        "mapId": 25,
+        "mapName": "MD0025",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "castle",
+        "missile_base",
+        "object"
+      ],
+      "classification": "explosive/removable blocker",
+      "effectStrategy": "destroy-restore-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 34,
+          "confidence": "low"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 35,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "castle_short_floor_trap",
+      "displayName": "MD0034 Castle — short floor trap",
+      "type": "trap",
+      "actorIds": [
+        76
+      ],
+      "introducedAt": {
+        "mapId": 34,
+        "mapName": "MD0034",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "castle",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 74,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "castle_small_crawl_creature",
+      "displayName": "MD0031 Castle — small crawl/creature object",
+      "type": "trap",
+      "actorIds": [
+        48
+      ],
+      "introducedAt": {
+        "mapId": 31,
+        "mapName": "MD0031",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "castle",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 46,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "castle_static_objects",
+      "displayName": "MD0025 Castle — static single-frame objects",
+      "type": "object",
+      "actorIds": [
+        14,
+        88,
+        110,
+        113
+      ],
+      "introducedAt": {
+        "mapId": 25,
+        "mapName": "MD0025",
+        "levelGroup": "castle",
+        "levelLabel": "Castle",
+        "spawnIndex": 4
+      },
+      "tags": [
+        "castle",
+        "object"
+      ],
+      "classification": "explosive/removable blocker",
+      "effectStrategy": "destroy-restore-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 17,
+          "confidence": "low"
+        },
+        {
+          "action": "rubble",
+          "direction": "neutral",
+          "pn": 87,
+          "confidence": "low"
+        },
+        {
+          "action": "round_object",
+          "direction": "neutral",
+          "pn": 116,
+          "confidence": "low"
+        },
+        {
+          "action": "red_block",
+          "direction": "neutral",
+          "pn": 118,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "egypt_block_hazard",
+      "displayName": "MD0018 Egypt — block/hazard directional pair",
+      "type": "trap",
+      "actorIds": [
+        16,
+        17,
+        18
+      ],
+      "introducedAt": {
+        "mapId": 18,
+        "mapName": "MD0018",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "egypt",
+        "trap",
+        "directional"
+      ],
+      "classification": "moving platform/object",
+      "effectStrategy": "trajectory-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "move",
+          "direction": "right",
+          "pn": 19,
+          "confidence": "medium"
+        },
+        {
+          "action": "move",
+          "direction": "left",
+          "pn": 20,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "egypt_gem_orb_object",
+      "displayName": "MD0016 Egypt — gem/orb-like object",
+      "type": "object",
+      "actorIds": [
+        57
+      ],
+      "introducedAt": {
+        "mapId": 16,
+        "mapName": "MD0016",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 4
+      },
+      "tags": [
+        "egypt",
+        "object"
+      ],
+      "classification": "visual-only decoration",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 53,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "egypt_long_floor_hazard",
+      "displayName": "MD0013 Egypt — long floor hazard",
+      "type": "trap",
+      "actorIds": [
+        115,
+        117
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 4
+      },
+      "tags": [
+        "egypt",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 22,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 23,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "egypt_small_creatures",
+      "displayName": "MD0013 Egypt — small creature/hazards",
+      "type": "trap",
+      "actorIds": [
+        49,
+        50
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 0
+      },
+      "tags": [
+        "egypt",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 47,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 48,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "egypt_tomb_hazard",
+      "displayName": "MD0013 Egypt — tomb/sarcophagus hazard",
+      "type": "trap",
+      "actorIds": [
+        27
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 2
+      },
+      "tags": [
+        "egypt",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 26,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "floor_spike_traps",
+      "displayName": "MD0006 Jungle — floor spike traps",
+      "type": "trap",
+      "actorIds": [
+        81,
+        83,
+        80
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 8
+      },
+      "tags": [
+        "trap",
+        "spikes"
+      ],
+      "classification": "falling/ejected hazard",
+      "effectStrategy": "eject-retract-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 77,
+          "confidence": "high"
+        },
+        {
+          "action": "idle_wide",
+          "direction": "neutral",
+          "pn": 81,
+          "confidence": "high"
+        },
+        {
+          "action": "idle_castle",
+          "direction": "neutral",
+          "pn": 79,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "jungle_creature_trap",
+      "displayName": "MD0006 Jungle — creature/trap",
+      "type": "trap",
+      "actorIds": [
+        86
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 10
+      },
+      "tags": [
+        "jungle",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 85,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "jungle_egypt_small_object",
+      "displayName": "MD0006 Jungle — falling dagger bank",
+      "type": "trap",
+      "actorIds": [
+        85
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "jungle",
+        "dagger",
+        "falling",
+        "trap"
+      ],
+      "classification": "falling/ejected hazard",
+      "effectStrategy": "falling-drop-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 84,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "jungle_floor_plant_hazard",
+      "displayName": "MD0004 Jungle — small floor/plant hazard",
+      "type": "trap",
+      "actorIds": [
+        51,
+        52,
+        53,
+        54
+      ],
+      "introducedAt": {
+        "mapId": 4,
+        "mapName": "MD0004",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "jungle",
+        "trap",
+        "hazard"
+      ],
+      "classification": "wall/floor emitter",
+      "effectStrategy": "emitter-projectile-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 49,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 50,
+          "confidence": "medium"
+        },
+        {
+          "action": "projectile",
+          "direction": "neutral",
+          "pn": 11,
+          "confidence": "high"
+        },
+        {
+          "action": "projectile_variant",
+          "direction": "neutral",
+          "pn": 12,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "jungle_idol_object",
+      "displayName": "MD0004 Jungle — golden idol/object",
+      "type": "object",
+      "actorIds": [
+        28
+      ],
+      "introducedAt": {
+        "mapId": 4,
+        "mapName": "MD0004",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "jungle",
+        "object"
+      ],
+      "classification": "visual-only decoration",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 27,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "jungle_theme_flying_trap",
+      "displayName": "MD0006 Jungle — flying/rolling trap object",
+      "type": "trap",
+      "actorIds": [
+        70
+      ],
+      "introducedAt": {
+        "mapId": 6,
+        "mapName": "MD0006",
+        "levelGroup": "south_america",
+        "levelLabel": "Jungle",
+        "spawnIndex": 11
+      },
+      "tags": [
+        "jungle",
+        "missile_base",
+        "trap"
+      ],
+      "classification": "moving platform/object",
+      "effectStrategy": "trajectory-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "move",
+          "direction": "neutral",
+          "pn": 67,
+          "confidence": "medium"
+        },
+        {
+          "action": "move_variant",
+          "direction": "neutral",
+          "pn": 68,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "missile_crate_platform",
+      "displayName": "MD0046 Missile Base — crate/platform hazard",
+      "type": "trap",
+      "actorIds": [
+        66
+      ],
+      "introducedAt": {
+        "mapId": 46,
+        "mapName": "MD0046",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 5
+      },
+      "tags": [
+        "missile_base",
+        "trap"
+      ],
+      "classification": "moving platform/object",
+      "effectStrategy": "trajectory-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 54,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "missile_crawl_fall_object",
+      "displayName": "MD0049 Missile Base — crawl/fall object",
+      "type": "trap",
+      "actorIds": [
+        90,
+        91
+      ],
+      "introducedAt": {
+        "mapId": 49,
+        "mapName": "MD0049",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "missile_base",
+        "trap"
+      ],
+      "classification": "static hazard",
+      "effectStrategy": "activation-pulse",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 89,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "missile_low_platform",
+      "displayName": "MD0049 Missile Base — low platform/object",
+      "type": "object",
+      "actorIds": [
+        31
+      ],
+      "introducedAt": {
+        "mapId": 49,
+        "mapName": "MD0049",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 13
+      },
+      "tags": [
+        "missile_base",
+        "object"
+      ],
+      "classification": "moving platform/object",
+      "effectStrategy": "trajectory-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 30,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "missile_rocket_hazards",
+      "displayName": "MD0046 Missile Base — rocket/missile hazards",
+      "type": "trap",
+      "actorIds": [
+        64,
+        65
+      ],
+      "introducedAt": {
+        "mapId": 46,
+        "mapName": "MD0046",
+        "levelGroup": "missile_base",
+        "levelLabel": "Missile Base",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "missile_base",
+        "trap"
+      ],
+      "classification": "wall/floor emitter",
+      "effectStrategy": "emitter-projectile-loop",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 62,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 61,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "missile_transition_lift_gate",
+      "displayName": "MD0045 Missile transition — large lift/gate actor",
+      "type": "object",
+      "actorIds": [
+        73
+      ],
+      "introducedAt": {
+        "mapId": 45,
+        "mapName": "MD0045",
+        "levelGroup": "missile_transition",
+        "levelLabel": "Missile transition",
+        "spawnIndex": 1
+      },
+      "tags": [
+        "missile_transition",
+        "object"
+      ],
+      "classification": "visual-only decoration",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 71,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_13__r_egypt_tomb_hazard",
+      "displayName": "Egypt tomb/sarcophagus hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_13"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 26,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_14__r_castle_small_crawl_creature",
+      "displayName": "Castle crawl creature / floor hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_14"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 46,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_15__r_missile_rocket_hazards",
+      "displayName": "Missile base rocket hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_15"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 62,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 61,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_18__r_egypt_long_floor_hazard",
+      "displayName": "Egypt long floor hazard alias",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_18"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 22,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 23,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1C__r_egypt_long_floor_hazard",
+      "displayName": "Egypt long floor hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1C"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 22,
+          "confidence": "medium"
+        },
+        {
+          "action": "idle_variant",
+          "direction": "neutral",
+          "pn": 23,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1D__r_pn_029",
+      "displayName": "Moving platform / floor mechanism frames",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1D"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "neutral",
+          "pn": 41,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1D__r_pn_02A",
+      "displayName": "Moving platform / floor mechanism frames",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1D"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "neutral",
+          "pn": 42,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1D__r_pn_02B",
+      "displayName": "Moving platform / floor mechanism frames",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1D"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "neutral",
+          "pn": 43,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1E__r_pn_029",
+      "displayName": "Moving platform / floor mechanism frames",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1E"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "neutral",
+          "pn": 41,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1E__r_pn_02A",
+      "displayName": "Moving platform / floor mechanism frames",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1E"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "neutral",
+          "pn": 42,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_1E__r_pn_02B",
+      "displayName": "Moving platform / floor mechanism frames",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_1E"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "neutral",
+          "pn": 43,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_2A__r_opening_round_boulder",
+      "displayName": "Opening rolling boulder chase hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_2A"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "neutral",
+          "pn": 18,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_2B__r_0x0C",
+      "displayName": "Jungle trap / projectile hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_2B"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": []
+    },
+    {
+      "id": "semantic:manual_x_entity_2C__r_boulder_object",
+      "displayName": "Falling stone / boulder hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_2C"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "neutral",
+          "pn": 18,
+          "confidence": "high"
+        },
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 66,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_2D__r_floor_spike_traps",
+      "displayName": "Floor spike trap",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_2D"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 77,
+          "confidence": "high"
+        },
+        {
+          "action": "idle_wide",
+          "direction": "neutral",
+          "pn": 81,
+          "confidence": "high"
+        },
+        {
+          "action": "idle_castle",
+          "direction": "neutral",
+          "pn": 79,
+          "confidence": "medium"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_2E__r_jungle_creature_trap",
+      "displayName": "Jungle creature trap",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_2E"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 85,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_32__r_castle_barrel_roll",
+      "displayName": "Rolling barrel trap",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_32"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "right",
+          "pn": 114,
+          "confidence": "high"
+        },
+        {
+          "action": "roll",
+          "direction": "left",
+          "pn": 115,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_33__r_castle_barrel_roll",
+      "displayName": "Rolling barrel trap alias",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_33"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "right",
+          "pn": 114,
+          "confidence": "high"
+        },
+        {
+          "action": "roll",
+          "direction": "left",
+          "pn": 115,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_39__r_pn_00D",
+      "displayName": "entity_39 -> pn_00D",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_39"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "right",
+          "pn": 13,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_39__r_pn_00E",
+      "displayName": "entity_39 -> pn_00E",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_39"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "left",
+          "pn": 14,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_3B__r_pn_033",
+      "displayName": "Scripted trap/action frame pair",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_3B"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "right",
+          "pn": 51,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_3B__r_pn_034",
+      "displayName": "Scripted trap/action frame pair",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_3B"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "left",
+          "pn": 52,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_3C__r_missile_crawl_fall_object",
+      "displayName": "Missile crawl/fall hazard",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_3C"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "idle",
+          "direction": "neutral",
+          "pn": 89,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_3D__r_castle_barrel_roll",
+      "displayName": "Rolling barrel trap alias",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_3D"
+      ],
+      "classification": "scripted multi-frame trap",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "roll",
+          "direction": "right",
+          "pn": 114,
+          "confidence": "high"
+        },
+        {
+          "action": "roll",
+          "direction": "left",
+          "pn": 115,
+          "confidence": "high"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_40__r_pn_033",
+      "displayName": "Scripted trap/action frame pair",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_40"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "right",
+          "pn": 51,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "semantic:manual_x_entity_40__r_pn_034",
+      "displayName": "Scripted trap/action frame pair",
+      "type": "trap",
+      "actorIds": [],
+      "introducedAt": null,
+      "tags": [
+        "semantic-mapping",
+        "x:entity_40"
+      ],
+      "classification": "explicit classic fallback",
+      "effectStrategy": "classic-fallback-frame",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "classic",
+      "animations": [
+        {
+          "action": "uncategorized",
+          "direction": "left",
+          "pn": 52,
+          "confidence": "low"
+        }
+      ]
+    },
+    {
+      "id": "torch_candle",
+      "displayName": "MD0013 Egypt — candle/torch animation",
+      "type": "object",
+      "actorIds": [
+        112
+      ],
+      "introducedAt": {
+        "mapId": 13,
+        "mapName": "MD0013",
+        "levelGroup": "egypt",
+        "levelLabel": "Egypt",
+        "spawnIndex": 3
+      },
+      "tags": [
+        "egypt",
+        "castle",
+        "object",
+        "animated"
+      ],
+      "classification": "visual-only decoration",
+      "effectStrategy": "state-animation",
+      "activeEffectGuaranteed": true,
+      "fallbackPolicy": "decoded-rdx-animation",
+      "animations": [
+        {
+          "action": "burn",
+          "direction": "neutral",
+          "pn": 117,
+          "confidence": "high"
+        }
+      ]
+    }
+  ]
+}

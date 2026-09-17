@@ -1,0 +1,3056 @@
+{
+  "resolverVersion": 1,
+  "room": {
+    "effective": {
+      "mapping": {
+        "group": "castle",
+        "mapId": 33,
+        "mapName": "MD0033",
+        "pixelOffset": {
+          "dxPx": 32,
+          "dyPx": -48
+        },
+        "rdxTopology": {
+          "authority": "user-reviewed-classic-topology-divergence+decoded-rdx-structure",
+          "collisionPolicy": "copy-source-descriptors-except-exits",
+          "effectiveVisualSize": [
+            320,
+            560
+          ],
+          "granularityPx": 16,
+          "id": "sm1a-restore-missing-barrel-deck",
+          "rawVisualSize": [
+            320,
+            512
+          ],
+          "slices": [
+            {
+              "height": 16,
+              "id": "top-ceiling-row",
+              "sourceY": 16,
+              "targetY": 0
+            },
+            {
+              "height": 288,
+              "id": "upper-through-second-deck",
+              "sourceY": 32,
+              "targetY": 16
+            },
+            {
+              "height": 64,
+              "id": "restored-third-barrel-deck",
+              "sourceY": 192,
+              "targetY": 304
+            },
+            {
+              "height": 192,
+              "id": "lower-room",
+              "sourceY": 320,
+              "targetY": 368
+            }
+          ]
+        },
+        "runtimeViewportBias": {
+          "dxPx": 0,
+          "dyPx": 0
+        },
+        "submap": 26,
+        "submapName": "SM1A"
+      },
+      "nativeControllerAuthority": "xrick-runtime"
+    },
+    "fingerprints": {
+      "adjustments": "6c465e0dfe65729b81e3e47ac51445e646976e79339dd558d7936d14772edef5",
+      "alignment": "2f578fe5c83a0b0189bf9a2e7abbe10bfe504c34d328ea18d065843e18dc77fa",
+      "presentationDepth": "ee493dcaee2995633d2d000a15790147b2b33d54b65a70ea560b759f0d979666",
+      "resolved": "8c2099af388b7eb4bb9c4c5aa79e0f05c0f1ce88049d460d057e2e0a39424efc",
+      "reviewed": "13f9ca2f0f1f68d8e77d0ddea5cf9b7244b7873313c67d2054cb8b95b6f4b95b",
+      "semantic": "bc6b659976cad285f9e7eb5d806d83e580b12645e69b181093ff9cefb9775287",
+      "sourceClassic": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
+      "sourceRdx": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
+      "structural": "0f470e286af675de68711e4193a0def6b4c0e35b37b9bcfee99539bfba22a0be",
+      "transitions": "81f4c7122ecac43dc662a02945311771fbbb25d6b3b9615960501c404557cba0"
+    },
+    "group": "castle",
+    "id": "SM1A",
+    "layers": {
+      "adjustments": {
+        "operations": [
+          {
+            "evidence": {
+              "entity": 17,
+              "neighborDx": 0,
+              "neighborDy": -8,
+              "neighborProvenance": "Classic nearest-solid-neighbour clearance audit; preserve Classic signed clearance/penetration"
+            },
+            "id": "SM1A.collectible.mark-302.position",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": 0,
+              "type": "translate"
+            },
+            "property": "position",
+            "provenance": "offline minimum-displacement support/accessibility audit",
+            "target": "SM1A.collectible.mark-302"
+          },
+          {
+            "evidence": {
+              "entity": 16,
+              "neighborDx": 0,
+              "neighborDy": -8,
+              "neighborProvenance": "Classic nearest-solid-neighbour clearance audit; preserve Classic signed clearance/penetration"
+            },
+            "id": "SM1A.collectible.mark-303.position",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": 0,
+              "type": "translate"
+            },
+            "property": "position",
+            "provenance": "offline minimum-displacement support/accessibility audit",
+            "target": "SM1A.collectible.mark-303"
+          },
+          {
+            "evidence": {
+              "allRoomParityReview": true,
+              "correctionKinds": [
+                "classic-nearest-solid-neighbour"
+              ],
+              "currentOrigin": [
+                240,
+                344
+              ],
+              "fittedOrigin": [
+                240,
+                336
+              ],
+              "sourceId": "placement:mark:302",
+              "subjectCategory": "collectible",
+              "supersededVisualDelta": [
+                0,
+                -8
+              ]
+            },
+            "id": "SM1A.mark-302.visual-anchor",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": -17,
+              "type": "translate"
+            },
+            "property": "visualAnchor",
+            "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
+            "target": "classic:SM1A:mark:302"
+          },
+          {
+            "evidence": {
+              "allRoomParityReview": true,
+              "correctionKinds": [
+                "classic-nearest-solid-neighbour"
+              ],
+              "currentOrigin": [
+                88,
+                408
+              ],
+              "fittedOrigin": [
+                88,
+                400
+              ],
+              "sourceId": "placement:mark:303",
+              "subjectCategory": "collectible",
+              "supersededVisualDelta": [
+                0,
+                -8
+              ]
+            },
+            "id": "SM1A.mark-303.visual-anchor",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": -17,
+              "type": "translate"
+            },
+            "property": "visualAnchor",
+            "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
+            "target": "classic:SM1A:mark:303"
+          }
+        ],
+        "schema": "rdr.adjustments_resolved.v1"
+      },
+      "alignment": {
+        "regions": [
+          {
+            "authority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+            "classicBoundsPx": [
+              0,
+              48,
+              256,
+              560
+            ],
+            "confidence": 1,
+            "evidence": "Raw MD0033 y=0..15 is black padding and is excluded. Its single decoded stone ceiling row is kept once; the shared upper interior is therefore 48px above Classic after trimming Classic-only ceiling depth. The omitted 64px barrel/ladder deck is restored structurally, so the same -48px correspondence continues below it. Classic bottom-only boundary depth is intentionally cropped rather than duplicated in RDX. The effective RDX room is 560px high.",
+            "id": "SM1A.effective-room",
+            "rdxBoundsPx": [
+              32,
+              0,
+              256,
+              560
+            ],
+            "status": "reviewed",
+            "transform": {
+              "dxPx": 32,
+              "dyPx": -48,
+              "type": "translate"
+            }
+          }
+        ],
+        "room": {
+          "mapId": 33,
+          "submap": 26
+        },
+        "schema": "rdr.level_alignment.v1"
+      },
+      "presentationDepth": {
+        "classes": [
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              8793,
+              8794,
+              8796,
+              8798,
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
+            ],
+            "id": "egypt.decorative-strips-plane-a",
+            "label": "Egypt decorative strips and ladder highlights",
+            "plane": "A",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Backdrop-authored Egypt ladder/strip motifs must not occlude behind-midground trap actors."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              8768,
+              8769,
+              8792,
+              8794,
+              8795,
+              8797,
+              8801,
+              8833,
+              9045,
+              9047,
+              9069,
+              9070
+            ],
+            "id": "egypt.decorative-strips-plane-b",
+            "label": "Egypt decorative strips, ladders, and backplates",
+            "plane": "B",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              1287,
+              1288
+            ],
+            "id": "castle.window-trim-plane-a",
+            "label": "Castle window trim",
+            "plane": "A",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Castle window trim is backdrop scenery and must not occlude behind-midground trap actors."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              11635,
+              11636
+            ],
+            "id": "castle.window-trim-plane-b",
+            "label": "Castle window backing",
+            "plane": "B",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Castle window backing belongs to the backdrop so trap sprites stay unobscured."
+            }
+          }
+        ],
+        "overrides": [],
+        "planeDefaults": {
+          "A": "foreground",
+          "B": "midground"
+        },
+        "schema": "rdr.presentation_depth_resolved.v2",
+        "seedBaseline": {
+          "authority": "generated-open-close-seed-v2+sm1a-restore-missing-barrel-deck",
+          "backdropBits": "00000000000000000000ffff03f80fffff03fc0fffff07fe0effaf0faf0fe0afffaf03c0afffaf0380cfffcf0100ffffff0000ff007f0000ff003f0000ffc01b00004be00d000000ef0f000000ef0f000000effe000000efff000007efff0f000fefff0fe0ffefaa0a40ffefff02000000000000ffefff0000ffefef0000bfeeff0000bfeeff0100bfeeff03e03fefef0240ffef7f02000000000000ffefff0000ffefff0000ffefaf0000ffefaf0000ffefaf0000ffefcf00004bef2f00000000000000ffefff0000ffefef0000bfeeff0000bfeeff0100bfeeff03e03fefef0240ffef7f020000c00f000000c00f000000c00f000000c00f000007ff1f00000fff3f0000ffeffe0700ffffff0700e0ff070000c0ff03000080ee01000000ff000060e07fe0ff60e03ff0ffe0ff1ff8ffe0ff0facff00e0ffaf0000c0ffaf000080ffcf000000ffff000000000000000000000000000000000000000000",
+          "gridHeight": 70,
+          "gridWidth": 40,
+          "openCellCount": 1187,
+          "schema": "rdr.presentation_depth_seed_baseline.v1",
+          "sourcePlane": "B",
+          "version": 1
+        },
+        "version": 2
+      },
+      "reviewedCorrections": {
+        "corrections": [
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-28-44.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 28,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:28:44",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                28,
+                44,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-29-44.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 29,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:29:44",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                29,
+                44,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-30-44.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 30,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:30:44",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                30,
+                44,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-31-44.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 31,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:31:44",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                31,
+                44,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-28-45.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 28,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:28:45",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                28,
+                45,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-29-45.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 29,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:29:45",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                29,
+                45,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-30-45.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 30,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:30:45",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                30,
+                45,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-31-45.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm1a-castle-changes.json"
+              ],
+              "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 31,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+            },
+            "target": "room:SM1A:collision:g8:31:45",
+            "type": "terrain-cell",
+            "value": {
+              "action": "open",
+              "g8Bounds": [
+                31,
+                45,
+                1,
+                1
+              ]
+            }
+          }
+        ],
+        "room": {
+          "mapId": 33,
+          "submap": 26
+        },
+        "schema": "rdr.reviewed_room_corrections.v1"
+      },
+      "semanticCorpus": {
+        "objects": [
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                160,
+                19
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+              "authority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+              "bomb": false,
+              "rect": [
+                64,
+                51,
+                160,
+                32
+              ],
+              "regionId": "SM1A.effective-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                32,
+                99,
+                160,
+                32
+              ]
+            },
+            "authority": "classic-ent-mvstep-motion+castle-rdx-pa-pn79-pn78",
+            "baseline": {
+              "origin": [
+                176,
+                40
+              ],
+              "runtimeDraw": [
+                157,
+                14
+              ],
+              "runtimeOrigin": [
+                176,
+                40
+              ],
+              "visualAnchor": [
+                157,
+                14
+              ]
+            },
+            "class": "trap",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 80,
+                "key": "mark:297:actor:80:front:0",
+                "owner": "rdx",
+                "pn": 79,
+                "role": "trap",
+                "sourceKey": "mark:297"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 45
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                160,
+                19
+              ],
+              "presentationOrigin": [
+                176,
+                40
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                64,
+                51,
+                160,
+                32
+              ],
+              "visualAnchor": [
+                157,
+                14
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls",
+              "RDX actor 0x50 owns PN79 in Castle MA data",
+              "PN78 is the multiframe moving companion immediately preceding PN79",
+              "Classic ent_mvstep remains trajectory/timing authority"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "pn79-castle-moving-floor-trap",
+            "groupId": "sm1a:mark:297",
+            "implementationDisposition": null,
+            "mounting": "floor",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 80,
+              "layer": "behind-midground",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 78,
+                "snapshot": 79
+              },
+              "provenance": "castle-spike-family:classic-motion+rdx-actor-0x50-state-pair"
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.actor.mark-297",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 45,
+                "flags": 140,
+                "h": 21,
+                "mark": 297,
+                "sprbase": 10,
+                "sprite": 10,
+                "spriteSequence": {
+                  "active": [],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 102
+                },
+                "triggerBounds": [
+                  32,
+                  99,
+                  160,
+                  32
+                ],
+                "w": 24,
+                "x": 128,
+                "y": 67
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-297",
+            "sources": {
+              "classic": {
+                "entity": 45,
+                "mark": 297,
+                "ref": "classic:SM1A:mark:297",
+                "slot": 4
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:297",
+                "sourceKey": "mark:297"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pn-foot",
+              "baseDraw": [
+                157,
+                14
+              ],
+              "baseOrigin": [
+                176,
+                40
+              ],
+              "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
+              "terminalPolicy": "classic-ent-mvstep-loop",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  157,
+                  16
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  176,
+                  42
+                ],
+                "pn": 78,
+                "visible": true,
+                "visualState": "moving"
+              },
+              "snapshot": {
+                "draw": [
+                  157,
+                  14
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  176,
+                  40
+                ],
+                "pn": 79,
+                "renderOrder": 0,
+                "visible": true,
+                "visualState": "idle"
+              }
+            },
+            "staticReplacement": {
+              "actorId": 80,
+              "confidence": 3,
+              "pn": 79,
+              "provenance": "reviewed Castle actor 0x50 / PN79-PN78 source linkage; Classic owns displacement",
+              "rdxX": 176,
+              "rdxY": 40,
+              "spawnIndex": 5,
+              "xrickX": 128,
+              "xrickY": 67
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                240,
+                155
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+              "authority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+              "bomb": false,
+              "rect": [
+                64,
+                147,
+                192,
+                32
+              ],
+              "regionId": "SM1A.effective-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                32,
+                195,
+                192,
+                32
+              ]
+            },
+            "authority": "production-c-rdx-trigger+same-run-classic-envelope",
+            "baseline": {
+              "origin": [
+                256,
+                176
+              ],
+              "runtimeDraw": [
+                245,
+                156
+              ],
+              "runtimeOrigin": [
+                256,
+                176
+              ],
+              "visualAnchor": [
+                245,
+                156
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:298:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 114,
+                "role": "actor",
+                "sourceKey": "mark:298"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 61
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                240,
+                155
+              ],
+              "presentationOrigin": [
+                256,
+                176
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                64,
+                147,
+                192,
+                32
+              ],
+              "visualAnchor": [
+                245,
+                156
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm1a:mark:298",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "behind-midground",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 115,
+                "snapshot": 114
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.actor.mark-298",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 61,
+                "flags": 136,
+                "h": 21,
+                "mark": 298,
+                "sprbase": 60,
+                "sprite": 60,
+                "spriteSequence": {
+                  "active": [
+                    106,
+                    107,
+                    107
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 106
+                },
+                "triggerBounds": [
+                  32,
+                  195,
+                  192,
+                  32
+                ],
+                "w": 18,
+                "x": 208,
+                "y": 203
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-298",
+            "sources": {
+              "classic": {
+                "entity": 61,
+                "mark": 298,
+                "ref": "classic:SM1A:mark:298",
+                "slot": 5
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:298",
+                "sourceKey": "mark:298"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                245,
+                156
+              ],
+              "baseOrigin": [
+                256,
+                176
+              ],
+              "originAuthority": "production-c-rdx-trigger+same-run-classic-envelope",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  242,
+                  156
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  253,
+                  176
+                ],
+                "pn": 115,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  245,
+                  156
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  256,
+                  176
+                ],
+                "pn": 114,
+                "renderOrder": 1,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                64,
+                219
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+              "authority": "classic-rdx-ladder-local-mask",
+              "bomb": false,
+              "rect": [
+                72,
+                211,
+                192,
+                32
+              ],
+              "regionId": "SM1A.effective-room",
+              "semanticOffset": [
+                8,
+                0
+              ],
+              "sourceRect": [
+                32,
+                259,
+                192,
+                32
+              ]
+            },
+            "authority": "production-c-rdx-trigger+same-run-classic-envelope",
+            "baseline": {
+              "origin": [
+                80,
+                240
+              ],
+              "runtimeDraw": [
+                69,
+                220
+              ],
+              "runtimeOrigin": [
+                80,
+                240
+              ],
+              "visualAnchor": [
+                67,
+                215
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:299:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 112,
+                "role": "actor",
+                "sourceKey": "mark:299"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 51
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                64,
+                219
+              ],
+              "presentationOrigin": [
+                80,
+                240
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                72,
+                211,
+                192,
+                32
+              ],
+              "visualAnchor": [
+                69,
+                220
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm1a:mark:299",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "behind-midground",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 114,
+                "snapshot": 114
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.actor.mark-299",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 51,
+                "flags": 136,
+                "h": 21,
+                "mark": 299,
+                "sprbase": 65,
+                "sprite": 65,
+                "spriteSequence": {
+                  "active": [
+                    107,
+                    106,
+                    106
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 107
+                },
+                "triggerBounds": [
+                  32,
+                  259,
+                  192,
+                  32
+                ],
+                "w": 18,
+                "x": 32,
+                "y": 267
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-299",
+            "sources": {
+              "classic": {
+                "entity": 51,
+                "mark": 299,
+                "ref": "classic:SM1A:mark:299",
+                "slot": 5
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:299",
+                "sourceKey": "mark:299"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                67,
+                215
+              ],
+              "baseOrigin": [
+                80,
+                240
+              ],
+              "originAuthority": "production-c-rdx-trigger+same-run-classic-envelope",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  72,
+                  220
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  83,
+                  240
+                ],
+                "pn": 114,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  69,
+                  220
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  80,
+                  240
+                ],
+                "pn": 114,
+                "renderOrder": 2,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            },
+            "triggerSemantics": {
+              "dx": 8,
+              "dy": 0,
+              "placementAuthority": "classic-rdx-ladder-local-mask",
+              "provenance": "2026-08-26 deterministic Classic-to-RDX ladder-local-mask placement: preserve the authored activator relationship to the corresponding RDX ladder/mechanism instead of applying a generic nearby-corridor fit."
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                256,
+                283
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-sm1a-topology-splice+cropped-classic-correspondence",
+              "authority": "classic-rdx-ladder-local-mask",
+              "bomb": false,
+              "rect": [
+                72,
+                275,
+                192,
+                32
+              ],
+              "regionId": "SM1A.effective-room",
+              "semanticOffset": [
+                8,
+                0
+              ],
+              "sourceRect": [
+                32,
+                323,
+                192,
+                32
+              ]
+            },
+            "authority": "production-c-rdx-trigger+same-run-classic-envelope",
+            "baseline": {
+              "origin": [
+                272,
+                304
+              ],
+              "runtimeDraw": [
+                261,
+                284
+              ],
+              "runtimeOrigin": [
+                272,
+                304
+              ],
+              "visualAnchor": [
+                261,
+                284
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:300:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 114,
+                "role": "actor",
+                "sourceKey": "mark:300"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 61
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                256,
+                283
+              ],
+              "presentationOrigin": [
+                272,
+                304
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                72,
+                275,
+                192,
+                32
+              ],
+              "visualAnchor": [
+                261,
+                284
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm1a:mark:300",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "behind-midground",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 115,
+                "snapshot": 114
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.actor.mark-300",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 61,
+                "flags": 136,
+                "h": 21,
+                "mark": 300,
+                "sprbase": 60,
+                "sprite": 60,
+                "spriteSequence": {
+                  "active": [
+                    106,
+                    107,
+                    107
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 106
+                },
+                "triggerBounds": [
+                  32,
+                  323,
+                  192,
+                  32
+                ],
+                "w": 18,
+                "x": 224,
+                "y": 331
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-300",
+            "sources": {
+              "classic": {
+                "entity": 61,
+                "mark": 300,
+                "ref": "classic:SM1A:mark:300",
+                "slot": 6
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:300",
+                "sourceKey": "mark:300"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                261,
+                284
+              ],
+              "baseOrigin": [
+                272,
+                304
+              ],
+              "originAuthority": "production-c-rdx-trigger+same-run-classic-envelope",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  258,
+                  284
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  269,
+                  304
+                ],
+                "pn": 115,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  261,
+                  284
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  272,
+                  304
+                ],
+                "pn": 114,
+                "renderOrder": 3,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            },
+            "triggerSemantics": {
+              "dx": 8,
+              "dy": 0,
+              "placementAuthority": "classic-rdx-ladder-local-mask",
+              "provenance": "2026-08-26 deterministic Classic-to-RDX ladder-local-mask placement: preserve the authored activator relationship to the corresponding RDX ladder/mechanism instead of applying a generic nearby-corridor fit."
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                72,
+                347
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                88,
+                368
+              ],
+              "runtimeDraw": [
+                78,
+                343
+              ],
+              "runtimeOrigin": [
+                88,
+                368
+              ],
+              "visualAnchor": [
+                78,
+                343
+              ]
+            },
+            "class": "enemy",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:301:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 56,
+                "role": "enemy",
+                "sourceKey": "mark:301"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 10
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                72,
+                347
+              ],
+              "presentationOrigin": [
+                88,
+                368
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                78,
+                343
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-enemy",
+            "groupId": "sm1a:mark:301",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 56,
+                "snapshot": 56
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.enemy.mark-301",
+            "sourceEvidence": {
+              "classic": {
+                "controller": {
+                  "authority": "xrick-map-mark-type1a",
+                  "family": "type1a",
+                  "kind": "bounded-horizontal-patrol",
+                  "patrol": {
+                    "counterLimit": 32,
+                    "distancePx": 64,
+                    "end": [
+                      104,
+                      395
+                    ],
+                    "initialDirection": "right",
+                    "loopPeriodTicks": 64,
+                    "start": [
+                      40,
+                      395
+                    ],
+                    "startupLatencyTicks": 0,
+                    "stepPx": 2
+                  }
+                },
+                "entity": 10,
+                "flags": 0,
+                "h": 21,
+                "mark": 301,
+                "sprbase": 65,
+                "sprite": 65,
+                "w": 24,
+                "x": 40,
+                "y": 395
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-301",
+            "sources": {
+              "classic": {
+                "entity": 10,
+                "mark": 301,
+                "ref": "classic:SM1A:mark:301",
+                "slot": 9
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:301",
+                "sourceKey": "mark:301"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                78,
+                343
+              ],
+              "baseOrigin": [
+                88,
+                368
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  78,
+                  343
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  88,
+                  368
+                ],
+                "pn": 56,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  78,
+                  343
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  88,
+                  368
+                ],
+                "pn": 56,
+                "renderOrder": 4,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [
+              {
+                "id": "SM1A.collectible.mark-302.position",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": 0,
+                  "type": "translate"
+                },
+                "property": "position",
+                "provenance": "offline minimum-displacement support/accessibility audit"
+              },
+              {
+                "id": "SM1A.mark-302.visual-anchor",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": -17,
+                  "type": "translate"
+                },
+                "property": "visualAnchor",
+                "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px."
+              }
+            ],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                224,
+                347
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                240,
+                368
+              ],
+              "runtimeDraw": [
+                222,
+                342
+              ],
+              "runtimeOrigin": [
+                240,
+                368
+              ],
+              "visualAnchor": [
+                222,
+                342
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:302:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 67,
+                "role": "actor",
+                "sourceKey": "mark:302"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 17
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                224,
+                347
+              ],
+              "presentationOrigin": [
+                240,
+                351
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                222,
+                325
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm1a:mark:302",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 67,
+                "snapshot": 67
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.actor.mark-302",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 17,
+                "flags": 0,
+                "h": 21,
+                "mark": 302,
+                "sprbase": 42,
+                "sprite": 42,
+                "w": 24,
+                "x": 192,
+                "y": 395
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-302",
+            "sources": {
+              "classic": {
+                "entity": 17,
+                "mark": 302,
+                "ref": "classic:SM1A:mark:302",
+                "slot": 6
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:302",
+                "sourceKey": "mark:302"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                222,
+                342
+              ],
+              "baseOrigin": [
+                240,
+                368
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  222,
+                  342
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  240,
+                  368
+                ],
+                "pn": 67,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  222,
+                  342
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  240,
+                  368
+                ],
+                "pn": 67,
+                "renderOrder": 5,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [
+              {
+                "id": "SM1A.collectible.mark-303.position",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": 0,
+                  "type": "translate"
+                },
+                "property": "position",
+                "provenance": "offline minimum-displacement support/accessibility audit"
+              },
+              {
+                "id": "SM1A.mark-303.visual-anchor",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": -17,
+                  "type": "translate"
+                },
+                "property": "visualAnchor",
+                "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px."
+              }
+            ],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                72,
+                411
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                88,
+                432
+              ],
+              "runtimeDraw": [
+                70,
+                406
+              ],
+              "runtimeOrigin": [
+                88,
+                432
+              ],
+              "visualAnchor": [
+                70,
+                406
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:303:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 67,
+                "role": "actor",
+                "sourceKey": "mark:303"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 16
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                72,
+                411
+              ],
+              "presentationOrigin": [
+                88,
+                415
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                70,
+                389
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm1a:mark:303",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 67,
+                "snapshot": 67
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.actor.mark-303",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 16,
+                "flags": 0,
+                "h": 21,
+                "mark": 303,
+                "sprbase": 41,
+                "sprite": 41,
+                "w": 24,
+                "x": 40,
+                "y": 459
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-303",
+            "sources": {
+              "classic": {
+                "entity": 16,
+                "mark": 303,
+                "ref": "classic:SM1A:mark:303",
+                "slot": 6
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:303",
+                "sourceKey": "mark:303"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                70,
+                406
+              ],
+              "baseOrigin": [
+                88,
+                432
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  70,
+                  406
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  88,
+                  432
+                ],
+                "pn": 67,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  70,
+                  406
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  88,
+                  432
+                ],
+                "pn": 67,
+                "renderOrder": 6,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                80,
+                475
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                96,
+                496
+              ],
+              "runtimeDraw": [
+                83,
+                471
+              ],
+              "runtimeOrigin": [
+                96,
+                496
+              ],
+              "visualAnchor": [
+                83,
+                471
+              ]
+            },
+            "class": "enemy",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:304:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 112,
+                "role": "enemy",
+                "sourceKey": "mark:304"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 11
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                80,
+                475
+              ],
+              "presentationOrigin": [
+                96,
+                496
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                83,
+                471
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-enemy",
+            "groupId": "sm1a:mark:304",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 112,
+                "snapshot": 112
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.enemy.mark-304",
+            "sourceEvidence": {
+              "classic": {
+                "controller": {
+                  "authority": "xrick-e_them-t1b-native",
+                  "canFall": true,
+                  "directionTarget": "rick",
+                  "family": "type1b",
+                  "kind": "rick-seeking-horizontal",
+                  "motionAuthority": "native-xrick-only"
+                },
+                "entity": 11,
+                "flags": 0,
+                "h": 21,
+                "mark": 304,
+                "sprbase": 65,
+                "sprite": 65,
+                "w": 24,
+                "x": 48,
+                "y": 523
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-mark-304",
+            "sources": {
+              "classic": {
+                "entity": 11,
+                "mark": 304,
+                "ref": "classic:SM1A:mark:304",
+                "slot": 10
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:mark:304",
+                "sourceKey": "mark:304"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                83,
+                471
+              ],
+              "baseOrigin": [
+                96,
+                496
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  83,
+                  471
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  96,
+                  496
+                ],
+                "pn": 112,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  83,
+                  471
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  96,
+                  496
+                ],
+                "pn": 112,
+                "renderOrder": 7,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM1A.effective-room",
+              "origin": [
+                36,
+                16
+              ],
+              "runtimeViewportBias": [
+                0,
+                0
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                47,
+                38
+              ],
+              "runtimeDraw": [
+                34,
+                14
+              ],
+              "runtimeOrigin": [
+                47,
+                38
+              ],
+              "visualAnchor": [
+                34,
+                14
+              ]
+            },
+            "class": "player",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 93,
+                "key": "player",
+                "owner": "rdx",
+                "pn": 97,
+                "role": "player",
+                "sourceKey": "player"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 1
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                36,
+                16
+              ],
+              "presentationOrigin": [
+                47,
+                38
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                34,
+                14
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "SM1A 560px cropped topology re-registration against Classic source + same-PN Castle controls"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-player",
+            "groupId": "sm1a:player",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "playerEntry": {
+              "alignedEntityOrigin": [
+                36,
+                16
+              ],
+              "authority": "xrick-map_maps-direct-entry+rick-bottom-centre-contact+independent-rdx-pa005d-evidence",
+              "classicEntityOrigin": [
+                4,
+                64
+              ],
+              "phaseZeroAuthority": true,
+              "phaseZeroMode": "xrick-direct-entry",
+              "rdxInitializerCount": 1,
+              "rdxInitializerExpectedOrigin": [
+                44,
+                37
+              ],
+              "rdxInitializerOrigin": [
+                8,
+                64
+              ],
+              "rdxInitializerRole": "independent-room-initializer",
+              "rdxInitializerSourceRef": "rdx:MD0033:actor:93:spawn:0",
+              "sourceAgreement": "initializer-disagreement",
+              "worldContact": [
+                47,
+                36
+              ]
+            },
+            "presentation": {
+              "actorId": 93,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 97,
+                "snapshot": 97
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "semanticId": "SM1A.player.player",
+            "sourceEvidence": {
+              "classic": {
+                "authority": "xrick-map_maps-direct-entry",
+                "entity": 1,
+                "mark": 0,
+                "role": "player",
+                "slot": 1,
+                "sourceKey": "player",
+                "sprite": 1,
+                "x": 4,
+                "y": 64
+              }
+            },
+            "sourceRecordId": "source-sm1a-md0033-player",
+            "sources": {
+              "classic": {
+                "entity": 1,
+                "mark": 0,
+                "ref": "classic:SM1A:player",
+                "slot": 1
+              },
+              "rdx": {
+                "mapId": 33,
+                "ref": "rdx:MD0033:player",
+                "sourceKey": "player"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                34,
+                14
+              ],
+              "baseOrigin": [
+                47,
+                38
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  34,
+                  14
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  47,
+                  38
+                ],
+                "pn": 97,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  34,
+                  14
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  47,
+                  38
+                ],
+                "pn": 97,
+                "renderOrder": 8,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          }
+        ],
+        "reviewedCorrections": [],
+        "schema": "rdr.semantic_corpus_resolved.v1",
+        "terrainHazards": [
+          {
+            "adjustmentsApplied": [],
+            "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+            "classicParentSourceKey": "terrain-hazard:classic-sm26-0",
+            "contact": {
+              "bounds": [
+                64,
+                104,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                64,
+                104,
+                32,
+                8
+              ],
+              "position": [
+                64,
+                104
+              ],
+              "visualBounds": [
+                64,
+                104,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "2026-09-09 47-map hazard parity review: Layer C aligns the Classic lethal strip to the visible Layer F spike run at px [64, 104, 32, 8].",
+              "Only the left 32px segment still has Revival spike artwork; keep the rightmost 16px non-lethal so the hazard box matches the visible spikes.",
+              "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+            ],
+            "family": "castle-static-map-trap",
+            "featureMatch": {
+              "basis": "layer-c-to-layer-f-landmark-fit",
+              "classicAlignedBounds": [
+                64,
+                104,
+                48,
+                8
+              ],
+              "rdxEffectiveBounds": [
+                64,
+                104,
+                32,
+                8
+              ]
+            },
+            "id": "auto-sm1a-classic-sm26-0",
+            "mounting": "embedded-map-art",
+            "position": [
+              64,
+              104
+            ],
+            "semanticId": "SM00.trap.auto-sm1a-classic-sm26-0",
+            "sourceId": 48126,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm26-0",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  64,
+                  104
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "classic": {
+          "fingerprint": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
+          "playerStart": {
+            "sprite": 1,
+            "x": 4,
+            "y": 64
+          },
+          "ref": "static/levels/classic/source.json",
+          "shapeTiles": [
+            80,
+            32
+          ],
+          "startRow": 16,
+          "submap": 26,
+          "submapName": "SM1A",
+          "transitions": {
+            "connectors": [
+              {
+                "connectorId": "xrick-connect-83",
+                "connectorIndex": 83,
+                "direction": "left",
+                "rowin": 32,
+                "rowout": 24,
+                "targetSubmap": 25
+              },
+              {
+                "connectorId": "xrick-connect-84",
+                "connectorIndex": 84,
+                "direction": "right",
+                "rowin": 32,
+                "rowout": 72,
+                "targetSubmap": 27
+              },
+              {
+                "connectorId": "xrick-connect-85",
+                "connectorIndex": 85,
+                "direction": "right",
+                "rowin": 32,
+                "rowout": 80,
+                "targetSubmap": 25
+              }
+            ]
+          }
+        },
+        "rdx": {
+          "actors": [
+            {
+              "actorId": 93,
+              "index": 0,
+              "offset": 0,
+              "sourceRef": "rdx:MD0033:actor:93:spawn:0",
+              "x": 8,
+              "y": 64
+            },
+            {
+              "actorId": 60,
+              "index": 1,
+              "offset": 28,
+              "sourceRef": "rdx:MD0033:actor:60:spawn:1",
+              "x": 72,
+              "y": 320
+            },
+            {
+              "actorId": 109,
+              "index": 2,
+              "offset": 56,
+              "sourceRef": "rdx:MD0033:actor:109:spawn:2",
+              "x": 88,
+              "y": 256
+            },
+            {
+              "actorId": 69,
+              "index": 3,
+              "offset": 84,
+              "sourceRef": "rdx:MD0033:actor:69:spawn:3",
+              "x": 87,
+              "y": 384
+            },
+            {
+              "actorId": 107,
+              "index": 4,
+              "offset": 112,
+              "sourceRef": "rdx:MD0033:actor:107:spawn:4",
+              "x": 88,
+              "y": 448
+            },
+            {
+              "actorId": 80,
+              "index": 5,
+              "offset": 140,
+              "sourceRef": "rdx:MD0033:actor:80:spawn:5",
+              "x": 177,
+              "y": 56
+            },
+            {
+              "actorId": 107,
+              "index": 6,
+              "offset": 168,
+              "sourceRef": "rdx:MD0033:actor:107:spawn:6",
+              "x": 248,
+              "y": 480
+            },
+            {
+              "actorId": 111,
+              "index": 7,
+              "offset": 196,
+              "sourceRef": "rdx:MD0033:actor:111:spawn:7",
+              "x": 264,
+              "y": 192
+            }
+          ],
+          "dimensions": {
+            "cellHeight": 32,
+            "cellWidth": 20,
+            "height": 512,
+            "width": 320
+          },
+          "fingerprint": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
+          "logicRef": "static/collision/rooms/MD0033.json",
+          "mapId": 33,
+          "mapName": "MD0033",
+          "ref": "static/levels/rdx/source.json",
+          "shapeTiles": [
+            64,
+            40
+          ],
+          "visualAuthority": "decoded-rom-plane-a+b"
+        }
+      },
+      "structuralCorrections": {
+        "operations": [
+          {
+            "action": "vertical-slice-map",
+            "authority": "user-reviewed-classic-topology-divergence+decoded-rdx-structure",
+            "collisionPolicy": "copy-source-descriptors-except-exits",
+            "effectiveVisualSize": [
+              320,
+              560
+            ],
+            "granularityPx": 16,
+            "id": "sm1a-restore-missing-barrel-deck",
+            "rawVisualSize": [
+              320,
+              512
+            ],
+            "reason": "Raw MD0033 is 512px tall, but its first 16px are black source padding rather than room geometry. The RDX room also omits one complete 64px barrel/ladder deck that exists in Classic. Build a 560px effective RDX room by discarding the black padding, keeping the decoded 16px stone ceiling row once, restoring the missing barrel deck from the matching decoded RDX section, and keeping the raw lower room/bottom boundary once. Do not extend the top or bottom to Classic height; the Fluid-v2 camera clamps to the effective RDX room and therefore shows more interior below at the top. Terrain collision descriptors follow the same slice map, while raw RDX ML20 exits are suppressed because xrick connector identity and the reviewed Layer-D exit remain authoritative after the structural splice.",
+            "slices": [
+              {
+                "height": 16,
+                "id": "top-ceiling-row",
+                "sourceY": 16,
+                "targetY": 0
+              },
+              {
+                "height": 288,
+                "id": "upper-through-second-deck",
+                "sourceY": 32,
+                "targetY": 16
+              },
+              {
+                "height": 64,
+                "id": "restored-third-barrel-deck",
+                "sourceY": 192,
+                "targetY": 304
+              },
+              {
+                "height": 192,
+                "id": "lower-room",
+                "sourceY": 320,
+                "targetY": 368
+              }
+            ],
+            "type": "room-topology-splice"
+          },
+          {
+            "action": "exit",
+            "authority": "xrick-connector+rdx-ml20-reviewed",
+            "contactRow": 72,
+            "direction": "right",
+            "g8Bounds": [
+              38,
+              60,
+              2,
+              2
+            ],
+            "id": "sm1a-right-rdx-exit-row48",
+            "reason": "Bind the single natural MD0033 right-side ML20 exit to xrick row 0x48 (SM1A -> SM1B). The topology splice maps its raw source cell at y=432 to effective y=480 after cropping the 16px source padding and restoring the missing 64px deck. Connector identity remains the xrick rowout/rowin pair.",
+            "rowIn": 32,
+            "sourceKey": "rdx:MD0033:logic:20:28",
+            "targetSubmap": 27,
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              28,
+              44,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-28-44.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 28,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:28:44",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              29,
+              44,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-29-44.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 29,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:29:44",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              30,
+              44,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-30-44.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 30,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:30:44",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              31,
+              44,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-31-44.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 31,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:31:44",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              28,
+              45,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-28-45.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 28,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:28:45",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              29,
+              45,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-29-45.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 29,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:29:45",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              30,
+              45,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-30-45.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 30,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:30:45",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "level-editor-reviewed-fix",
+            "g8Bounds": [
+              31,
+              45,
+              1,
+              1
+            ],
+            "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-31-45.1",
+            "provenance": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 31,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction.",
+            "sourceKey": "room:SM1A:collision:g8:31:45",
+            "type": "gameplay-cell-override"
+          }
+        ],
+        "schema": "rdr.structural_corrections_resolved.v1",
+        "topology": {
+          "authority": "user-reviewed-classic-topology-divergence+decoded-rdx-structure",
+          "collisionPolicy": "copy-source-descriptors-except-exits",
+          "effectiveVisualSize": [
+            320,
+            560
+          ],
+          "granularityPx": 16,
+          "id": "sm1a-restore-missing-barrel-deck",
+          "rawVisualSize": [
+            320,
+            512
+          ],
+          "slices": [
+            {
+              "height": 16,
+              "id": "top-ceiling-row",
+              "sourceY": 16,
+              "targetY": 0
+            },
+            {
+              "height": 288,
+              "id": "upper-through-second-deck",
+              "sourceY": 32,
+              "targetY": 16
+            },
+            {
+              "height": 64,
+              "id": "restored-third-barrel-deck",
+              "sourceY": 192,
+              "targetY": 304
+            },
+            {
+              "height": 192,
+              "id": "lower-room",
+              "sourceY": 320,
+              "targetY": 368
+            }
+          ]
+        }
+      }
+    },
+    "mapId": 33,
+    "mapName": "MD0033",
+    "provenance": {
+      "migrationStatus": "canonical-layered+reviewed-overlay",
+      "reviewedCorrections": [
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              28,
+              44,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-28-44.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 28,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:28:44",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              29,
+              44,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-29-44.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 29,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:29:44",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              30,
+              44,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-30-44.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 30,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:30:44",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              31,
+              44,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-31-44.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 31,44 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:31:44",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              28,
+              45,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-28-45.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 28,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:28:45",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              29,
+              45,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-29-45.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 29,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:29:45",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              30,
+              45,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-30-45.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 30,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:30:45",
+          "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "open",
+            "g8Bounds": [
+              31,
+              45,
+              1,
+              1
+            ]
+          },
+          "before": null,
+          "id": "SM1A.editor.terrain-cell.room-SM1A-collision-g8-31-45.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm1a-castle-changes.json"
+            ],
+            "reason": "User-reviewed patches/sm1a-castle-changes.json: open exact gameplay cell 31,45 in the effective SM1A topology; preserve the existing room-topology splice and exit correction."
+          },
+          "semantic": "gameplay",
+          "target": "room:SM1A:collision:g8:31:45",
+          "type": "terrain-cell"
+        }
+      ]
+    },
+    "submap": 26,
+    "transitions": {
+      "connectors": [
+        {
+          "alignmentRegionId": "SM1A.effective-room",
+          "classicPosition": [
+            0,
+            64
+          ],
+          "connectorId": "xrick-connect-83",
+          "connectorIndex": 83,
+          "contactSource": "classic-projection",
+          "direction": "left",
+          "rdxPosition": [
+            32,
+            16
+          ],
+          "rowin": 32,
+          "rowout": 24,
+          "sourceRef": "classic:left:row:24",
+          "status": "projected",
+          "targetSubmap": 25
+        },
+        {
+          "connectorId": "xrick-connect-84",
+          "connectorIndex": 84,
+          "contactSource": "reviewed-layer-d",
+          "direction": "right",
+          "rdxBounds": [
+            304,
+            480,
+            16,
+            16
+          ],
+          "rdxPosition": [
+            312,
+            488
+          ],
+          "rowin": 32,
+          "rowout": 72,
+          "sourceRef": "sm1a-right-rdx-exit-row48",
+          "status": "reviewed",
+          "targetSubmap": 27
+        },
+        {
+          "alignmentRegionId": "SM1A.effective-room",
+          "classicPosition": [
+            256,
+            512
+          ],
+          "connectorId": "xrick-connect-85",
+          "connectorIndex": 85,
+          "contactSource": "classic-projection",
+          "direction": "right",
+          "rdxPosition": [
+            288,
+            464
+          ],
+          "rowin": 32,
+          "rowout": 80,
+          "sourceRef": "classic:right:row:80",
+          "status": "projected",
+          "targetSubmap": 25
+        }
+      ],
+      "schema": "rdr.native_transitions_resolved.v1"
+    }
+  },
+  "schema": "rdr.resolved_level_room.v2",
+  "version": "2.1.104"
+}

@@ -1,0 +1,5154 @@
+{
+  "schema": "rd.asset_mapping.v1",
+  "version": "2026-06-06-sourcefix-v27",
+  "generatedAt": "2026-06-06T13:30:00.000Z",
+  "purpose": "Data format for using Rick Dangerous DX level/tile/sprite assets inside xrick while retaining xrick level topology/gameplay semantics.",
+  "sourceInputs": {
+    "matcherHtml": "rd_asset_matcher_sourcefix_v27.html",
+    "baselineDiff": "rd_asset_matcher_diff_sourcefix_v27_curated.json",
+    "xrickSources": "xrick-libretro source tables + generated xr_asset_browser sidecar",
+    "rdxSources": "Rick_Dangerous_DX_1.3x.bin Scorpion MD/NT/PP/MI/MA/PA/PN/PF/PI decoder + RDX sidecar"
+  },
+  "levelMapping": [
+    {
+      "xrickSubmap": 0,
+      "xrickSubmapHex": "SM00",
+      "rdxMd": 3,
+      "rdxMdName": "MD0003",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        56,
+        32
+      ],
+      "rdxShapeTiles": [
+        56,
+        40
+      ],
+      "alignmentScore": 0.8662498387426225,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 1,
+      "xrickSubmapHex": "SM01",
+      "rdxMd": 4,
+      "rdxMdName": "MD0004",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        104,
+        32
+      ],
+      "rdxShapeTiles": [
+        104,
+        40
+      ],
+      "alignmentScore": 0.816170352068805,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 2,
+      "xrickSubmapHex": "SM02",
+      "rdxMd": 5,
+      "rdxMdName": "MD0005",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -16
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        28,
+        40
+      ],
+      "alignmentScore": 0.8332317279685701,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 3,
+      "xrickSubmapHex": "SM03",
+      "rdxMd": 6,
+      "rdxMdName": "MD0006",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        128,
+        32
+      ],
+      "rdxShapeTiles": [
+        132,
+        40
+      ],
+      "alignmentScore": 0.8682553127155881,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 4,
+      "xrickSubmapHex": "SM04",
+      "rdxMd": 7,
+      "rdxMdName": "MD0007",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        80,
+        40
+      ],
+      "alignmentScore": 0.7416308247325922,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 5,
+      "xrickSubmapHex": "SM05",
+      "rdxMd": 8,
+      "rdxMdName": "MD0008",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        32,
+        40
+      ],
+      "alignmentScore": 0.8536609907120744,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 6,
+      "xrickSubmapHex": "SM06",
+      "rdxMd": 9,
+      "rdxMdName": "MD0009",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -16
+      },
+      "xrickShapeTiles": [
+        128,
+        32
+      ],
+      "rdxShapeTiles": [
+        120,
+        40
+      ],
+      "alignmentScore": 0.827182711319822,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 7,
+      "xrickSubmapHex": "SM07",
+      "rdxMd": 10,
+      "rdxMdName": "MD0010",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        128,
+        32
+      ],
+      "rdxShapeTiles": [
+        124,
+        40
+      ],
+      "alignmentScore": 0.8601569768244373,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 8,
+      "xrickSubmapHex": "SM08",
+      "rdxMd": 11,
+      "rdxMdName": "MD0011",
+      "group": "south_america",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 4
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 32
+      },
+      "xrickShapeTiles": [
+        128,
+        32
+      ],
+      "rdxShapeTiles": [
+        128,
+        40
+      ],
+      "alignmentScore": 0.9147103408689634,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 9,
+      "xrickSubmapHex": "SM09",
+      "rdxMd": 13,
+      "rdxMdName": "MD0013",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        120,
+        32
+      ],
+      "rdxShapeTiles": [
+        120,
+        40
+      ],
+      "alignmentScore": 0.8930822821763511,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 10,
+      "xrickSubmapHex": "SM10",
+      "rdxMd": 14,
+      "rdxMdName": "MD0014",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        96,
+        32
+      ],
+      "rdxShapeTiles": [
+        100,
+        40
+      ],
+      "alignmentScore": 0.8554204194333049,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 11,
+      "xrickSubmapHex": "SM11",
+      "rdxMd": 15,
+      "rdxMdName": "MD0015",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        48,
+        32
+      ],
+      "rdxShapeTiles": [
+        52,
+        40
+      ],
+      "alignmentScore": 0.8612501488272414,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 12,
+      "xrickSubmapHex": "SM12",
+      "rdxMd": 16,
+      "rdxMdName": "MD0016",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -16
+      },
+      "xrickShapeTiles": [
+        24,
+        32
+      ],
+      "rdxShapeTiles": [
+        52,
+        40
+      ],
+      "alignmentScore": 0.5016190214403519,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8",
+      "runtimeViewportBias": {
+        "dxPx": 0,
+        "dyPx": 224,
+        "evidence": "MD0016 is taller than the classic SM0C room. The ROM MA actor-0x5D entry at world Y=304 aligns with the classic bottom entry only when the runtime viewport is phased 224 px below the canonical topology transform. The canonical v27 pixelOffset remains unchanged."
+      }
+    },
+    {
+      "xrickSubmap": 13,
+      "xrickSubmapHex": "SM13",
+      "rdxMd": 17,
+      "rdxMdName": "MD0017",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        48,
+        32
+      ],
+      "rdxShapeTiles": [
+        52,
+        40
+      ],
+      "alignmentScore": 0.9192292252107588,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 14,
+      "xrickSubmapHex": "SM14",
+      "rdxMd": 18,
+      "rdxMdName": "MD0018",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -16
+      },
+      "xrickShapeTiles": [
+        96,
+        32
+      ],
+      "rdxShapeTiles": [
+        92,
+        40
+      ],
+      "alignmentScore": 0.7996651087642935,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8",
+      "runtimeViewportBias": {
+        "dxPx": 0,
+        "dyPx": 16,
+        "evidence": "SM0E/MD0018 direct-entry and RDX-to-classic toggle parity: the previous +24px phase left the RDX anchor one 8px classic row too high. +16px aligns the ROM-owned (40,96) entry with classic contact Y=103/104 without embedding Rick in the classic wall."
+      }
+    },
+    {
+      "xrickSubmap": 15,
+      "xrickSubmapHex": "SM15",
+      "rdxMd": 19,
+      "rdxMdName": "MD0019",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        120,
+        32
+      ],
+      "rdxShapeTiles": [
+        116,
+        40
+      ],
+      "alignmentScore": 0.9101570048309179,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 16,
+      "xrickSubmapHex": "SM16",
+      "rdxMd": 20,
+      "rdxMdName": "MD0020",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        128,
+        32
+      ],
+      "rdxShapeTiles": [
+        128,
+        40
+      ],
+      "alignmentScore": 0.9203975807094682,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 17,
+      "xrickSubmapHex": "SM17",
+      "rdxMd": 21,
+      "rdxMdName": "MD0021",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        56,
+        32
+      ],
+      "rdxShapeTiles": [
+        56,
+        40
+      ],
+      "alignmentScore": 0.9365607255970555,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 18,
+      "xrickSubmapHex": "SM18",
+      "rdxMd": 22,
+      "rdxMdName": "MD0022",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -16
+      },
+      "xrickShapeTiles": [
+        104,
+        32
+      ],
+      "rdxShapeTiles": [
+        100,
+        40
+      ],
+      "alignmentScore": 0.9366110399220131,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 19,
+      "xrickSubmapHex": "SM19",
+      "rdxMd": 23,
+      "rdxMdName": "MD0023",
+      "group": "egypt",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        104,
+        32
+      ],
+      "rdxShapeTiles": [
+        100,
+        40
+      ],
+      "alignmentScore": 0.953984576035205,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 20,
+      "xrickSubmapHex": "SM20",
+      "rdxMd": 25,
+      "rdxMdName": "MD0025",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 6,
+        "dyTiles": -4
+      },
+      "pixelOffset": {
+        "dxPx": 48,
+        "dyPx": -32
+      },
+      "xrickShapeTiles": [
+        56,
+        32
+      ],
+      "rdxShapeTiles": [
+        52,
+        40
+      ],
+      "alignmentScore": 0.9077329622240814,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 21,
+      "xrickSubmapHex": "SM21",
+      "rdxMd": 28,
+      "rdxMdName": "MD0028",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -8
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -64
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        28,
+        40
+      ],
+      "alignmentScore": 0.9587792642140469,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 22,
+      "xrickSubmapHex": "SM22",
+      "rdxMd": 29,
+      "rdxMdName": "MD0029",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -8
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -64
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        28,
+        40
+      ],
+      "alignmentScore": 0.9587792642140469,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 23,
+      "xrickSubmapHex": "SM23",
+      "rdxMd": 30,
+      "rdxMdName": "MD0030",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -6
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -48
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        72,
+        40
+      ],
+      "alignmentScore": 0.8553124481155571,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 24,
+      "xrickSubmapHex": "SM24",
+      "rdxMd": 31,
+      "rdxMdName": "MD0031",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        56,
+        32
+      ],
+      "rdxShapeTiles": [
+        56,
+        40
+      ],
+      "alignmentScore": 0.9200924608819347,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 25,
+      "xrickSubmapHex": "SM25",
+      "rdxMd": 32,
+      "rdxMdName": "MD0032",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        32,
+        40
+      ],
+      "alignmentScore": 0.9491163006529689,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 26,
+      "xrickSubmapHex": "SM26",
+      "rdxMd": 33,
+      "rdxMdName": "MD0033",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -12
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -96
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        64,
+        40
+      ],
+      "alignmentScore": 0.6454114433727949,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8",
+      "runtimeViewportBias": {
+        "dxPx": 0,
+        "dyPx": 72,
+        "evidence": "SM1A/MD0033 late-game native collision entry audit: the canonical visual topology offset is -96 px, but using it as the live collision viewport places Rick at world y=7 with an AABB above the map. A +72 px runtime-only phase moves the native collision origin onto the first valid RDX support while the rendered contact remains aligned to the Classic cold-entry contact within one pixel. The canonical visual mapping is unchanged."
+      }
+    },
+    {
+      "xrickSubmap": 27,
+      "xrickSubmapHex": "SM27",
+      "rdxMd": 34,
+      "rdxMdName": "MD0034",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 4
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 32
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        36,
+        40
+      ],
+      "alignmentScore": 0.9501109373363066,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 28,
+      "xrickSubmapHex": "SM28",
+      "rdxMd": 35,
+      "rdxMdName": "MD0035",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        84,
+        40
+      ],
+      "alignmentScore": 0.9424766614289677,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 29,
+      "xrickSubmapHex": "SM29",
+      "rdxMd": 36,
+      "rdxMdName": "MD0036",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        32,
+        40
+      ],
+      "alignmentScore": 0.9172385254180228,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 30,
+      "xrickSubmapHex": "SM30",
+      "rdxMd": 37,
+      "rdxMdName": "MD0037",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        56,
+        32
+      ],
+      "rdxShapeTiles": [
+        52,
+        40
+      ],
+      "alignmentScore": 0.9198746090288972,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 31,
+      "xrickSubmapHex": "SM31",
+      "rdxMd": 38,
+      "rdxMdName": "MD0038",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 8
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 64
+      },
+      "xrickShapeTiles": [
+        24,
+        32
+      ],
+      "rdxShapeTiles": [
+        28,
+        40
+      ],
+      "alignmentScore": 0.7117960164835165,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 32,
+      "xrickSubmapHex": "SM32",
+      "rdxMd": 39,
+      "rdxMdName": "MD0039",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        76,
+        40
+      ],
+      "alignmentScore": 0.872112488609659,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 33,
+      "xrickSubmapHex": "SM33",
+      "rdxMd": 40,
+      "rdxMdName": "MD0040",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        80,
+        40
+      ],
+      "alignmentScore": 0.8607983242173862,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 34,
+      "xrickSubmapHex": "SM34",
+      "rdxMd": 41,
+      "rdxMdName": "MD0041",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        128,
+        32
+      ],
+      "rdxShapeTiles": [
+        124,
+        40
+      ],
+      "alignmentScore": 0.8382016940942356,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 35,
+      "xrickSubmapHex": "SM35",
+      "rdxMd": 42,
+      "rdxMdName": "MD0042",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        80,
+        40
+      ],
+      "alignmentScore": 0.9105967168133856,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 36,
+      "xrickSubmapHex": "SM36",
+      "rdxMd": 43,
+      "rdxMdName": "MD0043",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        80,
+        40
+      ],
+      "alignmentScore": 0.8739314509969551,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 37,
+      "xrickSubmapHex": "SM37",
+      "rdxMd": 44,
+      "rdxMdName": "MD0044",
+      "group": "castle",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        80,
+        32
+      ],
+      "rdxShapeTiles": [
+        80,
+        40
+      ],
+      "alignmentScore": 0.8109070675580126,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 38,
+      "xrickSubmapHex": "SM38",
+      "rdxMd": 46,
+      "rdxMdName": "MD0046",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": -8
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": -64
+      },
+      "xrickShapeTiles": [
+        40,
+        32
+      ],
+      "rdxShapeTiles": [
+        32,
+        40
+      ],
+      "alignmentScore": 0.7600520802509321,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 39,
+      "xrickSubmapHex": "SM39",
+      "rdxMd": 47,
+      "rdxMdName": "MD0047",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        104,
+        32
+      ],
+      "rdxShapeTiles": [
+        100,
+        40
+      ],
+      "alignmentScore": 0.8657871129488368,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 40,
+      "xrickSubmapHex": "SM40",
+      "rdxMd": 48,
+      "rdxMdName": "MD0048",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        32,
+        40
+      ],
+      "alignmentScore": 0.8971455355050386,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 41,
+      "xrickSubmapHex": "SM41",
+      "rdxMd": 49,
+      "rdxMdName": "MD0049",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        104,
+        32
+      ],
+      "rdxShapeTiles": [
+        104,
+        40
+      ],
+      "alignmentScore": 0.8400778495887193,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 42,
+      "xrickSubmapHex": "SM42",
+      "rdxMd": 50,
+      "rdxMdName": "MD0050",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        24,
+        32
+      ],
+      "rdxShapeTiles": [
+        28,
+        40
+      ],
+      "alignmentScore": 0.9104900990099012,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 43,
+      "xrickSubmapHex": "SM43",
+      "rdxMd": 51,
+      "rdxMdName": "MD0051",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        104,
+        32
+      ],
+      "rdxShapeTiles": [
+        104,
+        40
+      ],
+      "alignmentScore": 0.7905124619762536,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 44,
+      "xrickSubmapHex": "SM44",
+      "rdxMd": 52,
+      "rdxMdName": "MD0052",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 2
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 16
+      },
+      "xrickShapeTiles": [
+        32,
+        32
+      ],
+      "rdxShapeTiles": [
+        36,
+        40
+      ],
+      "alignmentScore": 0.8681171012637978,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 45,
+      "xrickSubmapHex": "SM45",
+      "rdxMd": 53,
+      "rdxMdName": "MD0053",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 0
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 0
+      },
+      "xrickShapeTiles": [
+        96,
+        32
+      ],
+      "rdxShapeTiles": [
+        108,
+        40
+      ],
+      "alignmentScore": 0.834740638002774,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    },
+    {
+      "xrickSubmap": 46,
+      "xrickSubmapHex": "SM46",
+      "rdxMd": 54,
+      "rdxMdName": "MD0054",
+      "group": "missile_base",
+      "tileOffset": {
+        "dxTiles": 4,
+        "dyTiles": 10
+      },
+      "pixelOffset": {
+        "dxPx": 32,
+        "dyPx": 80
+      },
+      "xrickShapeTiles": [
+        28,
+        32
+      ],
+      "rdxShapeTiles": [
+        32,
+        40
+      ],
+      "alignmentScore": 0.9024038461538462,
+      "coordinateFormula": "rdx_x_px = xrick_x_px + dxTiles*8; rdx_y_px = xrick_y_px + dyTiles*8"
+    }
+  ],
+  "tileLayerMapping": {
+    "xrickLayoutRole": "canonical submap topology, gameplay collision, spawn timing and object logic source",
+    "rdxVisualRole": "render MD visual map from NT -> PP/MI -> PPFFFF; Plane A uses NT[MD+1] gated by MT bit 0x20; ML/MT are logic/collision not final graphics",
+    "coordinateAnchor": "bottom-center foot/contact point for actors; tiles are 8x8; alignment offsets are in tile units per levelMapping",
+    "fallback": "if an RDX visual asset is missing, preserve xrick sprite/tile until missing-rdx-data-research is closed"
+  },
+  "assetMappings": [
+    {
+      "mappingId": "manual_x_entity_10__r_jungle_theme_flying_trap",
+      "mappingType": "manual-fixed",
+      "category": "pickup_ammo_box",
+      "combinedName": "Jungle ammo box / pickup object",
+      "visualDescription": "Xrick entity 0x10 is one of the two ammo-box pickups; RDX represents both ammo box variants with the same jungle pickup/trap-looking object sprite.",
+      "confidence": "curated-visual",
+      "actionPurpose": "pickup_with_destroyed_explosion",
+      "xrick": {
+        "assetKey": "x:entity_10",
+        "setId": "entity_10",
+        "bundleKeys": [
+          "x:entity_10"
+        ],
+        "actions": [
+          {
+            "action": "idle_box",
+            "label": "box pickup idle sprite from ent_entdata.spr",
+            "direction": "neutral",
+            "frames": [
+              "0x29"
+            ],
+            "frameIds": [
+              41
+            ],
+            "source": "ents.c initialization + e_box_action",
+            "confidence": "high"
+          },
+          {
+            "action": "explode_box",
+            "label": "box explosion sequence",
+            "direction": "neutral",
+            "frames": [
+              "0x24",
+              "0x25",
+              "0x26",
+              "0x27",
+              "0x28"
+            ],
+            "frameIds": [
+              36,
+              37,
+              38,
+              39,
+              40
+            ],
+            "source": "e_box.c static sp[]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "idle_box [0x29] \u2014 box pickup idle sprite from ent_entdata.spr; explode_box [0x24,0x25,0x26,0x27,0x28] \u2014 box explosion sequence"
+      },
+      "rdx": {
+        "assetKey": "r:jungle_theme_flying_trap",
+        "setId": "jungle_theme_flying_trap",
+        "bundleKeys": [
+          "r:jungle_theme_flying_trap"
+        ],
+        "actions": [
+          {
+            "action": "move",
+            "label": "theme-shared flying/rolling trap",
+            "direction": "neutral",
+            "pn": "PN0x43",
+            "pnDec": 67,
+            "pfRange": "PF182-182",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "move_variant",
+            "label": "missile-base flying/rolling trap variant",
+            "direction": "neutral",
+            "pn": "PN0x44",
+            "pnDec": 68,
+            "pfRange": "PF183-183",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "move PN043 neutral \u2014 theme-shared flying/rolling trap; move_variant PN044 neutral \u2014 missile-base flying/rolling trap variant"
+      },
+      "portingNotes": "xrick entity has idle_box and explode_box actions; RDX match is a pickup/object graphic and no separate explosion PN has been proven for this pair yet. Audit note: treat pickup idle and destroy/explosion as separate actions when porting behavior; do not bundle score popup into pickup.",
+      "multiMatch": false
+    },
+    {
+      "mappingId": "manual_x_entity_2B__r_0x0C",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Jungle trap / projectile hazard",
+      "visualDescription": "Small trap/hazard object matched to RDX actor 0x0C; kept as low-confidence trap class pending final visual naming.",
+      "confidence": "curated-visual",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_2B",
+        "setId": "entity_2B",
+        "bundleKeys": [
+          "x:entity_2B"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x64"
+            ],
+            "frameIds": [
+              100
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x62",
+              "0x62",
+              "0x63",
+              "0x63"
+            ],
+            "frameIds": [
+              98,
+              98,
+              99,
+              99
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x64] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x62,0x62,0x63,0x63] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:0x0C",
+        "setId": "0x0C",
+        "bundleKeys": [
+          "r:0x0C",
+          "r:actor_0C",
+          "r:pn_00F",
+          "r:pn_010"
+        ],
+        "actions": [],
+        "actionSummary": "No RDX action rows found in sidecar; treated as static/logic asset."
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_2C__r_boulder_object",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Falling stone / boulder hazard",
+      "visualDescription": "Stone/boulder hazard object, not the opening round rolling boulder.",
+      "confidence": "curated-visual",
+      "actionPurpose": "rolling_or_spike_trap",
+      "xrick": {
+        "assetKey": "x:entity_2C",
+        "setId": "entity_2C",
+        "bundleKeys": [
+          "x:entity_2C"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x65"
+            ],
+            "frameIds": [
+              101
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x65] \u2014 type-3 wait/initial sprite at sproffs=0"
+      },
+      "rdx": {
+        "assetKey": "r:boulder_object",
+        "setId": "boulder_object",
+        "bundleKeys": [
+          "r:boulder_object"
+        ],
+        "actions": [
+          {
+            "action": "roll",
+            "label": "boulder rolling animation",
+            "direction": "neutral",
+            "pn": "PN0x12",
+            "pnDec": 18,
+            "pfRange": "PF48-51",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "User finding: PF48-PF51 / PN012 boulder rolling."
+          },
+          {
+            "action": "idle",
+            "label": "static boulder/object",
+            "direction": "neutral",
+            "pn": "PN0x42",
+            "pnDec": 66,
+            "pfRange": "PF181-181",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "roll PN012 neutral \u2014 boulder rolling animation; idle PN042 neutral \u2014 static boulder/object"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_2D__r_floor_spike_traps",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Floor spike trap",
+      "visualDescription": "Floor spike hazard; match to RDX floor spike group.",
+      "confidence": "curated-visual",
+      "actionPurpose": "rolling_or_spike_trap",
+      "xrick": {
+        "assetKey": "x:entity_2D",
+        "setId": "entity_2D",
+        "bundleKeys": [
+          "x:entity_2D"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x66"
+            ],
+            "frameIds": [
+              102
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x66] \u2014 type-3 wait/initial sprite at sproffs=0"
+      },
+      "rdx": {
+        "assetKey": "r:floor_spike_traps",
+        "setId": "floor_spike_traps",
+        "bundleKeys": [
+          "r:floor_spike_traps",
+          "r:pn_04C",
+          "r:pn_04E",
+          "r:pn_050"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "floor spike trap",
+            "direction": "neutral",
+            "pn": "PN0x4D",
+            "pnDec": 77,
+            "pfRange": "PF211-211",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "idle_wide",
+            "label": "wide floor spike trap",
+            "direction": "neutral",
+            "pn": "PN0x51",
+            "pnDec": 81,
+            "pfRange": "PF236-236",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "idle_castle",
+            "label": "castle floor spike/trap",
+            "direction": "neutral",
+            "pn": "PN0x4F",
+            "pnDec": 79,
+            "pfRange": "PF224-224",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN04D neutral \u2014 floor spike trap; idle_wide PN051 neutral \u2014 wide floor spike trap; idle_castle PN04F neutral \u2014 castle floor spike/trap"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_11__r_jungle_theme_flying_trap",
+      "mappingType": "manual-fixed",
+      "category": "pickup_ammo_box",
+      "combinedName": "Jungle ammo box / pickup object",
+      "visualDescription": "Xrick entity 0x11 is the second ammo-box pickup; it shares the same RDX ammo-box graphic as entity 0x10.",
+      "confidence": "curated-visual",
+      "actionPurpose": "pickup_with_destroyed_explosion",
+      "xrick": {
+        "assetKey": "x:entity_11",
+        "setId": "entity_11",
+        "bundleKeys": [
+          "x:entity_11"
+        ],
+        "actions": [
+          {
+            "action": "idle_box",
+            "label": "box pickup idle sprite from ent_entdata.spr",
+            "direction": "neutral",
+            "frames": [
+              "0x2A"
+            ],
+            "frameIds": [
+              42
+            ],
+            "source": "ents.c initialization + e_box_action",
+            "confidence": "high"
+          },
+          {
+            "action": "explode_box",
+            "label": "box explosion sequence",
+            "direction": "neutral",
+            "frames": [
+              "0x24",
+              "0x25",
+              "0x26",
+              "0x27",
+              "0x28"
+            ],
+            "frameIds": [
+              36,
+              37,
+              38,
+              39,
+              40
+            ],
+            "source": "e_box.c static sp[]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "idle_box [0x2a] \u2014 box pickup idle sprite from ent_entdata.spr; explode_box [0x24,0x25,0x26,0x27,0x28] \u2014 box explosion sequence"
+      },
+      "rdx": {
+        "assetKey": "r:jungle_theme_flying_trap",
+        "setId": "jungle_theme_flying_trap",
+        "bundleKeys": [
+          "r:jungle_theme_flying_trap"
+        ],
+        "actions": [
+          {
+            "action": "move",
+            "label": "theme-shared flying/rolling trap",
+            "direction": "neutral",
+            "pn": "PN0x43",
+            "pnDec": 67,
+            "pfRange": "PF182-182",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "move_variant",
+            "label": "missile-base flying/rolling trap variant",
+            "direction": "neutral",
+            "pn": "PN0x44",
+            "pnDec": 68,
+            "pfRange": "PF183-183",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "move PN043 neutral \u2014 theme-shared flying/rolling trap; move_variant PN044 neutral \u2014 missile-base flying/rolling trap variant"
+      },
+      "portingNotes": "xrick entity has idle_box and explode_box actions; RDX match is a pickup/object graphic and no separate explosion PN has been proven for this pair yet. Audit note: treat pickup idle and destroy/explosion as separate actions when porting behavior; do not bundle score popup into pickup.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_13__r_egypt_tomb_hazard",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Egypt tomb/sarcophagus hazard",
+      "visualDescription": "Xrick pickup-like or scripted object visually corresponds to RDX tomb/sarcophagus hazard.",
+      "confidence": "curated-visual",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_13",
+        "setId": "entity_13",
+        "bundleKeys": [
+          "x:entity_13"
+        ],
+        "actions": [
+          {
+            "action": "idle_collectible",
+            "label": "bonus idle sprite from ent_entdata.spr",
+            "direction": "neutral",
+            "frames": [
+              "0x2C"
+            ],
+            "frameIds": [
+              44
+            ],
+            "source": "ents.c initialization + e_bonus_action",
+            "confidence": "high"
+          },
+          {
+            "action": "score_popup",
+            "label": "score popup after collection",
+            "direction": "neutral",
+            "frames": [
+              "0xAD"
+            ],
+            "frameIds": [
+              173
+            ],
+            "source": "e_bonus.c collected branch",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "idle_collectible [0x2c] \u2014 bonus idle sprite from ent_entdata.spr; score_popup [0xad] \u2014 score popup after collection"
+      },
+      "rdx": {
+        "assetKey": "r:egypt_tomb_hazard",
+        "setId": "egypt_tomb_hazard",
+        "bundleKeys": [
+          "r:egypt_tomb_hazard"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "tomb/sarcophagus-like hazard",
+            "direction": "neutral",
+            "pn": "PN0x1A",
+            "pnDec": 26,
+            "pfRange": "PF69-69",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN01A neutral \u2014 tomb/sarcophagus-like hazard"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1C__r_egypt_long_floor_hazard",
+      "mappingType": "manual-fixed",
+      "category": "platform",
+      "combinedName": "Egypt moving platform \u00b7 explosion-triggered",
+      "visualDescription": "Native Egypt moving-platform controller. Flags select bomb/explosion activation; production presentation defaults to the short PN24 platform.",
+      "confidence": "curated-visual",
+      "actionPurpose": "moving_platform",
+      "xrick": {
+        "assetKey": "x:entity_1C",
+        "setId": "entity_1C",
+        "bundleKeys": [
+          "x:entity_1C"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x55"
+            ],
+            "frameIds": [
+              85
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x55] \u2014 type-3 wait/initial sprite at sproffs=0"
+      },
+      "rdx": {
+        "assetKey": "r:egypt_long_floor_hazard",
+        "setId": "egypt_long_floor_hazard",
+        "bundleKeys": [
+          "r:egypt_long_floor_hazard",
+          "r:pn_015",
+          "r:pn_018",
+          "r:pn_019"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "short moving platform",
+            "direction": "neutral",
+            "pn": "PN0x18",
+            "pnDec": 24,
+            "pfRange": "PF67-67",
+            "frameCount": 1,
+            "source": "production C moving-platform family + ROM PN/PF",
+            "confidence": "high",
+            "notes": "Native 0x1C explosion-triggered Egypt platform default."
+          }
+        ],
+        "actionSummary": "idle PN018 neutral \u2014 short moving platform"
+      },
+      "portingNotes": "0x1C is an Egypt moving-platform controller. Preserve Classic motion/flags; use PN24 as the default platform art unless a source-specific reviewed override says otherwise.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_18__r_egypt_long_floor_hazard",
+      "mappingType": "manual-fixed",
+      "category": "platform",
+      "combinedName": "Egypt moving platform \u00b7 presence-triggered",
+      "visualDescription": "Native Egypt moving-platform controller. Flags select Rick/presence activation; production presentation defaults to the short PN24 platform.",
+      "confidence": "curated-visual",
+      "actionPurpose": "moving_platform",
+      "xrick": {
+        "assetKey": "x:entity_18",
+        "setId": "entity_18",
+        "bundleKeys": [
+          "x:entity_18"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x55"
+            ],
+            "frameIds": [
+              85
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x55] \u2014 type-3 wait/initial sprite at sproffs=0"
+      },
+      "rdx": {
+        "assetKey": "r:egypt_long_floor_hazard",
+        "setId": "egypt_long_floor_hazard",
+        "bundleKeys": [
+          "r:egypt_long_floor_hazard",
+          "r:pn_015",
+          "r:pn_018",
+          "r:pn_019"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "short moving platform",
+            "direction": "neutral",
+            "pn": "PN0x18",
+            "pnDec": 24,
+            "pfRange": "PF67-67",
+            "frameCount": 1,
+            "source": "production C moving-platform family + ROM PN/PF",
+            "confidence": "high",
+            "notes": "Native 0x18 presence-triggered Egypt platform default."
+          }
+        ],
+        "actionSummary": "idle PN018 neutral \u2014 short moving platform"
+      },
+      "portingNotes": "0x18 is an Egypt moving-platform controller. Preserve Classic motion/flags; use PN24 as the default platform art unless a source-specific reviewed override says otherwise.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_38__r_castle_static_objects",
+      "mappingType": "manual-fixed",
+      "category": "object",
+      "combinedName": "Castle static object / obstacle",
+      "visualDescription": "Static castle obstacle/object group.",
+      "confidence": "curated-visual",
+      "actionPurpose": "object_or_utility",
+      "xrick": {
+        "assetKey": "x:entity_38",
+        "setId": "entity_38",
+        "bundleKeys": [
+          "x:entity_38"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x73"
+            ],
+            "frameIds": [
+              115
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x47",
+              "0x48"
+            ],
+            "frameIds": [
+              71,
+              72
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x73] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x47,0x48] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_static_objects",
+        "setId": "castle_static_objects",
+        "bundleKeys": [
+          "r:castle_static_objects"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "castle/missile single-frame enemy/object",
+            "direction": "neutral",
+            "pn": "PN0x11",
+            "pnDec": 17,
+            "pfRange": "PF47-47",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          },
+          {
+            "action": "rubble",
+            "label": "castle rock/rubble object",
+            "direction": "neutral",
+            "pn": "PN0x57",
+            "pnDec": 87,
+            "pfRange": "PF252-252",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          },
+          {
+            "action": "round_object",
+            "label": "castle round static object",
+            "direction": "neutral",
+            "pn": "PN0x74",
+            "pnDec": 116,
+            "pfRange": "PF335-335",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          },
+          {
+            "action": "red_block",
+            "label": "castle red block/object",
+            "direction": "neutral",
+            "pn": "PN0x76",
+            "pnDec": 118,
+            "pfRange": "PF348-348",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN011 neutral \u2014 castle/missile single-frame enemy/object; rubble PN057 neutral \u2014 castle rock/rubble object; round_object PN074 neutral \u2014 castle round static object; red_block PN076 neutral \u2014 castle red block/object"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_14__r_castle_small_crawl_creature",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Castle crawl creature / floor hazard",
+      "visualDescription": "Small crawl/floor creature hazard in castle context.",
+      "confidence": "curated-visual",
+      "actionPurpose": "moving_platform_or_floor_trap",
+      "xrick": {
+        "assetKey": "x:entity_14",
+        "setId": "entity_14",
+        "bundleKeys": [
+          "x:entity_14"
+        ],
+        "actions": [
+          {
+            "action": "idle_collectible",
+            "label": "bonus idle sprite from ent_entdata.spr",
+            "direction": "neutral",
+            "frames": [
+              "0x2E"
+            ],
+            "frameIds": [
+              46
+            ],
+            "source": "ents.c initialization + e_bonus_action",
+            "confidence": "high"
+          },
+          {
+            "action": "score_popup",
+            "label": "score popup after collection",
+            "direction": "neutral",
+            "frames": [
+              "0xAD"
+            ],
+            "frameIds": [
+              173
+            ],
+            "source": "e_bonus.c collected branch",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "idle_collectible [0x2e] \u2014 bonus idle sprite from ent_entdata.spr; score_popup [0xad] \u2014 score popup after collection"
+      },
+      "rdx": {
+        "assetKey": "r:castle_small_crawl_creature",
+        "setId": "castle_small_crawl_creature",
+        "bundleKeys": [
+          "r:castle_small_crawl_creature"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "small crawl/creature object",
+            "direction": "neutral",
+            "pn": "PN0x2E",
+            "pnDec": 46,
+            "pfRange": "PF132-132",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN02E neutral \u2014 small crawl/creature object"
+      },
+      "portingNotes": "Audit note: these are likely platform/floor mechanism frames; match by mechanism, not by proximity to other trap frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_35__r_castle_dog",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Castle dog enemy / dog-like trap",
+      "visualDescription": "Dog enemy/hazard appearance; xrick trap behavior maps to RDX dog enemy asset.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:entity_35",
+        "setId": "entity_35",
+        "bundleKeys": [
+          "x:entity_35"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x6D"
+            ],
+            "frameIds": [
+              109
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x6E",
+              "0x6F",
+              "0x70"
+            ],
+            "frameIds": [
+              110,
+              111,
+              112
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x6d] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x6e,0x6f,0x70] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_dog",
+        "setId": "castle_dog",
+        "bundleKeys": [
+          "r:castle_dog",
+          "r:pn_021"
+        ],
+        "actions": [
+          {
+            "action": "walk",
+            "label": "dog walk right",
+            "direction": "right",
+            "pn": "PN0x1F",
+            "pnDec": 31,
+            "pfRange": "PF74-77",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "dog walk left",
+            "direction": "left",
+            "pn": "PN0x20",
+            "pnDec": 32,
+            "pfRange": "PF78-81",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "walk PN01F right \u2014 dog walk right; walk PN020 left \u2014 dog walk left"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_3C__r_missile_crawl_fall_object",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Missile crawl/fall hazard",
+      "visualDescription": "Missile-base floor/crawl/falling object hazard.",
+      "confidence": "curated-visual",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_3C",
+        "setId": "entity_3C",
+        "bundleKeys": [
+          "x:entity_3C"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x78"
+            ],
+            "frameIds": [
+              120
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x78] \u2014 type-3 wait/initial sprite at sproffs=0"
+      },
+      "rdx": {
+        "assetKey": "r:missile_crawl_fall_object",
+        "setId": "missile_crawl_fall_object",
+        "bundleKeys": [
+          "r:missile_crawl_fall_object"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "crawl/fall object",
+            "direction": "neutral",
+            "pn": "PN0x59",
+            "pnDec": 89,
+            "pfRange": "PF254-254",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN059 neutral \u2014 crawl/fall object"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_artbase_2F__r_jungle_enemy_a",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Jungle warrior enemy A",
+      "visualDescription": "Directional walking jungle enemy; left/right facing frames are bundled as one character.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:artbase_2F",
+        "setId": "artbase_2F",
+        "bundleKeys": [
+          "x:artbase_2F"
+        ],
+        "actions": [
+          {
+            "action": "walk_right",
+            "label": "type-1 ground gait, RIGHT/native frames",
+            "direction": "right",
+            "frames": [
+              "0x2F",
+              "0x30",
+              "0x2F",
+              "0x31"
+            ],
+            "frameIds": [
+              47,
+              48,
+              47,
+              49
+            ],
+            "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+            "confidence": "high"
+          },
+          {
+            "action": "walk_left",
+            "label": "type-1 ground gait, LEFT/native frames",
+            "direction": "left",
+            "frames": [
+              "0x32",
+              "0x33",
+              "0x32",
+              "0x34"
+            ],
+            "frameIds": [
+              50,
+              51,
+              50,
+              52
+            ],
+            "source": "e_them_t1_action2: +3 when offsx<0",
+            "confidence": "high"
+          },
+          {
+            "action": "die_zombie",
+            "label": "killed e_them zombie/fall frames",
+            "direction": "neutral",
+            "frames": [
+              "0x35",
+              "0x36"
+            ],
+            "frameIds": [
+              53,
+              54
+            ],
+            "source": "e_them_z_action: sprbase+6/7",
+            "confidence": "high"
+          },
+          {
+            "action": "type2_patrol_right",
+            "label": "type-2 behavior gait, RIGHT; two frames because runtime samples only ent_sprseq[0..1]",
+            "direction": "right",
+            "frames": [
+              "0x2F",
+              "0x30"
+            ],
+            "frameIds": [
+              47,
+              48
+            ],
+            "source": "e_them_t2_action2 ground branch",
+            "confidence": "high"
+          },
+          {
+            "action": "type2_patrol_left",
+            "label": "type-2 behavior gait, LEFT; two native frames from ent_sprseq[4..5]",
+            "direction": "left",
+            "frames": [
+              "0x34",
+              "0x32"
+            ],
+            "frameIds": [
+              52,
+              50
+            ],
+            "source": "e_them_t2_action2 ground branch",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "walk_right [0x2f,0x30,0x2f,0x31] \u2014 type-1 ground gait, RIGHT/native frames; walk_left [0x32,0x33,0x32,0x34] \u2014 type-1 ground gait, LEFT/native frames; die_zombie [0x35,0x36] \u2014 killed e_them zombie/fall frames; type2_patrol_right [0x2f,0x30] \u2014 type-2 behavior gait, RIGHT; two frames because runtime samples only ent_sprseq[0..1]; type2_patrol_left [0x34,0x32] \u2014 type-2 behavior gait, LEFT; two native frames from ent_sprseq[4..5]"
+      },
+      "rdx": {
+        "assetKey": "r:jungle_enemy_a",
+        "setId": "jungle_enemy_a",
+        "bundleKeys": [
+          "r:jungle_enemy_a"
+        ],
+        "actions": [
+          {
+            "action": "die",
+            "label": "death / front-facing collapse",
+            "direction": "neutral",
+            "pn": "PN0x03",
+            "pnDec": 3,
+            "pfRange": "PF4-7",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "walk right",
+            "direction": "right",
+            "pn": "PN0x04",
+            "pnDec": 4,
+            "pfRange": "PF8-12",
+            "frameCount": 5,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "walk left",
+            "direction": "left",
+            "pn": "PN0x05",
+            "pnDec": 5,
+            "pfRange": "PF13-17",
+            "frameCount": 5,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "die PN003 neutral \u2014 death / front-facing collapse; walk PN004 right \u2014 walk right; walk PN005 left \u2014 walk left"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": false
+    },
+    {
+      "mappingId": "manual_x_artbase_8E__r_jungle_enemy_b",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Jungle warrior enemy B",
+      "visualDescription": "Second jungle walking enemy art set / palette variant.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:artbase_8E",
+        "setId": "artbase_8E",
+        "bundleKeys": [
+          "x:artbase_8E"
+        ],
+        "actions": [
+          {
+            "action": "walk_right",
+            "label": "type-1 ground gait, RIGHT/native frames",
+            "direction": "right",
+            "frames": [
+              "0x8E",
+              "0x8F",
+              "0x8E",
+              "0x90"
+            ],
+            "frameIds": [
+              142,
+              143,
+              142,
+              144
+            ],
+            "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+            "confidence": "high"
+          },
+          {
+            "action": "walk_left",
+            "label": "type-1 ground gait, LEFT/native frames",
+            "direction": "left",
+            "frames": [
+              "0x91",
+              "0x92",
+              "0x91",
+              "0x93"
+            ],
+            "frameIds": [
+              145,
+              146,
+              145,
+              147
+            ],
+            "source": "e_them_t1_action2: +3 when offsx<0",
+            "confidence": "high"
+          },
+          {
+            "action": "die_zombie",
+            "label": "killed e_them zombie/fall frames",
+            "direction": "neutral",
+            "frames": [
+              "0x94",
+              "0x95"
+            ],
+            "frameIds": [
+              148,
+              149
+            ],
+            "source": "e_them_z_action: sprbase+6/7",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "walk_right [0x8e,0x8f,0x8e,0x90] \u2014 type-1 ground gait, RIGHT/native frames; walk_left [0x91,0x92,0x91,0x93] \u2014 type-1 ground gait, LEFT/native frames; die_zombie [0x94,0x95] \u2014 killed e_them zombie/fall frames"
+      },
+      "rdx": {
+        "assetKey": "r:jungle_enemy_b",
+        "setId": "jungle_enemy_b",
+        "bundleKeys": [
+          "r:jungle_enemy_b"
+        ],
+        "actions": [
+          {
+            "action": "die",
+            "label": "death / front-facing collapse",
+            "direction": "neutral",
+            "pn": "PN0x06",
+            "pnDec": 6,
+            "pfRange": "PF18-21",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "walk right",
+            "direction": "right",
+            "pn": "PN0x07",
+            "pnDec": 7,
+            "pfRange": "PF22-26",
+            "frameCount": 5,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "walk left",
+            "direction": "left",
+            "pn": "PN0x08",
+            "pnDec": 8,
+            "pfRange": "PF27-31",
+            "frameCount": 5,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "die PN006 neutral \u2014 death / front-facing collapse; walk PN007 right \u2014 walk right; walk PN008 left \u2014 walk left"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": false
+    },
+    {
+      "mappingId": "manual_x_entity_12__r_jungle_idol_object",
+      "mappingType": "manual-fixed",
+      "category": "collectible",
+      "combinedName": "Golden idol collectible",
+      "visualDescription": "Static jungle idol / treasure object.",
+      "confidence": "curated-visual",
+      "actionPurpose": "collectible_pickup",
+      "xrick": {
+        "assetKey": "x:entity_12",
+        "setId": "entity_12",
+        "bundleKeys": [
+          "x:entity_12"
+        ],
+        "actions": [
+          {
+            "action": "idle_collectible",
+            "label": "bonus idle sprite from ent_entdata.spr",
+            "direction": "neutral",
+            "frames": [
+              "0x2B"
+            ],
+            "frameIds": [
+              43
+            ],
+            "source": "ents.c initialization + e_bonus_action",
+            "confidence": "high"
+          },
+          {
+            "action": "score_popup",
+            "label": "score popup after collection",
+            "direction": "neutral",
+            "frames": [
+              "0xAD"
+            ],
+            "frameIds": [
+              173
+            ],
+            "source": "e_bonus.c collected branch",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "idle_collectible [0x2b] \u2014 bonus idle sprite from ent_entdata.spr; score_popup [0xad] \u2014 score popup after collection"
+      },
+      "rdx": {
+        "assetKey": "r:jungle_idol_object",
+        "setId": "jungle_idol_object",
+        "bundleKeys": [
+          "r:jungle_idol_object"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "static idol/object frame",
+            "direction": "neutral",
+            "pn": "PN0x1B",
+            "pnDec": 27,
+            "pfRange": "PF70-70",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN01B neutral \u2014 static idol/object frame"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": false
+    },
+    {
+      "mappingId": "manual_x_entity_2E__r_jungle_creature_trap",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Jungle creature trap",
+      "visualDescription": "Small animated jungle hazard/creature trap.",
+      "confidence": "curated-visual",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_2E",
+        "setId": "entity_2E",
+        "bundleKeys": [
+          "x:entity_2E"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x67"
+            ],
+            "frameIds": [
+              103
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x68"
+            ],
+            "frameIds": [
+              104
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x67] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x68] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:jungle_creature_trap",
+        "setId": "jungle_creature_trap",
+        "bundleKeys": [
+          "r:jungle_creature_trap",
+          "r:pn_052",
+          "r:pn_056",
+          "r:pn_058"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "creature/trap frame",
+            "direction": "neutral",
+            "pn": "PN0x55",
+            "pnDec": 85,
+            "pfRange": "PF250-250",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN055 neutral \u2014 creature/trap frame"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": false
+    },
+    {
+      "mappingId": "manual_x_entity_15__r_missile_rocket_hazards",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Missile base rocket hazard",
+      "visualDescription": "Rocket/missile hazard object.",
+      "confidence": "curated-visual",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_15",
+        "setId": "entity_15",
+        "bundleKeys": [
+          "x:entity_15"
+        ],
+        "actions": [
+          {
+            "action": "idle_collectible",
+            "label": "bonus idle sprite from ent_entdata.spr",
+            "direction": "neutral",
+            "frames": [
+              "0x2D"
+            ],
+            "frameIds": [
+              45
+            ],
+            "source": "ents.c initialization + e_bonus_action",
+            "confidence": "high"
+          },
+          {
+            "action": "score_popup",
+            "label": "score popup after collection",
+            "direction": "neutral",
+            "frames": [
+              "0xAD"
+            ],
+            "frameIds": [
+              173
+            ],
+            "source": "e_bonus.c collected branch",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "idle_collectible [0x2d] \u2014 bonus idle sprite from ent_entdata.spr; score_popup [0xad] \u2014 score popup after collection"
+      },
+      "rdx": {
+        "assetKey": "r:missile_rocket_hazards",
+        "setId": "missile_rocket_hazards",
+        "bundleKeys": [
+          "r:missile_rocket_hazards"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "rocket/missile hazard",
+            "direction": "neutral",
+            "pn": "PN0x3E",
+            "pnDec": 62,
+            "pfRange": "PF174-175",
+            "frameCount": 2,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "idle_variant",
+            "label": "rocket/missile hazard variant",
+            "direction": "neutral",
+            "pn": "PN0x3D",
+            "pnDec": 61,
+            "pfRange": "PF173-173",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN03E neutral \u2014 rocket/missile hazard; idle_variant PN03D neutral \u2014 rocket/missile hazard variant"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_32__r_castle_barrel_roll",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Rolling barrel trap",
+      "visualDescription": "Castle rolling barrel hazard.",
+      "confidence": "curated-visual",
+      "actionPurpose": "rolling_or_spike_trap",
+      "xrick": {
+        "assetKey": "x:entity_32",
+        "setId": "entity_32",
+        "bundleKeys": [
+          "x:entity_32"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x6A"
+            ],
+            "frameIds": [
+              106
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x6A",
+              "0x6B",
+              "0x6B"
+            ],
+            "frameIds": [
+              106,
+              107,
+              107
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x6a] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x6a,0x6b,0x6b] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_barrel_roll",
+        "setId": "castle_barrel_roll",
+        "bundleKeys": [
+          "r:castle_barrel_roll"
+        ],
+        "actions": [
+          {
+            "action": "roll",
+            "label": "barrel roll right",
+            "direction": "right",
+            "pn": "PN0x72",
+            "pnDec": 114,
+            "pfRange": "PF327-330",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "roll",
+            "label": "barrel roll left",
+            "direction": "left",
+            "pn": "PN0x73",
+            "pnDec": 115,
+            "pfRange": "PF331-334",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "roll PN072 right \u2014 barrel roll right; roll PN073 left \u2014 barrel roll left"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_33__r_castle_barrel_roll",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Rolling barrel trap alias",
+      "visualDescription": "Second xrick barrel entity mapped to the same RDX rolling barrel asset.",
+      "confidence": "curated-visual",
+      "actionPurpose": "rolling_or_spike_trap",
+      "xrick": {
+        "assetKey": "x:entity_33",
+        "setId": "entity_33",
+        "bundleKeys": [
+          "x:entity_33"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x6B"
+            ],
+            "frameIds": [
+              107
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x6B",
+              "0x6A",
+              "0x6A"
+            ],
+            "frameIds": [
+              107,
+              106,
+              106
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x6b] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x6b,0x6a,0x6a] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_barrel_roll",
+        "setId": "castle_barrel_roll",
+        "bundleKeys": [
+          "r:castle_barrel_roll"
+        ],
+        "actions": [
+          {
+            "action": "roll",
+            "label": "barrel roll right",
+            "direction": "right",
+            "pn": "PN0x72",
+            "pnDec": 114,
+            "pfRange": "PF327-330",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "roll",
+            "label": "barrel roll left",
+            "direction": "left",
+            "pn": "PN0x73",
+            "pnDec": 115,
+            "pfRange": "PF331-334",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "roll PN072 right \u2014 barrel roll right; roll PN073 left \u2014 barrel roll left"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_3D__r_castle_barrel_roll",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Rolling barrel trap alias",
+      "visualDescription": "Scripted barrel/hazard alias mapped to RDX rolling barrel.",
+      "confidence": "curated-visual",
+      "actionPurpose": "rolling_or_spike_trap",
+      "xrick": {
+        "assetKey": "x:entity_3D",
+        "setId": "entity_3D",
+        "bundleKeys": [
+          "x:entity_3D"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x6A"
+            ],
+            "frameIds": [
+              106
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x6A",
+              "0x6B",
+              "0x6B"
+            ],
+            "frameIds": [
+              106,
+              107,
+              107
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x6a] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x6a,0x6b,0x6b] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_barrel_roll",
+        "setId": "castle_barrel_roll",
+        "bundleKeys": [
+          "r:castle_barrel_roll"
+        ],
+        "actions": [
+          {
+            "action": "roll",
+            "label": "barrel roll right",
+            "direction": "right",
+            "pn": "PN0x72",
+            "pnDec": 114,
+            "pfRange": "PF327-330",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "roll",
+            "label": "barrel roll left",
+            "direction": "left",
+            "pn": "PN0x73",
+            "pnDec": 115,
+            "pfRange": "PF331-334",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "roll PN072 right \u2014 barrel roll right; roll PN073 left \u2014 barrel roll left"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_22__r_egypt_gem_orb_object",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Egypt gem/orb object",
+      "visualDescription": "Gem/orb style Egypt object, visually object-class rather than live enemy.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:entity_22",
+        "setId": "entity_22",
+        "bundleKeys": [
+          "x:entity_22"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x5B"
+            ],
+            "frameIds": [
+              91
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x5b] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x0] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:egypt_gem_orb_object",
+        "setId": "egypt_gem_orb_object",
+        "bundleKeys": [
+          "r:egypt_gem_orb_object"
+        ],
+        "actions": [
+          {
+            "action": "idle",
+            "label": "gem/orb-like object",
+            "direction": "neutral",
+            "pn": "PN0x35",
+            "pnDec": 53,
+            "pfRange": "PF151-151",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "low",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "idle PN035 neutral \u2014 gem/orb-like object"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_42__r_castle_dog",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Castle dog enemy alias",
+      "visualDescription": "Same dog asset under a second xrick scripted/trap entity id.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:entity_42",
+        "setId": "entity_42",
+        "bundleKeys": [
+          "x:entity_42"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x6D"
+            ],
+            "frameIds": [
+              109
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x6E",
+              "0x6F",
+              "0x70"
+            ],
+            "frameIds": [
+              110,
+              111,
+              112
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x6d] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x6e,0x6f,0x70] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_dog",
+        "setId": "castle_dog",
+        "bundleKeys": [
+          "r:castle_dog",
+          "r:pn_021"
+        ],
+        "actions": [
+          {
+            "action": "walk",
+            "label": "dog walk right",
+            "direction": "right",
+            "pn": "PN0x1F",
+            "pnDec": 31,
+            "pfRange": "PF74-77",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "dog walk left",
+            "direction": "left",
+            "pn": "PN0x20",
+            "pnDec": 32,
+            "pfRange": "PF78-81",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "walk PN01F right \u2014 dog walk right; walk PN020 left \u2014 dog walk left"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_47__r_castle_missile_guard",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Castle/missile guard shooter",
+      "visualDescription": "Guard/shooter enemy; xrick scripted trap id uses guard-like walk/shoot asset.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:entity_47",
+        "setId": "entity_47",
+        "bundleKeys": [
+          "x:entity_47"
+        ],
+        "actions": [
+          {
+            "action": "zombie_formula",
+            "label": "special entity 0x47 runtime formula: sprbase+6/7",
+            "direction": "neutral",
+            "frames": [
+              "0x42",
+              "0x43"
+            ],
+            "frameIds": [
+              66,
+              67
+            ],
+            "source": "ent_action dispatches k==0x47 directly to e_them_z_action",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "zombie_formula [0x42,0x43] \u2014 special entity 0x47 runtime formula: sprbase+6/7"
+      },
+      "rdx": {
+        "assetKey": "r:castle_missile_guard",
+        "setId": "castle_missile_guard",
+        "bundleKeys": [
+          "r:castle_missile_guard",
+          "r:pn_06F"
+        ],
+        "actions": [
+          {
+            "action": "walk",
+            "label": "guard walk right",
+            "direction": "right",
+            "pn": "PN0x70",
+            "pnDec": 112,
+            "pfRange": "PF321-323",
+            "frameCount": 3,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "guard walk left",
+            "direction": "left",
+            "pn": "PN0x71",
+            "pnDec": 113,
+            "pfRange": "PF324-326",
+            "frameCount": 3,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "walk PN070 right \u2014 guard walk right; walk PN071 left \u2014 guard walk left"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_3E__r_castle_dog",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Castle dog enemy alias",
+      "visualDescription": "Joined dog-like trap/entity alias matched to the same RDX dog asset.",
+      "confidence": "curated-visual",
+      "actionPurpose": "enemy_character_bundle",
+      "xrick": {
+        "assetKey": "x:entity_3E",
+        "setId": "entity_3E",
+        "bundleKeys": [
+          "x:entity_3E"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x6D"
+            ],
+            "frameIds": [
+              109
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x6E"
+            ],
+            "frameIds": [
+              110
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x6d] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x6e] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:castle_dog",
+        "setId": "castle_dog",
+        "bundleKeys": [
+          "r:castle_dog",
+          "r:pn_021"
+        ],
+        "actions": [
+          {
+            "action": "walk",
+            "label": "dog walk right",
+            "direction": "right",
+            "pn": "PN0x1F",
+            "pnDec": 31,
+            "pfRange": "PF74-77",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "dog walk left",
+            "direction": "left",
+            "pn": "PN0x20",
+            "pnDec": 32,
+            "pfRange": "PF78-81",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "walk PN01F right \u2014 dog walk right; walk PN020 left \u2014 dog walk left"
+      },
+      "portingNotes": "Audit note: walk/rest/die/climb coverage must be checked per character. If RDX has walk but no die/rest PN, keep missing-action note for later behavior pass.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_score_popup_500__r_score_popup_500",
+      "mappingType": "manual-fixed",
+      "category": "ui_score",
+      "combinedName": "Score popup 500 points",
+      "visualDescription": "Score popup shown after collecting an item. Kept separate from collectible pickup sprites in both ports.",
+      "confidence": "curated-visual",
+      "actionPurpose": "score_popup",
+      "xrick": {
+        "assetKey": "x:score_popup_500",
+        "setId": "score_popup_500",
+        "bundleKeys": [
+          "x:score_popup_500"
+        ],
+        "actions": [],
+        "actionSummary": "No xrick action rows found in sidecar; treated as static/logic asset."
+      },
+      "rdx": {
+        "assetKey": "r:score_popup_500",
+        "setId": "score_popup_500",
+        "bundleKeys": [
+          "r:pn_01C",
+          "r:pn_01D",
+          "r:score_popup_500"
+        ],
+        "actions": [
+          {
+            "action": "score_popup",
+            "label": "500 score popup PN0x1C",
+            "direction": "neutral",
+            "pn": "PN0x1C",
+            "pnDec": 28,
+            "pfRange": "PF71-71",
+            "frameCount": 1,
+            "source": "score popup split",
+            "confidence": "medium",
+            "notes": "Separate from collectible pickup."
+          },
+          {
+            "action": "score_popup",
+            "label": "500 score popup PN0x1D",
+            "direction": "neutral",
+            "pn": "PN0x1D",
+            "pnDec": 29,
+            "pfRange": "PF72-72",
+            "frameCount": 1,
+            "source": "score popup split",
+            "confidence": "medium",
+            "notes": "Separate from collectible pickup."
+          }
+        ],
+        "actionSummary": "No RDX action rows found in sidecar; treated as static/logic asset."
+      },
+      "portingNotes": "Audit note: score popup is UI feedback, not the collectible pickup itself.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_2A__r_opening_round_boulder",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Opening rolling boulder chase hazard",
+      "visualDescription": "Round rolling boulder used in the first jungle chase. RDX uses PN0x12/decimal18 rolling frames; do not confuse with rectangular/brick boulder object.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "rolling_boulder_chase",
+      "xrick": {
+        "assetKey": "x:entity_2A",
+        "setId": "entity_2A",
+        "bundleKeys": [
+          "x:entity_2A"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x61",
+              "0x69"
+            ],
+            "frameIds": [
+              97,
+              105
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x61,0x69] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:opening_round_boulder",
+        "setId": "opening_round_boulder",
+        "bundleKeys": [
+          "r:opening_round_boulder",
+          "r:pn_012"
+        ],
+        "actions": [
+          {
+            "action": "roll",
+            "label": "opening round rolling boulder / chase ball",
+            "direction": "neutral",
+            "pn": "PN0x12",
+            "pnDec": 18,
+            "pfRange": "PF48-51",
+            "frameCount": 4,
+            "source": "PN-only special promotion",
+            "confidence": "high",
+            "notes": "Round boulder, not rectangular stone block."
+          }
+        ],
+        "actionSummary": "No RDX action rows found in sidecar; treated as static/logic asset."
+      },
+      "portingNotes": "Audit note: use round boulder PN0x12; rectangular boulder object remains separate.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_28__r_pn040_robot_enemy",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Robot enemy / mechanical hazard",
+      "visualDescription": "Robot enemy bundle. Xrick entity 0x28/0x29 are trap/logic variants of the same visual robot-style enemy; RDX PN040/PN041 are the paired robot frames.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "robot_enemy_activation",
+      "xrick": {
+        "assetKey": "x:entity_28",
+        "setId": "entity_28",
+        "bundleKeys": [
+          "x:entity_28"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x5E",
+              "0x5F",
+              "0x60",
+              "0x5F"
+            ],
+            "frameIds": [
+              94,
+              95,
+              96,
+              95
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x5e,0x5f,0x60,0x5f] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn040_robot_enemy",
+        "setId": "pn040_robot_enemy",
+        "bundleKeys": [
+          "r:pn040_robot_enemy",
+          "r:pn_040",
+          "r:pn_041"
+        ],
+        "actions": [
+          {
+            "action": "robot_motion",
+            "label": "robot enemy PN0x40",
+            "direction": "right",
+            "pn": "PN0x40",
+            "pnDec": 64,
+            "pfRange": "PF177-178",
+            "frameCount": 2,
+            "source": "PN-only special promotion",
+            "confidence": "high",
+            "notes": "Robot enemy bundle."
+          },
+          {
+            "action": "robot_motion_variant",
+            "label": "robot enemy companion PN0x41",
+            "direction": "right",
+            "pn": "PN0x41",
+            "pnDec": 65,
+            "pfRange": "PF179-180",
+            "frameCount": 2,
+            "source": "PN-only special promotion",
+            "confidence": "high",
+            "notes": "Companion robot frames."
+          }
+        ],
+        "actionSummary": "PN040: PF177-178 frames=2 direction=right speed=0x0028 flags=0x0040"
+      },
+      "portingNotes": "Audit note: treat 0x28/0x29 as same visual/mechanical enemy bundle despite xrick trap category.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_29__r_pn040_robot_enemy",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Robot enemy / mechanical hazard",
+      "visualDescription": "Robot enemy bundle. Xrick entity 0x28/0x29 are trap/logic variants of the same visual robot-style enemy; RDX PN040/PN041 are the paired robot frames.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "robot_enemy_activation",
+      "xrick": {
+        "assetKey": "x:entity_29",
+        "setId": "entity_29",
+        "bundleKeys": [
+          "x:entity_29"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x5E",
+              "0x5F",
+              "0x60",
+              "0x5F"
+            ],
+            "frameIds": [
+              94,
+              95,
+              96,
+              95
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x5e,0x5f,0x60,0x5f] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn040_robot_enemy",
+        "setId": "pn040_robot_enemy",
+        "bundleKeys": [
+          "r:pn040_robot_enemy",
+          "r:pn_040",
+          "r:pn_041"
+        ],
+        "actions": [
+          {
+            "action": "robot_motion",
+            "label": "robot enemy PN0x40",
+            "direction": "right",
+            "pn": "PN0x40",
+            "pnDec": 64,
+            "pfRange": "PF177-178",
+            "frameCount": 2,
+            "source": "PN-only special promotion",
+            "confidence": "high",
+            "notes": "Robot enemy bundle."
+          },
+          {
+            "action": "robot_motion_variant",
+            "label": "robot enemy companion PN0x41",
+            "direction": "right",
+            "pn": "PN0x41",
+            "pnDec": 65,
+            "pfRange": "PF179-180",
+            "frameCount": 2,
+            "source": "PN-only special promotion",
+            "confidence": "high",
+            "notes": "Companion robot frames."
+          }
+        ],
+        "actionSummary": "PN040: PF177-178 frames=2 direction=right speed=0x0028 flags=0x0040"
+      },
+      "portingNotes": "Audit note: treat 0x28/0x29 as same visual/mechanical enemy bundle despite xrick trap category.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_artbase_7E__r_pn_00A",
+      "mappingType": "manual-fixed",
+      "category": "enemy",
+      "combinedName": "Enemy death/rest variant",
+      "visualDescription": "Likely non-walk enemy state. PN00A is a neutral four-frame sequence; keep separate from rejected PN009 until visually confirmed.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "enemy_death_or_resting_variant",
+      "xrick": {
+        "assetKey": "x:artbase_7E",
+        "setId": "artbase_7E",
+        "bundleKeys": [
+          "x:artbase_7E"
+        ],
+        "actions": [
+          {
+            "action": "walk_right",
+            "label": "type-1 ground gait, RIGHT/native frames",
+            "direction": "right",
+            "frames": [
+              "0x7E",
+              "0x7F",
+              "0x7E",
+              "0x80"
+            ],
+            "frameIds": [
+              126,
+              127,
+              126,
+              128
+            ],
+            "source": "e_them_t1_action2: sprbase + ent_sprseq[(x&0x1c)>>3]",
+            "confidence": "high"
+          },
+          {
+            "action": "walk_left",
+            "label": "type-1 ground gait, LEFT/native frames",
+            "direction": "left",
+            "frames": [
+              "0x81",
+              "0x82",
+              "0x81",
+              "0x83"
+            ],
+            "frameIds": [
+              129,
+              130,
+              129,
+              131
+            ],
+            "source": "e_them_t1_action2: +3 when offsx<0",
+            "confidence": "high"
+          },
+          {
+            "action": "die_zombie",
+            "label": "killed e_them zombie/fall frames",
+            "direction": "neutral",
+            "frames": [
+              "0x84",
+              "0x85"
+            ],
+            "frameIds": [
+              132,
+              133
+            ],
+            "source": "e_them_z_action: sprbase+6/7",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "walk_right [0x7e,0x7f,0x7e,0x80] \u2014 type-1 ground gait, RIGHT/native frames; walk_left [0x81,0x82,0x81,0x83] \u2014 type-1 ground gait, LEFT/native frames; die_zombie [0x84,0x85] \u2014 killed e_them zombie/fall frames"
+      },
+      "rdx": {
+        "assetKey": "r:pn_00A",
+        "setId": "pn_00A",
+        "bundleKeys": [
+          "r:egypt_large_guard",
+          "r:pn_00A"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN010",
+            "direction": "neutral",
+            "pn": "PN0x0A",
+            "pnDec": 10,
+            "pfRange": "PF36-39",
+            "frameCount": 4,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN00A: PF36-39 frames=4 direction=neutral speed=0x0020 flags=0x000A"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_39__r_pn_00D",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "entity_39 -> pn_00D",
+      "visualDescription": "",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_39",
+        "setId": "entity_39",
+        "bundleKeys": [
+          "x:entity_39"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x74"
+            ],
+            "frameIds": [
+              116
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x74] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_00D",
+        "setId": "pn_00D",
+        "bundleKeys": [
+          "r:pn_00D",
+          "r:pn_00E"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN013",
+            "direction": "right",
+            "pn": "PN0x0D",
+            "pnDec": 13,
+            "pfRange": "PF42-42",
+            "frameCount": 1,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN00D: PF42-42 frames=1 direction=right speed=0x1005 flags=0x0085"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_39__r_pn_00E",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "entity_39 -> pn_00E",
+      "visualDescription": "",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_39",
+        "setId": "entity_39",
+        "bundleKeys": [
+          "x:entity_39"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x74"
+            ],
+            "frameIds": [
+              116
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x74] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_00E",
+        "setId": "pn_00E",
+        "bundleKeys": [
+          "r:pn_00D",
+          "r:pn_00E"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN014",
+            "direction": "left",
+            "pn": "PN0x0E",
+            "pnDec": 14,
+            "pfRange": "PF43-43",
+            "frameCount": 1,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN00E: PF43-43 frames=1 direction=left speed=0x2005 flags=0x0085"
+      },
+      "portingNotes": "Audit note: curated action purpose assigned from sidecar action names, PN metadata, and manual visual bundling.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_40__r_pn_033",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Scripted trap/action frame pair",
+      "visualDescription": "Xrick entities 0x3B and 0x40 are same-port joined scripted trap/action variants; RDX PN033/PN034 are the paired visual frames for that same hazard/action asset.",
+      "confidence": "manual-corrected",
+      "actionPurpose": "scripted_trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_40",
+        "setId": "entity_40",
+        "bundleKeys": [
+          "x:entity_3B",
+          "x:entity_40"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x7A",
+              "0x7A",
+              "0x7B",
+              "0x7B",
+              "0x7C",
+              "0x7C"
+            ],
+            "frameIds": [
+              122,
+              122,
+              123,
+              123,
+              124,
+              124
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x7a,0x7a,0x7b,0x7b,0x7c,0x7c] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_033",
+        "setId": "pn_033",
+        "bundleKeys": [
+          "r:pn_033",
+          "r:pn_034"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN051",
+            "direction": "right",
+            "pn": "PN0x33",
+            "pnDec": 51,
+            "pfRange": "PF137-143",
+            "frameCount": 7,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN033: PF137-143 frames=7 direction=right speed=0x1048 flags=0x00A6"
+      },
+      "portingNotes": "Audit note: active-loop trap frames, not collectible or player frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_40__r_pn_034",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Scripted trap/action frame pair",
+      "visualDescription": "Xrick entities 0x3B and 0x40 are same-port joined scripted trap/action variants; RDX PN033/PN034 are the paired visual frames for that same hazard/action asset.",
+      "confidence": "manual-corrected",
+      "actionPurpose": "scripted_trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_40",
+        "setId": "entity_40",
+        "bundleKeys": [
+          "x:entity_3B",
+          "x:entity_40"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x7A",
+              "0x7A",
+              "0x7B",
+              "0x7B",
+              "0x7C",
+              "0x7C"
+            ],
+            "frameIds": [
+              122,
+              122,
+              123,
+              123,
+              124,
+              124
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x7a,0x7a,0x7b,0x7b,0x7c,0x7c] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_034",
+        "setId": "pn_034",
+        "bundleKeys": [
+          "r:pn_033",
+          "r:pn_034"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN052",
+            "direction": "left",
+            "pn": "PN0x34",
+            "pnDec": 52,
+            "pfRange": "PF144-150",
+            "frameCount": 7,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN034: PF144-150 frames=7 direction=left speed=0x2048 flags=0x00A6"
+      },
+      "portingNotes": "Audit note: active-loop trap frames, not collectible or player frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1D__r_pn_029",
+      "mappingType": "manual-fixed",
+      "category": "projectile",
+      "combinedName": "Egypt scripted projectile controller",
+      "visualDescription": "Native scripted projectile/explosion controller used by the SM09 curving/coffin projectile family; it is not a moving platform.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "projectile_activation",
+      "xrick": {
+        "assetKey": "x:entity_1D",
+        "setId": "entity_1D",
+        "bundleKeys": [
+          "x:entity_1D"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x58",
+              "0x59"
+            ],
+            "frameIds": [
+              88,
+              89
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x58,0x59] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_029",
+        "setId": "pn_029",
+        "bundleKeys": [
+          "r:pn_029",
+          "r:pn_02A",
+          "r:pn_02B"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN041",
+            "direction": "neutral",
+            "pn": "PN0x29",
+            "pnDec": 41,
+            "pfRange": "PF108-113",
+            "frameCount": 6,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN029: PF108-113 frames=6 direction=neutral speed=0x001E flags=0x0029"
+      },
+      "portingNotes": "Do not use entity 0x1D for moving platforms. In current production evidence its SM09 source is projectile-owned; retain source-specific projectile presentation/trajectory authority.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1D__r_pn_02A",
+      "mappingType": "manual-fixed",
+      "category": "projectile",
+      "combinedName": "Egypt scripted projectile controller",
+      "visualDescription": "Native scripted projectile/explosion controller used by the SM09 curving/coffin projectile family; it is not a moving platform.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "projectile_activation",
+      "xrick": {
+        "assetKey": "x:entity_1D",
+        "setId": "entity_1D",
+        "bundleKeys": [
+          "x:entity_1D"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x58",
+              "0x59"
+            ],
+            "frameIds": [
+              88,
+              89
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x58,0x59] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_02A",
+        "setId": "pn_02A",
+        "bundleKeys": [
+          "r:pn_029",
+          "r:pn_02A",
+          "r:pn_02B"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN042",
+            "direction": "neutral",
+            "pn": "PN0x2A",
+            "pnDec": 42,
+            "pfRange": "PF114-119",
+            "frameCount": 6,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN02A: PF114-119 frames=6 direction=neutral speed=0x001E flags=0x002A"
+      },
+      "portingNotes": "Do not use entity 0x1D for moving platforms. In current production evidence its SM09 source is projectile-owned; retain source-specific projectile presentation/trajectory authority.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1D__r_pn_02B",
+      "mappingType": "manual-fixed",
+      "category": "projectile",
+      "combinedName": "Egypt scripted projectile controller",
+      "visualDescription": "Native scripted projectile/explosion controller used by the SM09 curving/coffin projectile family; it is not a moving platform.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "projectile_activation",
+      "xrick": {
+        "assetKey": "x:entity_1D",
+        "setId": "entity_1D",
+        "bundleKeys": [
+          "x:entity_1D"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x58",
+              "0x59"
+            ],
+            "frameIds": [
+              88,
+              89
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x58,0x59] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_02B",
+        "setId": "pn_02B",
+        "bundleKeys": [
+          "r:pn_029",
+          "r:pn_02A",
+          "r:pn_02B"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN043",
+            "direction": "neutral",
+            "pn": "PN0x2B",
+            "pnDec": 43,
+            "pfRange": "PF120-123",
+            "frameCount": 4,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN02B: PF120-123 frames=4 direction=neutral speed=0x0014 flags=0x002B"
+      },
+      "portingNotes": "Do not use entity 0x1D for moving platforms. In current production evidence its SM09 source is projectile-owned; retain source-specific projectile presentation/trajectory authority.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1E__r_pn_029",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Moving platform / floor mechanism frames",
+      "visualDescription": "Likely trap/platform activation sequence; RDX PN029/PN02A/PN02B are neutral multi-frame mechanisms and should not be bundled with PN033/PN034.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "moving_platform_or_floor_trap",
+      "xrick": {
+        "assetKey": "x:entity_1E",
+        "setId": "entity_1E",
+        "bundleKeys": [
+          "x:entity_1E"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x58",
+              "0x59"
+            ],
+            "frameIds": [
+              88,
+              89
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x58,0x59] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_029",
+        "setId": "pn_029",
+        "bundleKeys": [
+          "r:pn_029",
+          "r:pn_02A",
+          "r:pn_02B"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN041",
+            "direction": "neutral",
+            "pn": "PN0x29",
+            "pnDec": 41,
+            "pfRange": "PF108-113",
+            "frameCount": 6,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN029: PF108-113 frames=6 direction=neutral speed=0x001E flags=0x0029"
+      },
+      "portingNotes": "Audit note: these are likely platform/floor mechanism frames; match by mechanism, not by proximity to other trap frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1E__r_pn_02A",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Moving platform / floor mechanism frames",
+      "visualDescription": "Likely trap/platform activation sequence; RDX PN029/PN02A/PN02B are neutral multi-frame mechanisms and should not be bundled with PN033/PN034.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "moving_platform_or_floor_trap",
+      "xrick": {
+        "assetKey": "x:entity_1E",
+        "setId": "entity_1E",
+        "bundleKeys": [
+          "x:entity_1E"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x58",
+              "0x59"
+            ],
+            "frameIds": [
+              88,
+              89
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x58,0x59] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_02A",
+        "setId": "pn_02A",
+        "bundleKeys": [
+          "r:pn_029",
+          "r:pn_02A",
+          "r:pn_02B"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN042",
+            "direction": "neutral",
+            "pn": "PN0x2A",
+            "pnDec": 42,
+            "pfRange": "PF114-119",
+            "frameCount": 6,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN02A: PF114-119 frames=6 direction=neutral speed=0x001E flags=0x002A"
+      },
+      "portingNotes": "Audit note: these are likely platform/floor mechanism frames; match by mechanism, not by proximity to other trap frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_1E__r_pn_02B",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Moving platform / floor mechanism frames",
+      "visualDescription": "Likely trap/platform activation sequence; RDX PN029/PN02A/PN02B are neutral multi-frame mechanisms and should not be bundled with PN033/PN034.",
+      "confidence": "curated-action-audit",
+      "actionPurpose": "moving_platform_or_floor_trap",
+      "xrick": {
+        "assetKey": "x:entity_1E",
+        "setId": "entity_1E",
+        "bundleKeys": [
+          "x:entity_1E"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x58",
+              "0x59"
+            ],
+            "frameIds": [
+              88,
+              89
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x58,0x59] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_02B",
+        "setId": "pn_02B",
+        "bundleKeys": [
+          "r:pn_029",
+          "r:pn_02A",
+          "r:pn_02B"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN043",
+            "direction": "neutral",
+            "pn": "PN0x2B",
+            "pnDec": 43,
+            "pfRange": "PF120-123",
+            "frameCount": 4,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN02B: PF120-123 frames=4 direction=neutral speed=0x0014 flags=0x002B"
+      },
+      "portingNotes": "Audit note: these are likely platform/floor mechanism frames; match by mechanism, not by proximity to other trap frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_3B__r_pn_033",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Scripted trap/action frame pair",
+      "visualDescription": "Xrick entities 0x3B and 0x40 are same-port joined scripted trap/action variants; RDX PN033/PN034 are the paired visual frames for that same hazard/action asset.",
+      "confidence": "manual-corrected",
+      "actionPurpose": "scripted_trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_3B",
+        "setId": "entity_3B",
+        "bundleKeys": [
+          "x:entity_3B",
+          "x:entity_40"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x7C",
+              "0x7C",
+              "0x7A",
+              "0x7A",
+              "0x7B",
+              "0x7B",
+              "0x7A",
+              "0x7A",
+              "0x7C",
+              "0x7C"
+            ],
+            "frameIds": [
+              124,
+              124,
+              122,
+              122,
+              123,
+              123,
+              122,
+              122,
+              124,
+              124
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x7c,0x7c,0x7a,0x7a,0x7b,0x7b,0x7a,0x7a] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_033",
+        "setId": "pn_033",
+        "bundleKeys": [
+          "r:pn_033",
+          "r:pn_034"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN051",
+            "direction": "right",
+            "pn": "PN0x33",
+            "pnDec": 51,
+            "pfRange": "PF137-143",
+            "frameCount": 7,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN033: PF137-143 frames=7 direction=right speed=0x1048 flags=0x00A6"
+      },
+      "portingNotes": "Audit note: active-loop trap frames, not collectible or player frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_entity_3B__r_pn_034",
+      "mappingType": "manual-fixed",
+      "category": "trap",
+      "combinedName": "Scripted trap/action frame pair",
+      "visualDescription": "Xrick entities 0x3B and 0x40 are same-port joined scripted trap/action variants; RDX PN033/PN034 are the paired visual frames for that same hazard/action asset.",
+      "confidence": "manual-corrected",
+      "actionPurpose": "scripted_trap_activation",
+      "xrick": {
+        "assetKey": "x:entity_3B",
+        "setId": "entity_3B",
+        "bundleKeys": [
+          "x:entity_3B",
+          "x:entity_40"
+        ],
+        "actions": [
+          {
+            "action": "scripted_initial_or_wait",
+            "label": "type-3 wait/initial sprite at sproffs=0",
+            "direction": "neutral",
+            "frames": [
+              "0x00"
+            ],
+            "frameIds": [
+              0
+            ],
+            "source": "e_them_t3_action2 reads ent_sprseq[sprbase+sproffs]",
+            "confidence": "high"
+          },
+          {
+            "action": "scripted_active_loop",
+            "label": "type-3 active loop after wakeup; rotates until 0xFF",
+            "direction": "neutral",
+            "frames": [
+              "0x7C",
+              "0x7C",
+              "0x7A",
+              "0x7A",
+              "0x7B",
+              "0x7B",
+              "0x7A",
+              "0x7A",
+              "0x7C",
+              "0x7C"
+            ],
+            "frameIds": [
+              124,
+              124,
+              122,
+              122,
+              123,
+              123,
+              122,
+              122,
+              124,
+              124
+            ],
+            "source": "e_them_t3_action2 rotates ent_sprseq entries from sproffs=1",
+            "confidence": "high"
+          }
+        ],
+        "actionSummary": "scripted_initial_or_wait [0x0] \u2014 type-3 wait/initial sprite at sproffs=0; scripted_active_loop [0x7c,0x7c,0x7a,0x7a,0x7b,0x7b,0x7a,0x7a] \u2014 type-3 active loop after wakeup; rotates until 0xFF"
+      },
+      "rdx": {
+        "assetKey": "r:pn_034",
+        "setId": "pn_034",
+        "bundleKeys": [
+          "r:pn_033",
+          "r:pn_034"
+        ],
+        "actions": [
+          {
+            "action": "uncategorized",
+            "label": "unmapped PN052",
+            "direction": "left",
+            "pn": "PN0x34",
+            "pnDec": 52,
+            "pfRange": "PF144-150",
+            "frameCount": 7,
+            "source": "ROM PN/PF only",
+            "confidence": "low",
+            "notes": "Not currently assigned to a named actor/action set. Keep editable in sprite_anims.json."
+          }
+        ],
+        "actionSummary": "PN034: PF144-150 frames=7 direction=left speed=0x2048 flags=0x00A6"
+      },
+      "portingNotes": "Audit note: active-loop trap frames, not collectible or player frames.",
+      "multiMatch": true
+    },
+    {
+      "mappingId": "manual_x_rick_player__r_rick_player",
+      "mappingType": "manual-fixed",
+      "category": "player",
+      "combinedName": "Rick player character",
+      "visualDescription": "Main controllable Rick character. RDX has separate PN actions for shoot/crawl/climb/die/jump/stand/walk and cinematic parachute states; xrick has hardcoded e_rick.c sprite branches.",
+      "confidence": "source-derived",
+      "actionPurpose": "player_character_action_set",
+      "xrick": {
+        "assetKey": "x:rick_player",
+        "setId": "rick_player",
+        "bundleKeys": [
+          "x:rick_player"
+        ],
+        "actions": [
+          {
+            "action": "walk_right",
+            "label": "walk cycle, RIGHT; exact e_rick.c walk branch",
+            "direction": "right",
+            "frames": [
+              "0x01",
+              "0x02",
+              "0x03",
+              "0x04",
+              "0x05"
+            ],
+            "frameIds": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "source": "e_rick.c: sprite=(seq>>2)+1 when game_dir==RIGHT",
+            "confidence": "high"
+          },
+          {
+            "action": "walk_left",
+            "label": "walk cycle, LEFT; exact e_rick.c walk branch",
+            "direction": "left",
+            "frames": [
+              "0x0D",
+              "0x0E",
+              "0x0F",
+              "0x10",
+              "0x11"
+            ],
+            "frameIds": [
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            "source": "e_rick.c: sprite=(seq>>2)+1+0x0c when game_dir==LEFT",
+            "confidence": "high"
+          },
+          {
+            "action": "crawl_right",
+            "label": "crawl RIGHT only; no jump/shoot/stop/climb frames mixed in",
+            "direction": "right",
+            "frames": [
+              "0x07",
+              "0x08"
+            ],
+            "frameIds": [
+              7,
+              8
+            ],
+            "source": "e_rick.c crawl branch: sprite=0x07 plus (x&4)",
+            "confidence": "high"
+          },
+          {
+            "action": "crawl_left",
+            "label": "crawl LEFT only; no jump/shoot/stop/climb frames mixed in",
+            "direction": "left",
+            "frames": [
+              "0x13",
+              "0x14"
+            ],
+            "frameIds": [
+              19,
+              20
+            ],
+            "source": "e_rick.c crawl branch: sprite=0x13 plus (x&4)",
+            "confidence": "high"
+          },
+          {
+            "action": "jump_right",
+            "label": "jump RIGHT",
+            "direction": "right",
+            "frames": [
+              "0x06"
+            ],
+            "frameIds": [
+              6
+            ],
+            "source": "e_rick.c jump branch",
+            "confidence": "high"
+          },
+          {
+            "action": "jump_left",
+            "label": "jump LEFT",
+            "direction": "left",
+            "frames": [
+              "0x15"
+            ],
+            "frameIds": [
+              21
+            ],
+            "source": "e_rick.c jump branch",
+            "confidence": "high"
+          },
+          {
+            "action": "shoot_right",
+            "label": "shoot RIGHT",
+            "direction": "right",
+            "frames": [
+              "0x0A"
+            ],
+            "frameIds": [
+              10
+            ],
+            "source": "e_rick.c shoot branch",
+            "confidence": "high"
+          },
+          {
+            "action": "shoot_left",
+            "label": "shoot LEFT",
+            "direction": "left",
+            "frames": [
+              "0x16"
+            ],
+            "frameIds": [
+              22
+            ],
+            "source": "e_rick.c shoot branch",
+            "confidence": "high"
+          },
+          {
+            "action": "stop_right",
+            "label": "stick/stop RIGHT",
+            "direction": "right",
+            "frames": [
+              "0x0B"
+            ],
+            "frameIds": [
+              11
+            ],
+            "source": "e_rick.c stop branch",
+            "confidence": "high"
+          },
+          {
+            "action": "stop_left",
+            "label": "stick/stop LEFT",
+            "direction": "left",
+            "frames": [
+              "0x17"
+            ],
+            "frameIds": [
+              23
+            ],
+            "source": "e_rick.c stop branch",
+            "confidence": "high"
+          },
+          {
+            "action": "climb",
+            "label": "ladder climb alternation",
+            "direction": "neutral",
+            "frames": [
+              "0x0C",
+              "0x18"
+            ],
+            "frameIds": [
+              12,
+              24
+            ],
+            "source": "e_rick.c climb branch: ((x^y)&4) ? 0x18 : 0x0c",
+            "confidence": "high"
+          },
+          {
+            "action": "die_zombie",
+            "label": "Rick death/zombie fall",
+            "direction": "neutral",
+            "frames": [
+              "0x19",
+              "0x1A"
+            ],
+            "frameIds": [
+              25,
+              26
+            ],
+            "source": "e_rick_z_action",
+            "confidence": "high"
+          },
+          {
+            "action": "extra_pose_right",
+            "label": "visual/manual Rick RIGHT extra pose; not referenced by standard e_rick.c action branches",
+            "direction": "right",
+            "frames": [
+              "0x09"
+            ],
+            "frameIds": [
+              9
+            ],
+            "source": "sourcefix-v12 user diff + visual grouping; source reference not found in e_rick.c",
+            "confidence": "medium"
+          },
+          {
+            "action": "extra_pose_left",
+            "label": "visual/manual Rick LEFT extra pose; counterpart to 0x09; not referenced by standard e_rick.c action branches",
+            "direction": "left",
+            "frames": [
+              "0x12"
+            ],
+            "frameIds": [
+              18
+            ],
+            "source": "sourcefix-v12 user diff + visual grouping; source reference not found in e_rick.c",
+            "confidence": "medium"
+          }
+        ],
+        "actionSummary": "xrick Rick actions: stop, walk, crawl, climb, jump, shoot, stand, die, and visual extra poses from e_rick.c/source-derived sidecar."
+      },
+      "rdx": {
+        "assetKey": "r:rick_player",
+        "setId": "rick_player",
+        "bundleKeys": [
+          "r:rick_player"
+        ],
+        "actions": [
+          {
+            "action": "shoot",
+            "label": "shoot right",
+            "direction": "right",
+            "pn": "PN0x5B",
+            "pnDec": 91,
+            "pfRange": "PF263-263",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "User finding: PF263; image is visually duplicated with left."
+          },
+          {
+            "action": "shoot",
+            "label": "shoot left",
+            "direction": "left",
+            "pn": "PN0x5C",
+            "pnDec": 92,
+            "pfRange": "PF264-264",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "User finding: PF264; browser mirrors left PN for preview."
+          },
+          {
+            "action": "ladder_climb",
+            "label": "ladder climb",
+            "direction": "neutral",
+            "pn": "PN0x5D",
+            "pnDec": 93,
+            "pfRange": "PF265-266",
+            "frameCount": 2,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "PF265-PF266."
+          },
+          {
+            "action": "crawl",
+            "label": "crawl right",
+            "direction": "right",
+            "pn": "PN0x5E",
+            "pnDec": 94,
+            "pfRange": "PF267-268",
+            "frameCount": 2,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "PF267-PF268."
+          },
+          {
+            "action": "crawl",
+            "label": "crawl left",
+            "direction": "left",
+            "pn": "PN0x5F",
+            "pnDec": 95,
+            "pfRange": "PF269-270",
+            "frameCount": 2,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "PF269-PF270; mirrored in browser preview."
+          },
+          {
+            "action": "die",
+            "label": "die / front-facing collapse",
+            "direction": "neutral",
+            "pn": "PN0x60",
+            "pnDec": 96,
+            "pfRange": "PF271-274",
+            "frameCount": 4,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": "PF271-PF274."
+          },
+          {
+            "action": "jump",
+            "label": "jump right",
+            "direction": "right",
+            "pn": "PN0x61",
+            "pnDec": 97,
+            "pfRange": "PF275-275",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "jump",
+            "label": "jump left",
+            "direction": "left",
+            "pn": "PN0x62",
+            "pnDec": 98,
+            "pfRange": "PF276-276",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "stand",
+            "label": "stand right",
+            "direction": "right",
+            "pn": "PN0x63",
+            "pnDec": 99,
+            "pfRange": "PF277-278",
+            "frameCount": 2,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "stand",
+            "label": "stand left",
+            "direction": "left",
+            "pn": "PN0x64",
+            "pnDec": 100,
+            "pfRange": "PF279-280",
+            "frameCount": 2,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "jump_alt",
+            "label": "alternate jump right",
+            "direction": "right",
+            "pn": "PN0x65",
+            "pnDec": 101,
+            "pfRange": "PF281-281",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "jump_alt",
+            "label": "alternate jump left",
+            "direction": "left",
+            "pn": "PN0x66",
+            "pnDec": 102,
+            "pfRange": "PF282-282",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "parachute_folding_cinematic",
+            "label": "parachute folding cinematic",
+            "direction": "neutral",
+            "pn": "PN0x67",
+            "pnDec": 103,
+            "pfRange": "PF283-287",
+            "frameCount": 5,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "ladder_cinematic",
+            "label": "ladder cinematic candidate",
+            "direction": "neutral",
+            "pn": "PN0x68",
+            "pnDec": 104,
+            "pfRange": "PF288-288",
+            "frameCount": 1,
+            "source": "curated + ROM PN/PF",
+            "confidence": "medium",
+            "notes": ""
+          },
+          {
+            "action": "parachute_fall_cinematic",
+            "label": "parachute falling cinematic",
+            "direction": "neutral",
+            "pn": "PN0x69",
+            "pnDec": 105,
+            "pfRange": "PF289-297",
+            "frameCount": 9,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "parachute_fall_scaled_cinematic",
+            "label": "scaled parachute falling cinematic",
+            "direction": "neutral",
+            "pn": "PN0x6A",
+            "pnDec": 106,
+            "pfRange": "PF298-304",
+            "frameCount": 7,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "walk right",
+            "direction": "right",
+            "pn": "PN0x6B",
+            "pnDec": 107,
+            "pfRange": "PF305-310",
+            "frameCount": 6,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          },
+          {
+            "action": "walk",
+            "label": "walk left",
+            "direction": "left",
+            "pn": "PN0x6C",
+            "pnDec": 108,
+            "pfRange": "PF311-316",
+            "frameCount": 6,
+            "source": "curated + ROM PN/PF",
+            "confidence": "high",
+            "notes": ""
+          }
+        ],
+        "actionSummary": "RDX Rick actions: PN0x5B..PN0x6C class actions including shoot, ladder_climb, crawl, die, jump, stand, cinematic parachute, walk."
+      },
+      "portingNotes": "RDX exposes ladder_climb as PN0x5D / decimal 93. No separate up/down ladder PN has been found; treat ladder direction as state/behavior unless runtime tracing proves distinct graphics.",
+      "multiMatch": false
+    }
+  ],
+  "rdxLevelSpecific": [
+    {
+      "createdAt": "2026-06-06T10:54:14.077Z",
+      "id": "rdx_level_specific_r_torch_candle",
+      "rAssetKey": "r:torch_candle",
+      "rdxSetId": "torch_candle",
+      "type": "object",
+      "status": "level-specific",
+      "name": "MD0013 Egypt \u2014 candle/torch animation",
+      "notes": "Marked as RDX level-specific/port-only asset; it has no required xrick counterpart.",
+      "updatedAt": "2026-06-06T10:54:14.077Z"
+    },
+    {
+      "createdAt": "2026-06-06T10:54:26.655Z",
+      "id": "rdx_level_specific_r_jungle_opening_utility",
+      "rAssetKey": "r:jungle_opening_utility",
+      "rdxSetId": "jungle_opening_utility",
+      "type": "utility",
+      "status": "level-specific",
+      "name": "MD0001 Jungle \u2014 opening utility/object \u2014 catalog",
+      "notes": "Marked as RDX level-specific/port-only asset; it has no required xrick counterpart.",
+      "updatedAt": "2026-06-06T10:54:26.655Z"
+    },
+    {
+      "createdAt": "2026-06-06T10:54:28.818Z",
+      "id": "rdx_level_specific_r_missile_transition_lift_gate",
+      "rAssetKey": "r:missile_transition_lift_gate",
+      "rdxSetId": "missile_transition_lift_gate",
+      "type": "object",
+      "status": "level-specific",
+      "name": "MD0045 Missile transition \u2014 large lift/gate actor \u2014 catalog",
+      "notes": "Marked as RDX level-specific/port-only asset; it has no required xrick counterpart.",
+      "updatedAt": "2026-06-06T10:54:28.818Z"
+    },
+    {
+      "createdAt": "2026-06-06T10:54:46.504Z",
+      "id": "rdx_level_specific_r_pn_045",
+      "rAssetKey": "r:pn_045",
+      "rdxSetId": "pn_045",
+      "type": "utility",
+      "status": "level-specific",
+      "name": "RDX PN-only PN045 / dec 69",
+      "notes": "Marked as RDX level-specific/port-only asset; it has no required xrick counterpart.",
+      "updatedAt": "2026-06-06T10:54:46.504Z"
+    },
+    {
+      "createdAt": "2026-06-06T10:54:48.423Z",
+      "id": "rdx_level_specific_r_pn_048",
+      "rAssetKey": "r:pn_048",
+      "rdxSetId": "pn_048",
+      "type": "utility",
+      "status": "level-specific",
+      "name": "RDX PN-only PN048 / dec 72",
+      "notes": "Marked as RDX level-specific/port-only asset; it has no required xrick counterpart.",
+      "updatedAt": "2026-06-06T10:54:48.423Z"
+    }
+  ],
+  "coverage": {
+    "xrickRelevantAssets": 69,
+    "xrickCoveredByManualOrBundle": 35,
+    "xrickMissingOrUnconfirmed": 34,
+    "xrickCoveragePercent": 50.7,
+    "xrickMissingAssetIds": [
+      "entity_02",
+      "entity_03",
+      "artbase_37",
+      "artbase_41",
+      "artbase_4B",
+      "artbase_86",
+      "entity_16",
+      "entity_17",
+      "entity_19",
+      "entity_1A",
+      "entity_1B",
+      "entity_1F",
+      "entity_20",
+      "entity_21",
+      "entity_23",
+      "entity_24",
+      "entity_25",
+      "entity_26",
+      "entity_27",
+      "entity_2F",
+      "entity_30",
+      "entity_31",
+      "entity_34",
+      "entity_36",
+      "entity_37",
+      "entity_3A",
+      "entity_3F",
+      "entity_41",
+      "entity_43",
+      "entity_44",
+      "entity_45",
+      "entity_46",
+      "entity_48",
+      "entity_49"
+    ],
+    "rdxNamedAssets": 34,
+    "rdxCoveredByManualOrBundle": 19,
+    "rdxLevelSpecific": 3,
+    "rdxMissingOrUnconfirmed": 12,
+    "rdxCoveragePercentIncludingLevelSpecific": 64.7,
+    "rdxMissingSetIds": [
+      "jungle_floor_plant_hazard",
+      "jungle_egypt_small_object",
+      "egypt_mummy_guard",
+      "egypt_small_creatures",
+      "egypt_block_hazard",
+      "castle_guard",
+      "castle_short_floor_trap",
+      "castle_door_static_objects",
+      "missile_soldier_guard",
+      "missile_crate_platform",
+      "missile_low_platform",
+      "missile_small_block_utility"
+    ],
+    "rdxPnOnlyUtilityRecords": 42,
+    "rdxPnOnlyRepresentedOrLevelSpecific": 27,
+    "rdxPnOnlyMissingOrUnconfirmed": 15,
+    "rdxPnOnlyMissing": [
+      {
+        "pn": "PN0x00",
+        "pnDec": 0,
+        "pfRange": "PF1-1",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x01",
+        "pnDec": 1,
+        "pfRange": "PF2-2",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x09",
+        "pnDec": 9,
+        "pfRange": "PF32-35",
+        "frameCount": 4
+      },
+      {
+        "pn": "PN0x0B",
+        "pnDec": 11,
+        "pfRange": "PF40-40",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x0C",
+        "pnDec": 12,
+        "pfRange": "PF41-41",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x24",
+        "pnDec": 36,
+        "pfRange": "PF85-89",
+        "frameCount": 5
+      },
+      {
+        "pn": "PN0x25",
+        "pnDec": 37,
+        "pfRange": "PF90-94",
+        "frameCount": 5
+      },
+      {
+        "pn": "PN0x28",
+        "pnDec": 40,
+        "pfRange": "PF107-107",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x3F",
+        "pnDec": 63,
+        "pfRange": "PF176-176",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x46",
+        "pnDec": 70,
+        "pfRange": "PF188-188",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x49",
+        "pnDec": 73,
+        "pfRange": "PF191-194",
+        "frameCount": 4
+      },
+      {
+        "pn": "PN0x4B",
+        "pnDec": 75,
+        "pfRange": "PF196-198",
+        "frameCount": 3
+      },
+      {
+        "pn": "PN0x53",
+        "pnDec": 83,
+        "pfRange": "PF238-248",
+        "frameCount": 11
+      },
+      {
+        "pn": "PN0x6D",
+        "pnDec": 109,
+        "pfRange": "PF317-317",
+        "frameCount": 1
+      },
+      {
+        "pn": "PN0x6E",
+        "pnDec": 110,
+        "pfRange": "PF318-318",
+        "frameCount": 1
+      }
+    ]
+  },
+  "missingDataResearchFile": "missing-rdx-data-research.md"
+}

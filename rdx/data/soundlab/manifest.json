@@ -1,0 +1,620 @@
+{
+  "schema": "soundlab.build-manifest.v1",
+  "project": "rdr",
+  "rendererVersion": "soundlab-js-v1",
+  "rendererFingerprint": "7d0c0d2960fc44fadc704bca25e10ca32375bc3d0a2dd09859931799983511ab",
+  "authoring": {
+    "nativeAdapter": "../../src/soundlab/rdr-adapter.js"
+  },
+  "outputs": [
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 0,
+      "seed": 1,
+      "strength": 0.78,
+      "profile": "master",
+      "file": "audio/boulder_impact_0.wav",
+      "jobKey": "17fdfe85184ad5b3256d449758de2d50891f743b7aa0311abff275e8357608da",
+      "sha256": "0cf36f3209c15782a90854f2d24769c9606019d6839e77e46d4dc7eb54364758",
+      "sampleRate": 48000,
+      "encoding": "pcm16"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 0,
+      "seed": 1,
+      "strength": 0.78,
+      "profile": "runtime",
+      "file": "runtime/boulder_impact_0.wav",
+      "jobKey": "8e92b273d4c3470b8a492938ff5901456d6cd7867c8408fe762c3d82ea13327c",
+      "sha256": "275bfae5980d7c67fe1957b44a42613dfd0e398432c508847f03c8937ea79597",
+      "sampleRate": 22050,
+      "encoding": "u8",
+      "webFile": "web/rdx/data/soundlab/runtime/boulder_impact_0.wav"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 1,
+      "seed": 2,
+      "strength": 0.78,
+      "profile": "master",
+      "file": "audio/boulder_impact_1.wav",
+      "jobKey": "06c34cb45696956e36bb1b0244b61de8b72c8272f79f017211b6d7618b868a68",
+      "sha256": "82cfc9920ed97aea7b0c6a604460e72539fe84f8910bd641ec35e99c316a25b4",
+      "sampleRate": 48000,
+      "encoding": "pcm16"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 1,
+      "seed": 2,
+      "strength": 0.78,
+      "profile": "runtime",
+      "file": "runtime/boulder_impact_1.wav",
+      "jobKey": "c3ea745d09e5604a365118e9f4a9be0613fcd8e3dd6b40ec9b36ac425685f82f",
+      "sha256": "f95f17820ffb4add784cc66cc2255c337170b4d24caca036ad81d0b33a1f5ad1",
+      "sampleRate": 22050,
+      "encoding": "u8",
+      "webFile": "web/rdx/data/soundlab/runtime/boulder_impact_1.wav"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 2,
+      "seed": 3,
+      "strength": 0.78,
+      "profile": "master",
+      "file": "audio/boulder_impact_2.wav",
+      "jobKey": "bf499f3fb3c8fa64ec871b0861c67859afe3ce32775eb7f003c36eee57aefa2d",
+      "sha256": "dd4c3f61e752cac83c0f2b9c0001a69894a61c38032d2789c75b1866844b378e",
+      "sampleRate": 48000,
+      "encoding": "pcm16"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 2,
+      "seed": 3,
+      "strength": 0.78,
+      "profile": "runtime",
+      "file": "runtime/boulder_impact_2.wav",
+      "jobKey": "2f3d17bbb5ec743ee0e6042f7c40777a2cb992aacc94c1bc3c332cb3530714a3",
+      "sha256": "a2c074919174e2256282ec787bc7c6311a122b775fec834c2b5f61adc84e346f",
+      "sampleRate": 22050,
+      "encoding": "u8",
+      "webFile": "web/rdx/data/soundlab/runtime/boulder_impact_2.wav"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 3,
+      "seed": 4,
+      "strength": 0.78,
+      "profile": "master",
+      "file": "audio/boulder_impact_3.wav",
+      "jobKey": "148e5f7a827095b5bf9899f3fc00896cbfaa7106113ae5c4fea971ff767eda82",
+      "sha256": "f39198299cf382ace6cafe29552569529649d03648025aecac23e22ea021ffd3",
+      "sampleRate": 48000,
+      "encoding": "pcm16"
+    },
+    {
+      "binding": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "variant": 3,
+      "seed": 4,
+      "strength": 0.78,
+      "profile": "runtime",
+      "file": "runtime/boulder_impact_3.wav",
+      "jobKey": "b036cf5c0333ab25432f15ec63d4a907105cd3f664e36cca1653782bb97e4105",
+      "sha256": "a7641ca9e4c445b61511f85a55eb6ed3549bc40e8a7e6e2296d25de858393cf8",
+      "sampleRate": 22050,
+      "encoding": "u8",
+      "webFile": "web/rdx/data/soundlab/runtime/boulder_impact_3.wav"
+    }
+  ],
+  "bindings": [
+    {
+      "id": "sm00-boulder-impact",
+      "event": "boulder.impact",
+      "match": {
+        "submap": 0,
+        "mark": 1,
+        "actorFamily": "sm00-boulder"
+      },
+      "recipe": "boulder-impact",
+      "object": "heavy-stone-sphere",
+      "surface": "temple-stone",
+      "style": "rdr",
+      "variants": 4,
+      "strength": 0.78,
+      "telemetry": "telemetry/sm00-boulder-impact-fixture.json",
+      "scene": {
+        "id": "sm00-boulder-chase-fall",
+        "submap": 0,
+        "presentation": "rdx",
+        "preStageFrames": 12,
+        "controls": [
+          {
+            "from": 0,
+            "to": 179,
+            "mask": 1
+          }
+        ],
+        "proof": {
+          "event": "boulder.impact",
+          "submap": 0,
+          "mark": 1,
+          "actorFamily": "sm00-boulder",
+          "maxFrames": 180
+        },
+        "postEventFrames": 24,
+        "loop": true
+      }
+    }
+  ],
+  "previewModel": {
+    "renderer": {
+      "sampleRate": 48000,
+      "version": "soundlab-js-v1"
+    },
+    "exportProfiles": {
+      "master": {
+        "sampleRate": 48000,
+        "encoding": "pcm16",
+        "channels": 1
+      },
+      "runtime": {
+        "sampleRate": 22050,
+        "encoding": "u8",
+        "channels": 1
+      }
+    },
+    "resources": {
+      "materials": {
+        "concrete": {
+          "schema": "soundlab.material.v1",
+          "id": "concrete",
+          "family": "stone",
+          "modal": {
+            "modes": [
+              {
+                "frequencyHz": 104,
+                "decayMs": 275,
+                "gain": 1
+              },
+              {
+                "frequencyHz": 171,
+                "decayMs": 220,
+                "gain": 0.7576
+              },
+              {
+                "frequencyHz": 276,
+                "decayMs": 170,
+                "gain": 0.6098
+              },
+              {
+                "frequencyHz": 424,
+                "decayMs": 121,
+                "gain": 0.5102
+              },
+              {
+                "frequencyHz": 635,
+                "decayMs": 82,
+                "gain": 0.4386
+              },
+              {
+                "frequencyHz": 948,
+                "decayMs": 53,
+                "gain": 0.3846
+              }
+            ],
+            "frequencyJitter": 0.018,
+            "decayJitter": 0.08
+          },
+          "transient": {
+            "hardness": 0.55,
+            "bandwidth": 0.69
+          },
+          "residual": {
+            "amount": 0.58,
+            "brightness": 0.596,
+            "decayMs": 82
+          },
+          "contact": {
+            "roughness": 0.49
+          }
+        },
+        "masonry": {
+          "schema": "soundlab.material.v1",
+          "id": "masonry",
+          "family": "stone",
+          "modal": {
+            "modes": [
+              {
+                "frequencyHz": 128,
+                "decayMs": 245,
+                "gain": 1
+              },
+              {
+                "frequencyHz": 207,
+                "decayMs": 205,
+                "gain": 0.7576
+              },
+              {
+                "frequencyHz": 326,
+                "decayMs": 164,
+                "gain": 0.6098
+              },
+              {
+                "frequencyHz": 503,
+                "decayMs": 118,
+                "gain": 0.5102
+              },
+              {
+                "frequencyHz": 746,
+                "decayMs": 84,
+                "gain": 0.4386
+              },
+              {
+                "frequencyHz": 1110,
+                "decayMs": 55,
+                "gain": 0.3846
+              }
+            ],
+            "frequencyJitter": 0.018,
+            "decayJitter": 0.08
+          },
+          "transient": {
+            "hardness": 0.58,
+            "bandwidth": 0.696
+          },
+          "residual": {
+            "amount": 0.69,
+            "brightness": 0.6055999999999999,
+            "decayMs": 82
+          },
+          "contact": {
+            "roughness": 0.61
+          }
+        },
+        "sandstone": {
+          "schema": "soundlab.material.v1",
+          "id": "sandstone",
+          "family": "stone",
+          "modal": {
+            "modes": [
+              {
+                "frequencyHz": 96,
+                "decayMs": 205,
+                "gain": 1
+              },
+              {
+                "frequencyHz": 158,
+                "decayMs": 165,
+                "gain": 0.7576
+              },
+              {
+                "frequencyHz": 252,
+                "decayMs": 128,
+                "gain": 0.6098
+              },
+              {
+                "frequencyHz": 371,
+                "decayMs": 92,
+                "gain": 0.5102
+              },
+              {
+                "frequencyHz": 548,
+                "decayMs": 64,
+                "gain": 0.4386
+              },
+              {
+                "frequencyHz": 812,
+                "decayMs": 44,
+                "gain": 0.3846
+              }
+            ],
+            "frequencyJitter": 0.018,
+            "decayJitter": 0.08
+          },
+          "transient": {
+            "hardness": 0.48,
+            "bandwidth": 0.6759999999999999
+          },
+          "residual": {
+            "amount": 0.78,
+            "brightness": 0.5736,
+            "decayMs": 82
+          },
+          "contact": {
+            "roughness": 0.72
+          }
+        },
+        "steel": {
+          "schema": "soundlab.material.v1",
+          "id": "steel",
+          "family": "metal",
+          "modal": {
+            "modes": [
+              {
+                "frequencyHz": 226,
+                "decayMs": 390,
+                "gain": 1
+              },
+              {
+                "frequencyHz": 361,
+                "decayMs": 330,
+                "gain": 0.7576
+              },
+              {
+                "frequencyHz": 574,
+                "decayMs": 260,
+                "gain": 0.6098
+              },
+              {
+                "frequencyHz": 911,
+                "decayMs": 196,
+                "gain": 0.5102
+              },
+              {
+                "frequencyHz": 1447,
+                "decayMs": 138,
+                "gain": 0.4386
+              },
+              {
+                "frequencyHz": 2296,
+                "decayMs": 90,
+                "gain": 0.3846
+              }
+            ],
+            "frequencyJitter": 0.018,
+            "decayJitter": 0.08
+          },
+          "transient": {
+            "hardness": 0.88,
+            "bandwidth": 0.756
+          },
+          "residual": {
+            "amount": 0.32,
+            "brightness": 0.7016,
+            "decayMs": 130
+          },
+          "contact": {
+            "roughness": 0.23
+          }
+        },
+        "stone-dense": {
+          "schema": "soundlab.material.v1",
+          "id": "stone-dense",
+          "family": "stone",
+          "modal": {
+            "modes": [
+              {
+                "frequencyHz": 118,
+                "decayMs": 300,
+                "gain": 1
+              },
+              {
+                "frequencyHz": 192,
+                "decayMs": 235,
+                "gain": 0.7576
+              },
+              {
+                "frequencyHz": 304,
+                "decayMs": 178,
+                "gain": 0.6098
+              },
+              {
+                "frequencyHz": 468,
+                "decayMs": 128,
+                "gain": 0.5102
+              },
+              {
+                "frequencyHz": 704,
+                "decayMs": 88,
+                "gain": 0.4386
+              },
+              {
+                "frequencyHz": 1056,
+                "decayMs": 58,
+                "gain": 0.3846
+              }
+            ],
+            "frequencyJitter": 0.018,
+            "decayJitter": 0.08
+          },
+          "transient": {
+            "hardness": 0.64,
+            "bandwidth": 0.708
+          },
+          "residual": {
+            "amount": 0.62,
+            "brightness": 0.6248,
+            "decayMs": 82
+          },
+          "contact": {
+            "roughness": 0.52
+          }
+        },
+        "temple-stone": {
+          "schema": "soundlab.material.v1",
+          "id": "temple-stone",
+          "family": "stone",
+          "modal": {
+            "modes": [
+              {
+                "frequencyHz": 112,
+                "decayMs": 230,
+                "gain": 1
+              },
+              {
+                "frequencyHz": 183,
+                "decayMs": 190,
+                "gain": 0.7576
+              },
+              {
+                "frequencyHz": 291,
+                "decayMs": 155,
+                "gain": 0.6098
+              },
+              {
+                "frequencyHz": 438,
+                "decayMs": 110,
+                "gain": 0.5102
+              },
+              {
+                "frequencyHz": 672,
+                "decayMs": 78,
+                "gain": 0.4386
+              },
+              {
+                "frequencyHz": 1010,
+                "decayMs": 52,
+                "gain": 0.3846
+              }
+            ],
+            "frequencyJitter": 0.018,
+            "decayJitter": 0.08
+          },
+          "transient": {
+            "hardness": 0.62,
+            "bandwidth": 0.704
+          },
+          "residual": {
+            "amount": 0.66,
+            "brightness": 0.6184,
+            "decayMs": 82
+          },
+          "contact": {
+            "roughness": 0.56
+          }
+        }
+      },
+      "objects": {
+        "heavy-stone-sphere": {
+          "schema": "soundlab.object.v1",
+          "id": "heavy-stone-sphere",
+          "size": {
+            "radius": 16,
+            "referenceUnit": "game-px"
+          },
+          "massClass": "heavy",
+          "modal": {
+            "frequencyScale": 0.88,
+            "decayScale": 1.12,
+            "coupling": 0.82
+          },
+          "variation": {
+            "frequency": 0.018,
+            "decay": 0.08,
+            "brightness": 0.035
+          }
+        }
+      },
+      "recipes": {
+        "boulder-impact": {
+          "schema": "soundlab.recipe.v1",
+          "id": "boulder-impact",
+          "generator": "impact",
+          "durationMs": 360,
+          "mapping": {
+            "strengthCurve": "sqrt",
+            "minStrength": 0.16,
+            "transientGain": 0.86,
+            "bodyGain": 0.92,
+            "residualGain": 0.44
+          },
+          "mix": {
+            "transient": 0.64,
+            "body": 0.84,
+            "residual": 0.32
+          },
+          "advanced": {
+            "transientMs": 8,
+            "modalModeLimit": 8,
+            "dcBlock": true
+          }
+        },
+        "boulder-roll": {
+          "schema": "soundlab.recipe.v1",
+          "id": "boulder-roll",
+          "generator": "roll",
+          "durationMs": 900,
+          "mapping": {
+            "contactDensity": 6.8,
+            "speedReference": 4,
+            "bodyGain": 0.42,
+            "residualGain": 0.28
+          },
+          "mix": {
+            "body": 0.68,
+            "residual": 0.38
+          },
+          "advanced": {
+            "microImpactMs": 45,
+            "maxContactsPerSecond": 80
+          }
+        }
+      },
+      "styles": {
+        "rdr": {
+          "schema": "soundlab.style.v1",
+          "id": "rdr",
+          "bounds": {
+            "durationMs": [
+              35,
+              480
+            ],
+            "peak": [
+              0.35,
+              0.96
+            ],
+            "lowBandFraction": [
+              0.12,
+              0.62
+            ],
+            "highBandFraction": [
+              0.08,
+              0.58
+            ],
+            "crestFactor": [
+              1.5,
+              7.5
+            ]
+          },
+          "finishing": {
+            "drive": 1.12,
+            "softClip": 0.82,
+            "highpassHz": 36,
+            "lowpassHz": 9300,
+            "masterGain": 0.9,
+            "tailGateDb": -54,
+            "periodColoration": 0.05
+          },
+          "aesthetic": "short immediate distinctive late-1980s/early-1990s game effect; avoid cinematic sub-bass and long reverb"
+        }
+      }
+    },
+    "sources": [],
+    "environments": {
+      "schema": "soundlab.environments.v1",
+      "defaults": {
+        "south-america": "temple-stone",
+        "egypt": "sandstone",
+        "castle": "masonry",
+        "missile-base": "concrete"
+      },
+      "submaps": {
+        "0": {
+          "world": "south-america",
+          "surface": "temple-stone"
+        }
+      },
+      "regions": []
+    }
+  }
+}

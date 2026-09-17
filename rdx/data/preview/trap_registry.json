@@ -1,0 +1,6087 @@
+{
+  "classic": {
+    "excludedTiles": [
+      {
+        "bank": 1,
+        "evidence": [
+          "classic_hazard_tiles.png",
+          "reviewed-SM01-preview-comparison"
+        ],
+        "reason": "Jungle grey wall/statue detail is decorative; raw lethal flag is a false-positive level-data association.",
+        "tile": 93
+      }
+    ]
+  },
+  "passThroughGeometry": {
+    "principles": {
+      "authority": "reviewed-explicit-pass-through-only",
+      "meaning": "Only cells explicitly reviewed as visual-only may ignore Rick collision. MD0013 mark:117 corridor cells are full gameplay geometry and therefore have no pass-through entries.",
+      "playerOnly": true
+    },
+    "rooms": [],
+    "schema": "rdx.pass_through_geometry.v1",
+    "version": "2.1.70"
+  },
+  "principles": {
+    "classicAuthority": "classic MAP_EFLG_LETHAL remains authoritative for Classic-only contacts",
+    "classicToRdxProjectionAllowed": false,
+    "rdxAuthority": "trap descriptor current state + contact bounds; tile/terrain flags are projections and cannot make an inactive trap lethal",
+    "stateModel": "active|inactive|static"
+  },
+  "rdxAssetFamilies": [
+    {
+      "assemblySize": [
+        16,
+        8
+      ],
+      "authority": "verified-ROM-foreground-tile-signature",
+      "id": "jungle-floor-spikes-a",
+      "mounting": "floor",
+      "runtimeAssembly": "repeatable-16x8-pair",
+      "runtimePresentation": "descriptor-reusable-scenery",
+      "runtimeTileIndices": {
+        "floor": [
+          4716,
+          4718
+        ],
+        "paletteLine": 2
+      },
+      "tileHashes": [
+        "7f69f51c049d",
+        "a6b584943e0f"
+      ]
+    },
+    {
+      "assemblySize": [
+        16,
+        8
+      ],
+      "authority": "verified-ROM-foreground-tile-signature+decoded-global-tile-indices",
+      "id": "jungle-floor-spikes-b",
+      "mounting": "floor",
+      "runtimeAssembly": "repeatable-16x8-pair",
+      "runtimePresentation": "descriptor-reusable-scenery",
+      "runtimeTileIndices": {
+        "floor": [
+          4560,
+          4562
+        ],
+        "paletteLine": 2
+      },
+      "tileHashes": [
+        "a3fa9f91974d",
+        "745be1e3dcdd"
+      ]
+    },
+    {
+      "authority": "verified-ROM-foreground-assembly+user-identified-semantic-family",
+      "id": "jungle-scenery-floor-wall-blade",
+      "mounting": "floor-or-wall",
+      "runtimeAssembly": "repeatable-16x8-pair",
+      "runtimePresentation": "descriptor-reusable-scenery",
+      "runtimeTileIndices": {
+        "floor": [
+          5685,
+          5686
+        ],
+        "paletteLine": 2
+      },
+      "variants": [
+        {
+          "assemblySize": [
+            16,
+            8
+          ],
+          "mounting": "floor",
+          "tileHashes": [
+            "12b90937805b",
+            "95b3b1e12e64"
+          ]
+        },
+        {
+          "assemblySize": [
+            8,
+            16
+          ],
+          "mounting": "wall-right",
+          "tileHashes": [
+            "b177f028040f",
+            "6fca5189f19e"
+          ]
+        }
+      ]
+    },
+    {
+      "authority": "reviewed-RDX-map-art+Classic-lethal-counterpart+user-confirmed-trap",
+      "id": "egypt-static-map-trap",
+      "mounting": "embedded-map-art",
+      "runtimeAssembly": "map-art-only"
+    },
+    {
+      "authority": "user-reviewed-Layer-C-to-Layer-F-effective-hazard-parity",
+      "id": "castle-static-map-trap",
+      "mounting": "embedded-map-art",
+      "runtimeAssembly": "map-art-only"
+    },
+    {
+      "assemblySize": [
+        16,
+        8
+      ],
+      "authority": "verified-ROM-Egypt-floor-spike-tile-9196+Classic-mark-lifecycle+reviewed-activated-trap-parity",
+      "id": "egypt-activated-floor-spike-segment",
+      "mounting": "floor",
+      "runtimeAssembly": "repeatable-16x8-pair",
+      "runtimePresentation": "descriptor-reusable-scenery",
+      "runtimeTileIndices": {
+        "floor": [
+          9196,
+          9196
+        ],
+        "paletteLine": 0
+      },
+      "statePolicy": "Visible and lethal while the Classic source mark is in its default active state; descriptor scenery and contact disappear together after deactivation."
+    }
+  ],
+  "rooms": [
+    {
+      "authority": "reviewed-native-RDX-foreground-contact",
+      "evidence": {
+        "createdAt": "2026-08-03T15:04:48.552Z",
+        "romSha256": "06ba20d676fe3ded0f79ace313cb8379e6fe30a4cc9794fffdb392b585180a00",
+        "source": "terrain-hazards.json"
+      },
+      "mapId": 4,
+      "submap": 1,
+      "traps": [
+        {
+          "annotationId": "annotation-1785769448102-0",
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm01-0",
+          "contact": {
+            "bounds": [
+              168,
+              472,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "reviewed-annotation-general-location",
+            "exact-ROM-tile-hash-assembly",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm01-0; fitted RDX bounds [168, 472, 16, 8]"
+          ],
+          "family": "jungle-floor-spikes-a",
+          "id": "md0004-floor-blades-upper",
+          "mounting": "floor",
+          "position": [
+            168,
+            472
+          ],
+          "sourceBounds": [
+            176,
+            472,
+            16,
+            8
+          ],
+          "sourceId": 45057,
+          "sourceKey": "terrain-hazard:classic-sm01-0",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 4685,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 4686,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  4716,
+                  4718
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                168,
+                472
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "annotationId": "annotation-1785769463585-1",
+          "authority": "v2.1.57-placement-fitted-shared-render-collision-authority",
+          "classicParentSourceKey": "terrain-hazard:classic-sm01-1",
+          "contact": {
+            "bounds": [
+              104,
+              600,
+              15,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "reviewed-annotation-general-location",
+            "exact-ROM-tile-hash-assembly",
+            "v2.1.57 Placement fitted [104,600,16,8]; decoded pixels relocated from [96,600,16,8]"
+          ],
+          "family": "jungle-floor-spikes-b",
+          "id": "md0004-floor-blades-lower-left",
+          "mounting": "floor",
+          "position": [
+            104,
+            600
+          ],
+          "sourceBounds": [
+            96,
+            600,
+            16,
+            8
+          ],
+          "sourceId": 45058,
+          "sourceKey": "terrain-hazard:classic-sm01-1",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 3994,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 3974,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  4560,
+                  4562
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                104,
+                600
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "annotationId": "annotation-1785769483491-2",
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm01-2",
+          "contact": {
+            "bounds": [
+              184,
+              648,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "reviewed-annotation-general-location",
+            "exact-ROM-tile-hash-assembly",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm01-2; fitted RDX bounds [184, 648, 8, 16]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0004-wall-blades-upper",
+          "mounting": "wall-right",
+          "position": [
+            184,
+            648
+          ],
+          "sourceBounds": [
+            184,
+            656,
+            8,
+            16
+          ],
+          "sourceId": 45059,
+          "sourceKey": "terrain-hazard:classic-sm01-2",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 3375,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 3276,
+                  "hFlip": true,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "vFlip": true
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                184,
+                648
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "annotationId": "annotation-1785769483491-2",
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm01-3",
+          "contact": {
+            "bounds": [
+              184,
+              680,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "reviewed-annotation-general-location",
+            "exact-ROM-tile-hash-assembly",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm01-3; fitted RDX bounds [184, 680, 8, 16]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0004-wall-blades-lower",
+          "mounting": "wall-right",
+          "position": [
+            184,
+            680
+          ],
+          "sourceBounds": [
+            184,
+            672,
+            8,
+            16
+          ],
+          "sourceId": 45060,
+          "sourceKey": "terrain-hazard:classic-sm01-3",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 3377,
+                  "hFlip": true,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "vFlip": true
+                },
+                {
+                  "globalTile": 3455,
+                  "hFlip": true,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "vFlip": true
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                184,
+                680
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "verified-ROM-foreground-tile-signature",
+      "evidence": {
+        "romSha256": "06ba20d676fe3ded0f79ace313cb8379e6fe30a4cc9794fffdb392b585180a00",
+        "source": "verified RDX ROM tile scan"
+      },
+      "mapId": 6,
+      "submap": 3,
+      "traps": [
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-0",
+          "contact": {
+            "bounds": [
+              248,
+              200,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "exact decoded foreground tile-byte signature",
+            "same-global-tile-pair-as-jungle-scenery-wall-variant",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm03-0; fitted RDX bounds [248, 200, 8, 16]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0006-wall-blades-192",
+          "mounting": "wall-right",
+          "position": [
+            248,
+            200
+          ],
+          "sourceBounds": [
+            248,
+            192,
+            8,
+            16
+          ],
+          "sourceId": 45063,
+          "sourceKey": "terrain-hazard:classic-sm03-0",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 3182,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 5465,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                248,
+                200
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-3",
+          "contact": {
+            "bounds": [
+              248,
+              552,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "exact decoded foreground tile-byte signature",
+            "same-global-tile-pair-as-jungle-scenery-wall-variant",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm03-3; fitted RDX bounds [248, 552, 8, 16]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0006-wall-blades-560",
+          "mounting": "wall-right",
+          "position": [
+            248,
+            552
+          ],
+          "sourceBounds": [
+            248,
+            560,
+            8,
+            16
+          ],
+          "sourceId": 45064,
+          "sourceKey": "terrain-hazard:classic-sm03-3",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 5383,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 5385,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                248,
+                552
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.59-detached-hazard-foreground+background-source-cleanup",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-2",
+          "contact": {
+            "bounds": [
+              152,
+              552,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "exact decoded foreground tile-byte signature",
+            "same-global-tile-pair-as-jungle-scenery-wall-variant",
+            "v2.1.58 Placement fitted [152,552,8,16]; decoded pixels relocated from [152,576,8,16]",
+            "v2.1.59 source background-plane blade underlay at [152,576,8,16] is explicitly suppressed so only the relocated foreground hazard remains visible"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0006-wall-blades-576-left",
+          "mounting": "wall-right",
+          "position": [
+            152,
+            552
+          ],
+          "sourceBounds": [
+            152,
+            576,
+            8,
+            16
+          ],
+          "sourceId": 45065,
+          "sourceKey": "terrain-hazard:classic-sm03-2",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 5383,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 5385,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                152,
+                552
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-4",
+          "contact": {
+            "bounds": [
+              248,
+              584,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "exact decoded foreground tile-byte signature",
+            "same-global-tile-pair-as-jungle-scenery-wall-variant",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm03-4; fitted RDX bounds [248, 584, 8, 16]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0006-wall-blades-576-right",
+          "mounting": "wall-right",
+          "position": [
+            248,
+            584
+          ],
+          "sourceBounds": [
+            248,
+            576,
+            8,
+            16
+          ],
+          "sourceId": 45066,
+          "sourceKey": "terrain-hazard:classic-sm03-4",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 5383,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 5385,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                248,
+                584
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.59-placement-fitted-shared-render-collision-authority",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-6",
+          "contact": {
+            "bounds": [
+              136,
+              696,
+              15,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "exact decoded foreground tile-byte signature",
+            "v2.1.59 Placement fitted [136,696,16,8]; foreground hazard pixels relocated from [144,696,16,8] and stale background-plane underlay suppressed at the original position"
+          ],
+          "family": "jungle-floor-spikes-b",
+          "id": "md0006-floor-spikes-696",
+          "mounting": "floor",
+          "position": [
+            136,
+            696
+          ],
+          "sourceBounds": [
+            144,
+            696,
+            16,
+            8
+          ],
+          "sourceId": 45067,
+          "sourceKey": "terrain-hazard:classic-sm03-6",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 3164,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 3165,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  4560,
+                  4562
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                136,
+                696
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-1",
+          "contact": {
+            "bounds": [
+              232,
+              312,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 92 is a repeated floor blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM03->MD0006 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm03-1",
+          "position": [
+            232,
+            312
+          ],
+          "sourceId": 45312,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm03-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                232,
+                312
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm03-5",
+          "contact": {
+            "bounds": [
+              248,
+              616,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 91 is a repeated wall blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM03->MD0006 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm03-5",
+          "position": [
+            248,
+            616
+          ],
+          "sourceId": 45313,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm03-5",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                248,
+                616
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "verified-ROM-foreground-tile-signature",
+      "evidence": {
+        "romSha256": "06ba20d676fe3ded0f79ace313cb8379e6fe30a4cc9794fffdb392b585180a00",
+        "source": "verified RDX ROM tile scan"
+      },
+      "mapId": 7,
+      "submap": 4,
+      "traps": [
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm04-2",
+          "contact": {
+            "bounds": [
+              72,
+              312,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "user-supplied-MD0007-scenery-blade-reference",
+            "decoded-NT[MD+1]-tile-pair-12b90937805b+95b3b1e12e64",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm04-2; fitted RDX bounds [72, 312, 16, 8]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0007-scenery-blade-upper",
+          "mounting": "floor",
+          "position": [
+            72,
+            312
+          ],
+          "sourceBounds": [
+            80,
+            312,
+            16,
+            8
+          ],
+          "sourceId": 45069,
+          "sourceKey": "terrain-hazard:classic-sm04-2",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 4036,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 4037,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                72,
+                312
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm04-1",
+          "contact": {
+            "bounds": [
+              104,
+              248,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "user-supplied-MD0007-second-scenery-blade-reference",
+            "decoded-NT[MD+1]-tile-pair-12b90937805b+95b3b1e12e64",
+            "global-tiles-5685+5686-palette-line-2",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm04-1; fitted RDX bounds [104, 248, 16, 8]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0007-scenery-blade-top",
+          "mounting": "floor",
+          "position": [
+            104,
+            248
+          ],
+          "sourceBounds": [
+            80,
+            248,
+            16,
+            8
+          ],
+          "sourceId": 45077,
+          "sourceKey": "terrain-hazard:classic-sm04-1",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 4014,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 4015,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                104,
+                248
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm04-0",
+          "contact": {
+            "bounds": [
+              232,
+              184,
+              15,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "decoded-NT[MD+1]-tile-pair-a3fa9f91974d+745be1e3dcdd",
+            "global-tiles-4560+4562-palette-line-2",
+            "user-reported-top-right-MD0007-hazard",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm04-0; fitted RDX bounds [232, 184, 16, 8]"
+          ],
+          "family": "jungle-floor-spikes-b",
+          "id": "md0007-floor-spikes-top-right",
+          "mounting": "floor",
+          "position": [
+            232,
+            184
+          ],
+          "sourceBounds": [
+            240,
+            184,
+            16,
+            8
+          ],
+          "sourceId": 45078,
+          "sourceKey": "terrain-hazard:classic-sm04-0",
+          "sourceMapDetachment": {
+            "backgroundRestore": {
+              "authority": "reviewed-clean-background-tiles",
+              "plane": "B",
+              "tiles": [
+                {
+                  "globalTile": 4036,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0
+                },
+                {
+                  "globalTile": 4037,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0
+                }
+              ]
+            },
+            "planes": [
+              "A",
+              "B"
+            ]
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  4560,
+                  4562
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                232,
+                184
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "user-annotated-proper-SM05-MD0008-stateful-hazard-entities+verified-ROM-scenery-blade-family",
+      "evidence": {
+        "romSha256": "06ba20d676fe3ded0f79ace313cb8379e6fe30a4cc9794fffdb392b585180a00",
+        "source": "user annotated MD0008 and SM05 screenshots; MD0007 verified scenery-blade tile assembly"
+      },
+      "mapId": 8,
+      "submap": 5,
+      "traps": [
+        {
+          "authority": "user-annotated-active-position+classic-trigger-state+shared-C-placement+explicit-patch-provenance",
+          "contact": {
+            "bounds": [
+              126,
+              88,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "deactivation": {
+            "mutations": [
+              {
+                "logic": [
+                  12,
+                  8
+                ],
+                "ml": 0,
+                "mt": 32
+              },
+              {
+                "logic": [
+                  9,
+                  6
+                ],
+                "ml": 0,
+                "mt": 0
+              },
+              {
+                "logic": [
+                  10,
+                  6
+                ],
+                "ml": 0,
+                "mt": 0
+              }
+            ],
+            "rdxTrigger": {
+              "logic": [
+                12,
+                8
+              ],
+              "ml": 11
+            }
+          },
+          "evidence": [
+            "user-annotated-rdx-md0008-proper-hazard-entity",
+            "user-annotated-classic-sm05-corresponding-hazard-entity",
+            "global-tiles-5685+5686-palette-line-2",
+            "shared-scenery-placement-table-used-by-game-and-preview"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0008-ceiling-blades-mark53",
+          "mounting": "floor",
+          "patchProvenance": {
+            "kind": "patch",
+            "reason": "The tile pair is decoded from the RDX ROM; xrick mark ownership and active/deactivated coordinates are introduced mapping data.",
+            "romDecodedAsset": true,
+            "scope": "source-association-and-state-placement"
+          },
+          "position": [
+            126,
+            88
+          ],
+          "sourceId": 45073,
+          "sourceKey": "mark:53",
+          "sourceMark": 53,
+          "state": "active",
+          "visuals": {
+            "active": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "paletteLine": 2,
+                "repeat": [
+                  2,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ]
+              },
+              "position": [
+                126,
+                88
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            },
+            "inactive": {
+              "position": [
+                126,
+                96
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": false
+            }
+          }
+        },
+        {
+          "authority": "user-annotated-active-position+classic-trigger-state+shared-C-placement+explicit-patch-provenance+v2146-x+1",
+          "contact": {
+            "bounds": [
+              192,
+              88,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "deactivation": {
+            "mutations": [
+              {
+                "logic": [
+                  8,
+                  6
+                ],
+                "ml": 0,
+                "mt": 0
+              },
+              {
+                "logic": [
+                  13,
+                  6
+                ],
+                "ml": 0,
+                "mt": 0
+              },
+              {
+                "logic": [
+                  14,
+                  6
+                ],
+                "ml": 0,
+                "mt": 0
+              }
+            ],
+            "rdxTrigger": {
+              "logic": [
+                8,
+                6
+              ],
+              "ml": 12
+            }
+          },
+          "evidence": [
+            "user-annotated-rdx-md0008-proper-hazard-entity",
+            "user-annotated-classic-sm05-corresponding-hazard-entity",
+            "global-tiles-5685+5686-palette-line-2",
+            "shared-scenery-placement-table-used-by-game-and-preview"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0008-ceiling-blades-mark54",
+          "mounting": "floor",
+          "patchProvenance": {
+            "kind": "patch",
+            "reason": "The tile pair is decoded from the RDX ROM; xrick mark ownership and active/deactivated coordinates are introduced mapping data.",
+            "romDecodedAsset": true,
+            "scope": "source-association-and-state-placement"
+          },
+          "position": [
+            192,
+            88
+          ],
+          "sourceId": 45074,
+          "sourceKey": "mark:54",
+          "sourceMark": 54,
+          "state": "active",
+          "visuals": {
+            "active": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "paletteLine": 2,
+                "repeat": [
+                  2,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ]
+              },
+              "position": [
+                192,
+                88
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            },
+            "inactive": {
+              "position": [
+                192,
+                96
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": false
+            }
+          }
+        },
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm05-1",
+          "contact": {
+            "bounds": [
+              200,
+              184,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "user-annotated-rdx-md0008-proper-hazard-entity",
+            "user-annotated-classic-sm05-corresponding-hazard-entity",
+            "global-tiles-5685+5686-palette-line-2",
+            "shared-scenery-placement-table-used-by-game-and-preview",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm05-1; fitted RDX bounds [200, 184, 16, 8]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0008-floor-blades-left",
+          "mounting": "floor",
+          "position": [
+            200,
+            184
+          ],
+          "sourceBounds": [
+            184,
+            184,
+            16,
+            8
+          ],
+          "sourceId": 45075,
+          "sourceKey": "static:86:192:192:front:0",
+          "sourceSelector": {
+            "actorId": 86,
+            "kind": "rdx-static-spawn",
+            "spawnIndex": 1
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                200,
+                184
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "placement-audit-topology-fit+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm05-2",
+          "contact": {
+            "bounds": [
+              232,
+              184,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "user-annotated-rdx-md0008-proper-hazard-entity",
+            "user-annotated-classic-sm05-corresponding-hazard-entity",
+            "global-tiles-5685+5686-palette-line-2",
+            "shared-scenery-placement-table-used-by-game-and-preview",
+            "v2.1.60 one-to-one Classic parent terrain-hazard:classic-sm05-2; fitted RDX bounds [232, 184, 16, 8]"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0008-floor-blades-right",
+          "mounting": "floor",
+          "position": [
+            232,
+            184
+          ],
+          "sourceId": 45076,
+          "sourceKey": "static:86:240:192:front:0",
+          "sourceSelector": {
+            "actorId": 86,
+            "kind": "rdx-static-spawn",
+            "spawnIndex": 2
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                232,
+                184
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm05-0",
+          "contact": {
+            "bounds": [
+              248,
+              104,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 91 is a repeated wall blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM05->MD0008 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm05-0",
+          "position": [
+            248,
+            104
+          ],
+          "sourceId": 45314,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm05-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                248,
+                104
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "v2.1.52-classic-effect-parity+reviewed-native-RDX-foreground-contact",
+      "evidence": {
+        "createdAt": "2026-08-07T15:10:33.805Z",
+        "romSha256": "06ba20d676fe3ded0f79ace313cb8379e6fe30a4cc9794fffdb392b585180a00",
+        "source": "user-report+rdx-presentation-bridge"
+      },
+      "mapId": 9,
+      "submap": 6,
+      "traps": [
+        {
+          "authority": "classic-counterpart+local-neighbour-clearance+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm06-1",
+          "contact": {
+            "bounds": [
+              176,
+              744,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "MD0009#rdx-trap#static:86:192:752:front:0 is explicitly classified as a placed trap",
+            "user-reported-2026-08-07-that-contact-does-not-harm-Rick",
+            "global-tiles-5685+5686-palette-line-2",
+            "2026-08-19 Classic/RDX local-neighbour placement review: topology target is x=168; reviewed x=176 (+8 px)"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0009-scenery-blade-752",
+          "mounting": "floor",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 8,
+            "dy": 0,
+            "evidence": "Classic leaves a Rick-width gap between the blade and the statue to its left; MD0009 uses a wider statue footprint, so the topology-only x=168 target is too close."
+          },
+          "position": [
+            176,
+            744
+          ],
+          "sourceBounds": [
+            184,
+            744,
+            16,
+            8
+          ],
+          "sourceId": 45079,
+          "sourceKey": "static:86:192:752:front:0",
+          "sourceSelector": {
+            "actorId": 86,
+            "kind": "rdx-static-spawn",
+            "spawnIndex": 11
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                176,
+                744
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-counterpart+local-neighbour-clearance+reviewed-rdx-hazard-identity",
+          "classicParentSourceKey": "terrain-hazard:classic-sm06-0",
+          "contact": {
+            "bounds": [
+              240,
+              136,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "diagnostics": {
+            "authority": "main-pre-rewire-phase-zero-migration",
+            "pn": 255,
+            "quarterTurns": 0,
+            "selectionMarginPx": 2
+          },
+          "evidence": [
+            "Classic SM06 terrain-hazard classic-sm06-0 bounds [200,152,16,8]",
+            "verified RDX scenery-blade tiles 5685+5686 palette-line-2 reused by MD0007/MD0008/MD0009 lower trap",
+            "2026-08-19 Classic/RDX local-neighbour placement review: topology target is x=232; reviewed x=240 (+8 px)"
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "md0009-scenery-blade-144",
+          "mounting": "floor",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 8,
+            "dy": 0,
+            "evidence": "Preserve the Classic local-neighbour gap to mark:57: Classic opaque pickup pixels end at x=183 before the blade at x=200; RDX PN067 opaque pixels end at x=223, so the blade starts at x=240."
+          },
+          "position": [
+            240,
+            136
+          ],
+          "sourceId": 45080,
+          "sourceKey": "static:86:240:144:front:0",
+          "sourceSelector": {
+            "actorId": 86,
+            "kind": "synthetic-rdx-asset",
+            "spawnIndex": 65534
+          },
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                240,
+                136
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 10,
+      "submap": 7,
+      "traps": [
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm07-0",
+          "contact": {
+            "bounds": [
+              200,
+              936,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 92 is a repeated floor blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM07->MD0010 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm07-0",
+          "position": [
+            200,
+            936
+          ],
+          "sourceId": 45315,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm07-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                200,
+                936
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "reviewed-no-hazard-placement",
+      "evidence": {
+        "finding": "tile signature is visually reused here and is not sufficient evidence of a lethal placement",
+        "patchFile": "config/rdx-presentation/reviewed-patches/v2130-md0011-patches.json",
+        "source": "single-element review patch v2.1.30"
+      },
+      "mapId": 11,
+      "submap": 8,
+      "traps": [
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm08-0",
+          "contact": {
+            "bounds": [
+              104,
+              216,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 92 is a repeated floor blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM08->MD0011 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm08-0",
+          "position": [
+            104,
+            216
+          ],
+          "sourceId": 45316,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm08-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                104,
+                216
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm08-1",
+          "contact": {
+            "bounds": [
+              136,
+              216,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 92 is a repeated floor blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM08->MD0011 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm08-1",
+          "position": [
+            136,
+            216
+          ],
+          "sourceId": 45317,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm08-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                136,
+                216
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm08-2",
+          "contact": {
+            "bounds": [
+              248,
+              424,
+              8,
+              16
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 91 is a repeated wall blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM08->MD0011 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm08-2",
+          "position": [
+            248,
+            424
+          ],
+          "sourceId": 45318,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm08-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": true
+              },
+              "position": [
+                248,
+                424
+              ],
+              "size": [
+                8,
+                16
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "v2.1.57-world-scoped-classic-lethal-tile-signature-to-proven-rdx-family",
+          "classicParentSourceKey": "terrain-hazard:classic-sm08-3",
+          "contact": {
+            "bounds": [
+              136,
+              600,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Jungle tile 92 is a repeated floor blade signature.",
+            "RDX jungle-scenery-floor-wall-blade family is independently reviewed in MD0004/MD0006/MD0008/MD0009.",
+            "Placement uses the reviewed SM08->MD0011 topology transform only; no nearest-actor inference."
+          ],
+          "family": "jungle-scenery-floor-wall-blade",
+          "id": "auto-classic-sm08-3",
+          "position": [
+            136,
+            600
+          ],
+          "sourceId": 45319,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm08-3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 2,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  5685,
+                  5686
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                136,
+                600
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.63 user-confirmed SM09 trap audit"
+      },
+      "mapId": 13,
+      "submap": 9,
+      "traps": [
+        {
+          "authority": "user-confirmed-trap+placement-audit-reviewed-counterpart",
+          "classicParentSourceKey": "terrain-hazard:classic-sm09-0",
+          "contact": {
+            "bounds": [
+              80,
+              760,
+              8,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic MAP_EFLG_LETHAL terrain-hazard:classic-sm09-0 has an 8x8 lethal contact at the fitted RDX position [80,760]",
+            "v2.1.63 user confirmed this RDX location is the corresponding active trap",
+            "User Egypt re-audit requires one 8x8 arrow/spike cell extracted from the two identical middle cells of MD0015 terrain-hazard:classic-sm11-1; the previous 32x8 strip was too wide for the single Classic lethal cell"
+          ],
+          "family": "egypt-static-map-trap",
+          "id": "md0013-static-trap-sm09-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            80,
+            760
+          ],
+          "sourceId": 45320,
+          "sourceKey": "terrain-hazard:classic-sm09-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                80,
+                760
+              ],
+              "size": [
+                8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 14,
+      "submap": 10,
+      "traps": []
+    },
+    {
+      "absentClassicHazards": [],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 15,
+      "submap": 11,
+      "traps": [
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm11-0",
+          "contact": {
+            "bounds": [
+              128,
+              144,
+              64,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm11-0 projects to [128, 144, 128, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [16, 18, 8, 1] / px [128, 144, 64, 8].",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "The Classic strip maps to 3 disjoint RDX spike runs; each run owns a separate contact so the visual gap remains non-lethal."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              16,
+              18,
+              8,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "splitPart": 1,
+            "splitParts": 3,
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0015-classic-sm11-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            144
+          ],
+          "sourceId": 46464,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm11-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                144
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm11-0",
+          "contact": {
+            "bounds": [
+              200,
+              144,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm11-0 projects to [128, 144, 128, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [25, 18, 2, 1] / px [200, 144, 16, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "The Classic strip maps to 3 disjoint RDX spike runs; each run owns a separate contact so the visual gap remains non-lethal."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              25,
+              18,
+              2,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9153
+            ],
+            "splitPart": 2,
+            "splitParts": 3,
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0015-classic-sm11-0-part-2",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 72,
+            "dy": 0,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            200,
+            144
+          ],
+          "sourceId": 46465,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm11-0:part:2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                200,
+                144
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm11-0",
+          "contact": {
+            "bounds": [
+              224,
+              144,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm11-0 projects to [128, 144, 128, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [28, 18, 4, 1] / px [224, 144, 32, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "The Classic strip maps to 3 disjoint RDX spike runs; each run owns a separate contact so the visual gap remains non-lethal."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              28,
+              18,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "splitPart": 3,
+            "splitParts": 3,
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0015-classic-sm11-0-part-3",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 96,
+            "dy": 0,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            224,
+            144
+          ],
+          "sourceId": 46466,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm11-0:part:3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                224,
+                144
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm11-1",
+          "contact": {
+            "bounds": [
+              104,
+              176,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm11-1 projects to [96, 176, 32, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [13, 22, 2, 1] / px [104, 176, 16, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              13,
+              22,
+              2,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9153
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0015-classic-sm11-1",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 8,
+            "dy": 0,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            104,
+            176
+          ],
+          "sourceId": 46468,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm11-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                104,
+                176
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm11-2",
+          "contact": {
+            "bounds": [
+              160,
+              232,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm11-2 projects to [128, 232, 64, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [20, 29, 4, 1] / px [160, 232, 32, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              20,
+              29,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0015-classic-sm11-2",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 32,
+            "dy": 0,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            160,
+            232
+          ],
+          "sourceId": 46472,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm11-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                232
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm11-3",
+          "contact": {
+            "bounds": [
+              112,
+              320,
+              72,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike tile 94 group terrain-hazard:classic-sm11-3 occupies [96,288,64,8].",
+            "The coarse SM0B room transform projects that strip to [128,304,64,8], but the user-reviewed Revival trap redesign moves and widens the visible strip to [112,320,72,8] / g8:14..22:40.",
+            "The reviewed RDX location is reconstructed with canonical Egypt ceiling-blade Plane-A tile 9179 only, preserving decoded Plane-B/backdrop pixels beneath and between the spikes.",
+            "The lethal contact follows the complete nine-cell visible spike strip."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              14,
+              40,
+              9,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9179
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0015-classic-sm11-3",
+          "mounting": "embedded-map-art",
+          "position": [
+            112,
+            320
+          ],
+          "sourceId": 46476,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm11-3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                112,
+                320
+              ],
+              "size": [
+                72,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-sm0b-right-ceiling-spike-visual+hazard-pair",
+          "contact": {
+            "bounds": [
+              192,
+              336,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Reviewed visual-plane cells room:SM0B:visual:B:24:42 and :25:42 place the canonical Egypt alternate ceiling-spike motif (global tile 9153) at [192,336,16,8].",
+            "Reviewed terrain-cell patch sm0b-right-ceiling-spikes-lethal restores matching lethal g8 cells [24,42,2,1].",
+            "Level Editor needs an explicit semantic terrain hazard so the complete rightmost spike pair hazard box is visible and inspectable."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "user-reviewed-layer-f-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              24,
+              42,
+              2,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9153
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "sm0b-right-ceiling-spikes",
+          "mounting": "embedded-map-art",
+          "patchProvenance": {
+            "collisionPatchId": "sm0b-right-ceiling-spikes-lethal",
+            "kind": "patch",
+            "reason": "Pair the reviewed two-cell ceiling-spike map artwork with its lethal terrain cells so visual danger and gameplay contact stay congruent.",
+            "visualPatchIds": [
+              "SM0B.editor.visual-plane.room-SM0B-visual-B-24-42.1",
+              "SM0B.editor.visual-plane.room-SM0B-visual-B-25-42.1"
+            ]
+          },
+          "position": [
+            192,
+            336
+          ],
+          "sourceId": 47941,
+          "sourceKey": "reviewed-hazard:sm0b-right-ceiling-spikes",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                192,
+                336
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 16,
+      "submap": 12,
+      "traps": [
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "contact": {
+            "bounds": [
+              128,
+              48,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "RDX contains an unmatched contiguous ceiling-spike map-art run at g8 [16, 6, 2, 1] / px [128, 48, 16, 8].",
+            "The decoded RDX spike motif is sufficient hazard authority even when no one-to-one Classic lethal group survives the room redesign."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              16,
+              6,
+              2,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0016-rdx-ceiling-spike-16-6-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            48
+          ],
+          "sourceId": 47728,
+          "sourceKey": "auto-rdx-spike:ceiling:g8:16-17:6",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                48
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "contact": {
+            "bounds": [
+              176,
+              48,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "RDX contains an unmatched contiguous ceiling-spike map-art run at g8 [22, 6, 2, 1] / px [176, 48, 16, 8].",
+            "The decoded RDX spike motif is sufficient hazard authority even when no one-to-one Classic lethal group survives the room redesign."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              22,
+              6,
+              2,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0016-rdx-ceiling-spike-22-6-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            176,
+            48
+          ],
+          "sourceId": 47729,
+          "sourceKey": "auto-rdx-spike:ceiling:g8:22-23:6",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                176,
+                48
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 17,
+      "submap": 13,
+      "traps": [
+        {
+          "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm13-0",
+          "contact": {
+            "bounds": [
+              64,
+              360,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt floor-spike tile 92 group terrain-hazard:classic-sm13-0 occupies [32, 344, 32, 8].",
+            "The reviewed room transform projects that Classic strip to [64, 360, 32, 8] in RDX.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with the canonical Egypt floor-spike foreground tile 9196 and preserve the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "floor",
+            "gridBounds": [
+              8,
+              45,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9196
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0017-classic-sm13-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            360
+          ],
+          "sourceId": 46592,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm13-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                360
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            32,
+            0,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            64,
+            -16,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm14-0"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            96,
+            0,
+            64,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            128,
+            -16,
+            64,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm14-1"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            192,
+            0,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            224,
+            -16,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm14-2"
+        }
+      ],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 18,
+      "submap": 14,
+      "traps": [
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-3",
+          "contact": {
+            "bounds": [
+              64,
+              128,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm14-3 projects to [64, 112, 96, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [8, 16, 6, 1] / px [64, 128, 48, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              8,
+              16,
+              6,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-3",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 0,
+            "dy": 16,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            64,
+            128
+          ],
+          "sourceId": 46668,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                128
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-4",
+          "contact": {
+            "bounds": [
+              128,
+              216,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm14-4 projects to [128, 200, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [16, 27, 4, 1] / px [128, 216, 32, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              16,
+              27,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-4",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 0,
+            "dy": 16,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            128,
+            216
+          ],
+          "sourceId": 46672,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-4",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                216
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-5",
+          "contact": {
+            "bounds": [
+              224,
+              216,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm14-5 projects to [224, 200, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [28, 27, 4, 1] / px [224, 216, 32, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              28,
+              27,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-5",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 0,
+            "dy": 16,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            224,
+            216
+          ],
+          "sourceId": 46676,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-5",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                224,
+                216
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-6",
+          "contact": {
+            "bounds": [
+              160,
+              256,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm14-6 projects to [96, 240, 160, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [20, 32, 4, 1] / px [160, 256, 32, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              20,
+              32,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-6",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 64,
+            "dy": 16,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            160,
+            256
+          ],
+          "sourceId": 46680,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-6",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                256
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-7",
+          "contact": {
+            "bounds": [
+              96,
+              328,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm14-7 projects to [96, 328, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [12, 41, 4, 1] / px [96, 328, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              12,
+              41,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-7",
+          "mounting": "embedded-map-art",
+          "position": [
+            96,
+            328
+          ],
+          "sourceId": 46684,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-7",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                96,
+                328
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-8",
+          "contact": {
+            "bounds": [
+              160,
+              328,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm14-8 projects to [160, 328, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [20, 41, 4, 1] / px [160, 328, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              20,
+              41,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-8",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            328
+          ],
+          "sourceId": 46688,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-8",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                328
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-9",
+          "contact": {
+            "bounds": [
+              224,
+              432,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm14-9 projects to [224, 432, 32, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [28, 54, 4, 1] / px [224, 432, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              28,
+              54,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-9",
+          "mounting": "embedded-map-art",
+          "position": [
+            224,
+            432
+          ],
+          "sourceId": 46692,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-9",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                224,
+                432
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-10",
+          "contact": {
+            "bounds": [
+              96,
+              592,
+              64,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm14-10 projects to [96, 592, 64, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [12, 74, 8, 1] / px [96, 592, 64, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              12,
+              74,
+              8,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180,
+              9364,
+              9365
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-10",
+          "mounting": "embedded-map-art",
+          "position": [
+            96,
+            592
+          ],
+          "sourceId": 46696,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-10",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                96,
+                592
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-11",
+          "contact": {
+            "bounds": [
+              192,
+              592,
+              64,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm14-11 projects to [192, 592, 64, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [24, 74, 8, 1] / px [192, 592, 64, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              24,
+              74,
+              8,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-11",
+          "mounting": "embedded-map-art",
+          "position": [
+            192,
+            592
+          ],
+          "sourceId": 46700,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-11",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                192,
+                592
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-12",
+          "contact": {
+            "bounds": [
+              160,
+              624,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm14-12 projects to [160, 624, 32, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [20, 78, 4, 1] / px [160, 624, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              20,
+              78,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9180,
+              9364,
+              9365
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-12",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            624
+          ],
+          "sourceId": 46704,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-12",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                624
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm14-13",
+          "contact": {
+            "bounds": [
+              96,
+              680,
+              160,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm14-13 projects to [96, 680, 160, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [12, 85, 20, 1] / px [96, 680, 160, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              12,
+              85,
+              20,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199,
+              9366,
+              9367
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0018-classic-sm14-13",
+          "mounting": "embedded-map-art",
+          "position": [
+            96,
+            680
+          ],
+          "sourceId": 46708,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-13",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                96,
+                680
+              ],
+              "size": [
+                160,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-mark169-linked-egypt-activated-spike-v2",
+          "contact": {
+            "bounds": [
+              224,
+              328,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "RDX Egypt static-spike restoration already establishes global foreground tile 9196 as the canonical Egypt floor-spike motif.",
+            "User follow-up review requires SM0E mark 169 to cover the whole support span with two adjacent 16x8 floor-blade components, registered to the surrounding RDX ledge geometry.",
+            "Classic mark 169 owns deactivation; the repeated descriptor scenery uses that same mark so both visible spike segments and the full lethal contact disappear atomically."
+          ],
+          "family": "egypt-activated-floor-spike-segment",
+          "id": "sm0e-mark169-activated-spike",
+          "mounting": "floor",
+          "position": [
+            224,
+            328
+          ],
+          "sourceId": 48146,
+          "sourceKey": "mark:169",
+          "sourceMark": 169,
+          "state": "active",
+          "visuals": {
+            "active": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 0,
+                "repeat": [
+                  2,
+                  1
+                ],
+                "tileIndices": [
+                  9196,
+                  9196
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                224,
+                328
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            },
+            "inactive": {
+              "position": [
+                224,
+                328
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            128,
+            224,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            160,
+            240,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm15-0"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            192,
+            224,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            224,
+            240,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm15-1"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            96,
+            352,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            128,
+            368,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm15-2"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            192,
+            416,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            224,
+            432,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm15-3"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            128,
+            544,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            160,
+            560,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm15-5"
+        }
+      ],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 19,
+      "submap": 15,
+      "traps": [
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm15-4",
+          "contact": {
+            "bounds": [
+              128,
+              520,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm15-4 projects to [128, 520, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [16, 65, 4, 1] / px [128, 520, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              16,
+              65,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0019-classic-sm15-4",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            520
+          ],
+          "sourceId": 46736,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm15-4",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                520
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm15-6",
+          "contact": {
+            "bounds": [
+              96,
+              656,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm15-6 projects to [96, 656, 32, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [12, 82, 4, 1] / px [96, 656, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              12,
+              82,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9178,
+              9364,
+              9365
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0019-classic-sm15-6",
+          "mounting": "embedded-map-art",
+          "position": [
+            96,
+            656
+          ],
+          "sourceId": 46744,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm15-6",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                96,
+                656
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm15-7",
+          "contact": {
+            "bounds": [
+              128,
+              712,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt floor-spike tile 92 group terrain-hazard:classic-sm15-7 occupies [96, 696, 32, 8].",
+            "The reviewed room transform projects that Classic strip to [128, 712, 32, 8] in RDX.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with the canonical Egypt floor-spike foreground tile 9196 and preserve the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "floor",
+            "gridBounds": [
+              16,
+              89,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9196
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0019-classic-sm15-7",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            712
+          ],
+          "sourceId": 46748,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm15-7",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                712
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm15-8",
+          "contact": {
+            "bounds": [
+              160,
+              840,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm15-8 projects to [160, 840, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [20, 105, 6, 1] / px [160, 840, 48, 8].",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              20,
+              105,
+              6,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199,
+              9453,
+              9454
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0019-classic-sm15-8",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            840
+          ],
+          "sourceId": 46752,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm15-8",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                840
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            64,
+            352,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            96,
+            368,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm16-0"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            160,
+            352,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            192,
+            368,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm16-1"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            48,
+            456,
+            8,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            80,
+            472,
+            8,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm16-2"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            96,
+            640,
+            64,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            128,
+            656,
+            64,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm16-3"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            192,
+            640,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            224,
+            656,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm16-4"
+        }
+      ],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 20,
+      "submap": 16,
+      "traps": [
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm16-5",
+          "contact": {
+            "bounds": [
+              96,
+              968,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm16-5 projects to [96, 968, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [12, 121, 4, 1] / px [96, 968, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              12,
+              121,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0020-classic-sm16-5",
+          "mounting": "embedded-map-art",
+          "position": [
+            96,
+            968
+          ],
+          "sourceId": 46804,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-5",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                96,
+                968
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            32,
+            256,
+            32,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            64,
+            256,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm17-2"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            160,
+            256,
+            64,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            192,
+            256,
+            64,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm17-3"
+        }
+      ],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 21,
+      "submap": 17,
+      "traps": [
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm17-0",
+          "contact": {
+            "bounds": [
+              176,
+              64,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 94 group terrain-hazard:classic-sm17-0 projects to [160, 64, 96, 8].",
+            "The matching contiguous RDX ceiling-spike map-art run is g8 [22, 8, 6, 1] / px [176, 64, 48, 8].",
+            "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "ceiling",
+            "gridBounds": [
+              22,
+              8,
+              6,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9543
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0021-classic-sm17-0",
+          "mounting": "embedded-map-art",
+          "placementAdjustment": {
+            "basis": "classic-local-neighbour-clearance",
+            "dx": 16,
+            "dy": 0,
+            "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+          },
+          "position": [
+            176,
+            64
+          ],
+          "sourceId": 46848,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm17-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                176,
+                64
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm17-1",
+          "contact": {
+            "bounds": [
+              64,
+              152,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm17-1 projects to [64, 152, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [8, 19, 4, 1] / px [64, 152, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              8,
+              19,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9533,
+              9534
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0021-classic-sm17-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            152
+          ],
+          "sourceId": 46852,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm17-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                152
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-matching-v3",
+          "classicParentSourceKey": "terrain-hazard:classic-sm17-4",
+          "contact": {
+            "bounds": [
+              192,
+              376,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt tile 92 group terrain-hazard:classic-sm17-4 projects to [192, 376, 32, 8].",
+            "The matching contiguous RDX floor-spike map-art run is g8 [24, 47, 4, 1] / px [192, 376, 32, 8]."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              24,
+              47,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9195,
+              9197,
+              9198,
+              9199
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0021-classic-sm17-4",
+          "mounting": "embedded-map-art",
+          "position": [
+            192,
+            376
+          ],
+          "sourceId": 46864,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm17-4",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                192,
+                376
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            32,
+            32,
+            192,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            64,
+            16,
+            192,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm18-0"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            64,
+            664,
+            32,
+            8
+          ],
+          "family": "floor",
+          "projectedBounds": [
+            96,
+            648,
+            32,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm18-5"
+        },
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            48,
+            744,
+            8,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            80,
+            728,
+            8,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm18-6"
+        }
+      ],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 22,
+      "submap": 18,
+      "traps": [
+        {
+          "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm18-1",
+          "contact": {
+            "bounds": [
+              64,
+              136,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt floor-spike tile 92 group terrain-hazard:classic-sm18-1 occupies [32, 152, 32, 8].",
+            "The reviewed room transform projects that Classic strip to [64, 136, 32, 8] in RDX.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with the canonical Egypt floor-spike foreground tile 9196 and preserve the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "floor",
+            "gridBounds": [
+              8,
+              17,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9196
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0022-classic-sm18-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            136
+          ],
+          "sourceId": 46916,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm18-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                136
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm18-2",
+          "contact": {
+            "bounds": [
+              224,
+              136,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt floor-spike tile 92 group terrain-hazard:classic-sm18-2 occupies [192, 152, 32, 8].",
+            "The reviewed room transform projects that Classic strip to [224, 136, 32, 8] in RDX.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with the canonical Egypt floor-spike foreground tile 9196 and preserve the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "floor",
+            "gridBounds": [
+              28,
+              17,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9196
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0022-classic-sm18-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            224,
+            136
+          ],
+          "sourceId": 46920,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm18-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                224,
+                136
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm18-3",
+          "contact": {
+            "bounds": [
+              192,
+              200,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt floor-spike tile 92 group terrain-hazard:classic-sm18-3 occupies [160, 216, 32, 8].",
+            "The reviewed room transform projects that Classic strip to [192, 200, 32, 8] in RDX.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with the canonical Egypt floor-spike foreground tile 9196 and preserve the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "floor",
+            "gridBounds": [
+              24,
+              25,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9196
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0022-classic-sm18-3",
+          "mounting": "embedded-map-art",
+          "position": [
+            192,
+            200
+          ],
+          "sourceId": 46924,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm18-3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                192,
+                200
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-floor-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm18-4",
+          "contact": {
+            "bounds": [
+              128,
+              264,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt floor-spike tile 92 group terrain-hazard:classic-sm18-4 occupies [96, 280, 32, 8].",
+            "The reviewed room transform projects that Classic strip to [128, 264, 32, 8] in RDX.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with the canonical Egypt floor-spike foreground tile 9196 and preserve the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "floor",
+            "gridBounds": [
+              16,
+              33,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9196
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0022-classic-sm18-4",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            264
+          ],
+          "sourceId": 46928,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm18-4",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                264
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-mark221-linked-egypt-activated-spike-v2",
+          "contact": {
+            "bounds": [
+              128,
+              392,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "RDX Egypt static-spike restoration already establishes global foreground tile 9196 as the canonical Egypt floor-spike motif.",
+            "User follow-up review requires SM12 mark 221 to sit entirely on the yellow support brick, shifted right so it does not overhang the walkway.",
+            "Classic mark 221 owns deactivation; the descriptor scenery uses that same mark so visual visibility and lethal contact transition atomically."
+          ],
+          "family": "egypt-activated-floor-spike-segment",
+          "id": "sm12-mark221-activated-spike",
+          "mounting": "floor",
+          "position": [
+            128,
+            392
+          ],
+          "sourceId": 48147,
+          "sourceKey": "mark:221",
+          "sourceMark": 221,
+          "state": "active",
+          "visuals": {
+            "active": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 0,
+                "repeat": [
+                  1,
+                  1
+                ],
+                "tileIndices": [
+                  9196,
+                  9196
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                128,
+                392
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            },
+            "inactive": {
+              "position": [
+                128,
+                392
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": false
+            }
+          }
+        },
+        {
+          "authority": "classic-mark222-linked-egypt-activated-spike-v2",
+          "contact": {
+            "bounds": [
+              144,
+              392,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "RDX Egypt static-spike restoration already establishes global foreground tile 9196 as the canonical Egypt floor-spike motif.",
+            "User follow-up review requires SM12 mark 222 to span the full yellow support brick with two adjacent 16x8 floor-blade components; the right segment shifts to the support edge while staying clear of the statue pedestal.",
+            "Classic mark 222 owns deactivation; the repeated descriptor scenery uses that same mark so both visible spike segments and the full lethal contact disappear atomically."
+          ],
+          "family": "egypt-activated-floor-spike-segment",
+          "id": "sm12-mark222-activated-spike",
+          "mounting": "floor",
+          "position": [
+            144,
+            392
+          ],
+          "sourceId": 48148,
+          "sourceKey": "mark:222",
+          "sourceMark": 222,
+          "state": "active",
+          "visuals": {
+            "active": {
+              "asset": {
+                "assetFlags": 8,
+                "front": false,
+                "kind": "tile-pair",
+                "mirrorX": false,
+                "mirrorY": false,
+                "paletteLine": 0,
+                "repeat": [
+                  2,
+                  1
+                ],
+                "tileIndices": [
+                  9196,
+                  9196
+                ],
+                "verticalPair": false
+              },
+              "position": [
+                144,
+                392
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            },
+            "inactive": {
+              "position": [
+                144,
+                392
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "egypt-static-map-art-spike-run-absence-v1",
+          "classicBounds": [
+            32,
+            32,
+            192,
+            8
+          ],
+          "family": "ceiling",
+          "projectedBounds": [
+            64,
+            48,
+            192,
+            8
+          ],
+          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
+          "sourceKey": "terrain-hazard:classic-sm19-0"
+        }
+      ],
+      "authority": "reviewed-RDX-map-art-contact",
+      "evidence": {
+        "source": "v2.1.105 auto-generated Egypt static trap resolution"
+      },
+      "mapId": 23,
+      "submap": 19,
+      "traps": [
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm19-1",
+          "contact": {
+            "bounds": [
+              160,
+              336,
+              64,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike tile 94 group terrain-hazard:classic-sm19-1 occupies [128, 320, 64, 8].",
+            "The reviewed SM13 room transform projects that strip to [160, 336, 64, 8] / Layer-C g8:20..27:42.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with canonical Egypt ceiling-blade Plane-A tile 9179 while preserving the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              20,
+              42,
+              8,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9179
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0023-classic-sm19-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            336
+          ],
+          "sourceId": 46980,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm19-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                336
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm19-2",
+          "contact": {
+            "bounds": [
+              160,
+              400,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike tile 94 group terrain-hazard:classic-sm19-2 occupies [128, 384, 32, 8].",
+            "The reviewed SM13 room transform projects that strip to [160, 400, 32, 8] / Layer-C g8:20..23:50.",
+            "The RDX location has no surviving spike motif, so reconstruct the missing visual with canonical Egypt ceiling-blade Plane-A tile 9179 while preserving the Classic lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              20,
+              50,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9179
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0023-classic-sm19-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            400
+          ],
+          "sourceId": 46984,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm19-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                400
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-mark239-linked-rdx-map-art-spike-run-v1",
+          "contact": {
+            "bounds": [
+              64,
+              648,
+              64,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "RDX contains the contiguous eight-cell floor-spike map-art run g8:8..15:81 / px [64,648,64,8], composed from Plane-A spike teeth over its Plane-B underlay; together they are the sole visible spike representation.",
+            "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "rdx-map-art-spike-run",
+            "family": "floor",
+            "gridBounds": [
+              8,
+              81,
+              8,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9613,
+              9614
+            ],
+            "templateTiles": [
+              9196
+            ]
+          },
+          "id": "auto-md0023-rdx-floor-spike-8-81-8",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            648
+          ],
+          "sourceId": 47936,
+          "sourceKey": "auto-rdx-spike:floor:g8:8-15:81",
+          "sourceMark": 239,
+          "state": "active",
+          "visuals": {
+            "active": {
+              "planes": [
+                "A",
+                "B"
+              ],
+              "position": [
+                64,
+                648
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": true
+            },
+            "inactive": {
+              "position": [
+                64,
+                648
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "user-reviewed-missing-hazard-accepted-v1",
+          "classicBounds": [
+            200,
+            280,
+            8,
+            8
+          ],
+          "disposition": "missing, accepted",
+          "family": "castle-static-map-trap",
+          "projectedBounds": [
+            232,
+            232,
+            8,
+            8
+          ],
+          "reason": "User-reviewed parity exception: the SM17 Classic lethal terrain has no matching Revival hazard box and this missing contact is accepted.",
+          "sourceKey": "terrain-hazard:classic-sm23-0"
+        }
+      ],
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit + explicit user acceptance"
+      },
+      "mapId": 30,
+      "submap": 23,
+      "traps": []
+    },
+    {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit + explicit user correction"
+      },
+      "mapId": 33,
+      "submap": 26,
+      "traps": [
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm26-0",
+          "contact": {
+            "bounds": [
+              64,
+              104,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C aligns the Classic lethal strip to the visible Layer F spike run at px [64, 104, 32, 8].",
+            "Only the left 32px segment still has Revival spike artwork; keep the rightmost 16px non-lethal so the hazard box matches the visible spikes.",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              64,
+              104,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              64,
+              104,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm1a-classic-sm26-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            104
+          ],
+          "sourceId": 48126,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm26-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                104
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit"
+      },
+      "mapId": 35,
+      "submap": 28,
+      "traps": [
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm28-0",
+          "contact": {
+            "bounds": [
+              128,
+              424,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [128, 424, 32, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              128,
+              424,
+              32,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              128,
+              424,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm1c-classic-sm28-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            424
+          ],
+          "sourceId": 48128,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm28-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                424
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm28-1",
+          "contact": {
+            "bounds": [
+              64,
+              584,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [64, 584, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              64,
+              584,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              64,
+              584,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm1c-classic-sm28-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            584
+          ],
+          "sourceId": 48129,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm28-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                584
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm28-2",
+          "contact": {
+            "bounds": [
+              128,
+              584,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [128, 584, 32, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              128,
+              584,
+              32,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              128,
+              584,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm1c-classic-sm28-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            584
+          ],
+          "sourceId": 48130,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm28-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                584
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit"
+      },
+      "mapId": 36,
+      "submap": 29,
+      "traps": [
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm29-0",
+          "contact": {
+            "bounds": [
+              64,
+              200,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [64, 200, 32, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              64,
+              200,
+              32,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              64,
+              200,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm1d-classic-sm29-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            200
+          ],
+          "sourceId": 48131,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm29-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                200
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm29-1",
+          "contact": {
+            "bounds": [
+              160,
+              200,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [160, 200, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              160,
+              200,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              160,
+              200,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm1d-classic-sm29-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            200
+          ],
+          "sourceId": 48132,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm29-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                200
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit"
+      },
+      "mapId": 40,
+      "submap": 33,
+      "traps": [
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm33-0",
+          "contact": {
+            "bounds": [
+              160,
+              344,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [160, 344, 32, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              160,
+              344,
+              32,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              160,
+              344,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm21-classic-sm33-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            344
+          ],
+          "sourceId": 48133,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm33-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                344
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 41,
+      "submap": 34,
+      "traps": [
+        {
+          "authority": "classic-broken-bottle-visual+hazard-pair",
+          "contact": {
+            "bounds": [
+              136,
+              408,
+              8,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Reviewed visual-plane patch sm22-broken-bottle-upper-bottle restores the bottle art at [136, 408, 8, 8].",
+            "Reviewed terrain-cell patch sm22-broken-bottle-upper-lethal restores the matching lethal g8 cell [17, 51, 1, 1].",
+            "Level Editor needs an explicit semantic terrain hazard so the broken-bottle hazard box is visible and inspectable."
+          ],
+          "family": "castle-broken-bottle-floor-hazard",
+          "id": "sm22-broken-bottle-upper",
+          "mounting": "floor",
+          "patchProvenance": {
+            "collisionPatchId": "sm22-broken-bottle-upper-lethal",
+            "kind": "patch",
+            "reason": "Pair the reviewed foreground bottle overlay with its reviewed lethal 8x8 gameplay cell so the Level Editor exposes one inspectable broken-bottle hazard.",
+            "visualPatchId": "sm22-broken-bottle-upper-bottle"
+          },
+          "position": [
+            136,
+            408
+          ],
+          "sourceId": 47937,
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetId": "castle-broken-bottle",
+                "front": false,
+                "kind": "authored-visual-asset"
+              },
+              "position": [
+                136,
+                408
+              ],
+              "size": [
+                8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-broken-bottle-visual+hazard-pair",
+          "contact": {
+            "bounds": [
+              136,
+              824,
+              8,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Reviewed visual-plane patch sm22-broken-bottle-lower-bottle restores the bottle art at [136, 824, 8, 8].",
+            "Reviewed terrain-cell patch sm22-broken-bottle-lower-lethal restores the matching lethal g8 cell [17, 103, 1, 1].",
+            "Level Editor needs an explicit semantic terrain hazard so the broken-bottle hazard box is visible and inspectable."
+          ],
+          "family": "castle-broken-bottle-floor-hazard",
+          "id": "sm22-broken-bottle-lower",
+          "mounting": "floor",
+          "patchProvenance": {
+            "collisionPatchId": "sm22-broken-bottle-lower-lethal",
+            "kind": "patch",
+            "reason": "Pair the reviewed foreground bottle overlay with its reviewed lethal 8x8 gameplay cell so the Level Editor exposes one inspectable broken-bottle hazard.",
+            "visualPatchId": "sm22-broken-bottle-lower-bottle"
+          },
+          "position": [
+            136,
+            824
+          ],
+          "sourceId": 47938,
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetId": "castle-broken-bottle",
+                "front": false,
+                "kind": "authored-visual-asset"
+              },
+              "position": [
+                136,
+                824
+              ],
+              "size": [
+                8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit"
+      },
+      "mapId": 42,
+      "submap": 35,
+      "traps": [
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm35-0",
+          "contact": {
+            "bounds": [
+              64,
+              568,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [64, 568, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              64,
+              568,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              64,
+              568,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm23-classic-sm35-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            568
+          ],
+          "sourceId": 48138,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm35-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                568
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm35-1",
+          "contact": {
+            "bounds": [
+              128,
+              568,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [128, 568, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              128,
+              568,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              128,
+              568,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm23-classic-sm35-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            568
+          ],
+          "sourceId": 48139,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm35-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                568
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm35-2",
+          "contact": {
+            "bounds": [
+              192,
+              568,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [192, 568, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              192,
+              568,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              192,
+              568,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm23-classic-sm35-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            192,
+            568
+          ],
+          "sourceId": 48140,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm35-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                192,
+                568
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "absentClassicHazards": [
+        {
+          "authority": "user-reviewed-missing-hazard-accepted-v1",
+          "classicBounds": [
+            104,
+            536,
+            8,
+            8
+          ],
+          "disposition": "missing, accepted",
+          "family": "castle-static-map-trap",
+          "projectedBounds": [
+            136,
+            536,
+            8,
+            8
+          ],
+          "reason": "User-reviewed parity exception: terrain-hazard:classic-sm36-1 has no matching Revival hazard box and the missing contact is accepted.",
+          "sourceKey": "terrain-hazard:classic-sm36-1"
+        }
+      ],
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit + explicit user acceptance"
+      },
+      "mapId": 43,
+      "submap": 36,
+      "traps": [
+        {
+          "authority": "classic-broken-bottle-visual+hazard-pair",
+          "contact": {
+            "bounds": [
+              104,
+              248,
+              8,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Reviewed visual-plane patch sm24-broken-bottle-visual restores the bottle art at [104, 248, 8, 8].",
+            "Reviewed terrain-cell patch sm24-broken-bottle-lethal restores the matching lethal g8 cell [13, 31, 1, 1].",
+            "Level Editor needs an explicit semantic terrain hazard so the broken-bottle hazard box is visible and inspectable."
+          ],
+          "family": "castle-broken-bottle-floor-hazard",
+          "id": "sm24-broken-bottle",
+          "mounting": "floor",
+          "patchProvenance": {
+            "collisionPatchId": "sm24-broken-bottle-lethal",
+            "kind": "patch",
+            "reason": "Pair the reviewed foreground bottle overlay with its reviewed lethal 8x8 gameplay cell so the Level Editor exposes one inspectable broken-bottle hazard.",
+            "visualPatchId": "sm24-broken-bottle-visual"
+          },
+          "position": [
+            104,
+            248
+          ],
+          "sourceId": 47939,
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetId": "castle-broken-bottle",
+                "front": false,
+                "kind": "authored-visual-asset"
+              },
+              "position": [
+                104,
+                248
+              ],
+              "size": [
+                8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "mapId": 44,
+      "submap": 37,
+      "traps": [
+        {
+          "authority": "classic-broken-bottle-visual+hazard-pair",
+          "contact": {
+            "bounds": [
+              104,
+              504,
+              8,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Reviewed visual-plane patch sm25-broken-bottle-visual restores the bottle art at [104, 504, 8, 8].",
+            "Reviewed terrain-cell patch sm25-broken-bottle-lethal restores the matching lethal g8 cell [13, 63, 1, 1].",
+            "Level Editor needs an explicit semantic terrain hazard so the broken-bottle hazard box is visible and inspectable."
+          ],
+          "family": "castle-broken-bottle-floor-hazard",
+          "id": "sm25-broken-bottle",
+          "mounting": "floor",
+          "patchProvenance": {
+            "collisionPatchId": "sm25-broken-bottle-lethal",
+            "kind": "patch",
+            "reason": "Pair the reviewed foreground bottle overlay with its reviewed lethal 8x8 gameplay cell so the Level Editor exposes one inspectable broken-bottle hazard.",
+            "visualPatchId": "sm25-broken-bottle-visual"
+          },
+          "position": [
+            104,
+            504
+          ],
+          "sourceId": 47940,
+          "state": "static",
+          "visuals": {
+            "static": {
+              "asset": {
+                "assetId": "castle-broken-bottle",
+                "front": false,
+                "kind": "authored-visual-asset"
+              },
+              "position": [
+                104,
+                504
+              ],
+              "size": [
+                8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "schema": "rdx.trap_registry.v1",
+  "sourceSha256": "1e6217633bfa0ec769dd108a76999dff39d4290dff5e1eb1804e2c5771260cee",
+  "version": "2.1.104"
+}

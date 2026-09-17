@@ -1,0 +1,4995 @@
+{
+  "resolverVersion": 1,
+  "room": {
+    "effective": {
+      "mapping": {
+        "group": "egypt",
+        "mapId": 18,
+        "mapName": "MD0018",
+        "pixelOffset": {
+          "dxPx": 32,
+          "dyPx": -16
+        },
+        "runtimeViewportBias": {
+          "dxPx": 0,
+          "dyPx": 16,
+          "evidence": "SM0E/MD0018 direct-entry and RDX-to-classic toggle parity: the previous +24px phase left the RDX anchor one 8px classic row too high. +16px aligns the ROM-owned (40,96) entry with classic contact Y=103/104 without embedding Rick in the classic wall."
+        },
+        "submap": 14,
+        "submapName": "SM0E"
+      },
+      "nativeControllerAuthority": "xrick-runtime"
+    },
+    "fingerprints": {
+      "adjustments": "d5b035d1d560f2f3e66195171d9a2bab4521ce6f4d85a00464fd76e5bca7ddae",
+      "alignment": "1a1968a9a86217c5f5bee566211ac63e459198525b890cd5755b542a7c7fbbcc",
+      "presentationDepth": "c7a5a9ba9f14695412faa86ce12c4f993bf532aa8b128f750edd5800d2f9c202",
+      "resolved": "18909e5c18e745899a28f133b3928743b9a09fe331c3104de63290c6f1d3e7be",
+      "reviewed": "237ba64338903292d0cfc6f30f5b43b3838555ff34617c8e8003729d1b56bd05",
+      "semantic": "430dacebcd37a8b4a842a00bf8f46ddf8c2a878fc51047a92889dcf4b6f3f9a3",
+      "sourceClassic": "f181df15c7c230e06e94c3bcb8e8bb7409395b226799a329c6b6175437626bf5",
+      "sourceRdx": "97f9547c713b4a4a504b8e004c017f84988a563c255d2683a737179f8c398408",
+      "structural": "9a67f3f6ad8d14e4cde4964c11edd96c733378c086d6621c9b957dcadd4ebaf7",
+      "transitions": "6745013f4655da57fcfd0c3df61e5489e296c7e08e7bffae0050fff046af4363"
+    },
+    "group": "egypt",
+    "id": "SM0E",
+    "layers": {
+      "adjustments": {
+        "operations": [
+          {
+            "evidence": {
+              "activatedTrapReview": "rdr-trap-audit-review-v5",
+              "reviewEdges": [
+                "left",
+                "bottom"
+              ],
+              "sourceId": "placement:mark:167"
+            },
+            "id": "SM0E.mark-167.visual-anchor",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": -4,
+              "type": "translate"
+            },
+            "property": "visualAnchor",
+            "provenance": "User-reviewed activated-trap parity audit 2026-09-10: align the left and bottom edges of the active PN84 hazard to the Classic footprint after the maintained room warp. This supersedes the older provisional -16px phase estimate; preserve gameplay/controller coordinates and move only Layer-F presentation.",
+            "target": "classic:SM0E:mark:167"
+          },
+          {
+            "evidence": {
+              "activatedTrapReview": "rdr-trap-audit-review-v5",
+              "reviewNote": "left edge must touch left wall",
+              "roomPhaseBias": [
+                0,
+                16
+              ],
+              "sourceId": "placement:mark:171"
+            },
+            "id": "SM0E.mark-171.visual-anchor",
+            "operation": {
+              "dxPx": -16,
+              "dyPx": -16,
+              "type": "translate"
+            },
+            "property": "visualAnchor",
+            "provenance": "SM0E room-phase placement audit: the RDX presentation sample is one 16px phase below the topology-fitted surrounding geometry; preserve gameplay/controller coordinates and move only the Layer-F presentation. User-reviewed activated-trap parity audit 2026-09-10 additionally requires the left edge to touch the left wall, so shift Layer-F presentation 16px left without moving the Classic controller/trigger.",
+            "target": "classic:SM0E:mark:171"
+          },
+          {
+            "evidence": {
+              "classicAlignedControllerY": 523,
+              "rdxControllerY": 507,
+              "rdxSupportTopY": 528,
+              "sourceId": "placement:mark:173"
+            },
+            "id": "SM0E.mark-173.gameplay-position",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": -16,
+              "type": "translate"
+            },
+            "property": "position",
+            "provenance": "2026-09-07 MD0018 mark173 RDX support registration: the Classic controller projects 16px into the remastered floor while its reviewed PN38 body already sits on that floor. Move the Revival-only gameplay controller up 16px so actor collision, patrol support, and the PN38 presentation share the same RDX contact; Classic mode and patrol timing remain unchanged.",
+            "target": "SM0E.enemy.mark-173"
+          },
+          {
+            "evidence": {
+              "gameplayPlacement": "SM0E.mark-173.gameplay-position",
+              "sourceId": "placement:mark:173"
+            },
+            "id": "SM0E.mark-173.visual-anchor",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": -16,
+              "type": "translate"
+            },
+            "property": "visualAnchor",
+            "provenance": "MD0018 mark173 visual registration follows the same reviewed -16px RDX support correction as its gameplay controller; keep Layer-F diagnostics and PN38 on the same contact while native presentation derives the visual move from the relocated controller.",
+            "target": "SM0E.enemy.mark-173"
+          },
+          {
+            "id": "SM0E.mark-174.gameplay-position",
+            "operation": {
+              "dxPx": 0,
+              "dyPx": -16,
+              "type": "translate"
+            },
+            "patchProvenance": "2026-09-11 user-reviewed moving-platform visual-parity patch",
+            "property": "position",
+            "provenance": "2026-09-11 moving-platform visual-parity follow-up: move mark174 5 px left from the August review while retaining its accepted 16 px upward registration. Use Layer-F gameplay/controller delta [0,-16]; Classic mode, trigger, path, and timing remain unchanged.",
+            "target": "SM0E.actor.mark-174"
+          },
+          {
+            "evidence": {
+              "reviewedMovePx": [
+                -5,
+                0
+              ],
+              "sourceId": "visual-parity:SM0E:mark-174"
+            },
+            "id": "SM0E.mark-174.visual-anchor",
+            "operation": {
+              "dxPx": -5,
+              "dyPx": 0,
+              "type": "translate"
+            },
+            "patchProvenance": "2026-09-11 user-reviewed moving-platform visual-parity patch",
+            "property": "visualAnchor",
+            "provenance": "2026-09-11 moving-platform visual-parity follow-up: move PN24 presentation 5 px left with the corrected mark174 gameplay body; retain the existing vertical PN24 registration and Classic trajectory/timing.",
+            "target": "SM0E.actor.mark-174"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-3.position",
+            "operation": {
+              "type": "set",
+              "x": 64,
+              "y": 128
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-3 projects to [64, 112, 96, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [8, 16, 6, 1] / px [64, 128, 48, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.; The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-3"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-3.gameplay-bounds",
+            "operation": {
+              "rect": [
+                64,
+                128,
+                48,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-3 projects to [64, 112, 96, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [8, 16, 6, 1] / px [64, 128, 48, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.; The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-3"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-3.visual-bounds",
+            "operation": {
+              "rect": [
+                64,
+                128,
+                48,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-3"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-4.position",
+            "operation": {
+              "type": "set",
+              "x": 128,
+              "y": 216
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-4 projects to [128, 200, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [16, 27, 4, 1] / px [128, 216, 32, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-4"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-4.gameplay-bounds",
+            "operation": {
+              "rect": [
+                128,
+                216,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-4 projects to [128, 200, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [16, 27, 4, 1] / px [128, 216, 32, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-4"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-4.visual-bounds",
+            "operation": {
+              "rect": [
+                128,
+                216,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-4"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-5.position",
+            "operation": {
+              "type": "set",
+              "x": 224,
+              "y": 216
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-5 projects to [224, 200, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [28, 27, 4, 1] / px [224, 216, 32, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-5"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-5.gameplay-bounds",
+            "operation": {
+              "rect": [
+                224,
+                216,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-5 projects to [224, 200, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [28, 27, 4, 1] / px [224, 216, 32, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-5"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-5.visual-bounds",
+            "operation": {
+              "rect": [
+                224,
+                216,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-5"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-6.position",
+            "operation": {
+              "type": "set",
+              "x": 160,
+              "y": 256
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-6 projects to [96, 240, 160, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [20, 32, 4, 1] / px [160, 256, 32, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.; The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-6"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-6.gameplay-bounds",
+            "operation": {
+              "rect": [
+                160,
+                256,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-6 projects to [96, 240, 160, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [20, 32, 4, 1] / px [160, 256, 32, 8].; The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.; The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous.",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-6"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-6.visual-bounds",
+            "operation": {
+              "rect": [
+                160,
+                256,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-6"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-7.position",
+            "operation": {
+              "type": "set",
+              "x": 96,
+              "y": 328
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-7 projects to [96, 328, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [12, 41, 4, 1] / px [96, 328, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-7"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-7.gameplay-bounds",
+            "operation": {
+              "rect": [
+                96,
+                328,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-7 projects to [96, 328, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [12, 41, 4, 1] / px [96, 328, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-7"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-7.visual-bounds",
+            "operation": {
+              "rect": [
+                96,
+                328,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-7"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-8.position",
+            "operation": {
+              "type": "set",
+              "x": 160,
+              "y": 328
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-8 projects to [160, 328, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [20, 41, 4, 1] / px [160, 328, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-8"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-8.gameplay-bounds",
+            "operation": {
+              "rect": [
+                160,
+                328,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-8 projects to [160, 328, 32, 8].; The matching contiguous RDX floor-spike map-art run is g8 [20, 41, 4, 1] / px [160, 328, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-8"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-8.visual-bounds",
+            "operation": {
+              "rect": [
+                160,
+                328,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-8"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-9.position",
+            "operation": {
+              "type": "set",
+              "x": 224,
+              "y": 432
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-9 projects to [224, 432, 32, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [28, 54, 4, 1] / px [224, 432, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-9"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-9.gameplay-bounds",
+            "operation": {
+              "rect": [
+                224,
+                432,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-9 projects to [224, 432, 32, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [28, 54, 4, 1] / px [224, 432, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-9"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-9.visual-bounds",
+            "operation": {
+              "rect": [
+                224,
+                432,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-9"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-10.position",
+            "operation": {
+              "type": "set",
+              "x": 96,
+              "y": 592
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-10 projects to [96, 592, 64, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [12, 74, 8, 1] / px [96, 592, 64, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-10"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-10.gameplay-bounds",
+            "operation": {
+              "rect": [
+                96,
+                592,
+                64,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-10 projects to [96, 592, 64, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [12, 74, 8, 1] / px [96, 592, 64, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-10"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-10.visual-bounds",
+            "operation": {
+              "rect": [
+                96,
+                592,
+                64,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-10"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-11.position",
+            "operation": {
+              "type": "set",
+              "x": 192,
+              "y": 592
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-11 projects to [192, 592, 64, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [24, 74, 8, 1] / px [192, 592, 64, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-11"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-11.gameplay-bounds",
+            "operation": {
+              "rect": [
+                192,
+                592,
+                64,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-11 projects to [192, 592, 64, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [24, 74, 8, 1] / px [192, 592, 64, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-11"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-11.visual-bounds",
+            "operation": {
+              "rect": [
+                192,
+                592,
+                64,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-11"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-12.position",
+            "operation": {
+              "type": "set",
+              "x": 160,
+              "y": 624
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-12 projects to [160, 624, 32, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [20, 78, 4, 1] / px [160, 624, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-12"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-12.gameplay-bounds",
+            "operation": {
+              "rect": [
+                160,
+                624,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 94 group terrain-hazard:classic-sm14-12 projects to [160, 624, 32, 8].; The matching contiguous RDX ceiling-spike map-art run is g8 [20, 78, 4, 1] / px [160, 624, 32, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-12"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-12.visual-bounds",
+            "operation": {
+              "rect": [
+                160,
+                624,
+                32,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-12"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-13.position",
+            "operation": {
+              "type": "set",
+              "x": 96,
+              "y": 680
+            },
+            "property": "position",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-13 projects to [96, 680, 160, 8].; The matching contiguous RDX floor-spike map-art run is g8 [12, 85, 20, 1] / px [96, 680, 160, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-13"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-13.gameplay-bounds",
+            "operation": {
+              "rect": [
+                96,
+                680,
+                160,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "gameplayBounds",
+            "provenance": "Classic Egypt tile 92 group terrain-hazard:classic-sm14-13 projects to [96, 680, 160, 8].; The matching contiguous RDX floor-spike map-art run is g8 [12, 85, 20, 1] / px [96, 680, 160, 8].",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-13"
+          },
+          {
+            "id": "SM0E.trap.auto-md0018-classic-sm14-13.visual-bounds",
+            "operation": {
+              "rect": [
+                96,
+                680,
+                160,
+                8
+              ],
+              "type": "set-rect"
+            },
+            "property": "visualBounds",
+            "provenance": "egypt-static-map-art-spike-run-matching-v3",
+            "target": "SM0E.trap.auto-md0018-classic-sm14-13"
+          }
+        ],
+        "schema": "rdr.adjustments_resolved.v1"
+      },
+      "alignment": {
+        "regions": [
+          {
+            "authority": "reviewed-room-correspondence",
+            "classicBoundsPx": [
+              0,
+              0,
+              768,
+              256
+            ],
+            "confidence": 0.7996651087642935,
+            "id": "SM0E.whole-room",
+            "rdxBoundsPx": [
+              0,
+              0,
+              736,
+              320
+            ],
+            "status": "reviewed",
+            "transform": {
+              "dxPx": 32,
+              "dyPx": -16,
+              "type": "translate"
+            }
+          }
+        ],
+        "room": {
+          "mapId": 18,
+          "submap": 14
+        },
+        "schema": "rdr.level_alignment.v1"
+      },
+      "presentationDepth": {
+        "classes": [
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              8793,
+              8794,
+              8796,
+              8798,
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
+            ],
+            "id": "egypt.decorative-strips-plane-a",
+            "label": "Egypt decorative strips and ladder highlights",
+            "plane": "A",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Backdrop-authored Egypt ladder/strip motifs must not occlude behind-midground trap actors."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              8768,
+              8769,
+              8792,
+              8794,
+              8795,
+              8797,
+              8801,
+              8833,
+              9045,
+              9047,
+              9069,
+              9070
+            ],
+            "id": "egypt.decorative-strips-plane-b",
+            "label": "Egypt decorative strips, ladders, and backplates",
+            "plane": "B",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              1287,
+              1288
+            ],
+            "id": "castle.window-trim-plane-a",
+            "label": "Castle window trim",
+            "plane": "A",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Castle window trim is backdrop scenery and must not occlude behind-midground trap actors."
+            }
+          },
+          {
+            "band": "backdrop",
+            "globalTiles": [
+              11635,
+              11636
+            ],
+            "id": "castle.window-trim-plane-b",
+            "label": "Castle window backing",
+            "plane": "B",
+            "provenance": {
+              "authority": "visual-parity-audit-affected-traps-20260911",
+              "reason": "Castle window backing belongs to the backdrop so trap sprites stay unobscured."
+            }
+          }
+        ],
+        "overrides": [],
+        "planeDefaults": {
+          "A": "foreground",
+          "B": "midground"
+        },
+        "schema": "rdr.presentation_depth_resolved.v2",
+        "seedBaseline": {
+          "authority": "generated-open-close-seed-v2",
+          "backdropBits": "00f3cfff0000f3cfff0000f3cfff0000f3cfff0000f3cfff0000f3cfff0000f3cfff0100f3cfff00fcf3cfff00fcf3cfff00fcf3cfff00fcf3cfff000000cfff000000cfff000000c0ff000000c0ff00003fcff000003fcff000003fcff000003fcff000003fcff000003fcff000000f0ff000000f0ff000003fffff00003fffff00003fffff00003fffff00000f000000000f000000000f000000000f00000000ffffff0000ffffff0000fffdfb0300fffdfb0300fffdfb0300fffdfb0300f0ffff0300f0fff70300f0f0f00000f0f0f00000000000000010c7cf0000ffffcf0000ffffcf0000ffffcf0000ffffcf00000f00cf00000f00cf00000f000000000f00000080cf0f000080cf0f000080cfcfff0080cfcfff000000cfff00c00ccfff00c00ccff000c00ccff000c00c0ff000c00c0ff000c00ccfff00c00ccfff00c00ccfff00c00ccfff00c00c00f000c00c40f800c03ccfff00c03ccfff00c03ccf0f00c03ccf0f00c00c000000c00c000000c03f0fff00c03f0fff00003f0fff00003f0fff00003fcfffff003fcfffff003fcfffff003fcfffff003fcfff00003fcfff00003fcfff00003fcfff00000000000000ffffff000000000400000000000000000000000000000000",
+          "gridHeight": 92,
+          "gridWidth": 40,
+          "openCellCount": 1487,
+          "schema": "rdr.presentation_depth_seed_baseline.v1",
+          "sourcePlane": "B",
+          "version": 1
+        },
+        "version": 2
+      },
+      "reviewedCorrections": {
+        "corrections": [
+          {
+            "expected": [
+              64,
+              483
+            ],
+            "id": "SM0E.editor.entity-position.SM0E.trap.mark-171.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "patches/sm0e-egypt-changes.json",
+                "SM01.trap.mark-12"
+              ],
+              "reason": "User-reviewed patches/sm0e-egypt-changes.json: translate SM0E source mark 171 by (0,16) RDX-world pixels. Classic source entity 27 and same-family SM01 mark 12 retain the shared native controller; this explicit room placement edit preserves PN83 and the existing Layer-F visual-anchor adjustment."
+            },
+            "target": "SM0E.trap.mark-171",
+            "type": "entity-position",
+            "value": {
+              "position": [
+                64,
+                499
+              ]
+            }
+          }
+        ],
+        "room": {
+          "mapId": 18,
+          "submap": 14
+        },
+        "schema": "rdr.reviewed_room_corrections.v1"
+      },
+      "semanticCorpus": {
+        "objects": [
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                104,
+                11
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                120,
+                48
+              ],
+              "runtimeDraw": [
+                101,
+                22
+              ],
+              "runtimeOrigin": [
+                120,
+                48
+              ],
+              "visualAnchor": [
+                101,
+                22
+              ]
+            },
+            "class": "enemy",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:164:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 38,
+                "role": "enemy",
+                "sourceKey": "mark:164"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 8
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                104,
+                27
+              ],
+              "presentationOrigin": [
+                120,
+                48
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                101,
+                22
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-enemy",
+            "groupId": "sm0e:mark:164",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 38,
+                "snapshot": 38
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                104,
+                27
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.enemy.mark-164",
+            "sourceEvidence": {
+              "classic": {
+                "controller": {
+                  "authority": "xrick-e_them-t1b-native",
+                  "canFall": true,
+                  "directionTarget": "rick",
+                  "family": "type1b",
+                  "kind": "rick-seeking-horizontal",
+                  "motionAuthority": "native-xrick-only"
+                },
+                "entity": 8,
+                "flags": 0,
+                "h": 21,
+                "mark": 164,
+                "sprbase": 55,
+                "sprite": 55,
+                "w": 24,
+                "x": 72,
+                "y": 27
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-164",
+            "sources": {
+              "classic": {
+                "entity": 8,
+                "mark": 164,
+                "ref": "classic:SM0E:mark:164",
+                "slot": 9
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:164",
+                "sourceKey": "mark:164"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                101,
+                22
+              ],
+              "baseOrigin": [
+                120,
+                48
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  101,
+                  22
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  120,
+                  48
+                ],
+                "pn": 38,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  101,
+                  22
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  120,
+                  48
+                ],
+                "pn": 38,
+                "renderOrder": 0,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                200,
+                11
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                216,
+                48
+              ],
+              "runtimeDraw": [
+                197,
+                22
+              ],
+              "runtimeOrigin": [
+                216,
+                48
+              ],
+              "visualAnchor": [
+                197,
+                22
+              ]
+            },
+            "class": "enemy",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:165:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 38,
+                "role": "enemy",
+                "sourceKey": "mark:165"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 8
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                200,
+                27
+              ],
+              "presentationOrigin": [
+                216,
+                48
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                197,
+                22
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-enemy",
+            "groupId": "sm0e:mark:165",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 38,
+                "snapshot": 38
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                200,
+                27
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.enemy.mark-165",
+            "sourceEvidence": {
+              "classic": {
+                "controller": {
+                  "authority": "xrick-e_them-t1b-native",
+                  "canFall": true,
+                  "directionTarget": "rick",
+                  "family": "type1b",
+                  "kind": "rick-seeking-horizontal",
+                  "motionAuthority": "native-xrick-only"
+                },
+                "entity": 8,
+                "flags": 0,
+                "h": 21,
+                "mark": 165,
+                "sprbase": 55,
+                "sprite": 55,
+                "w": 24,
+                "x": 168,
+                "y": 27
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-165",
+            "sources": {
+              "classic": {
+                "entity": 8,
+                "mark": 165,
+                "ref": "classic:SM0E:mark:165",
+                "slot": 10
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:165",
+                "sourceKey": "mark:165"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                197,
+                22
+              ],
+              "baseOrigin": [
+                216,
+                48
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  197,
+                  22
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  216,
+                  48
+                ],
+                "pn": 38,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  197,
+                  22
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  216,
+                  48
+                ],
+                "pn": 38,
+                "renderOrder": 1,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                128,
+                112
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                56,
+                161,
+                24,
+                24
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                -2
+              ],
+              "sourceRect": [
+                24,
+                163,
+                24,
+                24
+              ]
+            },
+            "authority": "classic-C-authoritative-path+reviewed-PN22-anchor-aligned-v5",
+            "baseline": {
+              "origin": [
+                143,
+                144
+              ],
+              "runtimeDraw": [
+                127,
+                124
+              ],
+              "runtimeOrigin": [
+                143,
+                144
+              ],
+              "visualAnchor": [
+                127,
+                124
+              ]
+            },
+            "class": "platform",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:166:actor:16:front:0",
+                "owner": "rdx",
+                "pn": 22,
+                "role": "moving-platform",
+                "sourceKey": "mark:166"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 36
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                128,
+                128
+              ],
+              "presentationOrigin": [
+                143,
+                144
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                56,
+                161,
+                24,
+                24
+              ],
+              "visualAnchor": [
+                124,
+                124
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "moving-platform",
+            "groupId": "sm0e:mark:166",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "authoredOverride": true,
+              "behavior": "follow-classic-always-visible",
+              "layer": "front",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "originOverride": [
+                143,
+                144
+              ],
+              "owner": "rdx",
+              "patchProvenance": "md0018-mark166-pn22-wide-moving-platform",
+              "pnByState": {
+                "simulated": 22,
+                "snapshot": 22
+              },
+              "provenance": "MD0018 mark:166 is one 32 px PN22 moving platform. Level Editor Export Changes records reviewed contact [127,128], trigger [56,161], PN22 origin [143,144], and opaque bounds [128,128,32,16]. Preserve PN22 and move the production platform 2 px up from the prior [127,130]/[143,146] baseline."
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                128,
+                128
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.actor.mark-166",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 36,
+                "flags": 46,
+                "h": 16,
+                "mark": 166,
+                "sprbase": 12,
+                "sprite": 12,
+                "spriteSequence": {
+                  "active": [],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 85
+                },
+                "triggerBounds": [
+                  24,
+                  163,
+                  24,
+                  24
+                ],
+                "w": 24,
+                "x": 96,
+                "y": 128
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-166",
+            "sources": {
+              "classic": {
+                "entity": 36,
+                "mark": 166,
+                "ref": "classic:SM0E:mark:166",
+                "slot": 0
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:166",
+                "sourceKey": "mark:166"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                127,
+                124
+              ],
+              "baseOrigin": [
+                143,
+                144
+              ],
+              "originAuthority": "classic-C-authoritative-path+reviewed-PN22-anchor-aligned-v5",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "classic-c-relative"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  127,
+                  60
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  143,
+                  144
+                ],
+                "pn": 22,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  127,
+                  124
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  143,
+                  144
+                ],
+                "pn": 22,
+                "renderOrder": 2,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            },
+            "triggerSemantics": {
+              "authority": "user-reviewed-level-editor-placement",
+              "clearFlags": 0,
+              "dx": 0,
+              "dy": -2,
+              "mode": "preserve-classic-trigger",
+              "patchProvenance": "2026-08-26 Level Editor compact Export Changes",
+              "provenance": "2026-08-26 SM0E Level Editor review: mark166 PN22 moving-platform contact is [127,128] and trigger top-left is [56,161]. Production baseline was contact [127,130] / trigger [56,163], so remove the prior +2 gameplay Y correction and move only the Classic activator 2 px up. PN22 remains paired with the reviewed position.",
+              "setFlags": 0
+            }
+          },
+          {
+            "adjustmentsApplied": [
+              {
+                "id": "SM0E.mark-167.visual-anchor",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": -4,
+                  "type": "translate"
+                },
+                "property": "visualAnchor",
+                "provenance": "User-reviewed activated-trap parity audit 2026-09-10: align the left and bottom edges of the active PN84 hazard to the Classic footprint after the maintained room warp. This supersedes the older provisional -16px phase estimate; preserve gameplay/controller coordinates and move only Layer-F presentation."
+              }
+            ],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                147
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                64,
+                163,
+                32,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                32,
+                163,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-rom-state-fixed-anchor",
+            "baseline": {
+              "origin": [
+                64,
+                160
+              ],
+              "runtimeDraw": [
+                60,
+                156
+              ],
+              "runtimeOrigin": [
+                64,
+                160
+              ],
+              "visualAnchor": [
+                60,
+                156
+              ]
+            },
+            "class": "trap",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 85,
+                "key": "mark:167:actor:85:front:0",
+                "owner": "rdx",
+                "pn": 83,
+                "role": "trap",
+                "sourceKey": "mark:167"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 27
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                64,
+                163
+              ],
+              "presentationOrigin": [
+                64,
+                156
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                64,
+                163,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                60,
+                152
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "pn84-side-trap",
+            "groupId": "sm0e:mark:167",
+            "implementationDisposition": null,
+            "mounting": "wall-right",
+            "patchProvenance": null,
+            "presentation": {
+              "actionStateOwner": true,
+              "actorId": 85,
+              "layer": "behind-midground",
+              "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 83,
+                "snapshot": 83
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                163
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.trap.mark-167",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 27,
+                "flags": 136,
+                "h": 18,
+                "mark": 167,
+                "sprbase": 17,
+                "sprite": 17,
+                "spriteSequence": {
+                  "active": [
+                    87
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 0
+                },
+                "triggerBounds": [
+                  32,
+                  163,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 32,
+                "y": 163
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-167",
+            "sources": {
+              "classic": {
+                "entity": 27,
+                "mark": 167,
+                "ref": "classic:SM0E:mark:167",
+                "slot": 4
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:167",
+                "sourceKey": "mark:167"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                60,
+                156
+              ],
+              "baseOrigin": [
+                64,
+                160
+              ],
+              "originAuthority": "production-c-rom-state-fixed-anchor",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  60,
+                  156
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  64,
+                  160
+                ],
+                "pn": 83,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  60,
+                  156
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  64,
+                  160
+                ],
+                "pn": 83,
+                "renderOrder": 3,
+                "visible": false,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                232,
+                283
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                64,
+                291,
+                128,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                32,
+                291,
+                128,
+                32
+              ]
+            },
+            "authority": "production-c-runtime",
+            "baseline": {
+              "runtimeDraw": [
+                200,
+                299
+              ],
+              "visualAnchor": [
+                200,
+                299
+              ]
+            },
+            "class": "shooter",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "direction": "left",
+                "key": "child:static:49:272:295:front:0:projectile:trigger:168",
+                "mirrorX": false,
+                "owner": "rdx",
+                "pn": 52,
+                "role": "projectile",
+                "sourceKey": "mark:168"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 26
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                232,
+                299
+              ],
+              "presentationOrigin": [
+                232,
+                299
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                64,
+                291,
+                128,
+                32
+              ],
+              "visualAnchor": [
+                200,
+                299
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": {
+              "policy": "explicit-classic-fallback",
+              "reason": "RDX action ownership unresolved"
+            },
+            "family": "projectile-emitter-child",
+            "groupId": "sm0e:mark:168",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": null,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "classic-fallback",
+              "pnByState": {
+                "simulated": null,
+                "snapshot": null
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitter": {
+              "actorId": 49,
+              "authority": "reviewed-projectile-emitter-link",
+              "direction": "left",
+              "linked": true,
+              "origin": [
+                272,
+                295
+              ],
+              "provenance": "reviewed emitter audit ff7e937; migrated into canonical Layer E",
+              "spawnIndex": 12
+            },
+            "projectileEmitterResolved": {
+              "actorId": 49,
+              "authority": "reviewed-projectile-emitter-link",
+              "bodyOffset": [
+                -3,
+                0
+              ],
+              "cadence": {
+                "activationMode": "native-xrick-projectile-state",
+                "authority": "native-xrick-projectile-state",
+                "speedPxPerUpdate": 8
+              },
+              "corrections": [
+                "explicit-emitter-link",
+                "emitter-mouth-offset",
+                "presentation-only-projectile-projection",
+                "native-displacement-preserved"
+              ],
+              "direction": "left",
+              "linked": true,
+              "mouth": [
+                259,
+                285
+              ],
+              "muzzleOffset": [
+                -13,
+                -10
+              ],
+              "nativeDisplacementPreserved": true,
+              "origin": [
+                272,
+                295
+              ],
+              "projectionPolicy": {
+                "collision": "classic-c-5x3-projectile-core",
+                "motion": "native-displacement-preserved",
+                "presentation": "emitter-mouth-offset"
+              },
+              "provenance": "reviewed emitter audit ff7e937; migrated into canonical Layer E",
+              "spawnIndex": 12
+            },
+            "projectileTopologyResolved": {
+              "bodySourceKey": "mark:168",
+              "emitter": {
+                "actorId": 49,
+                "authority": "reviewed-projectile-emitter-link",
+                "bodyOffset": [
+                  -3,
+                  0
+                ],
+                "cadence": {
+                  "activationMode": "native-xrick-projectile-state",
+                  "authority": "native-xrick-projectile-state",
+                  "speedPxPerUpdate": 8
+                },
+                "corrections": [
+                  "explicit-emitter-link",
+                  "emitter-mouth-offset",
+                  "presentation-only-projectile-projection",
+                  "native-displacement-preserved"
+                ],
+                "direction": "left",
+                "linked": true,
+                "mouth": [
+                  259,
+                  285
+                ],
+                "muzzleOffset": [
+                  -13,
+                  -10
+                ],
+                "nativeDisplacementPreserved": true,
+                "origin": [
+                  272,
+                  295
+                ],
+                "projectionPolicy": {
+                  "collision": "classic-c-5x3-projectile-core",
+                  "motion": "native-displacement-preserved",
+                  "presentation": "emitter-mouth-offset"
+                },
+                "provenance": "reviewed emitter audit ff7e937; migrated into canonical Layer E",
+                "spawnIndex": 12
+              },
+              "lane": {
+                "authority": "native-displacement-preserved",
+                "collisionSize": [
+                  5,
+                  3
+                ],
+                "direction": "left",
+                "endpointPolicy": "room-edge",
+                "projectileMirrorX": false,
+                "projectileMirrorY": false,
+                "projectilePn": 52,
+                "speedPxPerUpdate": 8
+              },
+              "logicalShooterSemanticId": "SM0E.shooter.mark-168",
+              "nativeProjectileSourceKeys": [
+                "mark:168"
+              ],
+              "shooter": {
+                "actorId": 49,
+                "authority": "canonical-projectile-shooter-body-offset-default",
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  269,
+                  295
+                ],
+                "pn": null,
+                "sourceActorId": 49,
+                "spawnIndex": 12
+              },
+              "topologyRole": "logical-shooter"
+            },
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                232,
+                299
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.shooter.mark-168",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 26,
+                "flags": 136,
+                "h": 6,
+                "mark": 168,
+                "sprbase": 14,
+                "sprite": 14,
+                "spriteSequence": {
+                  "active": [
+                    86
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 0
+                },
+                "triggerBounds": [
+                  32,
+                  291,
+                  128,
+                  32
+                ],
+                "w": 24,
+                "x": 200,
+                "y": 299
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-168",
+            "sources": {
+              "classic": {
+                "entity": 26,
+                "mark": 168,
+                "ref": "classic:SM0E:mark:168",
+                "slot": 5
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:168",
+                "sourceKey": "mark:168"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                200,
+                299
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  192,
+                  299
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  200,
+                  299
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "renderOrder": 4,
+                "visible": false,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                224,
+                331
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                240,
+                307,
+                32,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                -16
+              ],
+              "sourceRect": [
+                208,
+                323,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-rdx-trigger+same-run-classic-envelope",
+            "baseline": {
+              "origin": [
+                240,
+                368
+              ],
+              "runtimeDraw": [
+                229,
+                348
+              ],
+              "runtimeOrigin": [
+                240,
+                368
+              ],
+              "visualAnchor": [
+                229,
+                348
+              ]
+            },
+            "class": "trap",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned",
+              "contactBounds": [
+                224,
+                328,
+                32,
+                8
+              ],
+              "provenance": "Activated-trap parity correction 2026-09-11 follow-up: SM0E mark 169 uses two adjacent 16x8 Egypt floor-spike components covering [224,328,32,8]; live contact follows that full footprint and both visible components disappear with Classic mark 169."
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:169:actor:17:front:0",
+                "owner": "rdx",
+                "pn": 79,
+                "role": "trap",
+                "sourceKey": "mark:169"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 37
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                224,
+                347
+              ],
+              "presentationOrigin": [
+                240,
+                368
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                240,
+                307,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                229,
+                348
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture",
+              "RDX Egypt canonical floor-spike foreground tile 9196 reused as two adjacent 16x8 mark-owned descriptor components to cover the full support span"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "egypt-activated-floor-spike-segment",
+            "groupId": "sm0e:mark:169",
+            "implementationDisposition": "presentation-suppressed-by-descriptor-scenery-owner",
+            "mounting": "floor",
+            "patchProvenance": null,
+            "presentation": {
+              "actionStateOwner": true,
+              "actorId": 0,
+              "authoredOverride": true,
+              "behavior": "suppress",
+              "layer": "behind-midground",
+              "lifecycleAuthority": "classic-action-state-deactivation",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "patchProvenance": "sm0e-mark169-egypt-descriptor-spike",
+              "pnByState": {
+                "simulated": 79,
+                "snapshot": 79
+              },
+              "provenance": "Classic mark 169 remains the lifecycle/controller authority. Its legacy actor sprite is presentation-suppressed; the visible Revival mechanism is the linked 32x8 Egypt floor-spike descriptor scenery using repeated global tile 9196, and the whole two-segment hazard disappears after deactivation."
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                224,
+                347
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.actor.mark-169",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 37,
+                "flags": 36,
+                "h": 8,
+                "mark": 169,
+                "sprbase": 32,
+                "sprite": 32,
+                "spriteSequence": {
+                  "active": [
+                    0
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 93
+                },
+                "triggerBounds": [
+                  208,
+                  323,
+                  32,
+                  32
+                ],
+                "w": 32,
+                "x": 192,
+                "y": 347
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-169",
+            "sources": {
+              "classic": {
+                "entity": 37,
+                "mark": 169,
+                "ref": "classic:SM0E:mark:169",
+                "slot": 5
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:169",
+                "sourceKey": "mark:169"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                229,
+                348
+              ],
+              "baseOrigin": [
+                240,
+                368
+              ],
+              "originAuthority": "production-c-rdx-trigger+same-run-classic-envelope",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  226,
+                  344
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  230,
+                  372
+                ],
+                "pn": 79,
+                "visible": false,
+                "visualState": "deactivated-controller-reference"
+              },
+              "snapshot": {
+                "draw": [
+                  226,
+                  344
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  230,
+                  372
+                ],
+                "pn": 79,
+                "renderOrder": 5,
+                "visible": true,
+                "visualState": "active-default-controller-reference"
+              }
+            },
+            "triggerSemantics": {
+              "authority": "user-reviewed-switch-alignment",
+              "dx": 0,
+              "dy": -16,
+              "reason": "The bullet activator for mark 169 should stay aligned with the reviewed RDX trap placement in both Layers and Runtime; the raw trigger rectangle is one room phase too low."
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                467
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                64,
+                483,
+                32,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                32,
+                483,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-runtime",
+            "baseline": {
+              "runtimeDraw": [
+                64,
+                483
+              ],
+              "visualAnchor": [
+                64,
+                483
+              ]
+            },
+            "class": "collectible",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": null,
+                "key": "fallback:mark:170",
+                "owner": "classic",
+                "pn": null,
+                "role": "collectible",
+                "sourceKey": "mark:170"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 22
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                64,
+                483
+              ],
+              "presentationOrigin": [
+                64,
+                483
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                64,
+                483,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                64,
+                483
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": {
+              "policy": "explicit-classic-fallback",
+              "reason": "production-renderer-no-drawable-rdx-plan"
+            },
+            "family": "role-collectible",
+            "groupId": "sm0e:mark:170",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": null,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "classic-fallback",
+              "pnByState": {
+                "simulated": null,
+                "snapshot": null
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                483
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.collectible.mark-170",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 22,
+                "flags": 0,
+                "h": 21,
+                "mark": 170,
+                "sprbase": 30,
+                "sprite": 30,
+                "triggerBounds": [
+                  32,
+                  483,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 32,
+                "y": 483
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-170",
+            "sources": {
+              "classic": {
+                "entity": 22,
+                "mark": 170,
+                "ref": "classic:SM0E:mark:170",
+                "slot": 7
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:170",
+                "sourceKey": "mark:170"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                64,
+                483
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  64,
+                  483
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  64,
+                  483
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "renderOrder": 6,
+                "visible": false,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [
+              {
+                "id": "SM0E.mark-171.visual-anchor",
+                "operation": {
+                  "dxPx": -16,
+                  "dyPx": -16,
+                  "type": "translate"
+                },
+                "property": "visualAnchor",
+                "provenance": "SM0E room-phase placement audit: the RDX presentation sample is one 16px phase below the topology-fitted surrounding geometry; preserve gameplay/controller coordinates and move only the Layer-F presentation. User-reviewed activated-trap parity audit 2026-09-10 additionally requires the left edge to touch the left wall, so shift Layer-F presentation 16px left without moving the Classic controller/trigger."
+              }
+            ],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                467
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "classic-rdx-ladder-local-mask",
+              "bomb": false,
+              "rect": [
+                56,
+                507,
+                32,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                -8,
+                0
+              ],
+              "sourceRect": [
+                32,
+                507,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-rom-state-fixed-anchor",
+            "baseline": {
+              "origin": [
+                64,
+                480
+              ],
+              "runtimeDraw": [
+                60,
+                476
+              ],
+              "runtimeOrigin": [
+                64,
+                480
+              ],
+              "visualAnchor": [
+                60,
+                476
+              ]
+            },
+            "class": "trap",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 85,
+                "key": "mark:171:actor:85:front:0",
+                "owner": "rdx",
+                "pn": 83,
+                "role": "trap",
+                "sourceKey": "mark:171"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 27
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                64,
+                499
+              ],
+              "presentationOrigin": [
+                48,
+                480
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                56,
+                507,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                44,
+                476
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "pn84-side-trap",
+            "groupId": "sm0e:mark:171",
+            "implementationDisposition": null,
+            "mounting": "wall-right",
+            "patchProvenance": null,
+            "presentation": {
+              "actionStateOwner": true,
+              "actorId": 85,
+              "layer": "behind-midground",
+              "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 83,
+                "snapshot": 83
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "reviewed": {
+              "position": [
+                64,
+                499
+              ]
+            },
+            "reviewedCorrectionsApplied": [
+              {
+                "id": "SM0E.editor.entity-position.SM0E.trap.mark-171.1",
+                "provenance": {
+                  "authority": "level-editor-reviewed-fix",
+                  "evidence": [
+                    "patches/sm0e-egypt-changes.json",
+                    "SM01.trap.mark-12"
+                  ],
+                  "reason": "User-reviewed patches/sm0e-egypt-changes.json: translate SM0E source mark 171 by (0,16) RDX-world pixels. Classic source entity 27 and same-family SM01 mark 12 retain the shared native controller; this explicit room placement edit preserves PN83 and the existing Layer-F visual-anchor adjustment."
+                },
+                "type": "entity-position"
+              }
+            ],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                483
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.trap.mark-171",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 27,
+                "flags": 136,
+                "h": 18,
+                "mark": 171,
+                "sprbase": 17,
+                "sprite": 17,
+                "spriteSequence": {
+                  "active": [
+                    87
+                  ],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 0
+                },
+                "triggerBounds": [
+                  32,
+                  507,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 32,
+                "y": 483
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-171",
+            "sources": {
+              "classic": {
+                "entity": 27,
+                "mark": 171,
+                "ref": "classic:SM0E:mark:171",
+                "slot": 5
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:171",
+                "sourceKey": "mark:171"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                60,
+                492
+              ],
+              "baseOrigin": [
+                64,
+                496
+              ],
+              "originAuthority": "production-c-rom-state-fixed-anchor",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  60,
+                  492
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  64,
+                  496
+                ],
+                "pn": 83,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  60,
+                  492
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  64,
+                  496
+                ],
+                "pn": 83,
+                "renderOrder": 7,
+                "visible": false,
+                "visualState": "snapshot"
+              }
+            },
+            "triggerSemantics": {
+              "dx": -8,
+              "dy": 0,
+              "placementAuthority": "classic-rdx-ladder-local-mask",
+              "provenance": "2026-08-26 deterministic Classic-to-RDX ladder-local-mask placement: preserve the authored activator relationship to the corresponding RDX ladder/mechanism instead of applying a generic nearby-corridor fit."
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                160,
+                507
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                176,
+                528
+              ],
+              "runtimeDraw": [
+                158,
+                502
+              ],
+              "runtimeOrigin": [
+                176,
+                528
+              ],
+              "visualAnchor": [
+                158,
+                502
+              ]
+            },
+            "class": "actor",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:172:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 67,
+                "role": "actor",
+                "sourceKey": "mark:172"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 16
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                160,
+                523
+              ],
+              "presentationOrigin": [
+                176,
+                528
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                158,
+                502
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-actor",
+            "groupId": "sm0e:mark:172",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 67,
+                "snapshot": 67
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                160,
+                523
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.actor.mark-172",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 16,
+                "flags": 0,
+                "h": 21,
+                "mark": 172,
+                "sprbase": 41,
+                "sprite": 41,
+                "w": 24,
+                "x": 128,
+                "y": 523
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-172",
+            "sources": {
+              "classic": {
+                "entity": 16,
+                "mark": 172,
+                "ref": "classic:SM0E:mark:172",
+                "slot": 4
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:172",
+                "sourceKey": "mark:172"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                158,
+                502
+              ],
+              "baseOrigin": [
+                176,
+                528
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  158,
+                  502
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  176,
+                  528
+                ],
+                "pn": 67,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  158,
+                  502
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  176,
+                  528
+                ],
+                "pn": 67,
+                "renderOrder": 8,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [
+              {
+                "id": "SM0E.mark-173.gameplay-position",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": -16,
+                  "type": "translate"
+                },
+                "property": "position",
+                "provenance": "2026-09-07 MD0018 mark173 RDX support registration: the Classic controller projects 16px into the remastered floor while its reviewed PN38 body already sits on that floor. Move the Revival-only gameplay controller up 16px so actor collision, patrol support, and the PN38 presentation share the same RDX contact; Classic mode and patrol timing remain unchanged."
+              },
+              {
+                "id": "SM0E.mark-173.visual-anchor",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": -16,
+                  "type": "translate"
+                },
+                "property": "visualAnchor",
+                "provenance": "MD0018 mark173 visual registration follows the same reviewed -16px RDX support correction as its gameplay controller; keep Layer-F diagnostics and PN38 on the same contact while native presentation derives the visual move from the relocated controller."
+              }
+            ],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                160,
+                507
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                176,
+                544
+              ],
+              "runtimeDraw": [
+                121,
+                518
+              ],
+              "runtimeOrigin": [
+                140,
+                544
+              ],
+              "visualAnchor": [
+                157,
+                518
+              ]
+            },
+            "class": "enemy",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "mark:173:actor:0:front:0",
+                "owner": "rdx",
+                "pn": 38,
+                "role": "enemy",
+                "sourceKey": "mark:173"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 7
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                160,
+                507
+              ],
+              "presentationOrigin": [
+                140,
+                528
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                121,
+                502
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-enemy",
+            "groupId": "sm0e:mark:173",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 38,
+                "snapshot": 38
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                160,
+                523
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.enemy.mark-173",
+            "sourceEvidence": {
+              "classic": {
+                "controller": {
+                  "authority": "xrick-map-mark-type1a",
+                  "family": "type1a",
+                  "kind": "bounded-horizontal-patrol",
+                  "patrol": {
+                    "counterLimit": 12,
+                    "distancePx": 24,
+                    "end": [
+                      152,
+                      523
+                    ],
+                    "initialDirection": "right",
+                    "loopPeriodTicks": 24,
+                    "start": [
+                      128,
+                      523
+                    ],
+                    "startupLatencyTicks": 32,
+                    "stepPx": 2
+                  }
+                },
+                "entity": 7,
+                "flags": 0,
+                "h": 21,
+                "mark": 173,
+                "sprbase": 55,
+                "sprite": 55,
+                "w": 24,
+                "x": 128,
+                "y": 523
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-173",
+            "sources": {
+              "classic": {
+                "entity": 7,
+                "mark": 173,
+                "ref": "classic:SM0E:mark:173",
+                "slot": 9
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:173",
+                "sourceKey": "mark:173"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                157,
+                518
+              ],
+              "baseOrigin": [
+                176,
+                544
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  157,
+                  518
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  176,
+                  544
+                ],
+                "pn": 38,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  121,
+                  518
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  140,
+                  544
+                ],
+                "pn": 38,
+                "renderOrder": 9,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [
+              {
+                "id": "SM0E.mark-174.gameplay-position",
+                "operation": {
+                  "dxPx": 0,
+                  "dyPx": -16,
+                  "type": "translate"
+                },
+                "property": "position",
+                "provenance": "2026-09-11 moving-platform visual-parity follow-up: move mark174 5 px left from the August review while retaining its accepted 16 px upward registration. Use Layer-F gameplay/controller delta [0,-16]; Classic mode, trigger, path, and timing remain unchanged."
+              },
+              {
+                "id": "SM0E.mark-174.visual-anchor",
+                "operation": {
+                  "dxPx": -5,
+                  "dyPx": 0,
+                  "type": "translate"
+                },
+                "property": "visualAnchor",
+                "provenance": "2026-09-11 moving-platform visual-parity follow-up: move PN24 presentation 5 px left with the corrected mark174 gameplay body; retain the existing vertical PN24 registration and Classic trajectory/timing."
+              }
+            ],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                672
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                240,
+                659,
+                32,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                208,
+                659,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-classic-trigger-isolated",
+            "baseline": {
+              "runtimeDraw": [
+                64,
+                688
+              ],
+              "visualAnchor": [
+                64,
+                688
+              ]
+            },
+            "class": "platform",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 0,
+                "key": "fallback:mark:174",
+                "owner": "rdx",
+                "pn": 24,
+                "role": "moving-platform",
+                "sourceKey": "mark:174"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 38
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                64,
+                672
+              ],
+              "presentationOrigin": [
+                75,
+                688
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                240,
+                659,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                60,
+                668
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "moving-platform",
+            "groupId": "sm0e:mark:174",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 0,
+              "authoredOverride": true,
+              "behavior": "follow-classic-always-visible",
+              "layer": "front",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "originOverride": [
+                80,
+                688
+              ],
+              "owner": "rdx",
+              "patchProvenance": "md0018-mark174-reviewed-pn24-source-owned",
+              "pnByState": {
+                "simulated": 24,
+                "snapshot": 24
+              },
+              "provenance": "Mark 174 uses reviewed PN24 at phase-zero RDX origin (80,688) while the original Classic controller remains authoritative for motion and timing."
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                64,
+                688
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.actor.mark-174",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 38,
+                "flags": 46,
+                "h": 16,
+                "mark": 174,
+                "sprbase": 12,
+                "sprite": 12,
+                "spriteSequence": {
+                  "active": [],
+                  "authority": "xrick-ent-sprseq",
+                  "dormant": 85
+                },
+                "triggerBounds": [
+                  208,
+                  659,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 32,
+                "y": 688
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-174",
+            "sources": {
+              "classic": {
+                "entity": 38,
+                "mark": 174,
+                "ref": "classic:SM0E:mark:174",
+                "slot": 0
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:174",
+                "sourceKey": "mark:174"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                64,
+                688
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-classic-trigger-isolated",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  64,
+                  688
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  80,
+                  688
+                ],
+                "pn": 24,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  64,
+                  688
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": [
+                  80,
+                  688
+                ],
+                "pn": 24,
+                "renderOrder": 10,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                256,
+                627
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": {
+              "alignmentAuthority": "reviewed-room-correspondence",
+              "authority": "reviewed-room-correspondence",
+              "bomb": false,
+              "rect": [
+                256,
+                643,
+                32,
+                32
+              ],
+              "regionId": "SM0E.whole-room",
+              "semanticOffset": [
+                0,
+                0
+              ],
+              "sourceRect": [
+                224,
+                643,
+                32,
+                32
+              ]
+            },
+            "authority": "production-c-runtime",
+            "baseline": {
+              "runtimeDraw": [
+                256,
+                643
+              ],
+              "visualAnchor": [
+                256,
+                643
+              ]
+            },
+            "class": "collectible",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": null,
+                "key": "fallback:mark:175",
+                "owner": "classic",
+                "pn": null,
+                "role": "collectible",
+                "sourceKey": "mark:175"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 23
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                256,
+                643
+              ],
+              "presentationOrigin": [
+                256,
+                643
+              ],
+              "supportBounds": null,
+              "triggerBounds": [
+                256,
+                643,
+                32,
+                32
+              ],
+              "visualAnchor": [
+                256,
+                643
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": {
+              "policy": "explicit-classic-fallback",
+              "reason": "production-renderer-no-drawable-rdx-plan"
+            },
+            "family": "role-collectible",
+            "groupId": "sm0e:mark:175",
+            "implementationDisposition": null,
+            "mounting": "static",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": null,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": false,
+              "mirrorY": false,
+              "owner": "classic-fallback",
+              "pnByState": {
+                "simulated": null,
+                "snapshot": null
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                256,
+                643
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.collectible.mark-175",
+            "sourceEvidence": {
+              "classic": {
+                "entity": 23,
+                "flags": 1,
+                "h": 21,
+                "mark": 175,
+                "sprbase": 31,
+                "sprite": 31,
+                "triggerBounds": [
+                  224,
+                  643,
+                  32,
+                  32
+                ],
+                "w": 24,
+                "x": 224,
+                "y": 643
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-mark-175",
+            "sources": {
+              "classic": {
+                "entity": 23,
+                "mark": 175,
+                "ref": "classic:SM0E:mark:175",
+                "slot": 8
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:mark:175",
+                "sourceKey": "mark:175"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "classic-c-sprite",
+              "baseDraw": [
+                256,
+                643
+              ],
+              "baseOrigin": null,
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  256,
+                  643
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  256,
+                  643
+                ],
+                "front": false,
+                "mirrorX": false,
+                "mirrorY": false,
+                "origin": null,
+                "pn": null,
+                "renderOrder": 11,
+                "visible": false,
+                "visualState": "snapshot"
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "alignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                36,
+                48
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "alignedTrigger": null,
+            "authority": "production-c-runtime",
+            "baseline": {
+              "origin": [
+                40,
+                96
+              ],
+              "runtimeDraw": [
+                28,
+                72
+              ],
+              "runtimeOrigin": [
+                40,
+                96
+              ],
+              "visualAnchor": [
+                28,
+                72
+              ]
+            },
+            "class": "player",
+            "collision": {
+              "authority": "classic-c-runtime",
+              "class": "gameplay-source-owned"
+            },
+            "componentStateCycles": null,
+            "components": [
+              {
+                "actorId": 93,
+                "key": "player",
+                "owner": "rdx",
+                "pn": 99,
+                "role": "player",
+                "sourceKey": "player"
+              }
+            ],
+            "controller": {
+              "authority": "classic-xrick",
+              "entity": 1
+            },
+            "effective": {
+              "gameplayBounds": null,
+              "position": [
+                36,
+                64
+              ],
+              "presentationOrigin": [
+                40,
+                96
+              ],
+              "supportBounds": null,
+              "triggerBounds": null,
+              "visualAnchor": [
+                28,
+                72
+              ],
+              "visualBounds": null
+            },
+            "evidence": [
+              "production-c-presentation-capture"
+            ],
+            "exception": null,
+            "fallback": null,
+            "family": "role-player",
+            "groupId": "sm0e:player",
+            "implementationDisposition": null,
+            "mounting": "free-moving",
+            "patchProvenance": null,
+            "presentation": {
+              "actorId": 93,
+              "layer": "normal",
+              "mirrorPolicy": "explicit",
+              "mirrorX": true,
+              "mirrorY": false,
+              "owner": "rdx",
+              "pnByState": {
+                "simulated": 99,
+                "snapshot": 99
+              }
+            },
+            "previewStateCycle": null,
+            "projectileEmitterResolved": null,
+            "projectileTopologyResolved": null,
+            "relationships": [],
+            "runtimeAlignedBaseline": {
+              "authority": "SM0E.whole-room",
+              "origin": [
+                36,
+                64
+              ],
+              "runtimeViewportBias": [
+                0,
+                16
+              ],
+              "status": "reviewed"
+            },
+            "semanticId": "SM0E.player.player",
+            "sourceEvidence": {
+              "classic": {
+                "authority": "xrick-map_maps-direct-entry",
+                "entity": 1,
+                "mark": 0,
+                "role": "player",
+                "slot": 1,
+                "sourceKey": "player",
+                "sprite": 1,
+                "x": 4,
+                "y": 64
+              }
+            },
+            "sourceRecordId": "source-sm0e-md0018-player",
+            "sources": {
+              "classic": {
+                "entity": 1,
+                "mark": 0,
+                "ref": "classic:SM0E:player",
+                "slot": 1
+              },
+              "rdx": {
+                "mapId": 18,
+                "ref": "rdx:MD0018:player",
+                "sourceKey": "player"
+              }
+            },
+            "spatial": {
+              "anchorAuthority": "rdx-pa",
+              "baseDraw": [
+                28,
+                72
+              ],
+              "baseOrigin": [
+                40,
+                96
+              ],
+              "originAuthority": "production-c-runtime",
+              "terminalPolicy": "runtime-state",
+              "trajectoryAuthority": "fixed-contact"
+            },
+            "states": {
+              "simulated": {
+                "draw": [
+                  28,
+                  72
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  40,
+                  96
+                ],
+                "pn": 99,
+                "visible": true,
+                "visualState": "simulated"
+              },
+              "snapshot": {
+                "draw": [
+                  28,
+                  72
+                ],
+                "front": false,
+                "mirrorX": true,
+                "mirrorY": false,
+                "origin": [
+                  40,
+                  96
+                ],
+                "pn": 99,
+                "renderOrder": 12,
+                "visible": true,
+                "visualState": "snapshot"
+              }
+            }
+          }
+        ],
+        "reviewedCorrections": [],
+        "schema": "rdr.semantic_corpus_resolved.v1",
+        "terrainHazards": [
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-3",
+            "contact": {
+              "bounds": [
+                64,
+                128,
+                48,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                64,
+                128,
+                48,
+                8
+              ],
+              "position": [
+                64,
+                128
+              ],
+              "visualBounds": [
+                64,
+                128,
+                48,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 94 group terrain-hazard:classic-sm14-3 projects to [64, 112, 96, 8].",
+              "The matching contiguous RDX ceiling-spike map-art run is g8 [8, 16, 6, 1] / px [64, 128, 48, 8].",
+              "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+              "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "ceiling",
+              "gridBounds": [
+                8,
+                16,
+                6,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9178,
+                9180
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-3",
+            "mounting": "embedded-map-art",
+            "placementAdjustment": {
+              "basis": "classic-local-neighbour-clearance",
+              "dx": 0,
+              "dy": 16,
+              "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+            },
+            "position": [
+              64,
+              128
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-3",
+            "sourceId": 46668,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-3",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  64,
+                  128
+                ],
+                "size": [
+                  48,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-4",
+            "contact": {
+              "bounds": [
+                128,
+                216,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                128,
+                216,
+                32,
+                8
+              ],
+              "position": [
+                128,
+                216
+              ],
+              "visualBounds": [
+                128,
+                216,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 92 group terrain-hazard:classic-sm14-4 projects to [128, 200, 32, 8].",
+              "The matching contiguous RDX floor-spike map-art run is g8 [16, 27, 4, 1] / px [128, 216, 32, 8].",
+              "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "floor",
+              "gridBounds": [
+                16,
+                27,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9195,
+                9197,
+                9198,
+                9199
+              ],
+              "templateTiles": [
+                9196
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-4",
+            "mounting": "embedded-map-art",
+            "placementAdjustment": {
+              "basis": "classic-local-neighbour-clearance",
+              "dx": 0,
+              "dy": 16,
+              "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+            },
+            "position": [
+              128,
+              216
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-4",
+            "sourceId": 46672,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-4",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  128,
+                  216
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-5",
+            "contact": {
+              "bounds": [
+                224,
+                216,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                224,
+                216,
+                32,
+                8
+              ],
+              "position": [
+                224,
+                216
+              ],
+              "visualBounds": [
+                224,
+                216,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 92 group terrain-hazard:classic-sm14-5 projects to [224, 200, 32, 8].",
+              "The matching contiguous RDX floor-spike map-art run is g8 [28, 27, 4, 1] / px [224, 216, 32, 8].",
+              "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "floor",
+              "gridBounds": [
+                28,
+                27,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9195,
+                9197,
+                9198,
+                9199
+              ],
+              "templateTiles": [
+                9196
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-5",
+            "mounting": "embedded-map-art",
+            "placementAdjustment": {
+              "basis": "classic-local-neighbour-clearance",
+              "dx": 0,
+              "dy": 16,
+              "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+            },
+            "position": [
+              224,
+              216
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-5",
+            "sourceId": 46676,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-5",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  224,
+                  216
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-6",
+            "contact": {
+              "bounds": [
+                160,
+                256,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                160,
+                256,
+                32,
+                8
+              ],
+              "position": [
+                160,
+                256
+              ],
+              "visualBounds": [
+                160,
+                256,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 94 group terrain-hazard:classic-sm14-6 projects to [96, 240, 160, 8].",
+              "The matching contiguous RDX ceiling-spike map-art run is g8 [20, 32, 4, 1] / px [160, 256, 32, 8].",
+              "The local RDX spike strip is phase-shifted relative to the room-wide Classic->RDX transform; contact follows the RDX strip.",
+              "The RDX spike strip changes the Classic footprint; every visible spike cell in the matched run is hazardous."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "ceiling",
+              "gridBounds": [
+                20,
+                32,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9178,
+                9180
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-6",
+            "mounting": "embedded-map-art",
+            "placementAdjustment": {
+              "basis": "classic-local-neighbour-clearance",
+              "dx": 64,
+              "dy": 16,
+              "evidence": "Exact local RDX spike run overrides the coarse room-wide topology projection."
+            },
+            "position": [
+              160,
+              256
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-6",
+            "sourceId": 46680,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-6",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  160,
+                  256
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-7",
+            "contact": {
+              "bounds": [
+                96,
+                328,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                96,
+                328,
+                32,
+                8
+              ],
+              "position": [
+                96,
+                328
+              ],
+              "visualBounds": [
+                96,
+                328,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 92 group terrain-hazard:classic-sm14-7 projects to [96, 328, 32, 8].",
+              "The matching contiguous RDX floor-spike map-art run is g8 [12, 41, 4, 1] / px [96, 328, 32, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "floor",
+              "gridBounds": [
+                12,
+                41,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9195,
+                9197,
+                9198,
+                9199
+              ],
+              "templateTiles": [
+                9196
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-7",
+            "mounting": "embedded-map-art",
+            "position": [
+              96,
+              328
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-7",
+            "sourceId": 46684,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-7",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  96,
+                  328
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-8",
+            "contact": {
+              "bounds": [
+                160,
+                328,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                160,
+                328,
+                32,
+                8
+              ],
+              "position": [
+                160,
+                328
+              ],
+              "visualBounds": [
+                160,
+                328,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 92 group terrain-hazard:classic-sm14-8 projects to [160, 328, 32, 8].",
+              "The matching contiguous RDX floor-spike map-art run is g8 [20, 41, 4, 1] / px [160, 328, 32, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "floor",
+              "gridBounds": [
+                20,
+                41,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9195,
+                9197,
+                9198,
+                9199
+              ],
+              "templateTiles": [
+                9196
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-8",
+            "mounting": "embedded-map-art",
+            "position": [
+              160,
+              328
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-8",
+            "sourceId": 46688,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-8",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  160,
+                  328
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-9",
+            "contact": {
+              "bounds": [
+                224,
+                432,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                224,
+                432,
+                32,
+                8
+              ],
+              "position": [
+                224,
+                432
+              ],
+              "visualBounds": [
+                224,
+                432,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 94 group terrain-hazard:classic-sm14-9 projects to [224, 432, 32, 8].",
+              "The matching contiguous RDX ceiling-spike map-art run is g8 [28, 54, 4, 1] / px [224, 432, 32, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "ceiling",
+              "gridBounds": [
+                28,
+                54,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9178,
+                9180
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-9",
+            "mounting": "embedded-map-art",
+            "position": [
+              224,
+              432
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-9",
+            "sourceId": 46692,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-9",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  224,
+                  432
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-10",
+            "contact": {
+              "bounds": [
+                96,
+                592,
+                64,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                96,
+                592,
+                64,
+                8
+              ],
+              "position": [
+                96,
+                592
+              ],
+              "visualBounds": [
+                96,
+                592,
+                64,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 94 group terrain-hazard:classic-sm14-10 projects to [96, 592, 64, 8].",
+              "The matching contiguous RDX ceiling-spike map-art run is g8 [12, 74, 8, 1] / px [96, 592, 64, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "ceiling",
+              "gridBounds": [
+                12,
+                74,
+                8,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9178,
+                9180,
+                9364,
+                9365
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-10",
+            "mounting": "embedded-map-art",
+            "position": [
+              96,
+              592
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-10",
+            "sourceId": 46696,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-10",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  96,
+                  592
+                ],
+                "size": [
+                  64,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-11",
+            "contact": {
+              "bounds": [
+                192,
+                592,
+                64,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                192,
+                592,
+                64,
+                8
+              ],
+              "position": [
+                192,
+                592
+              ],
+              "visualBounds": [
+                192,
+                592,
+                64,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 94 group terrain-hazard:classic-sm14-11 projects to [192, 592, 64, 8].",
+              "The matching contiguous RDX ceiling-spike map-art run is g8 [24, 74, 8, 1] / px [192, 592, 64, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "ceiling",
+              "gridBounds": [
+                24,
+                74,
+                8,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9178,
+                9180
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-11",
+            "mounting": "embedded-map-art",
+            "position": [
+              192,
+              592
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-11",
+            "sourceId": 46700,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-11",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  192,
+                  592
+                ],
+                "size": [
+                  64,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-12",
+            "contact": {
+              "bounds": [
+                160,
+                624,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                160,
+                624,
+                32,
+                8
+              ],
+              "position": [
+                160,
+                624
+              ],
+              "visualBounds": [
+                160,
+                624,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 94 group terrain-hazard:classic-sm14-12 projects to [160, 624, 32, 8].",
+              "The matching contiguous RDX ceiling-spike map-art run is g8 [20, 78, 4, 1] / px [160, 624, 32, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "ceiling",
+              "gridBounds": [
+                20,
+                78,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9178,
+                9180,
+                9364,
+                9365
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-12",
+            "mounting": "embedded-map-art",
+            "position": [
+              160,
+              624
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-12",
+            "sourceId": 46704,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-12",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  160,
+                  624
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "egypt-static-map-art-spike-run-matching-v3",
+            "classicParentSourceKey": "terrain-hazard:classic-sm14-13",
+            "contact": {
+              "bounds": [
+                96,
+                680,
+                160,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                96,
+                680,
+                160,
+                8
+              ],
+              "position": [
+                96,
+                680
+              ],
+              "visualBounds": [
+                96,
+                680,
+                160,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt tile 92 group terrain-hazard:classic-sm14-13 projects to [96, 680, 160, 8].",
+              "The matching contiguous RDX floor-spike map-art run is g8 [12, 85, 20, 1] / px [96, 680, 160, 8]."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "rdx-map-art-spike-run",
+              "family": "floor",
+              "gridBounds": [
+                12,
+                85,
+                20,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9195,
+                9197,
+                9198,
+                9199,
+                9366,
+                9367
+              ],
+              "templateTiles": [
+                9196
+              ]
+            },
+            "id": "auto-md0018-classic-sm14-13",
+            "mounting": "embedded-map-art",
+            "position": [
+              96,
+              680
+            ],
+            "semanticId": "SM00.trap.auto-md0018-classic-sm14-13",
+            "sourceId": 46708,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm14-13",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  96,
+                  680
+                ],
+                "size": [
+                  160,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "classic-mark169-linked-egypt-activated-spike-v2",
+            "contact": {
+              "bounds": [
+                224,
+                328,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                224,
+                328,
+                32,
+                8
+              ],
+              "position": [
+                224,
+                328
+              ],
+              "visualBounds": [
+                224,
+                328,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "RDX Egypt static-spike restoration already establishes global foreground tile 9196 as the canonical Egypt floor-spike motif.",
+              "User follow-up review requires SM0E mark 169 to cover the whole support span with two adjacent 16x8 floor-blade components, registered to the surrounding RDX ledge geometry.",
+              "Classic mark 169 owns deactivation; the repeated descriptor scenery uses that same mark so both visible spike segments and the full lethal contact disappear atomically."
+            ],
+            "family": "egypt-activated-floor-spike-segment",
+            "id": "sm0e-mark169-activated-spike",
+            "mounting": "floor",
+            "position": [
+              224,
+              328
+            ],
+            "semanticId": "SM00.trap.sm0e-mark169-activated-spike",
+            "sourceId": 48146,
+            "sourceKey": "mark:169",
+            "sourceMark": 169,
+            "state": "active",
+            "visuals": {
+              "active": {
+                "position": [
+                  224,
+                  328
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              },
+              "inactive": {
+                "position": [
+                  224,
+                  328
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": false
+              }
+            }
+          }
+        ]
+      },
+      "source": {
+        "classic": {
+          "fingerprint": "f181df15c7c230e06e94c3bcb8e8bb7409395b226799a329c6b6175437626bf5",
+          "playerStart": {
+            "sprite": 1,
+            "x": 4,
+            "y": 64
+          },
+          "ref": "static/levels/classic/source.json",
+          "shapeTiles": [
+            96,
+            32
+          ],
+          "startRow": 16,
+          "submap": 14,
+          "submapName": "SM0E",
+          "transitions": {
+            "connectors": [
+              {
+                "connectorId": "xrick-connect-42",
+                "connectorIndex": 42,
+                "direction": "left",
+                "rowin": 48,
+                "rowout": 24,
+                "targetSubmap": 13
+              },
+              {
+                "connectorId": "xrick-connect-43",
+                "connectorIndex": 43,
+                "direction": "right",
+                "rowin": 24,
+                "rowout": 96,
+                "targetSubmap": 15
+              }
+            ]
+          }
+        },
+        "rdx": {
+          "actors": [
+            {
+              "actorId": 93,
+              "index": 0,
+              "offset": 0,
+              "sourceRef": "rdx:MD0018:actor:93:spawn:0",
+              "x": 40,
+              "y": 96
+            },
+            {
+              "actorId": 16,
+              "index": 1,
+              "offset": 28,
+              "sourceRef": "rdx:MD0018:actor:16:spawn:1",
+              "x": 57,
+              "y": 167
+            },
+            {
+              "actorId": 112,
+              "index": 2,
+              "offset": 56,
+              "sourceRef": "rdx:MD0018:actor:112:spawn:2",
+              "x": 80,
+              "y": 149
+            },
+            {
+              "actorId": 112,
+              "index": 3,
+              "offset": 84,
+              "sourceRef": "rdx:MD0018:actor:112:spawn:3",
+              "x": 112,
+              "y": 277
+            },
+            {
+              "actorId": 39,
+              "index": 4,
+              "offset": 112,
+              "sourceRef": "rdx:MD0018:actor:39:spawn:4",
+              "x": 121,
+              "y": 48
+            },
+            {
+              "actorId": 112,
+              "index": 5,
+              "offset": 140,
+              "sourceRef": "rdx:MD0018:actor:112:spawn:5",
+              "x": 144,
+              "y": 629
+            },
+            {
+              "actorId": 41,
+              "index": 6,
+              "offset": 168,
+              "sourceRef": "rdx:MD0018:actor:41:spawn:6",
+              "x": 153,
+              "y": 528
+            },
+            {
+              "actorId": 69,
+              "index": 7,
+              "offset": 196,
+              "sourceRef": "rdx:MD0018:actor:69:spawn:7",
+              "x": 183,
+              "y": 528
+            },
+            {
+              "actorId": 41,
+              "index": 8,
+              "offset": 224,
+              "sourceRef": "rdx:MD0018:actor:41:spawn:8",
+              "x": 201,
+              "y": 80
+            },
+            {
+              "actorId": 112,
+              "index": 9,
+              "offset": 252,
+              "sourceRef": "rdx:MD0018:actor:112:spawn:9",
+              "x": 224,
+              "y": 37
+            },
+            {
+              "actorId": 112,
+              "index": 10,
+              "offset": 280,
+              "sourceRef": "rdx:MD0018:actor:112:spawn:10",
+              "x": 224,
+              "y": 629
+            },
+            {
+              "actorId": 112,
+              "index": 11,
+              "offset": 308,
+              "sourceRef": "rdx:MD0018:actor:112:spawn:11",
+              "x": 240,
+              "y": 277
+            },
+            {
+              "actorId": 49,
+              "index": 12,
+              "offset": 336,
+              "sourceRef": "rdx:MD0018:actor:49:spawn:12",
+              "x": 272,
+              "y": 295
+            },
+            {
+              "actorId": 17,
+              "index": 13,
+              "offset": 364,
+              "sourceRef": "rdx:MD0018:actor:17:spawn:13",
+              "x": 263,
+              "y": 311
+            },
+            {
+              "actorId": 18,
+              "index": 14,
+              "offset": 392,
+              "sourceRef": "rdx:MD0018:actor:18:spawn:14",
+              "x": 263,
+              "y": 663
+            }
+          ],
+          "dimensions": {
+            "cellHeight": 46,
+            "cellWidth": 20,
+            "height": 736,
+            "width": 320
+          },
+          "fingerprint": "97f9547c713b4a4a504b8e004c017f84988a563c255d2683a737179f8c398408",
+          "logicRef": "static/collision/rooms/MD0018.json",
+          "mapId": 18,
+          "mapName": "MD0018",
+          "ref": "static/levels/rdx/source.json",
+          "shapeTiles": [
+            92,
+            40
+          ],
+          "visualAuthority": "decoded-rom-plane-a+b"
+        }
+      },
+      "structuralCorrections": {
+        "operations": [
+          {
+            "actorId": 17,
+            "authority": "reviewed-structural-presentation",
+            "id": "SM0E.rdx-spawn-13.suppress",
+            "reason": "MD0018 MA spawn 13 (actor 0x11 / PN19) is the stationary RDX half that was incorrectly paired with Classic mark:166. The reviewed object is one moving PN22 platform, so the raw PN19 spawn must not render independently.",
+            "sourceKey": "static:17:136:149:front:0",
+            "sourceRef": "rdx:MD0018:actor:17:spawn:13",
+            "spawnIndex": 13,
+            "type": "rdx-spawn-suppression"
+          }
+        ],
+        "schema": "rdr.structural_corrections_resolved.v1"
+      }
+    },
+    "mapId": 18,
+    "mapName": "MD0018",
+    "provenance": {
+      "migrationStatus": "canonical-layered+reviewed-overlay",
+      "reviewedCorrections": [
+        {
+          "after": [
+            64,
+            499
+          ],
+          "before": [
+            64,
+            483
+          ],
+          "id": "SM0E.editor.entity-position.SM0E.trap.mark-171.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "patches/sm0e-egypt-changes.json",
+              "SM01.trap.mark-12"
+            ],
+            "reason": "User-reviewed patches/sm0e-egypt-changes.json: translate SM0E source mark 171 by (0,16) RDX-world pixels. Classic source entity 27 and same-family SM01 mark 12 retain the shared native controller; this explicit room placement edit preserves PN83 and the existing Layer-F visual-anchor adjustment."
+          },
+          "semantic": "gameplay",
+          "target": "SM0E.trap.mark-171",
+          "type": "entity-position"
+        }
+      ]
+    },
+    "submap": 14,
+    "transitions": {
+      "connectors": [
+        {
+          "alignmentRegionId": "SM0E.whole-room",
+          "classicPosition": [
+            0,
+            64
+          ],
+          "connectorId": "xrick-connect-42",
+          "connectorIndex": 42,
+          "contactSource": "classic-projection",
+          "direction": "left",
+          "rdxPosition": [
+            32,
+            48
+          ],
+          "rowin": 48,
+          "rowout": 24,
+          "sourceRef": "classic:left:row:24",
+          "status": "projected",
+          "targetSubmap": 13
+        },
+        {
+          "alignmentRegionId": "SM0E.whole-room",
+          "classicPosition": [
+            256,
+            640
+          ],
+          "connectorId": "xrick-connect-43",
+          "connectorIndex": 43,
+          "contactSource": "classic-projection",
+          "direction": "right",
+          "rdxPosition": [
+            288,
+            624
+          ],
+          "rowin": 24,
+          "rowout": 96,
+          "sourceRef": "classic:right:row:96",
+          "status": "projected",
+          "targetSubmap": 15
+        }
+      ],
+      "schema": "rdr.native_transitions_resolved.v1"
+    }
+  },
+  "schema": "rdr.resolved_level_room.v2",
+  "version": "2.1.104"
+}

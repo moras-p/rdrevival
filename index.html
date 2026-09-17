@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rick Dangerous: Revival — development preview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <nav class="tool-launcher" aria-label="Development tools">
+      <a id="rdx-map-editor-open" class="file-button" href="map-editor.html" aria-label="Open the Level Editor">Level editor</a>
+      <button id="rdx-playtest-open" type="button" aria-controls="rdx-playtest-panel" aria-expanded="true">Playtest</button>
+      <a class="file-button" href="juice-editor.html">Game juice editor</a>
+      <a class="file-button" href="soundlab.html">SoundLab</a>
+      <a class="file-button" href="pixel-art-editor.html">Pixel art editor</a>
+    </nav>
+    <header>
+      <div class="control-deck" aria-label="Game preview controls">
+        <nav class="control-group-tabs" aria-label="Control groups">
+          <button type="button" data-control-group="playtest" aria-pressed="false">Playtest controls</button>
+          <button type="button" data-control-group="ai" aria-pressed="false">AI Play</button>
+          <button type="button" data-control-group="audio" aria-pressed="false">Audio</button>
+          <button type="button" data-control-group="collision" aria-pressed="false">Collision</button>
+          <button type="button" data-control-group="assets" aria-pressed="false">Assets</button>
+          <button type="button" data-control-group="diagnostics" aria-pressed="false">Diagnostics</button>
+        </nav>
+        <div class="controls control-group-panel" data-control-group-panel="playtest" hidden>
+          <label class="file-button">Load ROM<input id="rdx-rom" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream"></label>
+          <button id="rdx-rom-folder" type="button" hidden title="Choose a folder once so supporting browsers can re-read Rick_Dangerous_DX_1.3.bin automatically when permission remains granted">Connect ROM folder</button>
+          <button id="rdx-disable" class="asset-source-icon" type="button" disabled aria-label="Use classic assets" title="Use classic assets">◐</button>
+          <label class="debug-overlay-icon" title="Debug overlay"><input id="rdx-debug-overlay-toggle" type="checkbox" aria-label="Debug overlay"><span aria-hidden="true">▦</span></label>
+          <label class="collision-policy"><input id="rdx-invulnerable-toggle" type="checkbox"> Invulnerable</label>
+          <button id="rdx-sound-toggle" class="asset-source-icon" type="button" aria-label="Mute sound" title="Sound on" aria-pressed="false">🔊</button>
+          <button id="rdx-map-prev" type="button" aria-label="Previous supported map" title="Previous map">&lt;</button>
+          <label class="collision-policy">Map <select id="rdx-map-select"></select></label>
+          <button id="rdx-map-next" type="button" aria-label="Next supported map" title="Next map">&gt;</button>
+          <button id="rdx-reset-level" type="button">Reset</button>
+          <button id="rdx-unpause" type="button">Unpause</button>
+          <span id="rdx-runtime-options"></span>
+        </div>
+        <div class="controls control-group-panel ai-control-panel" data-control-group-panel="ai" hidden>
+          <div class="ai-control-primary">
+            <button id="rdx-ai-restart-run" class="primary ai-primary-action" type="button" disabled title="Canonical deterministic workflow: restart and prime the room, precompute the route, restore the identical start, then replay it. Invulnerable uses route-only planning and ignores lethal contacts.">↻ Restart + certified AI play</button>
+            <button id="rdx-ai-stop" type="button" disabled title="Stop AI and immediately return control to the player">■ Stop AI</button>
+            <label class="collision-policy"><input id="rdx-ai-continue" type="checkbox" checked> Continue into next rooms</label>
+          </div>
+          <div class="ai-control-secondary">
+            <label class="collision-policy">Live-state objective
+              <select id="rdx-ai-mode" title="Live-state objective. Invulnerable overrides AI planning to Debug reachability so lethal contacts do not affect routing.">
+                <option value="2" selected>Mortal · certified safe</option>
+                <option value="1">Debug reachability · unsafe</option>
+              </select>
+            </label>
+            <button id="rdx-ai-run" type="button" disabled title="Diagnostic path: plan from the current live state without canonical restart">▶ Plan current live state</button>
+            <button id="rdx-ai-copy-debug" type="button" disabled title="Copy planner topology, proof failures, rejection history, gameplay tuning and runtime diagnostics as JSON">Copy AI debug</button>
+          </div>
+          <div class="ai-control-status-row">
+            <strong id="rdx-ai-status" class="ai-play-status" role="status" aria-live="polite">AI idle</strong>
+            <span class="ai-control-help">Primary workflow: native deterministic compile/certify → fixed-plan replay. Libretro remains the second parity gate; browser/WASM is the final gate.</span>
+          </div>
+        </div>
+        <div class="controls control-group-panel" data-control-group-panel="audio" hidden>
+          <label class="collision-policy">Audio quality
+            <select id="rdx-audio-quality"><option value="high" selected>High · Amiga Original MAX</option><option value="low">Low · XRICK FAST</option></select>
+          </label>
+          <label class="collision-policy">Moving-platform cogs
+            <select id="rdx-moving-platform-cog-sound"></select>
+          </label>
+          <label class="collision-policy">Enemy stick hit
+            <select id="rdx-stick-hit-sound"></select>
+          </label>
+          <label class="collision-policy">Cog cadence
+            <select id="rdx-moving-platform-cog-cadence"></select>
+          </label>
+        </div>
+        <div class="controls control-group-panel" data-control-group-panel="collision" hidden>
+          <label class="collision-policy">Collision policy
+            <select id="rdx-collision-policy"><option value="native_experimental" selected>RDX descriptors + xrick — default</option><option value="native_strict">RDX descriptors + xrick — strict</option><option value="classic_only">Classic collision only</option><option value="mixed_diagnostic">Descriptor fallback diagnostic</option></select>
+          </label>
+          <label class="collision-policy"><input id="rdx-ignore-explodable" type="checkbox"> Ignore explodeable-piece collision</label>
+          <button id="rdx-collision-trace" type="button">Record collision trace</button>
+        </div>
+        <div class="controls control-group-panel" data-control-group-panel="assets" hidden>
+          <label class="collision-policy">Sprites <select id="rdx-sprite-mode"><option value="rdx" selected>RDX sprites</option><option value="classic">Classic sprites</option></select></label>
+          <label class="collision-policy">Bullet <select id="rdx-bullet-source"></select></label>
+          <label class="collision-policy">Planted dynamite <select id="rdx-dynamite-source"></select></label>
+          <label class="collision-policy">Castle blockage <select id="rdx-castle-blockage-source"></select></label>
+          <label class="collision-policy">Golden idol <select id="rdx-golden-idol-source"></select></label>
+          <label class="collision-policy">Ammo boxes <select id="rdx-ammo-box-source"></select></label>
+          <label class="collision-policy">Missing assets <select id="rdx-fallback-mode"><option value="red" selected>Classic fallback + red frame</option><option value="classic">Classic fallback</option><option value="hidden">Hide fallback</option></select></label>
+        </div>
+        <div class="controls control-group-panel" data-control-group-panel="diagnostics" hidden>
+          <label class="collision-policy">Camera <select id="rdx-camera-mode"></select></label>
+          <label class="collision-policy">Fluid camera collision sync <select id="rdx-fluid-camera-collision-sync"></select></label>
+          <label class="collision-policy">Transition effect <select id="rdx-transition-preset"></select></label>
+          <label class="collision-policy">Dynamite bounce radius <select id="rdx-dynamite-bounce-radius"></select></label>
+          <label class="collision-policy">Game juice preset <select id="rdx-game-juice-preset"></select></label>
+          <label class="collision-policy"><input id="rdx-movement-feel-preview" type="checkbox"> Movement feel preview</label>
+          <button id="rdx-reset-triggers" type="button">Reset triggers</button>
+          <button id="rdx-playthrough-record" type="button">Record broken-case playthrough</button>
+          <button id="rdx-diagnostics-export" type="button" disabled>Export diagnostics JSON</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="game-panel" id="rdx-playtest-panel">
+      <div id="stage" tabindex="0" aria-label="xrick game canvas">
+        <canvas id="rdx-background" width="320" height="200"></canvas>
+        <canvas id="rdx-sprites" width="320" height="200"></canvas>
+        <canvas id="xrick-layer" width="320" height="200"></canvas>
+        <canvas id="rdx-foreground" width="320" height="200"></canvas>
+        <canvas id="rdx-front-sprites" width="320" height="200"></canvas>
+        <canvas id="rdx-collision-overlay" width="320" height="200"></canvas>
+        <canvas id="rdx-annotation-overlay" width="320" height="200" aria-label="Broken scenery annotation layer"></canvas>
+        <canvas id="canvas" width="320" height="200"></canvas>
+        <div id="rdx-invulnerability-warning" role="status" aria-live="polite" hidden>
+          INVULNERABLE · HIT DETECTED · DEATH PREVENTED
+        </div>
+      </div>
+      <section id="rdx-gai-route-inspector" aria-label="GAI current route plan"></section>
+      <div class="playtest-debug-toggle-row"><button id="rdx-playtest-debug-toggle" type="button" aria-expanded="false" aria-controls="rdx-playtest-debug">Show debug info</button></div>
+      <div id="rdx-playtest-debug" hidden>
+        <div class="status-row">
+          <strong id="rdx-status">Initializing xrick…</strong>
+          <span id="engine-status"></span>
+        </div>
+        <pre id="rdx-detail"></pre>
+      </div>
+    </section>
+
+    <section class="notes" id="rdx-legacy-annotation-data" hidden>
+      <h2>Annotation data</h2>
+      <p>Each entry uses canonical room names and RDX world coordinates. Type a note, enable annotation mode, then drag around the broken scenery. Each gesture is saved as one bounding rectangle and annotation mode finishes automatically.</p>
+      <div class="annotation-controls">
+        <label>Annotation note <input id="rdx-annotation-note" type="text" maxlength="500" placeholder="Describe the broken scenery"></label>
+        <label>Expected action
+          <select id="rdx-expected-action">
+            <option value="other">Other / describe in note</option>
+            <option value="removed-by-dynamite">Removed by dynamite</option>
+            <option value="become-rubble">Change into exploded rubble</option>
+            <option value="collision-removed">Stop blocking the player</option>
+            <option value="moved">Move to another position</option>
+            <option value="carried-player">Carry the player</option>
+            <option value="trap-fire">Trap should fire</option>
+            <option value="trap-not-fire">Trap should not fire</option>
+            <option value="switch-toggle">Switch should toggle</option>
+          </select>
+        </label>
+        <strong id="rdx-selected-element">No map element selected</strong>
+        <button id="rdx-save-element-annotation" type="button" disabled>Save selected-element annotation</button>
+        <button id="rdx-copy-annotations" type="button" disabled>Copy JSON</button>
+        <button id="rdx-clear-annotations" type="button">Clear annotations</button>
+        <strong id="rdx-annotation-count">0 annotations</strong>
+      </div>
+      <pre id="rdx-annotation-data">[]</pre>
+    </section>
+
+    <section class="notes" id="rdx-logic-puzzle-playthroughs" hidden>
+      <h2>Logic puzzle playthroughs</h2>
+      <p>Complex rooms are listed as reproducible start/end challenges. Start a puzzle, record the successful trigger order, then finish it when Rick reaches the highlighted end area. The recording contains only C-engine state and controls.</p>
+      <div class="annotation-controls">
+        <button id="rdx-puzzle-prev" type="button">◀ Puzzle</button>
+        <label>Logic puzzle <select id="rdx-puzzle-select"></select></label>
+        <button id="rdx-puzzle-next" type="button">Puzzle ▶</button>
+        <button id="rdx-puzzle-start" type="button">Start at puzzle entry</button>
+        <button id="rdx-puzzle-record" type="button">Record walkthrough</button>
+        <button id="rdx-puzzle-finish" type="button" disabled>Finish walkthrough</button>
+        <button id="rdx-puzzle-copy" type="button" disabled>Copy walkthrough JSON</button>
+        <strong id="rdx-puzzle-status">No puzzle active</strong>
+      </div>
+      <pre id="rdx-puzzle-data">[]</pre>
+    </section>
+  </main>
+  <script src="player.js"></script>
+  <script src="xrick.js"></script>
+  <script type="module" src="rdx/integration.js"></script>
+  <div id="rdx-preview-geometry-tooltip" class="preview-geometry-tooltip" hidden role="status"></div>
+</body>
+</html>

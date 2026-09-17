@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rick Dangerous: Revival — Game Juice Editor</title>
+  <link rel="stylesheet" href="juice-editor.css">
+</head>
+<body>
+  <main class="juice-shell">
+    <header class="juice-header">
+      <div class="juice-brand">
+        <div class="brand-mark" aria-hidden="true">⌁</div>
+        <div>
+          <h1>Game Juice Editor</h1>
+          <p>Live xrick gameplay · Classic or RDX presentation</p>
+        </div>
+      </div>
+      <div class="header-context" aria-label="Current tool context">
+        <span>Rick Dangerous: Revival</span><span aria-hidden="true">›</span><span>JavaScript tools</span><span aria-hidden="true">›</span><strong>Live xrick A/B</strong>
+      </div>
+      <nav class="header-actions" aria-label="Editor navigation">
+        <a class="header-link" href="#live-documentation">Help</a>
+        <button id="global-audio-mute" class="header-icon-button" type="button" aria-pressed="false" aria-label="Mute editor audio" title="Mute editor audio">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path class="speaker-body" d="M3.5 8h3L11 4.5v11L6.5 12h-3z"></path>
+            <path class="speaker-wave" d="M13.5 7a4.2 4.2 0 0 1 0 6M15.7 5a7 7 0 0 1 0 10"></path>
+            <path class="speaker-mute" d="m3.5 3.5 13 13"></path>
+          </svg>
+        </button>
+        <a class="header-link primary-link" href="index.html">Game preview ↗</a>
+        <label class="file-button">Load RDX 1.3x ROM<input id="rdx-rom" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream"></label>
+        <button id="profile-export" type="button">Export B</button>
+        <label class="file-button">Import B<input id="profile-import" type="file" accept="application/json,.json"></label>
+      </nav>
+    </header>
+
+    <div class="juice-workspace-shell">
+      <aside class="juice-sidebar">
+        <nav class="juice-screen-tabs" aria-label="Game Juice editor screens">
+          <button type="button" data-juice-screen="actions" aria-selected="true"><span class="nav-glyph" aria-hidden="true">ϟ</span><span class="nav-copy"><strong>Actions &amp; feedback</strong><small>Juice events &amp; effects</small></span></button>
+          <button type="button" data-juice-screen="audio" aria-selected="false"><span class="nav-glyph" aria-hidden="true">◖</span><span class="nav-copy"><strong>Audible effects</strong><small>Sound design</small></span></button>
+          <button type="button" data-juice-screen="entity-audio" aria-selected="false"><span class="nav-glyph" aria-hidden="true">◇</span><span class="nav-copy"><strong>Entity sound types</strong><small>Enemies, items, UI</small></span></button>
+          <button type="button" data-juice-screen="transitions" aria-selected="false"><span class="nav-glyph" aria-hidden="true">↔</span><span class="nav-copy"><strong>Map transitions</strong><small>Screen &amp; level changes</small></span></button>
+          <button type="button" data-juice-screen="resources" aria-selected="false"><span class="nav-glyph" aria-hidden="true">▣</span><span class="nav-copy"><strong>HUD inventory</strong><small>HUD &amp; UI feedback</small></span></button>
+          <button type="button" data-juice-screen="movement" aria-selected="false"><span class="nav-glyph" aria-hidden="true">⌁</span><span class="nav-copy"><strong>Movement feel</strong><small>Physics &amp; controls</small></span></button>
+        </nav>
+        <section class="sidebar-project-card" aria-label="Project target">
+          <div class="sidebar-project-label">Project</div>
+          <strong>Amiga/CD32</strong>
+          <small>RDX 1.3x target</small>
+          <a href="#live-documentation">CD32 ✓ era guide</a>
+        </section>
+      </aside>
+
+      <div class="juice-content">
+
+    <section class="juice-tool-screen" data-juice-screen-panel="audio" hidden aria-labelledby="juice-audio-screen-title">
+      <header class="tool-screen-heading">
+        <div><div class="eyebrow">Audible feedback</div><h2 id="juice-audio-screen-title">Audible effects</h2><p>Edit the sound heard for each juice event. When live routing is enabled, the selected event's native SFX is suppressed and this authored voice is heard directly in gameplay.</p></div>
+        <div class="tool-screen-heading-actions"><output id="audio-screen-status">Ready to audition.</output><button id="audio-screen-audition" type="button" class="primary">▶ Audition effect</button></div>
+      </header>
+      <div class="juice-tool-grid audio-tool-grid">
+        <section class="tool-card">
+          <h3>Event</h3>
+          <label>Action<select id="audio-screen-action"></select></label>
+          <label>Sound source<select id="audio-screen-source"><option value="cd32" selected>HG / CD32</option><option value="classic">Classic</option></select></label>
+          <label class="toggle"><input id="audio-screen-enabled" type="checkbox"> Authored event sound enabled</label>
+          <label>Sample<select id="audio-screen-sample"></select></label>
+          <label>Live gameplay audition<select id="audio-audition"><option value="off">Off · native audio only</option><option value="b" selected>B · live audible effects</option><option value="a">A · accepted baseline effects</option><option value="both">A + B effects</option></select></label>
+          <label class="toggle" title="When enabled, the selected Audible Effects event replaces its native SFX in the editable B gameplay pane in real time."><input id="audio-affect-live" type="checkbox" checked> Affect live gameplay view</label>
+          <p class="tool-note">Live B routing suppresses the selected event's native logical SFX only after the authored replacement has decoded successfully. Audible Effects remains active even when the visual Action recipe is disabled.</p><output id="audio-live-route-status" class="tool-note" role="status">Live audio route: preparing…</output>
+        </section>
+        <section class="tool-card control-matrix">
+          <h3>Voice properties</h3>
+          <label>Relative gain<input id="audio-screen-gain" type="number" min="0" max="1.5" step="0.01"></label>
+          <label>Pitch jitter<input id="audio-screen-pitch" type="number" min="0" max="0.2" step="0.005"></label>
+          <label>Playback rate<input id="audio-screen-rate" type="number" min="0.5" max="2" step="0.01"></label>
+          <label>Fixed pan<input id="audio-screen-pan" type="number" min="-1" max="1" step="0.05"></label>
+          <label class="toggle"><input id="audio-screen-event-pan" type="checkbox"> Add event/projectile-side pan</label>
+          <label>Attack (ms)<input id="audio-screen-attack" type="number" min="0" max="250" step="5" value="0"></label>
+          <label>Release (ms)<input id="audio-screen-release" type="number" min="0" max="500" step="5" value="0"></label>
+          <label>Filter<select id="audio-screen-filter"><option value="none">None</option><option value="lowpass">Low-pass</option><option value="highpass">High-pass</option><option value="bandpass">Band-pass</option></select></label>
+          <label>Filter cutoff (Hz)<input id="audio-screen-filter-hz" type="number" min="80" max="12000" step="20" value="4200"></label>
+          <label>Layer sample<select id="audio-screen-layer-sample"><option value="">None</option></select></label>
+          <label>Layer gain<input id="audio-screen-layer-gain" type="number" min="0" max="1.5" step="0.01" value="0"></label>
+          <label>Layer rate<input id="audio-screen-layer-rate" type="number" min="0.5" max="2" step="0.01" value="1"></label>
+          <label class="toggle"><input id="audio-screen-loop" type="checkbox"> Loop audition / retrigger cadence</label>
+          <label>Loop cadence (ms)<input id="audio-screen-loop-ms" type="number" min="60" max="2000" step="20" value="240"></label>
+        </section>
+        <section class="tool-card control-matrix">
+          <h3>Reference playback</h3>
+          <label>Reference<select id="audio-reference-kind"><option value="projectile">Projectile shooter cadence</option><option value="walk">Walking cadence</option><option value="startup">Startup music (Classic tune0)</option></select></label>
+          <label class="toggle"><input id="audio-reference-loop" type="checkbox"> Loop reference</label>
+          <button id="audio-reference-play" type="button">▶ Play reference</button>
+          <p class="tool-note">Use a reference while tuning so transformed effects can be judged against the game's actual cadence and tonal density.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="juice-tool-screen" data-juice-screen-panel="entity-audio" hidden aria-labelledby="juice-entity-audio-screen-title">
+      <header class="tool-screen-heading">
+        <div><div class="eyebrow">Use-case sound tuning</div><h2 id="juice-entity-audio-screen-title">Entity sound types</h2><p>Group mechanisms by gameplay use case—projectile shooter, moving platform, trap, collectible—so shared source WAVs can be reshaped consistently without exposing instance numbers.</p></div>
+        <div class="tool-screen-heading-actions"><output id="entity-audio-status">Loading entity sound map…</output><button id="entity-audio-audition" type="button" class="primary">▶ Audition entity</button></div>
+      </header>
+      <div class="juice-tool-grid audio-tool-grid">
+        <section class="tool-card">
+          <h3>Gameplay sound type</h3>
+          <label>Type<select id="entity-audio-type"></select></label>
+          <label>Sound source<select id="entity-audio-source"><option value="cd32" selected>HG / CD32</option><option value="classic">Classic</option></select></label>
+          <label class="toggle"><input id="entity-audio-enabled" type="checkbox"> Use per-type override</label>
+          <label>Sample<select id="entity-audio-sample"></select></label>
+          <p id="entity-audio-provenance" class="tool-note">Source mapping pending.</p>
+        </section>
+        <section class="tool-card control-matrix">
+          <h3>Per-type properties</h3>
+          <label>Relative gain<input id="entity-audio-gain" type="number" min="0" max="1.5" step="0.01" value="1"></label>
+          <label>Pitch jitter<input id="entity-audio-pitch" type="number" min="0" max="0.2" step="0.005" value="0"></label>
+          <label>Playback rate<input id="entity-audio-rate" type="number" min="0.5" max="2" step="0.01" value="1"></label>
+          <label>Fixed pan<input id="entity-audio-pan" type="number" min="-1" max="1" step="0.05" value="0"></label>
+          <label class="toggle"><input id="entity-audio-event-pan" type="checkbox" checked> Add event/projectile-side pan</label>
+          <label>Attack (ms)<input id="entity-audio-attack" type="number" min="0" max="250" step="5" value="0"></label>
+          <label>Release (ms)<input id="entity-audio-release" type="number" min="0" max="500" step="5" value="0"></label>
+          <label>Filter<select id="entity-audio-filter"><option value="none">None</option><option value="lowpass">Low-pass</option><option value="highpass">High-pass</option><option value="bandpass">Band-pass</option></select></label>
+          <label>Filter cutoff (Hz)<input id="entity-audio-filter-hz" type="number" min="80" max="12000" step="20" value="4200"></label>
+          <label>Layer sample<select id="entity-audio-layer-sample"><option value="">None</option></select></label>
+          <label>Layer gain<input id="entity-audio-layer-gain" type="number" min="0" max="1.5" step="0.01" value="0"></label>
+          <label>Layer rate<input id="entity-audio-layer-rate" type="number" min="0.5" max="2" step="0.01" value="1"></label>
+          <p class="tool-note">Overrides are keyed by gameplay category. Reuse one source with rate/pitch, ADSR, filtering and a quiet second layer to create distinct old-school mechanical identities. Existing numeric per-entity overrides remain readable as a compatibility fallback.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="juice-tool-screen" data-juice-screen-panel="transitions" hidden aria-labelledby="juice-transition-screen-title">
+      <header class="tool-screen-heading">
+        <div><div class="eyebrow">Map entry / exit feedback</div><h2 id="juice-transition-screen-title">Map transitions</h2><p>Author filmic 16-bit demoscene-inspired entry and exit transitions. Exit previews close the scene; entry previews reveal it. Point-origin presets can close/open around Rick, map center, or a custom map point.</p></div>
+        <button id="transition-play" type="button" class="primary">▶ Play transition</button>
+      </header>
+      <div class="transition-layout">
+        <section class="tool-card transition-controls">
+          <label>Hook<select id="transition-hook"><option value="mapExit">Map exit · OUT</option><option value="mapEntry">Map entry · IN</option><option value="playerDeath">Hero death · OUT</option></select></label>
+          <label>Preset<select id="transition-preset">
+            <option value="copper-curtain">Copper curtain · raster bands</option>
+            <option value="raster-shutters">Raster shutters · alternating scan bands</option>
+            <option value="mosaic-collapse">Mosaic collapse · ordered 8px blocks</option>
+            <option value="tunnel-iris">Tunnel iris · point-origin close/open</option>
+            <option value="pixel-dissolve">Pixel dissolve · deterministic dither</option>
+            <option value="scanline-squeeze">Scanline squeeze · cinematic letterbox</option>
+            <option value="checker-wipe">8px checker wipe</option>
+            <option value="blitter-bars">Horizontal blitter bars</option>
+            <option value="tile-iris">8px tile iris</option>
+          </select></label>
+          <label>Duration<input id="transition-duration" type="number" min="4" max="48" step="1"><span>frames @25Hz</span></label>
+          <label>Direction<select id="transition-direction"><option value="auto">Auto from Rick</option><option value="left">Left</option><option value="right">Right</option></select></label>
+          <label>Origin<select id="transition-origin"><option value="rick">Rick / entry-exit point</option><option value="center">Map center</option><option value="custom">Custom map point</option></select></label>
+          <label>Origin X<input id="transition-origin-x" type="number" min="0" max="319" step="1"></label>
+          <label>Origin Y<input id="transition-origin-y" type="number" min="8" max="199" step="1"></label>
+          <label>Preview phase<input id="transition-phase" type="range" min="0" max="100" step="1" value="0"><output id="transition-phase-output">0%</output></label>
+          <label>Performance impact<output id="transition-performance-score">—</output></label>
+          <p class="tool-note">The preview reuses the production-composited live xrick frame, including the active solver, placement patches, and screen-space transforms. OUT closes toward black; IN starts closed and reveals the map. Tunnel/mosaic effects can originate from Rick or a specific map point.</p>
+        </section>
+        <figure class="transition-preview-card">
+          <figcaption><strong id="transition-preview-title">Exit / OUT composition preview</strong><span id="transition-preview-status">Waiting for live xrick frame…</span></figcaption>
+          <canvas id="transition-preview" width="320" height="200"></canvas>
+        </figure>
+      </div>
+    </section>
+
+    <section class="juice-tool-screen" data-juice-screen-panel="resources" hidden aria-labelledby="juice-resource-screen-title">
+      <header class="tool-screen-heading">
+        <div><div class="eyebrow">HUD-only feedback</div><h2 id="juice-resource-screen-title">Inventory &amp; score HUD</h2><p>Author inventory feedback separately from world/action juice. These controls affect only HUD token/score reactions; the preview below is an isolated 320×64 HUD compositor and never injects effects into the live A/B game panes.</p></div>
+        <label>Refill preview<select id="resource-ammo-kind"><option value="bullets" selected>Bullets</option><option value="dynamite">Dynamite</option></select></label>
+      </header>
+      <div class="resource-preview-layout">
+        <figure class="resource-preview-card">
+          <figcaption><strong>HUD-only preview</strong><span id="resource-preview-status">Uses the live HUD as visual source; preview state and effects are isolated from gameplay.</span></figcaption>
+          <canvas id="resource-preview" width="320" height="64" aria-label="Inventory and score HUD feedback preview"></canvas>
+          <div class="resource-preview-actions"><button id="resource-preview-reset" type="button">Reset from live state</button><output id="resource-preview-values">Ammo — · Score —</output></div>
+        </figure>
+        <div id="resource-feedback-grid" class="resource-feedback-grid"></div>
+      </div>
+    </section>
+
+    <section class="juice-tool-screen" data-juice-screen-panel="movement" hidden aria-labelledby="juice-movement-screen-title">
+      <header class="tool-screen-heading">
+        <div><div class="eyebrow">Platformer controller</div><h2 id="juice-movement-screen-title">Movement feel</h2><p>Tune movement mechanics independently from visual juice. These values drive the authoritative xrick simulation shared by A and B; collision remains on the intentional 8×8 Classic-style grid.</p></div>
+        <div class="tool-screen-heading-actions"><output id="movement-status">Neutral Rick movement defaults.</output><button id="movement-reset" type="button" class="primary">Reset movement defaults</button></div>
+      </header>
+      <div class="juice-tool-grid">
+        <section class="tool-card control-matrix">
+          <h3>Horizontal &amp; jump input</h3>
+          <label>Walk speed<input id="movement-walk-speed" type="number" min="1" max="4" step="1" value="2"></label>
+          <label>Coyote time<input id="movement-coyote-frames" type="number" min="0" max="8" step="1" value="3"></label>
+          <label>Jump input buffer<input id="movement-jump-buffer-frames" type="number" min="0" max="8" step="1" value="0"></label>
+          <label>Ladder top-entry tolerance<input id="movement-ladder-top-entry-tolerance" type="number" min="0" max="6" step="1" value="1"></label>
+          <label>Jump takeoff<input id="movement-jump-takeoff" type="number" min="2" max="8" step="0.25" value="5.5"></label>
+          <label>Jump release velocity<input id="movement-jump-release" type="number" min="25" max="100" step="5" value="100"></label>
+          <p class="tool-note">Ladder top-entry tolerance adds pixels to each side of the existing grounded DOWN alignment window on RDX ladders. 0 preserves the previous entry window; 1 adds 1 px left and right. DOWN+LEFT/RIGHT still crawls past the ladder.</p>
+          <p class="tool-note">Jump release is the percentage of upward velocity retained when jump is released early. Lower values produce a shorter tap-jump.</p>
+        </section>
+        <section class="tool-card control-matrix">
+          <h3>Air &amp; surface corrections</h3>
+          <label>Gravity<input id="movement-gravity" type="number" min="0.125" max="2" step="0.125" value="0.5"></label>
+          <label>Apex gravity<input id="movement-apex-gravity" type="number" min="25" max="150" step="5" value="100"></label>
+          <label>Maximum fall speed<input id="movement-max-fall" type="number" min="2" max="16" step="0.5" value="8"></label>
+          <label>Long-fall bounce min height<input id="movement-fall-bounce-min-height" type="number" min="0" max="192" step="8" value="48"></label>
+          <p class="tool-note">Collision correction is intentionally not exposed: both presentations use the same coarse xrick 8×8 collision behavior. Movement tuning may change velocities and input forgiveness, not terrain resolution or corner rules.</p>
+        </section>
+        <section class="tool-card control-matrix platform-curve-card">
+          <h3>Moving platform path timeline</h3>
+          <label>Curve<select id="movement-platform-curve"><option value="linear">Linear / Classic</option><option value="ease-in">Ease in</option><option value="ease-out">Ease out</option><option value="ease-in-out">Ease in / out</option><option value="overshoot">Dynamic · overshoot</option><option value="anticipate">Dynamic · anticipate</option><option value="custom">Custom cubic</option></select></label>
+          <canvas id="movement-platform-curve-preview" class="movement-curve-preview" width="280" height="112" aria-label="Moving platform path timing curve"></canvas>
+          <div id="movement-platform-custom" class="movement-curve-custom">
+            <label>X1<input id="movement-platform-curve-x1" type="number" min="0" max="1" step="0.01" value="0.25"></label>
+            <label>Y1<input id="movement-platform-curve-y1" type="number" min="-1" max="2" step="0.01" value="0.10"></label>
+            <label>X2<input id="movement-platform-curve-x2" type="number" min="0" max="1" step="0.01" value="0.25"></label>
+            <label>Y2<input id="movement-platform-curve-y2" type="number" min="-1" max="2" step="0.01" value="1.00"></label>
+          </div>
+          <p class="tool-note">Remaps time inside each authored xrick movement step. Tick count, path endpoint and collision geometry are unchanged. Linear is the exact original motion; unsafe dynamic/custom envelopes fall back to Linear at that step.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="actions-screen" data-juice-screen-panel="actions">
+      <section class="comparison-banner" aria-label="A/B comparison model">
+        <div class="comparison-card comparison-a">
+          <span class="comparison-letter">A</span>
+          <div><strong>Baseline</strong><small id="baseline-banner-status">JUICE OFF · raw xrick presentation</small></div>
+          <span class="comparison-era">CD32 ✓</span>
+        </div>
+        <div class="comparison-arrow" aria-hidden="true">⇄</div>
+        <div class="comparison-card comparison-b">
+          <span class="comparison-letter">B</span>
+          <div><strong>Editable Juice</strong><small>All inspector edits apply here · compare against A</small></div>
+        </div>
+        <div class="comparison-accept">
+          <button id="accept-baseline" type="button" class="primary">✓ Accept B → A</button>
+          <button id="reset-baseline" type="button" class="quiet">↶ Reset A</button>
+        </div>
+      </section>
+
+      <nav class="actions-workflow-switch" aria-label="Actions workflow">
+        <button type="button" data-actions-workflow="playtest" aria-pressed="false"><strong>Playtest A/B</strong><small>Playable comparison</small></button>
+        <button type="button" data-actions-workflow="tune" aria-pressed="true"><strong>Tune action</strong><small>Parameters + action preview</small></button>
+        <span id="actions-workflow-status">Action tuning owns the preview area.</span>
+      </nav>
+
+      <section class="editor-grid">
+        <section class="arena-panel editor-window" data-editor-window="live-preview">
+          <div class="panel-heading arena-heading">
+            <div class="window-heading-copy"><span class="window-kicker">Real-time A/B comparison</span><h2>Live xrick preview</h2><p>Playable production simulation · <kbd>←</kbd><kbd>→</kbd> move · <kbd>Z</kbd>/<kbd>↑</kbd> jump · <kbd>X</kbd> gun · <kbd>C</kbd> dynamite</p></div>
+            <div class="arena-actions">
+              <div class="preview-mode-switch" role="group" aria-label="Playable preview view">
+                <button type="button" data-compare-view="side" aria-pressed="true">A/B</button>
+                <button type="button" data-compare-view="a" aria-pressed="false">A</button>
+                <button type="button" data-compare-view="b" aria-pressed="false">B</button>
+                <button type="button" data-compare-view="off" aria-pressed="false" title="Raw production frame with all editor juice disabled">Raw</button>
+              </div>
+              <select id="compare-mode" class="visually-hidden" tabindex="-1" aria-hidden="true"><option value="side" selected>A/B — baseline vs editable</option><option value="b">B — editable only</option><option value="a">A — baseline only</option><option value="off">Raw game — all juice off</option></select>
+            </div>
+          </div>
+
+          <div class="window-body">
+            <div class="live-toolbar">
+              <label>Presentation<select id="presentation-source"><option value="classic" selected>Classic xrick</option><option value="rdx" disabled>RDX (load ROM)</option></select></label>
+              <label>Level<select id="level-select"></select></label>
+              <button id="reset-level" type="button">Reset level</button>
+              <label class="toggle"><input id="invincible" type="checkbox" checked> Invincible traversal</label>
+              <span id="engine-live-status" class="live-status-chip">Initializing xrick…</span>
+            </div>
+
+            <details class="preview-settings-drawer">
+              <summary>Preview settings <span>audio · resources · analysis · trail</span></summary>
+              <div class="preview-settings-grid">
+                <label class="toggle"><input id="infinite-resources" type="checkbox" checked> Auto-refill bullets / dynamite / lives</label>
+                <label class="toggle"><input id="auto-revive" type="checkbox" checked> Auto-revive at same spot</label>
+                <label>Amiga audio<select id="audio-quality"><option value="2" selected>HIGH · native Amiga MAX</option><option value="1">STANDARD · native Amiga</option><option value="0">LOW · XRICK FAST WAV</option></select></label>
+                <label>Filter<select id="audio-filter"><option value="1" selected>A500</option><option value="2">A500 + LED</option><option value="0">Off</option></select></label>
+                <label>Spatial<select id="audio-spatial"><option value="2" selected>Headphones</option><option value="1">Pan</option><option value="0">Off</option></select></label>
+                <button id="slowmo-toggle" type="button" aria-pressed="false" title="Run the authoritative xrick simulation at one frame per second for frame analysis">Slow-mo · 1 FPS</button>
+                <label class="toggle"><input id="motion-trail-enabled" type="checkbox"> Motion trail</label>
+                <label>Trail copies<input id="motion-trail-copies" type="number" min="1" max="8" step="1" value="3"></label>
+                <label>Trail tint<select id="motion-trail-color"><option value="white">White</option><option value="off-white" selected>Off-white</option><option value="faint-white">Faint white</option><option value="gray">Gray</option></select></label>
+                <label>Trail opacity<input id="motion-trail-alpha" type="number" min="0.05" max="1" step="0.05" value="1"></label>
+                <span id="motion-trail-compat" class="period-accuracy compact" data-period="period">CD32 ✓ · opaque afterimages</span>
+              </div>
+            </details>
+
+            <div class="gameplay-feel-toolbar" aria-label="Gameplay feel tuning">
+              <div class="gameplay-feel-heading"><strong>Movement feel</strong><small id="movement-toolbar-summary">Coyote 3f · buffer 0f · jump 5.5 · gravity 0.5</small></div>
+              <button id="open-movement-settings" type="button">Tune movement</button>
+              <div class="solver-status"><span>Collision</span><strong id="collision-solver-status">Classic xrick</strong></div>
+            </div>
+
+            <div id="native-preview-owner-note" class="native-preview-owner-note" hidden></div>
+
+            <div class="compare-stage" id="arena-frame" tabindex="0" aria-label="Live playable xrick A/B juice preview">
+              <figure class="preview-pane baseline-pane" id="pane-a">
+                <figcaption><strong>A · Baseline</strong><span id="pane-a-status">JUICE OFF</span></figcaption>
+                <canvas id="arena-a" width="320" height="200"></canvas>
+              </figure>
+              <figure class="preview-pane editable-pane" id="pane-b">
+                <figcaption><strong>B · Editable Juice</strong><span id="pane-b-status">LIVE EDITS</span></figcaption>
+                <canvas id="arena-b" width="320" height="200"></canvas>
+              </figure>
+              <div class="arena-focus">Click preview to capture controls</div>
+            </div>
+
+            <div class="comparison-toolbar">
+              <div><strong id="baseline-toolbar-status">A = raw xrick / JUICE OFF</strong><small>A and B are two views of one playable simulation.</small></div>
+              <button id="accept-baseline-toolbar" type="button">Accept B → A</button>
+              <button id="save-b" type="button">Save B</button>
+              <span id="last-event">No event yet</span>
+            </div>
+            <details class="event-log"><summary>Live xrick → juice events</summary><div id="event-log-list"></div></details>
+          </div>
+        </section>
+
+        <aside class="workspace-inspector" aria-label="Game Juice inspector">
+          <section class="action-panel editor-window" data-editor-window="recipe-actions" data-default-collapsed="true">
+            <div class="panel-heading"><div class="window-heading-copy"><span class="window-kicker">Profile authoring</span><h2>Recipe &amp; actions</h2><p>Select an xrick event. Recipes modify B only.</p></div><label class="quick-action-select"><span>Action</span><select id="action-quick-select" aria-label="Selected Game Juice action"></select></label><button id="profile-reset" type="button" class="quiet">Reset B</button></div>
+            <div class="window-body">
+              <div id="game-style-picker"></div>
+              <div id="action-list" class="action-list"></div>
+              <details class="protocol-note"><summary>Profile workflow</summary><code>rick-dangerous-revival.juice-profile.v1</code><p><strong>A does not follow B.</strong> Accept B only when you want to freeze a new comparison baseline.</p></details>
+            </div>
+          </section>
+
+          <section class="inspector-panel editor-window" data-editor-window="action-inspector" data-default-collapsed="false">
+            <div class="panel-heading"><div class="window-heading-copy"><span class="window-kicker">Action feedback bundle</span><h2 id="inspector-title">Landing</h2><p id="inspector-subtitle">player.land · editing B</p></div><div id="action-cost-badge" class="cost-badge">low</div></div>
+            <div class="window-body">
+              <div class="action-master-row"><label class="toggle"><input id="action-enabled" type="checkbox" checked> Enabled in B</label><span class="action-clipboard-tools"><button id="action-copy" type="button" aria-label="Copy entire action configuration"></button><button id="action-paste" type="button" aria-label="Paste entire action configuration" disabled></button></span><button id="action-test" type="button">Preview effect</button></div>
+              <div id="action-preview-host" class="action-preview-host" aria-live="polite"></div>
+              <div id="effect-editor"></div>
+            </div>
+          </section>
+
+          <section class="performance-panel editor-window" data-editor-window="performance">
+            <div class="panel-heading"><div class="window-heading-copy"><span class="window-kicker">Target budget</span><h2>Device &amp; performance</h2><p>Live cost of the editable B presentation.</p></div></div>
+            <div class="window-body perf-strip" aria-label="Performance budget">
+              <div class="perf-controls"><label>Target device<select id="perf-preset"></select></label><label class="toggle"><input id="adaptive-budget" type="checkbox" checked> Adaptive budget</label></div>
+              <div class="perf-metrics-grid">
+                <div class="metric"><span>Frame</span><strong id="metric-frame">—</strong><small id="metric-frame-budget">—</small></div>
+                <div class="metric"><span>B juice</span><strong id="metric-juice">—</strong><small id="metric-juice-budget">production-side cost</small></div>
+                <div class="metric"><span>Quality</span><strong id="metric-quality">—</strong><small>adaptive particle scale</small></div>
+                <div class="metric"><span>Profile cost</span><strong id="metric-profile-cost">—</strong><small>static worst case</small></div>
+                <div class="metric"><span>Particles</span><strong id="metric-particles">—</strong><small id="metric-particle-cap">—</small></div>
+                <div class="metric"><span>Dropped</span><strong id="metric-dropped">0</strong><small>budget protection</small></div>
+                <div class="metric era-fit"><span>Era fit</span><strong id="metric-era-fit" data-period="period">CD32 ✓</strong><small id="metric-era-detail">opaque/masked candidate</small></div>
+              </div>
+              <button id="benchmark-toggle" type="button" class="benchmark-button">Run B benchmark</button>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </section>
+
+
+    <section class="editor-docs" id="live-documentation" aria-labelledby="live-documentation-title">
+      <header class="docs-header">
+        <div>
+          <div class="eyebrow">Live documentation</div>
+          <h2 id="live-documentation-title">How to use the Game Juice Editor</h2>
+          <p>This guide reflects the current editor state. Values below update as you change presentation, level, action, baseline, audio and performance target.</p>
+        </div>
+        <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to editor ↑</a>
+      </header>
+
+      <div class="docs-live-strip" aria-label="Current editor state">
+        <div><span>Comparison</span><strong id="doc-baseline-status">A juice off → B editable</strong></div>
+        <div><span>Presentation</span><strong id="doc-presentation">Classic xrick</strong></div>
+        <div><span>Level</span><strong id="doc-level">Loading…</strong></div>
+        <div><span>Action</span><strong id="doc-action">Landing</strong></div>
+        <div><span>Target</span><strong id="doc-performance">Very low-end · 25 FPS</strong></div>
+        <div><span>Audio</span><strong id="doc-audio">Amiga HIGH · A500 · Headphones</strong></div>
+        <div><span>Collision</span><strong id="doc-collision">Classic xrick</strong></div>
+        <div><span>Feel</span><strong id="doc-gameplay-feel">Coyote 3f · bounce 48px</strong></div>
+      </div>
+
+      <div class="docs-grid">
+        <article>
+          <h3>1. Start with the default A/B</h3>
+          <p><strong>A is deliberately raw:</strong> the same xrick frame with editor juice disabled. <strong>B is editable:</strong> every recipe, template and numeric control in the inspector changes B only. Both panes use the same input, player state, enemies, bullets, dynamite and game frame.</p>
+          <ol>
+            <li>Choose Classic for Classic map flags, or load the RDX ROM and choose RDX to project the live RDX descriptors through the same xrick 8×8 solver.</li>
+            <li>Choose a level and click the preview so keyboard controls are captured.</li>
+            <li>Use the <strong>A/B · A · B</strong> preview switch to play both synchronized presentations together or give either view the full preview area.</li>
+            <li>Open <strong>Recipe &amp; actions</strong> when you need to choose a whole-game template or a different event; collapse it again to return space to the preview.</li>
+            <li>Use the <strong>Action feedback bundle</strong> window to apply a recipe or tune individual pieces. Any main window can be collapsed or expanded for focused editing.</li>
+            <li>Play normally and compare A against B at the same instant.</li>
+          </ol>
+        </article>
+
+        <article>
+          <h3>2. Accept a new baseline</h3>
+          <p>When B is clearly better, press <strong>Accept B as new A baseline</strong>. A becomes a frozen copy of B's current juice profile. Further edits continue on B, so the next comparison becomes “accepted version” versus “new experiment”.</p>
+          <p>Use <strong>Reset A to JUICE OFF</strong> at any time to return to the original raw-game reference. Accepting does not alter xrick gameplay or production defaults.</p>
+        </article>
+
+        <article>
+          <h3>3. Actions, recipes and pieces</h3>
+          <p>The <strong>Recipe &amp; actions</strong> window chooses the event being tuned. <strong>Whole-game templates</strong> apply a complete low-end style to every B action at once; <strong>Action recipes</strong> then set a coherent group of effects for one action. Each effect card exposes a <strong>piece template</strong> plus raw parameters for fine tuning.</p>
+          <p><strong>Wall hug / falling contact</strong> fires at a low cadence when xrick is falling, the player presses into a wall, and xrick's normal horizontal step is blocked. <strong>Projectile near miss</strong> fires once when an active hostile projectile sweeps close to Rick's head without overlapping him; proximity controls magnitude and the event carries left/right pan for a cheap fly-by cue. <strong>Target hit</strong> is confirmed from the enemy's actual death transition at the bullet's leading collision point.</p>
+          <dl>
+            <dt>Particles</dt><dd>Pooled dust, sparks, debris and bursts.</dd>
+            <dt>Camera impulse</dt><dd>Short screen kick/shake; no extra render pass.</dd>
+            <dt>Contact flash (area)</dt><dd>Cheap single-rectangle emphasis at the event point.</dd>
+            <dt>Target sprite flash</dt><dd>White or red target-silhouette flash for a chosen number of 25 Hz frames. For a confirmed bullet hit the target is the enemy, not Rick.</dd>
+            <dt>Foreground block flash</dt><dd>Old-school 8px block/ripple flash around blasts. In RDX presentation it uses semantic presentation-layer masks, so a recipe can light backdrop and decorative foreground while preserving walkable Midground and actor sprites instead of becoming a modern full-screen post-process.</dd>
+            <dt>Stop-the-world / freeze-frame</dt><dd>B holds the exact impact frame for N xrick frames while A continues, so the A/B comparison stays deterministic. The same value maps to a true global simulation hold when promoted into the production game.</dd>
+            <dt>Actor displacement / squash</dt><dd>Takeoff, recoil and landing deformation using the real actor sprite. Terrain is never part of the transform.</dd>
+            <dt>Hit knockback</dt><dd>Independent enemy/hero push-back after projectile or dynamite damage. It is a bounded sprite/blitter displacement in the editor so A/B remains one deterministic gameplay simulation.</dd>
+            <dt>HUD inventory feedback</dt><dd>Flash/fade/jitter the next bullet or dynamite token when a resource is consumed. It targets the same 8px icon cadence now used by both Classic and RDX HUDs.</dd>
+            <dt>Audible effect layer</dt><dd>Optional Game Juice sample/category layer using the same live gameplay-window JuiceRuntime path. Native Amiga game SFX continue underneath, so the edited layer can reinforce or reshape existing cues without replacing the core mixer.</dd>
+          </dl>
+        </article>
+
+        <article>
+          <h3>4. What “live xrick” means</h3>
+          <p>The editor is not a substitute platformer. The production browser xrick simulation remains authoritative for movement, collision, enemies, bullets, dynamite and animation state. Presentation changes the terrain provider, not Rick's solver: Classic reads Classic flags and RDX projects live MT/ML descriptors into the same 8×8 xrick semantics.</p>
+          <p><strong>Invincible traversal</strong> and <strong>Infinite ammo/dynamite</strong> are editor conveniences for repeated testing; turn them off when validating normal game constraints.</p>
+        </article>
+
+        <article>
+          <h3>5. Gameplay feel controls</h3>
+          <p><strong>Coyote time</strong> is measured in fixed 25 Hz gameplay frames and applies to both Classic and RDX movement. It retains jump eligibility briefly after support is lost without restoring a fake grounded state or snapping Rick back to the ledge.</p>
+          <p><strong>Fall bounce min height</strong> is the minimum tracked drop distance before the native RDX long-fall rebound may trigger. The existing impact-speed gate still applies, so lowering this value does not make tiny low-speed steps bounce. These two controls affect the one shared gameplay simulation and are intentionally not A/B-specific juice pieces.</p>
+        </article>
+
+        <article>
+          <h3>6. Performance budget</h3>
+          <p>The default target is intentionally conservative for low-end platforms. Watch <strong>B juice</strong> first: it is the measured editor-side cost of the editable feedback pass. The adaptive budget can reduce particle density when the selected target is exceeded.</p>
+          <dl>
+            <dt>Frame</dt><dd>Average / p95 time spent in the editor's browser frame loop.</dd>
+            <dt>B juice</dt><dd>Average / p95 time spent rendering B's juice layer.</dd>
+            <dt>Quality</dt><dd>Current adaptive particle scale.</dd>
+            <dt>Particles</dt><dd>Active particles against the fixed pool cap.</dd>
+            <dt>Dropped</dt><dd>Effects refused by particle/audio budget protection.</dd>
+            <dt>Profile cost</dt><dd>Static worst-case score for the current B profile.</dd>
+          </dl>
+          <p>Bundled templates are intended to stay <strong>CD32 ✓</strong>: opaque palette/tile flashes and 1:1 sprite/blitter displacement are preferred, particles are small bounded opaque lists, camera offsets are integer-friendly, and optional accent voices are capped. Manual settings remain deliberately broader for comparison, but alpha blending or real-time sprite scaling are labelled <strong>ENHANCED ⚠</strong> and must not be promoted into Revival presets. The recommended Amiga/CD32 master preset is intentionally flash-heavy and particle-light.</p>
+          <p>Use <strong>Run B benchmark</strong> after a meaningful change, especially for explosions and stacked hit feedback.</p>
+        </article>
+
+        <article>
+          <h3>7. High-quality Amiga sound</h3>
+          <p>The production native Amiga sound engine stays active in the editor. Default is <strong>HIGH · native Amiga MAX</strong> with the <strong>A500</strong> filter and <strong>Headphones</strong> spatial mode. Switch to STANDARD or LOW directly here when profiling slower targets.</p>
+          <p><strong>Audible Effects are live in the gameplay windows.</strong> B is enabled by default, so sample choice, category overrides, ADSR, filtering, pitch/rate, panning and layers edited in Audible Effects use the same JuiceRuntime audio path while you play. For the selected Audible Effects action, the corresponding native logical SFX is suppressed while B live routing is active, preventing a doubled sound; choose Off to hear native audio only.</p>
+        </article>
+
+        <article>
+          <h3>8. Saving and exporting</h3>
+          <p>B is autosaved locally as a temporary draft. <strong>Save B draft now</strong> forces an immediate local checkpoint. <strong>Export B JSON</strong> exports the editable juice profile for review; it does not promote the profile into production settings.</p>
+          <p>A/B baseline state is local editor workflow state. If you accept B into A, that gives you a frozen comparison target while continuing to tune B.</p>
+        </article>
+
+        <article>
+          <h3>9. Keyboard controls</h3>
+          <p>Click inside the preview first. Use <kbd>←</kbd>/<kbd>→</kbd> to move, <kbd>Z</kbd> or <kbd>↑</kbd> to jump, <kbd>X</kbd> for the real gun action, <kbd>C</kbd> for the real dynamite action, <kbd>↓</kbd> to crawl and <kbd>Space</kbd> for raw Fire. A and B never receive separate controls because they are two presentations of the same simulation.</p>
+        </article>
+      </div>
+    </section>
+
+      </div>
+    </div>
+
+    <footer><span id="save-status">Draft saved locally.</span><span>Production baseline: xrick gameplay/collision · Classic=Classic flags · RDX=descriptor-projected 8×8 flags · real game sprites/projectiles/dynamite · pooled Canvas2D juice.</span></footer>
+  </main>
+
+  <dialog id="action-clipboard-dialog" aria-labelledby="action-clipboard-title" aria-describedby="action-clipboard-message">
+    <form method="dialog">
+      <h2 id="action-clipboard-title">Action JSON</h2>
+      <p id="action-clipboard-message" role="status"></p>
+      <label for="action-clipboard-text">Action JSON</label>
+      <textarea id="action-clipboard-text" rows="14" spellcheck="false"></textarea>
+      <div class="action-clipboard-buttons">
+        <button type="button" id="action-clipboard-apply">Paste into action</button>
+        <button type="submit" id="action-clipboard-close">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- SDL keeps its normal framebuffer offscreen; the editor copies from the production bridge. -->
+  <div class="engine-source" aria-hidden="true"><div id="stage"><canvas id="canvas" width="320" height="200"></canvas></div><span id="engine-status"></span></div>
+  <script src="juice-host.js"></script>
+  <script src="xrick.js"></script>
+  <script type="module" src="juice-editor.js"></script>
+</body>
+</html>

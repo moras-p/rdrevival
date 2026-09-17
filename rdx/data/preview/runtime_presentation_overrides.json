@@ -1,0 +1,783 @@
+{
+  "schema": "rdx.runtime_presentation_overrides.v1",
+  "version": "2.1.52",
+  "source": "config/rdx-presentation/generated_table_inputs.json",
+  "tables": {
+    "emitterMuzzles": [{"actorId":49,"direction":"left","muzzleX":-13,"muzzleY":-10},{"actorId":50,"direction":"right","muzzleX":13,"muzzleY":-10},{"actorId":51,"direction":"left","muzzleX":-4,"muzzleY":-10},{"actorId":52,"direction":"left","muzzleX":-4,"muzzleY":-10},{"actorId":53,"direction":"right","muzzleX":4,"muzzleY":-10},{"actorId":54,"direction":"right","muzzleX":4,"muzzleY":-10}],
+    "projectileEmitterLinks": [{"submap":1,"mapId":4,"mark":6,"spawnIndex":7,"actorId":53,"direction":"right","rdxX":175,"rdxY":120},{"submap":1,"mapId":4,"mark":10,"spawnIndex":1,"actorId":53,"direction":"right","rdxX":47,"rdxY":344},{"submap":1,"mapId":4,"mark":14,"spawnIndex":2,"actorId":53,"direction":"right","rdxX":47,"rdxY":728},{"submap":3,"mapId":6,"mark":33,"spawnIndex":2,"actorId":53,"direction":"right","rdxX":47,"rdxY":536},{"submap":4,"mapId":7,"mark":44,"spawnIndex":1,"actorId":53,"direction":"right","rdxX":47,"rdxY":312},{"submap":4,"mapId":7,"mark":48,"spawnIndex":2,"actorId":53,"direction":"right","rdxX":47,"rdxY":600},{"submap":6,"mapId":9,"mark":61,"spawnIndex":17,"actorId":51,"direction":"left","rdxX":272,"rdxY":361},{"submap":6,"mapId":9,"mark":63,"spawnIndex":2,"actorId":53,"direction":"right","rdxX":47,"rdxY":520},{"submap":6,"mapId":9,"mark":68,"spawnIndex":4,"actorId":53,"direction":"right","rdxX":47,"rdxY":808},{"submap":7,"mapId":10,"mark":73,"spawnIndex":1,"actorId":53,"direction":"right","rdxX":47,"rdxY":136},{"submap":7,"mapId":10,"mark":75,"spawnIndex":13,"actorId":51,"direction":"left","rdxX":272,"rdxY":233},{"submap":7,"mapId":10,"mark":80,"spawnIndex":2,"actorId":53,"direction":"right","rdxX":47,"rdxY":552},{"submap":7,"mapId":10,"mark":82,"spawnIndex":4,"actorId":54,"direction":"right","rdxX":47,"rdxY":712},{"submap":7,"mapId":10,"mark":84,"spawnIndex":5,"actorId":53,"direction":"right","rdxX":47,"rdxY":840},{"submap":8,"mapId":11,"mark":90,"spawnIndex":8,"actorId":51,"direction":"left","rdxX":272,"rdxY":313},{"submap":8,"mapId":11,"mark":91,"spawnIndex":2,"actorId":53,"direction":"right","rdxX":47,"rdxY":312},{"submap":8,"mapId":11,"mark":97,"spawnIndex":9,"actorId":51,"direction":"left","rdxX":272,"rdxY":889},{"submap":9,"mapId":13,"mark":111,"spawnIndex":0,"actorId":50,"direction":"right","rdxX":47,"rdxY":518},{"submap":9,"mapId":13,"mark":115,"spawnIndex":22,"actorId":49,"direction":"left","rdxX":272,"rdxY":711},{"submap":9,"mapId":13,"mark":118,"spawnIndex":23,"actorId":49,"direction":"left","rdxX":272,"rdxY":903},{"submap":10,"mapId":14,"mark":124,"spawnIndex":1,"actorId":50,"direction":"right","rdxX":47,"rdxY":294},{"submap":13,"mapId":17,"mark":161,"spawnIndex":10,"actorId":49,"direction":"left","rdxX":256,"rdxY":359},{"submap":14,"mapId":18,"mark":168,"spawnIndex":12,"actorId":49,"direction":"left","rdxX":272,"rdxY":295},{"submap":16,"mapId":20,"mark":205,"spawnIndex":2,"actorId":50,"direction":"right","rdxX":47,"rdxY":774},{"submap":16,"mapId":20,"mark":207,"spawnIndex":17,"actorId":49,"direction":"left","rdxX":272,"rdxY":967},{"submap":18,"mapId":22,"mark":216,"spawnIndex":14,"actorId":49,"direction":"left","rdxX":272,"rdxY":71},{"submap":18,"mapId":22,"mark":220,"spawnIndex":1,"actorId":50,"direction":"right","rdxX":47,"rdxY":326},{"submap":18,"mapId":22,"mark":223,"spawnIndex":15,"actorId":49,"direction":"left","rdxX":272,"rdxY":471}],
+    "markActorOverrides": [
+      {
+        "submap": 8,
+        "mapId": 11,
+        "mark": 87,
+        "actorId": 81,
+        "pn": 76,
+        "rdxX": 128,
+        "rdxY": 137,
+        "behavior": "suppress",
+        "mirrorX": false,
+        "mirrorY": true
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 102,
+        "actorId": 0,
+        "pn": 52,
+        "rdxX": 164,
+        "rdxY": 95,
+        "behavior": "coffin-fireball-follow-classic-when-awake",
+        "mirrorX": false
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 103,
+        "actorId": 0,
+        "pn": 51,
+        "rdxX": 172,
+        "rdxY": 95,
+        "behavior": "coffin-fireball-follow-classic-when-awake",
+        "mirrorX": false
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 106,
+        "actorId": 0,
+        "pn": 22,
+        "rdxX": 111,
+        "rdxY": 235,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 117,
+        "actorId": 0,
+        "pn": 22,
+        "rdxX": 239,
+        "rdxY": 800,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 10,
+        "mapId": 14,
+        "mark": 130,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 155,
+        "rdxY": 624,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 134,
+        "actorId": 0,
+        "pn": 22,
+        "rdxX": 111,
+        "rdxY": 112,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 141,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 131,
+        "rdxY": 336,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 142,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 155,
+        "rdxY": 336,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 143,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 179,
+        "rdxY": 336,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 15,
+        "mapId": 19,
+        "mark": 184,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 139,
+        "rdxY": 448,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false
+      },
+      {
+        "submap": 15,
+        "mapId": 19,
+        "mark": 187,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 211,
+        "rdxY": 752,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 209,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 171,
+        "rdxY": 80,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 210,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 195,
+        "rdxY": 80,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 211,
+        "actorId": 0,
+        "pn": 24,
+        "rdxX": 219,
+        "rdxY": 80,
+        "behavior": "follow-classic-always-visible",
+        "mirrorX": false,
+        "mirrorY": false
+      }
+    ],
+    "gameplayMarkPositionDeltas": [
+      {
+        "submap": 8,
+        "mapId": 11,
+        "mark": 93,
+        "dx": -13,
+        "dy": 1
+      },
+      {
+        "submap": 8,
+        "mapId": 11,
+        "mark": 94,
+        "dx": 64,
+        "dy": 0
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 106,
+        "dx": -1,
+        "dy": 0
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 117,
+        "dx": -9,
+        "dy": 0
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 134,
+        "dx": -1,
+        "dy": 0
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 141,
+        "dx": -5,
+        "dy": 8
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 142,
+        "dx": -5,
+        "dy": 8
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 143,
+        "dx": -5,
+        "dy": 8
+      },
+      {
+        "submap": 14,
+        "mapId": 18,
+        "mark": 174,
+        "dx": 5,
+        "dy": -16
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 209,
+        "dx": -5,
+        "dy": -8
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 210,
+        "dx": -5,
+        "dy": -8
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 211,
+        "dx": -5,
+        "dy": -8
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 212,
+        "dx": -6,
+        "dy": -8
+      },
+      {
+        "submap": 19,
+        "mapId": 23,
+        "mark": 229,
+        "dx": -13,
+        "dy": -8
+      },
+      {
+        "submap": 19,
+        "mapId": 23,
+        "mark": 231,
+        "dx": -6,
+        "dy": 0
+      }
+    ],
+    "triggerSemantics": [
+      {
+        "submap": 0,
+        "mapId": 3,
+        "mark": 1,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": 8,
+        "dy": 0,
+        "mode": "rick-contact-delayed-8px",
+        "authority": "user-verified-escape-margin-restoration"
+      },
+      {
+        "submap": 1,
+        "mapId": 4,
+        "mark": 10,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 3,
+        "mapId": 6,
+        "mark": 31,
+        "clearFlags": 192,
+        "setFlags": 0,
+        "mode": "shoot-or-overlapping-blast",
+        "authority": "user-verified-RDX-gameplay-semantics"
+      },
+      {
+        "submap": 4,
+        "mapId": 7,
+        "mark": 44,
+        "dx": -24,
+        "dy": 0
+      },
+      {
+        "submap": 4,
+        "mapId": 7,
+        "mark": 48,
+        "clearFlags": 64,
+        "setFlags": 128,
+        "mode": "rick-contact",
+        "authority": "user-verified-RDX-gameplay-semantics"
+      },
+      {
+        "submap": 6,
+        "mapId": 9,
+        "mark": 63,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 6,
+        "mapId": 9,
+        "mark": 68,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 7,
+        "mapId": 10,
+        "mark": 73,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 7,
+        "mapId": 10,
+        "mark": 75,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 7,
+        "mapId": 10,
+        "mark": 78,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 7,
+        "mapId": 10,
+        "mark": 82,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 106,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -1,
+        "dy": -5,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 114,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 115,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 9,
+        "mapId": 13,
+        "mark": 117,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 10,
+        "mapId": 14,
+        "mark": 130,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -16,
+        "dy": -21,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 134,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -16,
+        "dy": -21,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 141,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -17,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 142,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -16,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 11,
+        "mapId": 15,
+        "mark": 143,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -16,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 13,
+        "mapId": 17,
+        "mark": 161,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 14,
+        "mapId": 18,
+        "mark": 166,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": 0,
+        "dy": -2,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 14,
+        "mapId": 18,
+        "mark": 171,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 16,
+        "mapId": 20,
+        "mark": 195,
+        "dx": 24,
+        "dy": -8
+      },
+      {
+        "submap": 16,
+        "mapId": 20,
+        "mark": 205,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 209,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -5,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 210,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -5,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 211,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -5,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 212,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -6,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 17,
+        "mapId": 21,
+        "mark": 213,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 18,
+        "mapId": 22,
+        "mark": 223,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 19,
+        "mapId": 23,
+        "mark": 229,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -13,
+        "dy": -8,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 19,
+        "mapId": 23,
+        "mark": 231,
+        "clearFlags": 0,
+        "setFlags": 0,
+        "dx": -6,
+        "dy": 0,
+        "mode": "preserve-classic-trigger",
+        "authority": "user-reviewed-level-editor-placement"
+      },
+      {
+        "submap": 20,
+        "mapId": 25,
+        "mark": 242,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 20,
+        "mapId": 25,
+        "mark": 245,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 24,
+        "mapId": 31,
+        "mark": 283,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 26,
+        "mapId": 33,
+        "mark": 299,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 26,
+        "mapId": 33,
+        "mark": 300,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 29,
+        "mapId": 36,
+        "mark": 328,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 33,
+        "mapId": 40,
+        "mark": 366,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 34,
+        "mapId": 41,
+        "mark": 376,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 37,
+        "mapId": 44,
+        "mark": 408,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 38,
+        "mapId": 46,
+        "mark": 417,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 38,
+        "mapId": 46,
+        "mark": 418,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 38,
+        "mapId": 46,
+        "mark": 421,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 39,
+        "mapId": 47,
+        "mark": 428,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 39,
+        "mapId": 47,
+        "mark": 431,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 39,
+        "mapId": 47,
+        "mark": 435,
+        "dx": -8,
+        "dy": 0
+      },
+      {
+        "submap": 39,
+        "mapId": 47,
+        "mark": 436,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 39,
+        "mapId": 47,
+        "mark": 438,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 40,
+        "mapId": 48,
+        "mark": 442,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 41,
+        "mapId": 49,
+        "mark": 456,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 41,
+        "mapId": 49,
+        "mark": 458,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 42,
+        "mapId": 50,
+        "mark": 469,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 42,
+        "mapId": 50,
+        "mark": 470,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 43,
+        "mapId": 51,
+        "mark": 480,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 43,
+        "mapId": 51,
+        "mark": 483,
+        "dx": 8,
+        "dy": 8
+      },
+      {
+        "submap": 43,
+        "mapId": 51,
+        "mark": 485,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 44,
+        "mapId": 52,
+        "mark": 494,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 44,
+        "mapId": 52,
+        "mark": 495,
+        "dx": 8,
+        "dy": 0
+      },
+      {
+        "submap": 45,
+        "mapId": 53,
+        "mark": 502,
+        "dx": 8,
+        "dy": 0
+      }
+    ]
+  }
+}
