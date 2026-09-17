@@ -1,4 +1,5 @@
 import { XrickLivePreview, LIVE_WIDTH, LIVE_HEIGHT, NATIVE_SFX_IDS } from '../juice/xrick-live-preview.js';
+import { RDX_ROM_FILENAME, loadRememberedRdxRom, rememberRdxRom, validateRdxRomBytes } from '../runtime/rom-store.js';
 
 const CHECKPOINT_SLOTS = Object.freeze([0, 1, 2, 3, 4, 5, 6]);
 const CHECKPOINT_INTERVAL_FRAMES = 6;
@@ -91,8 +92,12 @@ export class RdrSoundLabRuntime {
     onFrame,
     onReplay,
     onStatus,
+    onNativeInput,
     previewFactory = XrickLivePreview,
     fetcher = globalThis.fetch?.bind(globalThis),
+    loadRememberedRom = loadRememberedRdxRom,
+    rememberRom = rememberRdxRom,
+    validateRom = validateRdxRomBytes,
     requestFrame = globalThis.requestAnimationFrame?.bind(globalThis),
     cancelFrame = globalThis.cancelAnimationFrame?.bind(globalThis),
     now = () => globalThis.performance?.now?.() ?? Date.now()
@@ -104,12 +109,17 @@ export class RdrSoundLabRuntime {
     this.onFrame = onFrame;
     this.onReplay = onReplay;
     this.onStatus = onStatus;
+    this.onNativeInput = onNativeInput;
     this.previewFactory = previewFactory;
     this.fetcher = fetcher;
+    this.loadRememberedRom = loadRememberedRom;
+    this.rememberRom = rememberRom;
+    this.validateRom = validateRom;
     this.requestFrame = requestFrame || (() => 0);
     this.cancelFrame = cancelFrame || (() => {});
     this.now = now;
     this.preview = null;
+    this.romOverride = null;
     this.lastSerial = 0;
     this.running = false;
     this.raf = 0;
@@ -126,14 +136,13 @@ export class RdrSoundLabRuntime {
   }
 
   async start({ submap = 0, event = '', match = {}, action = 'impact', durationMs = 0, playback = '' } = {}) {
-    if (this.preview) return;
+    if (this.running) return;
     this.target = { event:String(event || ''), mark:Number(match?.mark), actorFamily:String(match?.actorFamily || ''), action:String(action || 'impact'), playback:String(playback || ''), tailFrames:Math.max(DEFAULT_TAIL_FRAMES, Math.ceil(Math.max(0, finite(durationMs, 0)) / GAME_FRAME_MS)) };
     this.onStatus?.('Starting native runtime…');
-    this.preview = await this.previewFactory.create(() => {}, () => {});
-    if (!this.fetcher) throw new Error('Native runtime fetch is unavailable');
-    const response = await this.fetcher('rdx/data/editor/Rick_Dangerous_DX_1.3x.bin', { cache:'no-store' });
-    if (!response.ok) throw new Error(`RDX ROM load failed (${response.status})`);
-    await this.preview.loadRdxRom(new Uint8Array(await response.arrayBuffer()));
+    if (!this.preview) this.preview = await this.previewFactory.create(() => {}, () => {});
+    const rom = await this.#resolveRomSource();
+    await this.preview.loadRdxRom(rom.bytes);
+    this.onNativeInput?.({ status:'ready', name:rom.name, source:rom.source, remembered:Boolean(rom.remembered) });
     this.preview.setPresentation('rdx');
     if (!this.preview.selectSubmap(submap)) throw new Error(`Native runtime could not select submap ${submap}`);
     await this.preview.resetLevelForPlaytest();
@@ -145,6 +154,45 @@ export class RdrSoundLabRuntime {
     this.canvas?.addEventListener('keyup', this.keyUp);
     this.#loop();
     this.onStatus?.('Native RDX simulation · authoritative timing');
+  }
+
+  async loadNativeInput(fileOrBytes, { name = RDX_ROM_FILENAME } = {}) {
+    let bytes, displayName = name;
+    if (fileOrBytes instanceof Uint8Array || fileOrBytes instanceof ArrayBuffer) {
+      bytes = fileOrBytes instanceof Uint8Array ? fileOrBytes : new Uint8Array(fileOrBytes);
+    } else if (fileOrBytes && typeof fileOrBytes.arrayBuffer === 'function') {
+      displayName = fileOrBytes.name || displayName;
+      bytes = new Uint8Array(await fileOrBytes.arrayBuffer());
+    } else {
+      throw new TypeError('Choose an RDX ROM file to continue.');
+    }
+    const validated = await this.validateRom(bytes);
+    const remembered = await this.rememberRom(validated.bytes, { name:displayName });
+    this.romOverride = { bytes:validated.bytes, name:displayName, source:'manual-file', remembered:Boolean(remembered) };
+    const result = { status:'ready', name:displayName, source:'manual-file', remembered:Boolean(remembered) };
+    this.onNativeInput?.(result);
+    this.onStatus?.(`RDX ROM ready · ${displayName}${remembered ? ' · remembered in this browser' : ''}`);
+    return result;
+  }
+
+  async #resolveRomSource() {
+    if (this.romOverride?.bytes?.length) return this.romOverride;
+    const remembered = await this.loadRememberedRom?.();
+    if (remembered?.bytes?.length) return { bytes:remembered.bytes, name:remembered.name || RDX_ROM_FILENAME, source:remembered.source || 'browser-storage', remembered:true };
+    if (!this.fetcher) {
+      const error = new Error('RDX ROM is required for native SoundLab preview. Use Load ROM to choose it once; SoundLab will remember it in this browser.');
+      error.code = 'SOUNDLAB_NATIVE_INPUT_REQUIRED';
+      throw error;
+    }
+    const response = await this.fetcher('rdx/data/editor/Rick_Dangerous_DX_1.3x.bin', { cache:'no-store' });
+    if (!response.ok) {
+      const error = new Error(response.status === 404
+        ? 'RDX ROM is not available in this browser. Use Load ROM to choose Rick_Dangerous_DX_1.3.bin once; SoundLab will remember it locally.'
+        : `RDX ROM load failed (${response.status})`);
+      if (response.status === 404) error.code = 'SOUNDLAB_NATIVE_INPUT_REQUIRED';
+      throw error;
+    }
+    return { bytes:new Uint8Array(await response.arrayBuffer()), name:RDX_ROM_FILENAME, source:'bundled-rom', remembered:false };
   }
 
   reset() {

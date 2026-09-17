@@ -4,7 +4,13 @@
   "rendererVersion": "soundlab-js-v1",
   "rendererFingerprint": "7d67318faf5cd4b290c9e6f925fc7ad49d4287fc5bd050506057c7c2e0a04342",
   "authoring": {
-    "nativeAdapter": "../../src/soundlab/rdr-adapter.js"
+    "nativeAdapter": "../../src/soundlab/rdr-adapter.js",
+    "nativeInput": {
+      "label": "RDX ROM",
+      "buttonLabel": "Load ROM…",
+      "accept": ".bin,.rom,.md,application/octet-stream",
+      "help": "Required for native scene preview. Choose Rick_Dangerous_DX_1.3.bin once; SoundLab remembers it in this browser."
+    }
   },
   "outputs": [
     {
