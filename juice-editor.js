@@ -32,6 +32,7 @@ import { RdxRom } from './rdx/src/core/rom.js';
 import { RdxSpriteDecoder } from './rdx/src/core/sprite.js';
 import { PaletteRegistry } from './rdx/src/data/palettes.js';
 import { cd32AugmentedRdxFrame } from './rdx/src/runtime/cd32-augmentation.js';
+import { loadRememberedRdxRom, rememberRdxRom, RDX_ROM_FILENAME } from './rdx/src/runtime/rom-store.js';
 import { revivalBulletFrame } from './rdx/src/runtime/revival-bullet.js';
 import { revivalDynamiteFrame } from './rdx/src/runtime/revival-dynamite.js';
 import { REVIVAL_DYNAMITE_EXPLOSION_VARIANT_COUNT, REVIVAL_DYNAMITE_ROLLING_VARIANT_COUNT, revivalRollingExplosionFrame } from './rdx/src/runtime/revival-dynamite.js';
@@ -43,7 +44,7 @@ import { GAME_JUICE_EFFECT_KEYS, actionEffectSchemas, actionRecipeRevision, acti
 import { buildProductionPresetPatch, capturePresetProvenance, productionChangedActionIds, productionEditorBaselineRecipe, productionPresetDescriptor, productionPresetForEditorStyle } from './rdx/src/juice/juice-production-export.js';
 
 const $ = (id) => document.getElementById(id);
-const AUTO_RDX_ROM_NAME = 'Rick_Dangerous_DX_1.3.bin';
+const AUTO_RDX_ROM_NAME = RDX_ROM_FILENAME;
 const AUTO_RDX_ROM_PATHS = Object.freeze([`./resources/${AUTO_RDX_ROM_NAME}`, `../resources/${AUTO_RDX_ROM_NAME}`]);
 const canvasA = $('arena-a'), canvasB = $('arena-b');
 const ctxA = canvasA.getContext('2d', { alpha: false, desynchronized: true });
@@ -287,7 +288,7 @@ async function prepareRdxPoseAuthoring(bytes){
   ]);
   rdxPoseAuthoring={decoder:new RdxSpriteDecoder(rom),palettes:new PaletteRegistry(paletteData),cache:new Map(),utilityCache:new Map()};
 }
-async function activateEditorRdxRom(romBytes,name=AUTO_RDX_ROM_NAME,{automatic=false}={}){
+async function activateEditorRdxRom(romBytes,name=AUTO_RDX_ROM_NAME,{automatic=false,remember=true,directoryHandle=null}={}){
   if(!preview)throw new Error('xrick preview is not ready');
   const resumeNativeActionPreview=nativeActionPreviewOwned();
   if(resumeNativeActionPreview){
@@ -301,6 +302,7 @@ async function activateEditorRdxRom(romBytes,name=AUTO_RDX_ROM_NAME,{automatic=f
     preview.bridge.resumeBrowserLoop?.();
   }
   await preview.loadRdxRom(romBytes);await prepareRdxPoseAuthoring(romBytes);
+  if(remember)await rememberRdxRom(romBytes,{name:name||AUTO_RDX_ROM_NAME,directoryHandle});
   const option=$('presentation-source')?.querySelector('option[value="rdx"]');if(option){option.disabled=false;option.textContent='RDX production compositor';}
   if($('presentation-source'))$('presentation-source').value='rdx';preview.setPresentation('rdx',{forceFrame:false});
   /* Loading the DX presentation over an already-running Classic SM00 leaves
@@ -316,6 +318,11 @@ async function activateEditorRdxRom(romBytes,name=AUTO_RDX_ROM_NAME,{automatic=f
   $('save-status').textContent=`${automatic?'Auto-loaded':'Loaded'} ${name} · ${romBytes.length.toLocaleString()} bytes. RDX production compositor and exact ROM weapon frames are active.`;
 }
 async function autoLoadEditorRdxRom(){
+  const remembered=await loadRememberedRdxRom();
+  if(remembered){
+    await activateEditorRdxRom(remembered.bytes,remembered.name||AUTO_RDX_ROM_NAME,{automatic:true,remember:false,directoryHandle:remembered.directoryHandle||null});
+    return true;
+  }
   for(const path of AUTO_RDX_ROM_PATHS){
     let response;try{response=await fetch(path,{cache:'no-store'});}catch{continue;}
     if(response.status===404)continue;
@@ -2959,7 +2966,7 @@ async function init() {
   document.querySelectorAll('[data-actions-workflow]').forEach(button => button.addEventListener('click', () => setActionsWorkflow(button.dataset.actionsWorkflow)));
   $('global-audio-mute')?.addEventListener('click',()=>{editorMuted=!editorMuted;syncGlobalAudioMute({save:true});});
   buildPresetSelect(); buildGameStylePicker(); buildActionQuickSelect(); buildActionList(); buildInspector(); bindControls(); bindToolScreens(); applyCompareLayout(); syncActionsWorkflowUi();
-  $('adaptive-budget').checked = profile.adaptiveBudget; await Promise.all([buildLevelSelect(), loadEntitySoundMapping(), (async()=>{nativeActionPreviewSceneCatalog=await NativeActionPreviewSceneCatalog.create();await prepareRdxPoseAuthoring(nativeActionPreviewSceneCatalog.romBytes);})()]);buildInspector();
+  $('adaptive-budget').checked = profile.adaptiveBudget; await Promise.all([buildLevelSelect(), loadEntitySoundMapping(), (async()=>{nativeActionPreviewSceneCatalog=await NativeActionPreviewSceneCatalog.create();})()]);buildInspector();
   preview = await XrickLivePreview.create(handleEvent, handleNativeSfxEvent); preview.setInvincible(true); preview.setEditorAutoRefill(true); preview.setEditorAutoRevive(autoReviveSameSpot); preview.setHighQualityAmigaAudio(); runtimeA.setAudioSource('classic'); runtimeB.setAudioSource(selectedAudioSource);
   syncGlobalAudioMute();
   applyGameplayTuning({ save: false });

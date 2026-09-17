@@ -3,7 +3,6 @@ import { discardNativeSceneCheckpoint, restoreNativeSceneCheckpoint, saveNativeS
 
 const dataUrl = path => new URL(`../../data/${path}`, import.meta.url);
 async function fetchJson(path){const response=await fetch(dataUrl(path),{cache:'no-store'});if(!response.ok)throw new Error(`Native action preview ${path} HTTP ${response.status}`);return response.json();}
-async function fetchBytes(path){const response=await fetch(dataUrl(path),{cache:'no-store'});if(!response.ok)throw new Error(`Native action preview ${path} HTTP ${response.status}`);return new Uint8Array(await response.arrayBuffer());}
 
 const FRAME_MS = 40;
 const DEFAULT_SUBMAP = 0x02;
@@ -268,10 +267,10 @@ function unionBounds(rows){
  * does not instantiate any editor rendering pipeline. */
 export class NativeActionPreviewSceneCatalog {
   static async create(){
-    const [romBytes,levels,manifest]=await Promise.all([fetchBytes('editor/Rick_Dangerous_DX_1.3x.bin'),fetchJson('levels/resolved/levels.json'),fetchJson('rdx_runtime_room_manifest.json')]);
-    return new NativeActionPreviewSceneCatalog({romBytes,levels,manifest});
+    const [levels,manifest]=await Promise.all([fetchJson('levels/resolved/levels.json'),fetchJson('rdx_runtime_room_manifest.json')]);
+    return new NativeActionPreviewSceneCatalog({levels,manifest});
   }
-  constructor({romBytes,levels,manifest}){this.romBytes=romBytes;this.levels=levels;this.manifest=manifest;}
+  constructor({levels,manifest}){this.levels=levels;this.manifest=manifest;}
   roomName(submap){return (this.manifest?.rooms||[]).find(row=>Number(row.submap)===Number(submap))?.submapName||`SM${Number(submap).toString(16).toUpperCase().padStart(2,'0')}`;}
   targetAudit(actionId,submap){
     const scenario=nativeActionPreviewScenario(actionId),keys=Array.isArray(scenario.targetSourceKeys)?scenario.targetSourceKeys:[];
