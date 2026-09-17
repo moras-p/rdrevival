@@ -39,7 +39,8 @@ let tool = "pencil",
   timer = null,
   autosaveTimer = null,
   saveSerial = 0;
-const productionPreviewProvider = new RevivalPixelArtMapPreview();
+let productionPreviewBusy = false;
+const productionPreviewProvider = new RevivalPixelArtMapPreview({ onStatus: () => updateProductionPreviewStatus() });
 const controller = new ArtController({
   plugins: createAssetPlugins(),
   pluginContext: { productionPreviewProvider },
@@ -62,6 +63,16 @@ function run(fn) {
       message(`${e.code ?? "ERROR"}: ${e.message}`, true);
     }
   };
+}
+function updateProductionPreviewStatus(previewPlugin = null) {
+  const button = $("production-preview"), status = $("preview-capability");
+  if (!button || !status) return;
+  const plugin = previewPlugin ?? controller.plugins.list().find(p => p.id === controller.plugins.documentId(controller.store.document));
+  const available = !!plugin?.capabilities.nativePreview;
+  button.disabled = !available || productionPreviewBusy;
+  status.textContent = available
+    ? `${plugin.label}: ${productionPreviewProvider.status().message}`
+    : "Bind a preview-capable production asset plugin to use the real-map preview.";
 }
 function command(ops) {
   pendingTransform = null;
@@ -412,8 +423,7 @@ function render() {
   $("handoff-status").textContent = `${candidate.active} · ${d.authoring?.stage ?? "?"} · ${d.handoff?.acceptedRegions?.length ?? 0} accepted region(s) · last review ${d.handoff?.lastReviewCheckpoint ?? "checkpoint?"}@${d.handoff?.lastReviewRevision ?? "?"}`;
   const previewPlugin = controller.plugins.list().find(p => p.id === controller.plugins.documentId(d));
   const previewReady = !!previewPlugin?.capabilities.nativePreview;
-  $("production-preview").disabled = !previewReady;
-  $("preview-capability").textContent = previewReady ? `${previewPlugin.label}: native Live-map substitution available.` : "Bind a preview-capable production asset plugin to use the real-map preview.";
+  updateProductionPreviewStatus(previewPlugin);
   if (previewReady && document.activeElement !== $("preview-options") && $("preview-options").dataset.plugin !== previewPlugin.id) {
     const defaults = Object.fromEntries(Object.entries(previewPlugin.previewOptionsSchema?.properties ?? {}).filter(([, spec]) => spec.default !== undefined).map(([key, spec]) => [key, spec.default]));
     $("preview-options").value = JSON.stringify(defaults, null, 2);
@@ -849,7 +859,17 @@ $("review").onclick = run(() => controller.view({ mode: "review", checkpoint: $(
 $("observe").onclick = run(() => controller.view({ mode: "asset", zoom: 8 }));
 $("critique").onclick = run(() => controller.view({ mode: "critique", checkpoint: $("checkpoints").value || undefined, zoom: 6 }));
 $("animation-review").onclick = run(() => controller.view({ mode: "animation-review", zoom: 5 }));
-$("production-preview").onclick = run(() => controller.view({ mode: "production", zoom: 2, previewOptions: JSON.parse($("preview-options").value || "{}") }));
+$("production-preview").onclick = run(async () => {
+  if (productionPreviewBusy) return;
+  productionPreviewBusy = true;
+  updateProductionPreviewStatus();
+  try {
+    return await controller.view({ mode: "production", zoom: 2, previewOptions: JSON.parse($("preview-options").value || "{}") });
+  } finally {
+    productionPreviewBusy = false;
+    updateProductionPreviewStatus();
+  }
+});
 $("authoring-stage").onchange = run(() => command([{ type: "authoring_stage", stage: $("authoring-stage").value, lockCompleted: $("lock-authoring-stage").checked }]));
 $("apply-style-profile").onclick = run(() => command([{ type: "style_profile", profile: JSON.parse($("style-profile-json").value || "{}") }]));
 $("candidate-select").onchange = run(() => controller.candidateCommand({ ...controller.guard(), action: "switch", name: $("candidate-select").value }));

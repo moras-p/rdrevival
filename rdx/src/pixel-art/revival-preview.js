@@ -3,6 +3,8 @@ import { rgbaPixels, imageCanvas } from './image-io.js';
 import { XrickLivePreview } from '../juice/xrick-live-preview.js';
 import { NativeActionPreviewSceneCatalog, NativeActionPreviewScenarioRunner } from '../juice/native-action-preview.js';
 import { PRESENTATION_LAYER_BITS } from '../juice/presentation-layer-mask.js';
+import { loadRememberedRdxRom } from '../runtime/rom-store.js';
+import { ensurePixelArtNativeRuntime } from './native-runtime.js';
 
 const LIVE_WIDTH = 320, LIVE_HEIGHT = 200;
 const FRONT_BITS = PRESENTATION_LAYER_BITS.foreground | PRESENTATION_LAYER_BITS.frontActors | PRESENTATION_LAYER_BITS.hud;
@@ -53,25 +55,54 @@ function compositeDraft({ preview, captured, actorLayer, draftCanvas, drawX, dra
  * surfaces stage, render, and identify the actor that is replaced.
  */
 export class RevivalPixelArtMapPreview {
-  constructor() {
+  constructor({ onStatus = null } = {}) {
     this.catalog = null;
     this.preview = null;
     this.runner = null;
     this.ready = null;
+    this.onStatus = typeof onStatus === 'function' ? onStatus : null;
+    this.runtimeState = Object.freeze({ phase: 'not-loaded', message: 'Native Live-map preview available · runtime not loaded' });
+  }
+
+  status() { return this.runtimeState; }
+
+  #setStatus(phase, message) {
+    this.runtimeState = Object.freeze({ phase, message });
+    this.onStatus?.(this.runtimeState);
   }
 
   async #initialize() {
     if (this.ready) return this.ready;
-    this.ready = (async () => {
+    const attempt = (async () => {
+      this.#setStatus('starting', 'Starting native preview…');
+      const remembered = await loadRememberedRdxRom();
+      if (!remembered?.bytes) {
+        const error = new Error('Real map preview requires the RDX ROM. Load it once in Workbench, Level Editor, or SoundLab, then retry.');
+        error.code = 'RDX_ROM_REQUIRED';
+        throw error;
+      }
+      await ensurePixelArtNativeRuntime();
       this.catalog = await NativeActionPreviewSceneCatalog.create();
       this.preview = await XrickLivePreview.create(event => this.runner?.noteEvent(event));
-      await this.preview.loadRdxRom(this.catalog.romBytes);
+      await this.preview.loadRdxRom(remembered.bytes);
       this.preview.setPresentation('rdx', { forceFrame: false });
       this.preview.bridge.setFrontendPaused?.(true);
       this.runner = new NativeActionPreviewScenarioRunner(this.preview);
+      this.#setStatus('ready', 'Native preview ready · sound disabled');
       return this;
     })();
-    return this.ready;
+    this.ready = attempt;
+    try {
+      return await attempt;
+    } catch (error) {
+      this.ready = null;
+      this.catalog = null;
+      this.preview = null;
+      this.runner = null;
+      if (error?.code === 'RDX_ROM_REQUIRED') this.#setStatus('rom-required', 'RDX ROM required');
+      else this.#setStatus('unavailable', `Native preview unavailable: ${error?.message || error}`);
+      throw error;
+    }
   }
 
   async #actionCapture(descriptor) {
