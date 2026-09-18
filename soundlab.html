@@ -15,14 +15,24 @@
       </div>
       <div class="sl-header-context">
         <label class="sl-case-picker">Case<select id="sl-case-picker" aria-label="Authoring case"></select></label>
+        <button id="sl-focus-workspace" class="sl-header-tool" type="button" title="Hide unpinned tools not needed for the current operation">Focus</button>
+        <button id="sl-restore-workspace" class="sl-header-tool" type="button" disabled title="Restore the previous workspace layout">Restore</button>
         <span id="sl-authoring-mode" class="sl-pill neutral">standalone preview</span>
         <span id="sl-build-state" class="sl-pill">manifest</span>
       </div>
     </header>
 
+    <nav class="sl-tool-rail" aria-label="SoundLab workspace panels">
+      <button type="button" data-workspace-open="navigator" title="Show case navigator">Nav</button>
+      <button type="button" data-workspace-open="inspector" title="Show sound inspector">Edit</button>
+      <button id="sl-layers-rail" type="button" data-workspace-open="layers" title="Show layer editor" disabled>Layers</button>
+      <button type="button" data-workspace-open="references" title="Show reference browser">Ref</button>
+      <button type="button" data-workspace-open="diagnostics" title="Show diagnostics">Diag</button>
+    </nav>
+
     <section class="sl-layout">
-      <aside class="sl-cases panel">
-        <div class="panel-title"><span>Cases</span><small id="sl-case-count"></small></div>
+      <aside id="sl-cases-panel" class="sl-cases panel" data-workspace-panel="navigator">
+        <div class="panel-title"><span>Cases</span><div class="workspace-panel-actions"><small id="sl-case-count"></small><button type="button" data-workspace-pin="navigator" aria-pressed="false" title="Pin case navigator">Pin</button></div></div>
         <div id="sl-case-list" class="case-list"></div>
         <div class="sl-note">Manifest-defined authoring cases. Project semantics stay outside the reusable SoundLab core.</div>
       </aside>
@@ -45,9 +55,10 @@
               <div class="native-input-state"><strong id="sl-native-input-title">Native input</strong><small id="sl-native-input-status"></small></div>
               <label id="sl-native-input-button" class="native-file-button"><span id="sl-native-input-button-label">Load…</span><input id="sl-native-input-file" type="file"></label>
             </div>
-            <div class="scene-stage">
+            <div id="sl-scene-stage" class="scene-stage" title="Click a trajectory segment to select it">
               <canvas id="sl-native-canvas" width="640" height="480" tabindex="0" aria-label="Native game preview"></canvas>
               <canvas id="sl-scene-overlay" width="640" height="480" aria-hidden="true"></canvas>
+              <span id="sl-scene-audio-version" class="scene-audio-version" aria-live="polite">Draft</span>
               <button id="sl-scene-contact" class="scene-contact" type="button" hidden aria-label="Select semantic contact event" title="Select semantic contact"></button>
             </div>
             <div class="scene-readout">
@@ -64,19 +75,86 @@
               </div>
               <output id="sl-scene-window-readout">Waiting for scene</output>
             </div>
+            <section id="sl-score-workspace" class="score-workspace" hidden aria-label="Visual sound score">
+              <div class="score-toolbar">
+                <div class="score-selection"><span>Selected segment</span><strong id="sl-score-segment-name">—</strong><small id="sl-score-range-readout">—</small></div>
+                <div class="score-toolbar-controls">
+                  <div class="segmented score-versions" aria-label="Audio version">
+                    <button type="button" data-audio-version="draft" class="active">Draft</button>
+                    <button type="button" data-audio-version="published">Published</button>
+                    <button type="button" data-audio-version="original">Original</button>
+                  </div>
+                  <button id="sl-play-score" type="button" class="primary">Play scope</button>
+                </div>
+              </div>
+              <div class="score-scope-row">
+                <span>Playback</span>
+                <div class="segmented score-scopes" aria-label="Playback scope">
+                  <button type="button" data-playback-scope="selected" class="active">Selected segment</button>
+                  <button type="button" data-playback-scope="sequence">Whole sequence</button>
+                  <button type="button" data-playback-scope="scene">Full scene</button>
+                </div>
+                <div class="sequence-review-actions"><button id="sl-play-transition" type="button">Play transition</button><output id="sl-sequence-health" class="sequence-health" aria-live="polite">Sequence continuity: clean</output></div>
+              </div>
+              <div class="score-loop-row">
+                <span>Selected loop</span>
+                <div class="segmented score-loop-modes" aria-label="Selected segment loop mode">
+                  <button type="button" data-segment-loop="exact">Exact</button>
+                  <button type="button" data-segment-loop="context" class="active">Context</button>
+                  <button type="button" data-segment-loop="custom">Custom</button>
+                </div>
+                <label class="score-sound-range">Sound range <input id="sl-sound-start" type="number" step="1" aria-label="Sound authoring range start frame"><span>–</span><input id="sl-sound-end" type="number" step="1" aria-label="Sound authoring range end frame"><span>f</span></label>
+              </div>
+              <div id="sl-segment-strip" class="segment-strip" aria-label="Sound score segments"></div>
+              <div class="segment-reuse-bar" aria-label="Reuse segment sound design" hidden><output id="sl-segment-link-state">Independent segment design</output><div><button id="sl-segment-copy" type="button">Copy design</button><button id="sl-segment-link" type="button">Link design</button><button id="sl-segment-unlink" type="button" disabled>Unlink</button></div></div>
+              <div class="score-edit-grid">
+                <section class="gesture-editor" aria-label="Gesture editor">
+                  <div class="score-editor-title gesture-editor-title">
+                    <div class="gesture-identity"><span>Gesture</span><strong id="sl-gesture-title">Generated motion</strong><select id="sl-gesture-select" aria-label="Selected gesture"></select></div>
+                    <div class="score-editor-actions gesture-tools"><button id="sl-gesture-draw" type="button" aria-pressed="true">Draw</button><button id="sl-gesture-erase" type="button" aria-pressed="false">Erase</button><button id="sl-gesture-smooth" type="button">Smooth</button><button id="sl-gesture-reset" type="button">Reset</button><button id="sl-score-undo" type="button" disabled>Undo</button><button id="sl-score-redo" type="button" disabled>Redo</button></div>
+                  </div>
+                  <canvas id="sl-gesture-canvas" width="900" height="150" tabindex="0" aria-label="Edit sound gesture"></canvas>
+                  <small id="sl-gesture-status">Draw across the canvas to reshape the selected gesture. Pen pressure is used when available.</small>
+                  <div class="pen-pressure-preview" aria-live="polite"><span>Input pressure</span><progress id="sl-pressure-meter" max="1" value="0.5"></progress><output id="sl-pressure-readout">Mouse fallback 0.50</output></div>
+                  <details id="sl-pen-pressure" class="pen-pressure"><summary>Pen pressure calibration</summary><div class="pen-pressure-grid"><label>Minimum<input id="sl-pressure-min" type="range" min="0" max="0.95" step="0.01" value="0"></label><label>Maximum<input id="sl-pressure-max" type="range" min="0.05" max="1" step="0.01" value="1"></label><button id="sl-pressure-reset" type="button">Reset</button></div><small>Device calibration changes how future pen/touch samples are normalized. It is local workspace state and does not rewrite existing gestures.</small></details>
+                  <details id="sl-gesture-numeric" class="gesture-numeric"><summary>Curve values</summary><div id="sl-gesture-anchors" class="gesture-anchor-grid" aria-label="Numeric gesture curve anchors"></div><small>Five deterministic anchors provide a non-drawing alternative for curve height and pressure.</small></details>
+                </section>
+                <section class="layer-editor" aria-label="Sound layers">
+                  <div class="score-editor-title"><div><span>Layers</span><strong id="sl-layer-title">Selected segment</strong></div><div class="score-editor-actions"><button type="button" data-workspace-pin="layers" aria-pressed="false" title="Pin layer editor">Pin</button><button id="sl-layer-add" type="button">+ Layer</button><button id="sl-layer-up" type="button" title="Move selected layer up">↑</button><button id="sl-layer-down" type="button" title="Move selected layer down">↓</button><button id="sl-layer-remove" type="button">Remove</button></div></div>
+                  <div id="sl-layer-stack" class="layer-stack"></div>
+                  <div class="layer-properties">
+                    <label>Label<input id="sl-layer-label" type="text" maxlength="80" aria-label="Selected layer semantic label"></label>
+                    <label>Source<select id="sl-layer-source" aria-label="Selected layer source"><option value="binding">Existing generator</option><option value="procedural">Procedural primitive</option><option value="noise">Noise</option><option value="contact-train">Contact train</option><option value="resonant-body">Resonant body</option><option value="accent">Accent / debris</option><option value="frozen-sample">Frozen sample</option></select></label>
+                    <label>Gain<div class="range-row"><input id="sl-layer-gain" type="range" min="0" max="2" step="0.01" aria-label="Selected layer gain"><output id="sl-layer-gain-out">1.00</output></div></label>
+                    <label>Gesture<select id="sl-layer-gesture" aria-label="Selected layer gesture"></select></label>
+                    <label id="sl-layer-source-id-wrap" hidden>Frozen source<select id="sl-layer-source-id" aria-label="Frozen source asset"></select></label>
+                  </div>
+                  <div id="sl-layer-source-params" class="layer-source-params" aria-label="Selected layer source parameters" hidden></div>
+                  <details id="sl-layer-shaping" class="layer-shaping"><summary>Envelope &amp; variation</summary><div class="layer-shaping-grid"><label>Fade in (ms)<input id="sl-layer-attack-ms" type="number" min="0" max="4000" step="5" value="0"></label><label>Fade out (ms)<input id="sl-layer-release-ms" type="number" min="0" max="4000" step="5" value="0"></label><label>Gain variation<input id="sl-layer-variation-amount" type="number" min="0" max="1" step="0.01" value="0"></label><label>Variation rate (Hz)<input id="sl-layer-variation-rate" type="number" min="0.1" max="20" step="0.1" value="4"></label><label>Seed offset<input id="sl-layer-variation-seed" type="number" min="-2147483648" max="2147483647" step="1" value="0"></label></div><small>Variation is deterministic around the layer signal. The same project seed and offset reproduce the same result.</small></details>
+                  <div class="mapping-editor-head"><span>Mappings</span><div><button id="sl-mapping-reset" type="button" title="Restore generated mappings for this semantic layer">Reset mappings</button><button id="sl-mapping-add" type="button">+ Mapping</button></div></div>
+                  <div id="sl-mapping-editor" class="mapping-editor" aria-label="Exact layer mappings"></div>
+                  <div id="sl-mapping-summary" class="mapping-summary">Mappings update with the selected layer.</div>
+                </section>
+              </div>
+              <div class="score-timeline" aria-label="Synchronized sound score timeline">
+                <div class="score-lane" data-score-lane="segments"><div class="score-lane-label"><button type="button" data-lane-toggle="segments" aria-expanded="true">Segments</button><button type="button" data-lane-pin="segments" aria-pressed="false" aria-label="Pin Segments lane">Pin</button></div><div id="sl-segment-lane" class="score-lane-track"><i class="timeline-proof-marker" title="Native proof frame"></i><b class="timeline-playhead"></b></div></div>
+                <div class="score-lane" data-score-lane="motion"><div class="score-lane-label"><button type="button" data-lane-toggle="motion" aria-expanded="true">Motion</button><button type="button" data-lane-pin="motion" aria-pressed="false" aria-label="Pin Motion lane">Pin</button></div><div class="score-lane-track motion-lane"><canvas id="sl-motion-lane" width="900" height="72" aria-label="Native motion speed"></canvas><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
+                <div class="score-lane" data-score-lane="score"><div class="score-lane-label"><button type="button" data-lane-toggle="score" aria-expanded="true">Score</button><button type="button" data-lane-pin="score" aria-pressed="false" aria-label="Pin Score lane">Pin</button></div><div id="sl-score-lane" class="score-lane-track"><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
+                <div class="score-lane" data-score-lane="spectrum"><div class="score-lane-label"><button type="button" data-lane-toggle="spectrum" aria-expanded="true">Spectrum</button><button type="button" data-lane-pin="spectrum" aria-pressed="false" aria-label="Pin Spectrum lane">Pin</button></div><div class="score-lane-track analysis-lane"><canvas id="sl-spectrogram-lane" width="900" height="96" aria-label="Spectral energy aligned to the sound score timeline"></canvas><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
+                <div class="score-lane" data-score-lane="waveform"><div class="score-lane-label"><button type="button" data-lane-toggle="waveform" aria-expanded="true">Waveform</button><button type="button" data-lane-pin="waveform" aria-pressed="false" aria-label="Pin Waveform lane">Pin</button></div><div class="score-lane-track analysis-lane"><canvas id="sl-score-waveform-lane" width="900" height="72" aria-label="Waveform aligned to the sound score timeline"></canvas><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
+                <div class="score-analysis-footer">
+                  <label>Analyze<select id="sl-analysis-source" aria-label="Audio analysis source"><option value="layer">Selected layer</option><option value="segment" selected>Selected segment</option><option value="sequence">Full Draft sequence</option><option value="published">Published</option><option value="original">Original</option></select></label>
+                  <span id="sl-analysis-version" class="score-analysis-version">Draft</span><output id="sl-analysis-summary" class="score-analysis-summary">Audio analysis appears after auditioning Draft or Published.</output>
+                </div>
+              </div>
+            </section>
           </div>
         </section>
 
         <section class="panel waveform-panel">
           <div class="panel-title waveform-title">
             <div><span>Audition</span><small id="sl-waveform-caption">Current browser preview</small></div>
-            <div class="segmented" aria-label="Audition source">
-              <button data-profile="preview" class="active">Current preview</button>
-              <button data-profile="current-master" disabled>Current canonical</button>
-              <button data-profile="current-runtime" disabled>Current runtime</button>
-              <button data-profile="master">Promoted master</button>
-              <button data-profile="runtime">Promoted runtime</button>
-            </div>
+            <span id="sl-waveform-version" class="waveform-version">Draft</span>
           </div>
           <canvas id="sl-waveform" width="900" height="180" aria-label="Sound waveform"></canvas>
           <div class="metrics">
@@ -87,8 +165,8 @@
           </div>
         </section>
 
-        <details class="panel reference-panel" data-persist-key="references">
-          <summary class="panel-title"><span>Reference sound color</span><small>approved library · perceptual axes</small></summary>
+        <details id="sl-reference-panel" class="panel reference-panel" data-persist-key="references" data-workspace-panel="references">
+          <summary class="panel-title"><span>Reference sound color</span><div class="workspace-panel-actions"><small>approved library · perceptual axes</small><button type="button" data-workspace-pin="references" aria-pressed="false" title="Pin reference browser">Pin</button></div></summary>
           <div class="reference-body">
             <div class="reference-toolbar">
               <label>X axis<select id="sl-reference-axis-x" aria-label="Reference map horizontal axis"></select></label>
@@ -105,9 +183,16 @@
           </div>
         </details>
 
-        <details class="panel capture-panel" data-persist-key="diagnostics">
-          <summary class="panel-title"><span>Telemetry & diagnostics</span><small>collapsed</small></summary>
+        <details id="sl-diagnostics-panel" class="panel capture-panel" data-persist-key="diagnostics" data-workspace-panel="diagnostics">
+          <summary class="panel-title"><span>Telemetry & diagnostics</span><div class="workspace-panel-actions"><small>collapsed</small><button type="button" data-workspace-pin="diagnostics" aria-pressed="false" title="Pin diagnostics">Pin</button></div></summary>
           <div class="diagnostics-body">
+            <div class="diagnostic-audition"><span>Technical audition sources</span><div class="segmented" aria-label="Technical audition source">
+              <button data-profile="preview" class="active">Browser preview</button>
+              <button data-profile="current-master" disabled>Current canonical</button>
+              <button data-profile="current-runtime" disabled>Current runtime</button>
+              <button data-profile="master">Promoted master</button>
+              <button data-profile="runtime">Promoted runtime</button>
+            </div></div>
             <div class="diagnostics-toolbar"><span>Exact native telemetry</span><div><button id="sl-use-capture" aria-pressed="false">Use trace</button><button id="sl-clear-capture">Clear</button><button id="sl-export-capture">Export trace</button></div></div>
             <pre id="sl-telemetry">Capture the authoritative game event; no browser collision inference is used.</pre>
             <div class="semantic-facts">
@@ -123,10 +208,10 @@
         </details>
       </section>
 
-      <aside class="sl-author panel">
+      <aside id="sl-author-panel" class="sl-author panel" data-workspace-panel="inspector">
         <div class="panel-title author-title">
           <div><span>Shape current sound</span><small id="sl-author-mode-caption">browser preview</small></div>
-          <div class="object-chip">Object <strong id="sl-object"></strong></div>
+          <div class="author-title-actions"><div class="object-chip">Object <strong id="sl-object"></strong></div><button type="button" data-workspace-pin="inspector" aria-pressed="false" title="Pin sound inspector">Pin</button></div>
         </div>
 
         <div class="author-fields focus-fields">
@@ -230,7 +315,7 @@
         </div>
 
         <section id="sl-canonical-panel" class="canonical-card" aria-label="Canonical authoring" hidden>
-          <div class="canonical-head"><strong>Canonical authoring</strong><small id="sl-service-detail">Connect by opening SoundLab through the local authoring service.</small></div>
+          <div class="canonical-head"><div><strong>Canonical authoring</strong><span id="sl-publish-audio-version" class="publish-audio-version" aria-live="polite">Listening Draft</span></div><small id="sl-service-detail">Connect by opening SoundLab through the local authoring service.</small></div>
           <div class="canonical-actions">
             <button id="sl-render-canonical" disabled>Render current</button>
             <button id="sl-render-variants" disabled>Variants</button>
@@ -239,6 +324,7 @@
             <button id="sl-promote" class="primary" disabled>Promote…</button>
           </div>
           <div id="sl-batch-strip" class="batch-strip" aria-live="polite"></div>
+          <div id="sl-publish-diff" class="publish-diff">Publish diff: no authored production changes.</div>
           <div id="sl-promotion-state" class="promotion-state">Standalone mode: canonical filesystem operations are unavailable.</div>
         </section>
         <p class="author-note">Focus mode stays browser-fast. Expert controls remain one disclosure away; connected canonical render/promotion never changes browser preview into production authority.</p>

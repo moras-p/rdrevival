@@ -3,7 +3,7 @@ import { RDX_ROM_FILENAME, loadRememberedRdxRom, rememberRdxRom, validateRdxRomB
 
 const CHECKPOINT_SLOTS = Object.freeze([0, 1, 2, 3, 4, 5, 6]);
 const CHECKPOINT_INTERVAL_FRAMES = 6;
-const DEFAULT_PREROLL_FRAMES = 24;
+const DEFAULT_PREROLL_FRAMES = 36;
 const DEFAULT_TAIL_FRAMES = 16;
 const HISTORY_FRAMES = 256;
 const GAME_FRAME_MS = 40;
@@ -225,11 +225,14 @@ export class RdrSoundLabRuntime {
     return this.replayScene(serial, { startFrame:this.scene.startFrame, endFrame:this.scene.endFrame });
   }
 
-  replayScene(serial, { startFrame, endFrame } = {}, { suppressSoundLab = false } = {}) {
+  replayScene(serial, { startFrame, endFrame } = {}, { suppressSoundLab = false, requireProof = true } = {}) {
     if (!this.preview || !this.scene || (Number(this.scene.serial) >>> 0) !== (Number(serial) >>> 0)) return false;
     const scene = this.scene;
-    const start = Math.max(scene.minFrame, Math.min(scene.proofFrame, Math.round(finite(startFrame, scene.startFrame))));
-    const end = Math.min(scene.maxFrame, Math.max(scene.proofFrame, Math.round(finite(endFrame, scene.endFrame))));
+    const requestedStart = Math.round(finite(startFrame, scene.startFrame));
+    const requestedEnd = Math.round(finite(endFrame, scene.endFrame));
+    const start = Math.max(scene.minFrame, Math.min(requireProof ? scene.proofFrame : scene.maxFrame, requestedStart));
+    const end = Math.min(scene.maxFrame, Math.max(requireProof ? scene.proofFrame : scene.minFrame, requestedEnd));
+    if (start > end) return false;
     const checkpoint = scene.checkpoint;
     this.#holdForSeek();
     if (!this.preview.bridge.debugCheckpointLoad?.(checkpoint.slot)) {
