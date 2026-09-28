@@ -1,4 +1,5 @@
 import { XrickLivePreview, LIVE_WIDTH, LIVE_HEIGHT, NATIVE_SFX_IDS } from '../juice/xrick-live-preview.js';
+import { NativeSceneRunner } from '../runtime/native-scene-runner.js';
 import { RDX_ROM_FILENAME, loadRememberedRdxRom, rememberRdxRom, validateRdxRomBytes } from '../runtime/rom-store.js';
 
 const CHECKPOINT_SLOTS = Object.freeze([0, 1, 2, 3, 4, 5, 6]);
@@ -131,29 +132,43 @@ export class RdrSoundLabRuntime {
     this.scene = null;
     this.pendingScene = null;
     this.scenePlayback = null;
+    this.sceneFixture = null;
+    this.sceneRunner = null;
     this.keyDown = event => this.preview?.keyDown(event.code);
     this.keyUp = event => this.preview?.keyUp(event.code);
   }
 
-  async start({ submap = 0, event = '', match = {}, action = 'impact', durationMs = 0, playback = '' } = {}) {
+  async start({ submap = 0, event = '', match = {}, scene = null, action = 'impact', durationMs = 0, playback = '' } = {}) {
     if (this.running) return;
-    this.target = { event:String(event || ''), mark:Number(match?.mark), actorFamily:String(match?.actorFamily || ''), action:String(action || 'impact'), playback:String(playback || ''), tailFrames:Math.max(DEFAULT_TAIL_FRAMES, Math.ceil(Math.max(0, finite(durationMs, 0)) / GAME_FRAME_MS)) };
+    const proof = scene?.proof || {};
+    this.target = { event:String(proof.event || event || ''), mark:Number(proof.mark ?? match?.mark), actorFamily:String(proof.actorFamily || match?.actorFamily || ''), action:String(action || 'impact'), playback:String(playback || ''), tailFrames:Math.max(DEFAULT_TAIL_FRAMES, Math.ceil(Math.max(0, finite(durationMs, 0)) / GAME_FRAME_MS)) };
+    this.sceneFixture = scene && typeof scene === 'object' ? scene : null;
     this.onStatus?.('Starting native runtime…');
     if (!this.preview) this.preview = await this.previewFactory.create(() => {}, () => {});
     const rom = await this.#resolveRomSource();
     await this.preview.loadRdxRom(rom.bytes);
     this.onNativeInput?.({ status:'ready', name:rom.name, source:rom.source, remembered:Boolean(rom.remembered) });
-    this.preview.setPresentation('rdx');
-    if (!this.preview.selectSubmap(submap)) throw new Error(`Native runtime could not select submap ${submap}`);
+    this.preview.setPresentation(this.sceneFixture?.presentation || 'rdx');
+    const targetSubmap = Number(this.sceneFixture?.submap ?? submap);
+    if (!this.preview.selectSubmap(targetSubmap)) throw new Error(`Native runtime could not select submap ${targetSubmap}`);
     await this.preview.resetLevelForPlaytest();
     this.#applySoundLabPresentationDefaults();
-    this.lastSerial = this.preview.bridge.soundLabEventSerial?.() || 0;
     this.#resetSceneState();
+    if (this.sceneFixture) {
+      this.sceneRunner?.stop({ discard:true });
+      this.sceneRunner = new NativeSceneRunner(this.preview);
+      this.sceneRunner.start(this.sceneFixture);
+      this.lastSerial = this.sceneRunner.baselineEventSerial;
+    } else {
+      this.sceneRunner?.stop({ discard:true });
+      this.sceneRunner = null;
+      this.lastSerial = this.preview.bridge.soundLabEventSerial?.() || 0;
+    }
     this.running = true;
     this.canvas?.addEventListener('keydown', this.keyDown);
     this.canvas?.addEventListener('keyup', this.keyUp);
     this.#loop();
-    this.onStatus?.('Native RDX simulation · authoritative timing');
+    this.onStatus?.(this.sceneRunner ? 'Capturing reviewed native scene…' : 'Native RDX simulation · authoritative timing');
   }
 
   async loadNativeInput(fileOrBytes, { name = RDX_ROM_FILENAME } = {}) {
@@ -198,10 +213,17 @@ export class RdrSoundLabRuntime {
   reset() {
     if (!this.preview) return;
     this.#releaseSceneHold();
-    this.preview.resetLevel();
-    this.#applySoundLabPresentationDefaults();
-    this.lastSerial = this.preview.bridge.soundLabEventSerial?.() || 0;
     this.#resetSceneState();
+    this.#applySoundLabPresentationDefaults();
+    if (this.sceneRunner?.baseline) {
+      this.sceneRunner.setPaused(false);
+      this.sceneRunner.restart();
+      this.lastSerial = this.sceneRunner.baselineEventSerial;
+      this.onStatus?.('Capturing reviewed native scene…');
+      return;
+    }
+    this.preview.resetLevel();
+    this.lastSerial = this.preview.bridge.soundLabEventSerial?.() || 0;
     this.preview.bridge.resumeBrowserLoop?.();
     this.onStatus?.('Native RDX simulation · authoritative timing');
   }
@@ -214,6 +236,10 @@ export class RdrSoundLabRuntime {
     this.preview?.clearKeys();
     this.#releaseSceneHold();
     this.#discardCheckpoints();
+    this.sceneRunner?.stop({ discard:true });
+    this.sceneRunner = null;
+    this.sceneFixture = null;
+    this.preview?.bridge?.setFrontendPaused?.(false);
   }
 
   canReplayEvent(serial) {
@@ -388,6 +414,7 @@ export class RdrSoundLabRuntime {
       viewport:{ width:LIVE_WIDTH, height:LIVE_HEIGHT }
     };
     this.pendingScene = null;
+    this.sceneRunner?.setPaused(true);
     this.onScene?.(this.scene);
     this.onStatus?.('Scene ready · drag the window handles to audition');
   }
@@ -401,6 +428,14 @@ export class RdrSoundLabRuntime {
   }
 
   #captureNormalFrame() {
+    if (this.sceneRunner?.active) {
+      const fixtureState = this.sceneRunner.step();
+      if (fixtureState.error) {
+        this.running = false;
+        this.onStatus?.(fixtureState.error);
+        return;
+      }
+    }
     const frame = this.preview.capture();
     this.#drawFrame(frame);
     const frameSerial = finite(frame?.snapshot?.frameSerial, -1);
@@ -408,13 +443,14 @@ export class RdrSoundLabRuntime {
     const events = this.preview.bridge.soundLabEventsSince?.(this.lastSerial, 64) || [];
     for (const event of events) {
       this.lastSerial = event.serial;
-      const checkpoint = this.#beginScene(event, frame.snapshot, frameSerial);
       const enriched = {
         ...event,
-        actor:{ ...event.actor, family:this.target.actorFamily || undefined },
-        replayable:!!checkpoint,
-        preRollFrames:checkpoint ? Math.max(0, frameSerial - checkpoint.frameSerial) : 0
+        actor:{ ...event.actor, family:event.actor?.family || this.target.actorFamily || undefined }
       };
+      this.sceneRunner?.noteEvent(enriched);
+      const checkpoint = this.#beginScene(enriched, frame.snapshot, frameSerial);
+      enriched.replayable = !!checkpoint;
+      enriched.preRollFrames = checkpoint ? Math.max(0, frameSerial - checkpoint.frameSerial) : 0;
       this.onEvent?.(enriched, frame.snapshot);
     }
     if (frameSerial >= 0) this.#saveCheckpoint(frameSerial);
