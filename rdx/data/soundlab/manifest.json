@@ -169,7 +169,7 @@
       "strength": 0.62,
       "profile": "master",
       "file": "audio/boulder_roll_0.wav",
-      "jobKey": "c1080c95b72a65e51d73f1911cc67ee52443d4f2350921bbfef0a12440bae246",
+      "jobKey": "d28e747ff6ec721a77e7fc208957f2e1c285040e1f98e9df6367202f8642dedc",
       "sha256": "a2221d0b8f9deb49353e15fb85c9705ccd59cc48cb1cf9e964e76bda08576d74",
       "sampleRate": 48000,
       "encoding": "pcm16",
@@ -192,7 +192,7 @@
       "strength": 0.62,
       "profile": "runtime",
       "file": "runtime/boulder_roll_0.wav",
-      "jobKey": "2bffa2d9e673f2f38ee4d8809ab3ba16fa92105ce60f233757e0bde92107a972",
+      "jobKey": "2d495ddf06cd9339725e2e5210295623be83da18ef3a69066cb578496a026bb2",
       "sha256": "46e780a8dbc6f858dfbf33133976085ccbbf0efa4cb191fb495a4bc3f9a6cd07",
       "sampleRate": 22050,
       "encoding": "u8",
@@ -206,7 +206,7 @@
       "strength": 0.62,
       "profile": "master",
       "file": "audio/boulder_roll_1.wav",
-      "jobKey": "04296e0085ae781446f05d39e1629f6437c2f2434a4a1cbb770a8523107a4e7e",
+      "jobKey": "6b1df150902d9ab1fc36de2736684f758293ebf90548b021613b938572494c6e",
       "sha256": "7da255484bafc84c2e6655b20cdc27922da022cd9baeb3a8caf1b9574d6d72bc",
       "sampleRate": 48000,
       "encoding": "pcm16",
@@ -229,7 +229,7 @@
       "strength": 0.62,
       "profile": "runtime",
       "file": "runtime/boulder_roll_1.wav",
-      "jobKey": "c998fc83aebf4fb5547859820c9bc12dd8b161e5a1a06f3481dd91fa171064ac",
+      "jobKey": "ff562fa506393bab127f8b6f6096a649ffb1d5cb72ef23a7cd81e94cf485dbe8",
       "sha256": "86a74a29108c1e051439eb35d850bf436ba2863c1be64374436bbb923ca1c95e",
       "sampleRate": 22050,
       "encoding": "u8",
@@ -243,7 +243,7 @@
       "strength": 0.62,
       "profile": "master",
       "file": "audio/boulder_roll_2.wav",
-      "jobKey": "ee545fc374b75181b8ee59a2a0f7c2825f37d4841c6fdc811d6f15b9affe2942",
+      "jobKey": "4029bff1dc4ac1447fef37c234e30a3940cf0ba5045163c02ad8d056b401f3b2",
       "sha256": "1171b9a34365d27cb4040ff2377f3a4f3d210f5a2751c46a7462a5b1f03ac09b",
       "sampleRate": 48000,
       "encoding": "pcm16",
@@ -266,7 +266,7 @@
       "strength": 0.62,
       "profile": "runtime",
       "file": "runtime/boulder_roll_2.wav",
-      "jobKey": "03f5a86ddc1c0b4e9e3de2463fdac1b601ed6064f977dbd1ce38077be938bd7a",
+      "jobKey": "6b7021594f462428e1df20df6d61086ffdba6bfaebc29ac31b4d29dea46b343d",
       "sha256": "c54ec0e74f59f00fdf9753d793afe32ebdffebbc3dcc95bab466ac24b6f65f45",
       "sampleRate": 22050,
       "encoding": "u8",
@@ -280,7 +280,7 @@
       "strength": 0.62,
       "profile": "master",
       "file": "audio/boulder_roll_3.wav",
-      "jobKey": "6568806a00bdbc344551f6afee8621223aa6d279bc78184f35e3a86ca620f37f",
+      "jobKey": "94e5b02f0065ebad1e7141d37ff895223550878f18ed68dee8bc404022317ade",
       "sha256": "abcb06788ef00ed4d3b8e57604de3e33195681b4912126678c7d85fbe94fdac6",
       "sampleRate": 48000,
       "encoding": "pcm16",
@@ -303,7 +303,7 @@
       "strength": 0.62,
       "profile": "runtime",
       "file": "runtime/boulder_roll_3.wav",
-      "jobKey": "c6e1b08cd60b62e9f380a36f4e77165f5f4b411a9201c48266f15cb49c86aa43",
+      "jobKey": "4929ed50627a91dd6912099f9a6bb476a9e41f6f08bc789b441e386aa617f119",
       "sha256": "bbe0e5eaf2eb1da4239f00be622cc26fecf483d91941dbcceaf82a1855bd379a",
       "sampleRate": 22050,
       "encoding": "u8",
@@ -1695,7 +1695,29 @@
       "style": "rdr",
       "variants": 4,
       "strength": 0.62,
-      "telemetry": "telemetry/sm00-boulder-opening-roll-fixture.json"
+      "telemetry": "telemetry/sm00-boulder-opening-roll-fixture.json",
+      "scene": {
+        "id": "sm00-boulder-opening-roll",
+        "submap": 0,
+        "presentation": "rdx",
+        "preStageFrames": 12,
+        "controls": [
+          {
+            "from": 0,
+            "to": 179,
+            "mask": 1
+          }
+        ],
+        "proof": {
+          "event": "boulder.roll",
+          "submap": 0,
+          "mark": 1,
+          "actorFamily": "sm00-boulder",
+          "maxFrames": 180
+        },
+        "postEventFrames": 96,
+        "loop": true
+      }
     },
     {
       "id": "sm00-rick-step",

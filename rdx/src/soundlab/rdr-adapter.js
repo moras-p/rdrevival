@@ -259,7 +259,7 @@ export class RdrSoundLabRuntime {
     return this.replayScene(serial, { startFrame:this.scene.startFrame, endFrame:this.scene.endFrame });
   }
 
-  replayScene(serial, { startFrame, endFrame } = {}, { suppressSoundLab = false, requireProof = true } = {}) {
+  replayScene(serial, { startFrame, endFrame } = {}, { suppressSoundLab = false, suppressNativeSfx = false, requireProof = true } = {}) {
     if (!this.preview || !this.scene || (Number(this.scene.serial) >>> 0) !== (Number(serial) >>> 0)) return false;
     const scene = this.scene;
     const requestedStart = Math.round(finite(startFrame, scene.startFrame));
@@ -289,13 +289,15 @@ export class RdrSoundLabRuntime {
     }
     this.#drawFrame(frame);
 
-    /* Seeking is intentionally silent. Clear every logical native SFX suppression
-     * only when the selected scene window begins, so trap activation, earlier
-     * impacts and other pre-window requests cannot burst out at the start handle. */
-    this.#suppressNativeSfx(false);
+    /* Seeking is intentionally silent. Draft replay also keeps every native
+     * gameplay SFX suppressed for the whole selected window: the browser draft
+     * is authored audio, not a recording or a layer over incidental footsteps,
+     * triggers, or earlier game voices. Published/Original may opt back into
+     * native SFX explicitly through their replay route. */
+    this.#suppressNativeSfx(!!suppressNativeSfx);
     this.#setSoundLabRuntimeSuppressed(!!suppressSoundLab);
     this.preview.bridge.setAiAudioHold?.(false);
-    this.scenePlayback = { serial:Number(serial) >>> 0, startFrame:start, endFrame:end, frameSerial, lastStep:this.now() - GAME_FRAME_MS, suppressSoundLab:!!suppressSoundLab, proofNotified:false };
+    this.scenePlayback = { serial:Number(serial) >>> 0, startFrame:start, endFrame:end, frameSerial, lastStep:this.now() - GAME_FRAME_MS, suppressSoundLab:!!suppressSoundLab, suppressNativeSfx:!!suppressNativeSfx, proofNotified:false };
     this.onFrame?.({ frame, scene:{ ...scene, startFrame:start, endFrame:end }, replay:true });
     this.onReplay?.({ phase:'start', serial:Number(serial) >>> 0, startFrame:start, endFrame:end, proofFrame:scene.proofFrame, frameSerial, draft:!!suppressSoundLab });
     this.onStatus?.(`Playing scene window · ${start}–${end}f`);
@@ -499,18 +501,6 @@ export class RdrSoundLabRuntime {
     if (now - playback.lastStep < GAME_FRAME_MS) return;
     playback.lastStep = now;
     const previousFrame = playback.frameSerial;
-    const entersProof = playback.suppressSoundLab && !playback.proofNotified &&
-      previousFrame < this.scene.proofFrame && previousFrame + 1 >= this.scene.proofFrame;
-    if (entersProof) {
-      /* A draft audition owns the selected contact and its tail. Stop any
-       * pre-contact native SFX still ringing, then suppress new native SFX
-       * through the authored end frame. This prevents trigger/bounce voices or
-       * a promoted variant from coloring/doubling the deterministic draft.
-       * Music is not stopped by the native SFX flush. */
-      this.preview.bridge.setAiAudioHold?.(true);
-      this.#suppressNativeSfx(true);
-      this.preview.bridge.setAiAudioHold?.(false);
-    }
     this.preview.bridge.debugForceBrowserFrame?.();
     const frame = this.preview.capture();
     playback.frameSerial = finite(frame?.snapshot?.frameSerial, playback.frameSerial + 1);
