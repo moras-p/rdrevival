@@ -20,11 +20,11 @@
       "nativeControllerAuthority": "xrick-runtime"
     },
     "fingerprints": {
-      "adjustments": "7b23ed7cdefc4ee4d55eee563d38e15331d585f6ab0db149c7ba84366bea14bc",
+      "adjustments": "9ffbf9ad390f1940044d6746e2cd3f70f993dbbd999f7e562cc0e3b570a73d39",
       "alignment": "5d5e1c46bc808f5279f0439b20b0482cd104e3dfb8fb175d598faf98605cfb94",
       "presentationDepth": "68941259491bf524afe5d372142658d52927be64d03c245718649e2f5b88067b",
-      "resolved": "0b080e1ba1f4f88ea712c7560f930f4f19b1dd1897c6b29e8c9f928d0b179721",
-      "semantic": "37908f100a5d49a7d52a8c9924d9dc4608a7f788d0e6248547fc35fe65a43dae",
+      "resolved": "1bc130e90a45eac47b122309c94f0b5aa6f54a0c1ee8cbcb931c15eb21b7c3e7",
+      "semantic": "ee6d00d6df0fa9da1f03816f9ee90a65ce05da2957fea1809f6d352f417b67b9",
       "sourceClassic": "6f4c80eb5111a471e02719643a4752e569656ad50766e2737793d7a3a66b7440",
       "sourceRdx": "80aa7238e4e4629f4f3152884ef6985a6ace2d2a467d04db0ec1d2c8cd22bfa1",
       "structural": "44cd39ed67cfb0910ab49082fafeed2438798be474ab7b60f87f8533d2d1c2de",
@@ -185,6 +185,21 @@
             "property": "visualAnchor",
             "provenance": "User-reviewed activated-trap parity audit 2026-09-10: align the selected Classic hazard/visual edges after room alignment while preserving the Classic controller and trigger semantics.",
             "target": "classic:SM0F:mark:181"
+          },
+          {
+            "id": "SM0F.actor.mark-187.trigger-bounds",
+            "operation": {
+              "rect": [
+                192,
+                723,
+                40,
+                32
+              ],
+              "type": "set-rect"
+            },
+            "property": "triggerBounds",
+            "provenance": "User-reviewed in-game dynamite reach 2026-09-28: PN24 remains visibly within the explosion at the platform's left edge, but the aligned Classic trigger starts at x=200. Extend the bomb activation box one 8 px gameplay cell left while preserving its existing right, top, and bottom edges.",
+            "target": "SM0F.actor.mark-187"
           }
         ],
         "schema": "rdr.adjustments_resolved.v1"
@@ -2377,7 +2392,22 @@
             }
           },
           {
-            "adjustmentsApplied": [],
+            "adjustmentsApplied": [
+              {
+                "id": "SM0F.actor.mark-187.trigger-bounds",
+                "operation": {
+                  "rect": [
+                    192,
+                    723,
+                    40,
+                    32
+                  ],
+                  "type": "set-rect"
+                },
+                "property": "triggerBounds",
+                "provenance": "User-reviewed in-game dynamite reach 2026-09-28: PN24 remains visibly within the explosion at the platform's left edge, but the aligned Classic trigger starts at x=200. Extend the bomb activation box one 8 px gameplay cell left while preserving its existing right, top, and bottom edges."
+              }
+            ],
             "alignedBaseline": {
               "authority": "SM0F.whole-room",
               "origin": [
@@ -2463,9 +2493,9 @@
               ],
               "supportBounds": null,
               "triggerBounds": [
-                200,
+                192,
                 723,
-                32,
+                40,
                 32
               ],
               "visualAnchor": [

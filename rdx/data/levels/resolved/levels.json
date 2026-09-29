@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "1b47f34a5d63b7dbf163d8ec6e4675c37371f8b8eb228a3979f386c79ef6023a",
+  "authoredLayersFingerprint": "39acf324a1ed8c3b837e663547b4152fa19f3fa1a5b10f18052277e92b8dcbc5",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -13305,6 +13305,22 @@
           "submap": 11
         },
         {
+          "action": "open",
+          "authority": "user-reviewed-sm0e-mark166-hidden-hazard",
+          "g8Bounds": [
+            16,
+            16,
+            4,
+            1
+          ],
+          "id": "md0018-open-mark166-phantom-ceiling-hazard-16-19-16",
+          "mapId": 18,
+          "provenance": "User-reported SM0E/MD0018 mark 166 moving-platform review: when PN22 descends it reveals four lethal g8 cells at x=16..19,y=16 with no RDX hazard artwork. The cells sit in MT81/ML01+ML02 feature-specific descriptors whose aligned Classic 2x2 masks are fully open; the lethal row came only from the unresolved descriptor path falling back to the unshifted Classic ceiling-spike row. Open exactly those four top quadrants and leave the descriptor cells' already-open lower quadrants unchanged.",
+          "reason": "Remove the four phantom lethal cells hidden behind mark 166 at rest; the moving platform exposes open space, not a ceiling hazard.",
+          "sourceKey": "geometry:rdx:g8:{16-19}:16",
+          "submap": 14
+        },
+        {
           "action": "lethal",
           "authority": "level-editor-reviewed-fix",
           "g8Bounds": [
@@ -14182,14 +14198,14 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "1b47f34a5d63b7dbf163d8ec6e4675c37371f8b8eb228a3979f386c79ef6023a",
+    "authoredLayers": "39acf324a1ed8c3b837e663547b4152fa19f3fa1a5b10f18052277e92b8dcbc5",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "a610f689075a8bc72efeacab618bb8a83c73fea11e71a6aa5830bd1b23fab383",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "90b7c777c421f34f5a4465c1b500ac8254b185eb590256be5b0edf1769f48bd5",
-    "resolved32": 3008063754,
-    "runtimeSource": "aa3273ac13b033ec62a67c50dd124de4bab888809a156d50a51ca7cb6533e0d0",
-    "runtimeSource32": 551864855,
+    "resolved": "b1ccf6f3ef957c467a80ad953bbc126705d40f2c93a60a4e7cf00cf9647977b3",
+    "resolved32": 4237452751,
+    "runtimeSource": "6548c236c6443589649cf0290f47b8ced25d3beb2ea727d526487b736236d677",
+    "runtimeSource32": 1657875036,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -88434,12 +88450,12 @@
         "adjustments": "d5b035d1d560f2f3e66195171d9a2bab4521ce6f4d85a00464fd76e5bca7ddae",
         "alignment": "1a1968a9a86217c5f5bee566211ac63e459198525b890cd5755b542a7c7fbbcc",
         "presentationDepth": "c7a5a9ba9f14695412faa86ce12c4f993bf532aa8b128f750edd5800d2f9c202",
-        "resolved": "18909e5c18e745899a28f133b3928743b9a09fe331c3104de63290c6f1d3e7be",
+        "resolved": "38da1f8df4e17a50c4b51cc81c851271a2e3022ffc3893d8faa78315fa9af19a",
         "reviewed": "237ba64338903292d0cfc6f30f5b43b3838555ff34617c8e8003729d1b56bd05",
         "semantic": "430dacebcd37a8b4a842a00bf8f46ddf8c2a878fc51047a92889dcf4b6f3f9a3",
         "sourceClassic": "f181df15c7c230e06e94c3bcb8e8bb7409395b226799a329c6b6175437626bf5",
         "sourceRdx": "97f9547c713b4a4a504b8e004c017f84988a563c255d2683a737179f8c398408",
-        "structural": "9a67f3f6ad8d14e4cde4964c11edd96c733378c086d6621c9b957dcadd4ebaf7",
+        "structural": "9c94a8b2da439e48b2c377983011987760559c281d299fec5768385ad63b6e35",
         "transitions": "6745013f4655da57fcfd0c3df61e5489e296c7e08e7bffae0050fff046af4363"
       },
       "group": "egypt",
@@ -93319,6 +93335,21 @@
               "sourceRef": "rdx:MD0018:actor:17:spawn:13",
               "spawnIndex": 13,
               "type": "rdx-spawn-suppression"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-sm0e-mark166-hidden-hazard",
+              "g8Bounds": [
+                16,
+                16,
+                4,
+                1
+              ],
+              "id": "md0018-open-mark166-phantom-ceiling-hazard-16-19-16",
+              "provenance": "User-reported SM0E/MD0018 mark 166 moving-platform review: when PN22 descends it reveals four lethal g8 cells at x=16..19,y=16 with no RDX hazard artwork. The cells sit in MT81/ML01+ML02 feature-specific descriptors whose aligned Classic 2x2 masks are fully open; the lethal row came only from the unresolved descriptor path falling back to the unshifted Classic ceiling-spike row. Open exactly those four top quadrants and leave the descriptor cells' already-open lower quadrants unchanged.",
+              "reason": "Remove the four phantom lethal cells hidden behind mark 166 at rest; the moving platform exposes open space, not a ceiling hazard.",
+              "sourceKey": "geometry:rdx:g8:{16-19}:16",
+              "type": "gameplay-cell-override"
             }
           ],
           "schema": "rdr.structural_corrections_resolved.v1"
@@ -93420,11 +93451,11 @@
         "nativeControllerAuthority": "xrick-runtime"
       },
       "fingerprints": {
-        "adjustments": "7b23ed7cdefc4ee4d55eee563d38e15331d585f6ab0db149c7ba84366bea14bc",
+        "adjustments": "9ffbf9ad390f1940044d6746e2cd3f70f993dbbd999f7e562cc0e3b570a73d39",
         "alignment": "5d5e1c46bc808f5279f0439b20b0482cd104e3dfb8fb175d598faf98605cfb94",
         "presentationDepth": "68941259491bf524afe5d372142658d52927be64d03c245718649e2f5b88067b",
-        "resolved": "0b080e1ba1f4f88ea712c7560f930f4f19b1dd1897c6b29e8c9f928d0b179721",
-        "semantic": "37908f100a5d49a7d52a8c9924d9dc4608a7f788d0e6248547fc35fe65a43dae",
+        "resolved": "1bc130e90a45eac47b122309c94f0b5aa6f54a0c1ee8cbcb931c15eb21b7c3e7",
+        "semantic": "ee6d00d6df0fa9da1f03816f9ee90a65ce05da2957fea1809f6d352f417b67b9",
         "sourceClassic": "6f4c80eb5111a471e02719643a4752e569656ad50766e2737793d7a3a66b7440",
         "sourceRdx": "80aa7238e4e4629f4f3152884ef6985a6ace2d2a467d04db0ec1d2c8cd22bfa1",
         "structural": "44cd39ed67cfb0910ab49082fafeed2438798be474ab7b60f87f8533d2d1c2de",
@@ -93585,6 +93616,21 @@
               "property": "visualAnchor",
               "provenance": "User-reviewed activated-trap parity audit 2026-09-10: align the selected Classic hazard/visual edges after room alignment while preserving the Classic controller and trigger semantics.",
               "target": "classic:SM0F:mark:181"
+            },
+            {
+              "id": "SM0F.actor.mark-187.trigger-bounds",
+              "operation": {
+                "rect": [
+                  192,
+                  723,
+                  40,
+                  32
+                ],
+                "type": "set-rect"
+              },
+              "property": "triggerBounds",
+              "provenance": "User-reviewed in-game dynamite reach 2026-09-28: PN24 remains visibly within the explosion at the platform's left edge, but the aligned Classic trigger starts at x=200. Extend the bomb activation box one 8 px gameplay cell left while preserving its existing right, top, and bottom edges.",
+              "target": "SM0F.actor.mark-187"
             }
           ],
           "schema": "rdr.adjustments_resolved.v1"
@@ -95777,7 +95823,22 @@
               }
             },
             {
-              "adjustmentsApplied": [],
+              "adjustmentsApplied": [
+                {
+                  "id": "SM0F.actor.mark-187.trigger-bounds",
+                  "operation": {
+                    "rect": [
+                      192,
+                      723,
+                      40,
+                      32
+                    ],
+                    "type": "set-rect"
+                  },
+                  "property": "triggerBounds",
+                  "provenance": "User-reviewed in-game dynamite reach 2026-09-28: PN24 remains visibly within the explosion at the platform's left edge, but the aligned Classic trigger starts at x=200. Extend the bomb activation box one 8 px gameplay cell left while preserving its existing right, top, and bottom edges."
+                }
+              ],
               "alignedBaseline": {
                 "authority": "SM0F.whole-room",
                 "origin": [
@@ -95863,9 +95924,9 @@
                 ],
                 "supportBounds": null,
                 "triggerBounds": [
-                  200,
+                  192,
                   723,
-                  32,
+                  40,
                   32
                 ],
                 "visualAnchor": [
@@ -111328,9 +111389,9 @@
         "adjustments": "2a518c6c059529583b97bafede6877c9998e37943507a5b74e920866fdd8c071",
         "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
         "presentationDepth": "8f4aae003a5d41b3e6964ed9ee4e43d4ddea232cc6ef2439744ec0fa47c81d23",
-        "resolved": "025a079db291e21700527abb473f4f504f37f58951570c48b1740a8b2f7a97e9",
+        "resolved": "6bd4f6b4752ea033366bca91b984a29c16d5f2259abf17e5925d5ba838e6cc71",
         "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
-        "semantic": "071bdaf94d6b31b6cb6347f8a74c9be684fa72bd54a976ab60fd45fe2db90af4",
+        "semantic": "9e4565abbb7327b8b1a93923e7ddb77a3eeb741bb8f725b6a654b065eb662e59",
         "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
         "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
         "structural": "599dce63b1e7b6dec9fd0a3fa21bf76d7ee88a197fd5187e28c64fc1653ecc9b",
@@ -114690,7 +114751,8 @@
               },
               "evidence": [
                 "RDX contains the contiguous eight-cell floor-spike map-art run g8:8..15:81 / px [64,648,64,8], composed from Plane-A spike teeth over its Plane-B underlay; together they are the sole visible spike representation.",
-                "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle."
+                "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle.",
+                "When mark239 retracts the run, Plane B restores the reviewed clean-brick tiles from g8:8..15:77, exactly four 8px rows above the spike row, so the mortar-line cadence continues without spike-shadow pixels."
               ],
               "family": "egypt-static-map-trap",
               "featureMatch": {
@@ -114738,6 +114800,76 @@
                   "visible": true
                 },
                 "inactive": {
+                  "backgroundRestore": {
+                    "authority": "reviewed-clean-background-tiles",
+                    "plane": "B",
+                    "tiles": [
+                      {
+                        "globalTile": 7612,
+                        "offset": [
+                          0,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 8740,
+                        "offset": [
+                          8,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 7612,
+                        "offset": [
+                          16,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 7612,
+                        "offset": [
+                          24,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 7612,
+                        "offset": [
+                          32,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 8740,
+                        "offset": [
+                          40,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 7612,
+                        "offset": [
+                          48,
+                          0
+                        ],
+                        "paletteLine": 2
+                      },
+                      {
+                        "globalTile": 7612,
+                        "offset": [
+                          56,
+                          0
+                        ],
+                        "paletteLine": 2
+                      }
+                    ]
+                  },
                   "position": [
                     64,
                     648
@@ -188269,7 +188401,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "aa3273ac13b033ec62a67c50dd124de4bab888809a156d50a51ca7cb6533e0d0",
+  "runtimeSourceFingerprint": "6548c236c6443589649cf0290f47b8ced25d3beb2ea727d526487b736236d677",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {

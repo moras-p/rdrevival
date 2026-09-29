@@ -179,8 +179,17 @@ export function statefulEmbeddedMapArtSuppressions(registry, submap, mapId, nati
     if (!bounds || bounds.length !== 4 || bounds.some(value => !Number.isFinite(value)) || bounds[2] <= 0 || bounds[3] <= 0) continue;
     const planes = Array.isArray(activeVisual?.planes)
       ? [...new Set(activeVisual.planes.map(value => String(value).toUpperCase()))].filter(value => value === 'A' || value === 'B') : [];
+    const restore = trap.visuals?.inactive?.backgroundRestore || null;
+    const restoreTiles = Array.isArray(restore?.tiles) ? restore.tiles.map(tile => Object.freeze({
+      offset:Object.freeze(Array.isArray(tile?.offset) ? tile.offset.map(Number) : []),
+      globalTile:Number(tile?.globalTile), paletteLine:Number(tile?.paletteLine || 0),
+      hFlip:tile?.hFlip === true, vFlip:tile?.vFlip === true
+    })) : [];
+    const backgroundRestore = String(restore?.plane || '').toUpperCase() === 'B' && restoreTiles.length
+      ? Object.freeze({ tiles:Object.freeze(restoreTiles) }) : null;
     for (const plane of planes) out.push(Object.freeze({
-      trapId:String(trap.id || ''), sourceMark, x:bounds[0], y:bounds[1], width:bounds[2], height:bounds[3], plane
+      trapId:String(trap.id || ''), sourceMark, x:bounds[0], y:bounds[1], width:bounds[2], height:bounds[3], plane,
+      ...(plane === 'B' && backgroundRestore ? { backgroundRestore } : {})
     }));
   }
   return Object.freeze(out);
@@ -409,7 +418,16 @@ export function staticLayers(phase = 0) {
   for (const suppression of lifecycleSuppressions) {
     const local = { x:suppression.x - viewport.x, y:suppression.y - viewport.y,
       width:suppression.width, height:suppression.height };
-    if (suppression.plane === 'B') fillRectColor(backgroundPixels, local, palette[0] || [0,0,0,255]);
+    if (suppression.plane === 'B') {
+      fillRectColor(backgroundPixels, local, palette[0] || [0,0,0,255]);
+      for (const tile of suppression.backgroundRestore?.tiles || []) {
+        const resolved = this.mapDecoder.resolveGlobalTile(tile.globalTile);
+        if (!resolved?.tileBytes || tile.offset.length !== 2) continue;
+        drawMegaDriveTile(backgroundPixels, resolved.tileBytes, suppression.x + tile.offset[0], suppression.y + tile.offset[1], palette, {
+          paletteLine:tile.paletteLine, hFlip:tile.hFlip, vFlip:tile.vFlip, transparentZero:false
+        });
+      }
+    }
     if (suppression.plane === 'A') clearRect(foregroundPixels, local);
   }
   }

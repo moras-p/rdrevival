@@ -23,9 +23,9 @@
       "adjustments": "2a518c6c059529583b97bafede6877c9998e37943507a5b74e920866fdd8c071",
       "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
       "presentationDepth": "8f4aae003a5d41b3e6964ed9ee4e43d4ddea232cc6ef2439744ec0fa47c81d23",
-      "resolved": "025a079db291e21700527abb473f4f504f37f58951570c48b1740a8b2f7a97e9",
+      "resolved": "6bd4f6b4752ea033366bca91b984a29c16d5f2259abf17e5925d5ba838e6cc71",
       "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
-      "semantic": "071bdaf94d6b31b6cb6347f8a74c9be684fa72bd54a976ab60fd45fe2db90af4",
+      "semantic": "9e4565abbb7327b8b1a93923e7ddb77a3eeb741bb8f725b6a654b065eb662e59",
       "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
       "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
       "structural": "599dce63b1e7b6dec9fd0a3fa21bf76d7ee88a197fd5187e28c64fc1653ecc9b",
@@ -3385,7 +3385,8 @@
             },
             "evidence": [
               "RDX contains the contiguous eight-cell floor-spike map-art run g8:8..15:81 / px [64,648,64,8], composed from Plane-A spike teeth over its Plane-B underlay; together they are the sole visible spike representation.",
-              "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle."
+              "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle.",
+              "When mark239 retracts the run, Plane B restores the reviewed clean-brick tiles from g8:8..15:77, exactly four 8px rows above the spike row, so the mortar-line cadence continues without spike-shadow pixels."
             ],
             "family": "egypt-static-map-trap",
             "featureMatch": {
@@ -3433,6 +3434,76 @@
                 "visible": true
               },
               "inactive": {
+                "backgroundRestore": {
+                  "authority": "reviewed-clean-background-tiles",
+                  "plane": "B",
+                  "tiles": [
+                    {
+                      "globalTile": 7612,
+                      "offset": [
+                        0,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 8740,
+                      "offset": [
+                        8,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 7612,
+                      "offset": [
+                        16,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 7612,
+                      "offset": [
+                        24,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 7612,
+                      "offset": [
+                        32,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 8740,
+                      "offset": [
+                        40,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 7612,
+                      "offset": [
+                        48,
+                        0
+                      ],
+                      "paletteLine": 2
+                    },
+                    {
+                      "globalTile": 7612,
+                      "offset": [
+                        56,
+                        0
+                      ],
+                      "paletteLine": 2
+                    }
+                  ]
+                },
                 "position": [
                   64,
                   648

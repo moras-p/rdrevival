@@ -5145,7 +5145,8 @@
           },
           "evidence": [
             "RDX contains the contiguous eight-cell floor-spike map-art run g8:8..15:81 / px [64,648,64,8], composed from Plane-A spike teeth over its Plane-B underlay; together they are the sole visible spike representation.",
-            "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle."
+            "Classic marks238/239 remain native mechanism sources only; mark239 owns deactivation of the complete A+B embedded run so visual visibility, collision diagnostics and lethality share one lifecycle.",
+            "When mark239 retracts the run, Plane B restores the reviewed clean-brick tiles from g8:8..15:77, exactly four 8px rows above the spike row, so the mortar-line cadence continues without spike-shadow pixels."
           ],
           "family": "egypt-static-map-trap",
           "featureMatch": {
@@ -5192,6 +5193,76 @@
               "visible": true
             },
             "inactive": {
+              "backgroundRestore": {
+                "authority": "reviewed-clean-background-tiles",
+                "plane": "B",
+                "tiles": [
+                  {
+                    "globalTile": 7612,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 8740,
+                    "offset": [
+                      8,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 7612,
+                    "offset": [
+                      16,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 7612,
+                    "offset": [
+                      24,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 7612,
+                    "offset": [
+                      32,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 8740,
+                    "offset": [
+                      40,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 7612,
+                    "offset": [
+                      48,
+                      0
+                    ],
+                    "paletteLine": 2
+                  },
+                  {
+                    "globalTile": 7612,
+                    "offset": [
+                      56,
+                      0
+                    ],
+                    "paletteLine": 2
+                  }
+                ]
+              },
               "position": [
                 64,
                 648
@@ -6082,6 +6153,6 @@
     }
   ],
   "schema": "rdx.trap_registry.v1",
-  "sourceSha256": "1e6217633bfa0ec769dd108a76999dff39d4290dff5e1eb1804e2c5771260cee",
+  "sourceSha256": "0116196496319a68546fd7d200068c7f686d86fd9759cbdcaf741547bd0f838a",
   "version": "2.1.104"
 }

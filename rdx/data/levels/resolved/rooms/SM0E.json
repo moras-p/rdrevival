@@ -24,12 +24,12 @@
       "adjustments": "d5b035d1d560f2f3e66195171d9a2bab4521ce6f4d85a00464fd76e5bca7ddae",
       "alignment": "1a1968a9a86217c5f5bee566211ac63e459198525b890cd5755b542a7c7fbbcc",
       "presentationDepth": "c7a5a9ba9f14695412faa86ce12c4f993bf532aa8b128f750edd5800d2f9c202",
-      "resolved": "18909e5c18e745899a28f133b3928743b9a09fe331c3104de63290c6f1d3e7be",
+      "resolved": "38da1f8df4e17a50c4b51cc81c851271a2e3022ffc3893d8faa78315fa9af19a",
       "reviewed": "237ba64338903292d0cfc6f30f5b43b3838555ff34617c8e8003729d1b56bd05",
       "semantic": "430dacebcd37a8b4a842a00bf8f46ddf8c2a878fc51047a92889dcf4b6f3f9a3",
       "sourceClassic": "f181df15c7c230e06e94c3bcb8e8bb7409395b226799a329c6b6175437626bf5",
       "sourceRdx": "97f9547c713b4a4a504b8e004c017f84988a563c255d2683a737179f8c398408",
-      "structural": "9a67f3f6ad8d14e4cde4964c11edd96c733378c086d6621c9b957dcadd4ebaf7",
+      "structural": "9c94a8b2da439e48b2c377983011987760559c281d299fec5768385ad63b6e35",
       "transitions": "6745013f4655da57fcfd0c3df61e5489e296c7e08e7bffae0050fff046af4363"
     },
     "group": "egypt",
@@ -4909,6 +4909,21 @@
             "sourceRef": "rdx:MD0018:actor:17:spawn:13",
             "spawnIndex": 13,
             "type": "rdx-spawn-suppression"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-sm0e-mark166-hidden-hazard",
+            "g8Bounds": [
+              16,
+              16,
+              4,
+              1
+            ],
+            "id": "md0018-open-mark166-phantom-ceiling-hazard-16-19-16",
+            "provenance": "User-reported SM0E/MD0018 mark 166 moving-platform review: when PN22 descends it reveals four lethal g8 cells at x=16..19,y=16 with no RDX hazard artwork. The cells sit in MT81/ML01+ML02 feature-specific descriptors whose aligned Classic 2x2 masks are fully open; the lethal row came only from the unresolved descriptor path falling back to the unshifted Classic ceiling-spike row. Open exactly those four top quadrants and leave the descriptor cells' already-open lower quadrants unchanged.",
+            "reason": "Remove the four phantom lethal cells hidden behind mark 166 at rest; the moving platform exposes open space, not a ceiling hazard.",
+            "sourceKey": "geometry:rdx:g8:{16-19}:16",
+            "type": "gameplay-cell-override"
           }
         ],
         "schema": "rdr.structural_corrections_resolved.v1"
