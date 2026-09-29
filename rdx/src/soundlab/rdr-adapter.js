@@ -140,35 +140,40 @@ export class RdrSoundLabRuntime {
 
   async start({ submap = 0, event = '', match = {}, scene = null, action = 'impact', durationMs = 0, playback = '' } = {}) {
     if (this.running) return;
-    const proof = scene?.proof || {};
-    this.target = { event:String(proof.event || event || ''), mark:Number(proof.mark ?? match?.mark), actorFamily:String(proof.actorFamily || match?.actorFamily || ''), action:String(action || 'impact'), playback:String(playback || ''), tailFrames:Math.max(DEFAULT_TAIL_FRAMES, Math.ceil(Math.max(0, finite(durationMs, 0)) / GAME_FRAME_MS)) };
-    this.sceneFixture = scene && typeof scene === 'object' ? scene : null;
-    this.onStatus?.('Starting native runtime…');
-    if (!this.preview) this.preview = await this.previewFactory.create(() => {}, () => {});
-    const rom = await this.#resolveRomSource();
-    await this.preview.loadRdxRom(rom.bytes);
-    this.onNativeInput?.({ status:'ready', name:rom.name, source:rom.source, remembered:Boolean(rom.remembered) });
-    this.preview.setPresentation(this.sceneFixture?.presentation || 'rdx');
-    const targetSubmap = Number(this.sceneFixture?.submap ?? submap);
-    if (!this.preview.selectSubmap(targetSubmap)) throw new Error(`Native runtime could not select submap ${targetSubmap}`);
-    await this.preview.resetLevelForPlaytest();
-    this.#applySoundLabPresentationDefaults();
-    this.#resetSceneState();
-    if (this.sceneFixture) {
-      this.sceneRunner?.stop({ discard:true });
-      this.sceneRunner = new NativeSceneRunner(this.preview);
-      this.sceneRunner.start(this.sceneFixture);
-      this.lastSerial = this.sceneRunner.baselineEventSerial;
-    } else {
-      this.sceneRunner?.stop({ discard:true });
-      this.sceneRunner = null;
-      this.lastSerial = this.preview.bridge.soundLabEventSerial?.() || 0;
+    try {
+      const proof = scene?.proof || {};
+      this.target = { event:String(proof.event || event || ''), mark:Number(proof.mark ?? match?.mark), actorFamily:String(proof.actorFamily || match?.actorFamily || ''), action:String(action || 'impact'), playback:String(playback || ''), tailFrames:Math.max(DEFAULT_TAIL_FRAMES, Math.ceil(Math.max(0, finite(durationMs, 0)) / GAME_FRAME_MS)) };
+      this.sceneFixture = scene && typeof scene === 'object' ? scene : null;
+      this.onStatus?.('Starting native runtime…');
+      if (!this.preview) this.preview = await this.previewFactory.create(() => {}, () => {});
+      const rom = await this.#resolveRomSource();
+      await this.preview.loadRdxRom(rom.bytes);
+      this.onNativeInput?.({ status:'ready', name:rom.name, source:rom.source, remembered:Boolean(rom.remembered) });
+      this.preview.setPresentation(this.sceneFixture?.presentation || 'rdx');
+      const targetSubmap = Number(this.sceneFixture?.submap ?? submap);
+      if (!this.preview.selectSubmap(targetSubmap)) throw new Error(`Native runtime could not select submap ${targetSubmap}`);
+      await this.preview.resetLevelForPlaytest();
+      this.#applySoundLabPresentationDefaults();
+      this.#resetSceneState();
+      if (this.sceneFixture) {
+        this.sceneRunner?.stop({ discard:true });
+        this.sceneRunner = new NativeSceneRunner(this.preview);
+        this.sceneRunner.start(this.sceneFixture);
+        this.lastSerial = this.sceneRunner.baselineEventSerial;
+      } else {
+        this.sceneRunner?.stop({ discard:true });
+        this.sceneRunner = null;
+        this.lastSerial = this.preview.bridge.soundLabEventSerial?.() || 0;
+      }
+      this.running = true;
+      this.canvas?.addEventListener('keydown', this.keyDown);
+      this.canvas?.addEventListener('keyup', this.keyUp);
+      this.#loop();
+      this.onStatus?.(this.sceneRunner ? 'Capturing reviewed native scene…' : 'Native RDX simulation · authoritative timing');
+    } catch (error) {
+      this.stop();
+      throw error;
     }
-    this.running = true;
-    this.canvas?.addEventListener('keydown', this.keyDown);
-    this.canvas?.addEventListener('keyup', this.keyUp);
-    this.#loop();
-    this.onStatus?.(this.sceneRunner ? 'Capturing reviewed native scene…' : 'Native RDX simulation · authoritative timing');
   }
 
   async loadNativeInput(fileOrBytes, { name = RDX_ROM_FILENAME } = {}) {
