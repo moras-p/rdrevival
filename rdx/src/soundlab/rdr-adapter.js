@@ -134,6 +134,7 @@ export class RdrSoundLabRuntime {
     this.scenePlayback = null;
     this.sceneFixture = null;
     this.sceneRunner = null;
+    this.captureLastStep = null;
     this.keyDown = event => this.preview?.keyDown(event.code);
     this.keyUp = event => this.preview?.keyUp(event.code);
   }
@@ -158,6 +159,7 @@ export class RdrSoundLabRuntime {
       if (this.sceneFixture) {
         this.sceneRunner?.stop({ discard:true });
         this.sceneRunner = new NativeSceneRunner(this.preview);
+        this.#beginSceneCapture();
         this.sceneRunner.start(this.sceneFixture);
         this.lastSerial = this.sceneRunner.baselineEventSerial;
       } else {
@@ -222,6 +224,7 @@ export class RdrSoundLabRuntime {
     this.#applySoundLabPresentationDefaults();
     if (this.sceneRunner?.baseline) {
       this.sceneRunner.setPaused(false);
+      this.#beginSceneCapture();
       this.sceneRunner.restart();
       this.lastSerial = this.sceneRunner.baselineEventSerial;
       this.onStatus?.('Capturing reviewed native scene…');
@@ -314,6 +317,7 @@ export class RdrSoundLabRuntime {
     this.scene = null;
     this.pendingScene = null;
     this.scenePlayback = null;
+    this.captureLastStep = null;
   }
 
   #discardCheckpoints() {
@@ -333,6 +337,25 @@ export class RdrSoundLabRuntime {
     if (!this.preview?.bridge) return;
     this.preview.bridge.setAiTransitionHold?.(true);
     this.preview.bridge.setAiAudioHold?.(true);
+  }
+
+  #beginSceneCapture() {
+    if (!this.preview?.bridge) return;
+    this.captureLastStep = this.now() - GAME_FRAME_MS;
+    this.preview.bridge.setAiAudioHold?.(true);
+    this.#suppressNativeSfx(true);
+    this.#setSoundLabRuntimeSuppressed(true);
+  }
+
+  #finishSceneCaptureAudio() {
+    if (!this.preview?.bridge) return;
+    /* Fixture acquisition is evidence capture, not an audition. Keep it silent
+     * and flush the held route before returning control to the author so no
+     * pre-stage/contact voice can ring after the scene freezes. */
+    this.preview.bridge.setAiAudioHold?.(true);
+    this.#suppressNativeSfx(false);
+    this.#setSoundLabRuntimeSuppressed(false);
+    this.preview.bridge.setAiAudioHold?.(false);
   }
 
   #suppressNativeSfx(suppressed) {
@@ -420,8 +443,9 @@ export class RdrSoundLabRuntime {
     };
     this.pendingScene = null;
     this.sceneRunner?.setPaused(true);
+    this.#finishSceneCaptureAudio();
     this.onScene?.(this.scene);
-    this.onStatus?.('Scene ready · drag the window handles to audition');
+    this.onStatus?.('Scene ready · select a motion segment or playback scope');
   }
 
   #drawFrame(frame) {
@@ -434,9 +458,14 @@ export class RdrSoundLabRuntime {
 
   #captureNormalFrame() {
     if (this.sceneRunner?.active) {
+      const now = this.now();
+      if (this.captureLastStep != null && now - this.captureLastStep < GAME_FRAME_MS) return;
+      this.captureLastStep = this.captureLastStep == null ? now : this.captureLastStep + GAME_FRAME_MS;
+      if (now - this.captureLastStep > GAME_FRAME_MS * 2) this.captureLastStep = now;
       const fixtureState = this.sceneRunner.step();
       if (fixtureState.error) {
         this.running = false;
+        this.#releaseSceneHold();
         this.onStatus?.(fixtureState.error);
         return;
       }

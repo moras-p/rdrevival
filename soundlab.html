@@ -42,11 +42,9 @@
           <div class="panel-title native-title">
             <div><span>Native context</span><small id="sl-native-status">Not started</small></div>
             <div class="panel-actions">
-              <button id="sl-play-isolated" title="Audition the current isolated sound">Isolated</button>
-              <button id="sl-replay-draft" disabled title="Replay the native scene with the current draft replacing the promoted SoundLab cue">Draft in scene</button>
-              <button id="sl-replay-context" disabled title="Replay the native scene with the promoted/native SoundLab cue">Native in scene</button>
-              <button id="sl-reset-native">Reset</button>
-              <button id="sl-start-native" class="primary">Start</button>
+              <button id="sl-play-isolated" title="Audition the current sound without gameplay">Sound only</button>
+              <button id="sl-reset-native">Reset capture</button>
+              <button id="sl-start-native" class="primary">Capture scene</button>
               <button id="sl-toggle-native" aria-expanded="false" aria-controls="sl-native-body">Hide</button>
             </div>
           </div>
@@ -55,11 +53,20 @@
               <div class="native-input-state"><strong id="sl-native-input-title">Native input</strong><small id="sl-native-input-status"></small></div>
               <label id="sl-native-input-button" class="native-file-button"><span id="sl-native-input-button-label">Load…</span><input id="sl-native-input-file" type="file"></label>
             </div>
-            <div id="sl-scene-stage" class="scene-stage" title="Click a trajectory segment to select it">
-              <canvas id="sl-native-canvas" width="640" height="480" tabindex="0" aria-label="Native game preview"></canvas>
-              <canvas id="sl-scene-overlay" width="640" height="480" aria-hidden="true"></canvas>
-              <span id="sl-scene-audio-version" class="scene-audio-version" aria-live="polite">Draft</span>
-              <button id="sl-scene-contact" class="scene-contact" type="button" hidden aria-label="Select semantic contact event" title="Select semantic contact"></button>
+            <div class="scene-views">
+              <section class="scene-view" aria-label="Native gameplay view">
+                <div class="scene-view-title"><div><strong>Game preview</strong><small>Authoritative native scene</small></div><span id="sl-scene-audio-version" class="scene-audio-version" aria-live="polite">Draft</span></div>
+                <div class="scene-game-stage">
+                  <canvas id="sl-native-canvas" width="640" height="400" tabindex="0" aria-label="Native game preview"></canvas>
+                </div>
+              </section>
+              <section class="scene-view" aria-label="Motion and segment view">
+                <div class="scene-view-title"><div><strong>Motion &amp; segments</strong><small>Select a path segment to edit its sound</small></div></div>
+                <div id="sl-scene-stage" class="scene-stage" title="Click a trajectory segment to select it">
+                  <canvas id="sl-scene-overlay" width="640" height="400" aria-label="Scene motion and semantic segments"></canvas>
+                  <button id="sl-scene-contact" class="scene-contact" type="button" hidden aria-label="Select semantic contact event" title="Select semantic contact"></button>
+                </div>
+              </section>
             </div>
             <div class="scene-readout">
               <div><strong id="sl-scene-title">Watch the scene</strong><small id="sl-scene-motion">Capture the semantic event to extract object motion.</small><small id="sl-scene-script" class="scene-script">Scene timing will appear here.</small></div>
