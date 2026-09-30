@@ -1,5 +1,5 @@
 import { XrickLivePreview, LIVE_WIDTH, LIVE_HEIGHT, NATIVE_SFX_IDS } from '../juice/xrick-live-preview.js';
-import { NativeSceneRunner } from '../runtime/native-scene-runner.js';
+import { NativeSceneRunner, nativeSceneControlMask, stepNativeFrame } from '../runtime/native-scene-runner.js';
 import { RDX_ROM_FILENAME, loadRememberedRdxRom, rememberRdxRom, validateRdxRomBytes } from '../runtime/rom-store.js';
 
 const CHECKPOINT_SLOTS = Object.freeze([0, 1, 2, 3, 4, 5, 6]);
@@ -282,8 +282,11 @@ export class RdrSoundLabRuntime {
     const seekTarget = Math.max(checkpoint.frameSerial, start - 1);
     let frame = this.preview.capture();
     let frameSerial = finite(frame?.snapshot?.frameSerial, checkpoint.frameSerial);
+    let sceneFrame = Number.isFinite(Number(checkpoint.sceneFrame)) ? Number(checkpoint.sceneFrame) : null;
     while (frameSerial < seekTarget) {
-      this.preview.bridge.debugForceBrowserFrame?.();
+      const mask = sceneFrame == null ? 0 : nativeSceneControlMask(this.sceneFixture, sceneFrame);
+      stepNativeFrame(this.preview.bridge, mask);
+      if (sceneFrame != null) sceneFrame += 1;
       frame = this.preview.capture();
       frameSerial = finite(frame?.snapshot?.frameSerial, frameSerial + 1);
     }
@@ -297,7 +300,7 @@ export class RdrSoundLabRuntime {
     this.#suppressNativeSfx(!!suppressNativeSfx);
     this.#setSoundLabRuntimeSuppressed(!!suppressSoundLab);
     this.preview.bridge.setAiAudioHold?.(false);
-    this.scenePlayback = { serial:Number(serial) >>> 0, startFrame:start, endFrame:end, frameSerial, lastStep:this.now() - GAME_FRAME_MS, suppressSoundLab:!!suppressSoundLab, suppressNativeSfx:!!suppressNativeSfx, proofNotified:false };
+    this.scenePlayback = { serial:Number(serial) >>> 0, startFrame:start, endFrame:end, frameSerial, sceneFrame, lastStep:this.now() - GAME_FRAME_MS, suppressSoundLab:!!suppressSoundLab, suppressNativeSfx:!!suppressNativeSfx, proofNotified:false };
     this.onFrame?.({ frame, scene:{ ...scene, startFrame:start, endFrame:end }, replay:true });
     this.onReplay?.({ phase:'start', serial:Number(serial) >>> 0, startFrame:start, endFrame:end, proofFrame:scene.proofFrame, frameSerial, draft:!!suppressSoundLab });
     this.onStatus?.(`Playing scene window · ${start}–${end}f`);
@@ -384,7 +387,8 @@ export class RdrSoundLabRuntime {
       slot,
       tracking:this.preview.captureTrackingState?.() || null,
       lastSerial:this.lastSerial,
-      frameSerial
+      frameSerial,
+      sceneFrame:Number.isFinite(Number(this.sceneRunner?.frame)) ? Number(this.sceneRunner.frame) : null
     };
     this.checkpoints = this.checkpoints.filter(row => row.slot !== slot);
     this.checkpoints.push(checkpoint);
@@ -501,7 +505,9 @@ export class RdrSoundLabRuntime {
     if (now - playback.lastStep < GAME_FRAME_MS) return;
     playback.lastStep = now;
     const previousFrame = playback.frameSerial;
-    this.preview.bridge.debugForceBrowserFrame?.();
+    const mask = playback.sceneFrame == null ? 0 : nativeSceneControlMask(this.sceneFixture, playback.sceneFrame);
+    stepNativeFrame(this.preview.bridge, mask);
+    if (playback.sceneFrame != null) playback.sceneFrame += 1;
     const frame = this.preview.capture();
     playback.frameSerial = finite(frame?.snapshot?.frameSerial, playback.frameSerial + 1);
     this.#drawFrame(frame);
