@@ -11,6 +11,58 @@ export function aiHorizonLoopDecision({
     ? 'limit_reached' : 'replan';
 }
 
+export async function precomputeAiRoomCertificate({
+  firstSlice, continueSlice, complete, phaseCount, progressKey, terminalOutcome,
+  yieldBetweenSlices, cancelled = () => false, maxSlices = 64, maxElapsedMs = 120000,
+  workUsed, maxWork, prepareSlice
+} = {}) {
+  if (typeof firstSlice !== 'function' || typeof continueSlice !== 'function')
+    throw new Error('GAI precompute requires first and continuation slice functions');
+  const started = performance.now();
+  let slices = 0;
+  let maxSliceMs = 0;
+  let lastProgress = null;
+  let stagnantSlices = 0;
+  const totalWork = {rollouts:0,variants:0,proofs:0};
+  while (slices < maxSlices && !cancelled()) {
+    if (maxWork) {
+      const remaining = Object.fromEntries(Object.keys(totalWork).map(key =>
+        [key, Math.max(0, Number(maxWork[key]) - totalWork[key])]));
+      if (remaining.rollouts <= 0)
+        return {outcome:'search-limit',planned:false,slices,phases:Number(phaseCount?.()||0),
+          elapsedMs:Math.max(0,performance.now()-started),maxSliceMs,totalWork};
+      prepareSlice?.(remaining);
+    }
+    const sliceStarted = performance.now();
+    const planned = slices ? continueSlice() : firstSlice();
+    maxSliceMs = Math.max(maxSliceMs, performance.now() - sliceStarted);
+    slices += 1;
+    const phases = Number(phaseCount?.() || 0) >>> 0;
+    const used = workUsed?.();
+    if (used) for (const key of Object.keys(totalWork)) totalWork[key] += Number(used[key] || 0);
+    if (maxWork && Object.keys(totalWork).some(key => totalWork[key] > maxWork[key]))
+      return {outcome:'search-limit',planned:!!planned,slices,phases,
+        elapsedMs:Math.max(0,performance.now()-started),maxSliceMs,totalWork};
+    if (complete?.()) return { outcome:'complete', planned:!!planned, slices, phases,
+      elapsedMs:Math.max(0, performance.now() - started), maxSliceMs };
+    const terminal = terminalOutcome?.();
+    if (terminal) return { outcome:String(terminal), planned:!!planned, slices, phases,
+      elapsedMs:Math.max(0, performance.now() - started), maxSliceMs };
+    const progress = progressKey ? String(progressKey()) :
+      used ? JSON.stringify({phases,totalWork}) : null;
+    stagnantSlices = progress != null && progress === lastProgress ? stagnantSlices + 1 : 0;
+    lastProgress = progress;
+    if (stagnantSlices >= 8)
+      return { outcome:'no-progress', planned:!!planned,
+        slices, phases, elapsedMs:Math.max(0, performance.now() - started), maxSliceMs };
+    if (performance.now() - started >= maxElapsedMs) break;
+    await yieldBetweenSlices?.();
+  }
+  return { outcome:cancelled() ? 'cancelled' : 'search-limit', planned:false, slices,
+    phases:Number(phaseCount?.() || 0) >>> 0,
+    elapsedMs:Math.max(0, performance.now() - started), maxSliceMs };
+}
+
 export function createAiPlaytestController({ runtime, elements = {}, resourcesProvider = () => null, appVersion = 'unknown' } = {}) {
   if (!runtime) throw new Error('GAI browser controller requires a live runtime dependency object');
   const submapAssetName = submap => `SM${Number(submap).toString(16).toUpperCase().padStart(2, '0')}`;
@@ -30,7 +82,12 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   const aiAutoplay = {
     active:false, planning:false, scenario:2, deterministicRestart:true, fullRoomPlanning:true, continueRooms:true,
     planSubmap:-1, lastInputMask:0, completedAtSerial:-1, nextPlanToken:0, lastStatusSerial:-1, lastStop:null, coachControlled:false,
-    autoReplans:0, planStartedAtSerial:0
+    autoReplans:0, planStartedAtSerial:0, partialReady:false, heldResult:false,
+    planningSlices:0, maxPlanningSliceMs:0
+  };
+  const aiAcceptance = {
+    runId:0, reason:'', api:'', plannerCalls:0, playbackPlannerCalls:0, planningFrameSerials:[], playbackFrames:0,
+    maxPlanningSliceMs:0, maxPlaybackFrameGapMs:0, firstPlaybackGap:null, lastPlaybackAt:0
   };
   let aiCoachSequence = 0;
   let aiCoachSession = null;
@@ -58,9 +115,10 @@ function updateAiPlayButtons() {
   if (aiRunButton) {
     aiRunButton.disabled = !runtime.bridge || !runtime.renderer || aiAutoplay.planning || aiAutoplay.active;
     aiRunButton.setAttribute('aria-pressed', aiAutoplay.active && !aiAutoplay.deterministicRestart ? 'true' : 'false');
-    aiRunButton.textContent = aiAutoplay.planning && !aiAutoplay.deterministicRestart ? 'Planning…' : '▶ AI live state';
+    aiRunButton.textContent = aiAutoplay.planning && !aiAutoplay.deterministicRestart ? 'Precomputing…' :
+      (aiAutoplay.partialReady ? '▶ Play certified partial' : '▶ AI live state');
   }
-  if (aiStopButton) aiStopButton.disabled = !aiAutoplay.active && !aiAutoplay.planning;
+  if (aiStopButton) aiStopButton.disabled = !aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.heldResult;
   if (aiCopyDebugButton) aiCopyDebugButton.disabled = !runtime.bridge;
   if (aiModeSelect) aiModeSelect.disabled = aiAutoplay.active || aiAutoplay.planning;
 }
@@ -95,7 +153,7 @@ const AI_DROP_SEARCH_RESULT_LABELS = {
 
 const AI_DROP_ATTEMPT_OUTCOME_LABELS = {
   0:'none', 1:'invalid-sequence', 2:'approach-failed', 3:'landed-target',
-  4:'room-changed', 5:'intermediate-landing', 6:'frame-cap'
+  4:'room-changed', 5:'intermediate-landing', 6:'frame-cap', 7:'dead'
 };
 
 function aiFailureDetailLabel(stage, detail) {
@@ -1135,16 +1193,20 @@ function refreshGaiRouteInspectorProgress(snapshot = null) {
 }
 
 function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntime = false } = {}) {
+  const cancelledPlanning = aiAutoplay.planning || aiAutoplay.heldResult;
   aiAutoplay.nextPlanToken += 1;
   aiAutoplay.active = false;
   aiAutoplay.planning = false;
+  aiAutoplay.partialReady = false;
+  aiAutoplay.heldResult = false;
   aiAutoplay.planSubmap = -1;
   aiAutoplay.completedAtSerial = -1;
   aiAutoplay.lastStatusSerial = -1;
   runtime.bridge?.setAiAudioHold?.(false);
   runtime.bridge?.setAiTransitionHold?.(false);
+  runtime.bridge?.setFrontendPaused?.(false);
   clearAiControl();
-  if (resetRuntime && runtime.bridge) {
+  if ((resetRuntime || cancelledPlanning) && runtime.bridge) {
     runtime.bridge.aiReset();
     gaiRouteInspector?.clear();
   }
@@ -1211,6 +1273,7 @@ function ensureAiDescriptorCollision() {
 
 function finishAiPlanning(before, fullRoom, planned, elapsed) {
   aiAutoplay.planning = false;
+  aiAutoplay.partialReady = false;
   const inspectablePrefix = fullRoom && runtime.bridge.aiPartialPlan() && runtime.bridge.aiPhaseCount() > 0;
   if (!planned || runtime.bridge.aiPhaseCount() === 0 || (fullRoom && !runtime.bridge.aiCompletePlan() && !inspectablePrefix)) {
     const rejected = runtime.bridge.aiRejectedEdgeCount();
@@ -1259,6 +1322,113 @@ function configureAiPlanningMode({ fullRoom = false } = {}) {
   runtime.bridge.aiSetPreferSafe(!invulnerable && scenario === 2);
   aiAutoplay.scenario = scenario;
   return scenario;
+}
+
+function aiCooperativeTerminalOutcome() {
+  const outcome = runtime.bridge.aiOutcome() >>> 0;
+  if (outcome === 10) return 'memory-limit';
+  if (outcome === 11) return 'candidate-model-exhausted';
+  if (outcome === 12) return 'state-integrity-failure';
+  if (outcome === 4 || outcome === 5) return 'no-progress';
+  if ([3,6,7,8].includes(outcome) && !runtime.bridge.aiProofWorkLimitHits()) return 'no-route';
+  return '';
+}
+
+async function runVisibleAiPrecompute(reason, { restart = false } = {}) {
+  if (!runtime.bridge) return false;
+  if (aiAutoplay.heldResult) runtime.bridge.aiReset();
+  Object.assign(aiAcceptance, {
+    runId:aiAcceptance.runId + 1, reason:String(reason || ''),
+    api:restart ? 'aiRestartPlanFullContinue' : 'aiPlanFullContinue',
+    plannerCalls:0, playbackPlannerCalls:0, planningFrameSerials:[], playbackFrames:0,
+    maxPlanningSliceMs:0, maxPlaybackFrameGapMs:0, firstPlaybackGap:null, lastPlaybackAt:0
+  });
+  const token = ++aiAutoplay.nextPlanToken;
+  aiAutoplay.active = true;
+  aiAutoplay.planning = true;
+  aiAutoplay.partialReady = false;
+  aiAutoplay.heldResult = false;
+  aiAutoplay.deterministicRestart = !!restart;
+  aiAutoplay.fullRoomPlanning = true;
+  aiAutoplay.continueRooms = aiContinueToggle?.checked !== false;
+  aiAutoplay.lastStop = null;
+  clearAiControl();
+  runtime.bridge.setFrontendPaused(true);
+  runtime.bridge.setAiTransitionHold?.(true);
+  updateAiPlayButtons();
+  setAiPlayStatus(reason, 'running');
+  try {
+    runtime.bridge.setAiAudioHold?.(true);
+    await new Promise(resolve => setTimeout(resolve, AI_TRANSITION_AUDIO_QUIESCE_MS));
+    if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
+    const before = ensureAiDescriptorCollision();
+    if (!runtime.bridge.aiBackendAvailable())
+      throw new Error('WASM rollback backend is unavailable. Rebuild xrick.js/.wasm with GAI enabled.');
+    const scenario = configureAiPlanningMode({ fullRoom:true });
+    if (!runtime.bridge.aiValidationBudget())
+      runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
+    const result = await precomputeAiRoomCertificate({
+      // Smaller scheduling calls retain the former 64-slice effort ceiling.
+      // The native deadline changes granularity, not the amount of search.
+      maxSlices:64 * 48,
+      maxWork:{rollouts:64 * 8192,variants:64 * 48,proofs:64 * runtime.bridge.aiValidationBudget()},
+      workUsed:() => runtime.bridge.aiWorkUsage?.(),
+      prepareSlice:remaining => runtime.bridge.aiSetSliceLimits(remaining),
+      firstSlice:() => {
+        aiAcceptance.plannerCalls += 1;
+        const planned = restart ? runtime.bridge.aiRestartPlanFullContinue(scenario) : runtime.bridge.aiPlanFullContinue(scenario);
+        aiAcceptance.planningFrameSerials.push(runtime.bridge.snapshot()?.frameSerial >>> 0);
+        return planned;
+      },
+      continueSlice:() => {
+        aiAcceptance.plannerCalls += 1;
+        const planned = runtime.bridge.aiPlanFullContinue(scenario);
+        aiAcceptance.planningFrameSerials.push(runtime.bridge.snapshot()?.frameSerial >>> 0);
+        return planned;
+      },
+      complete:() => runtime.bridge.aiCompletePlan(),
+      partial:() => runtime.bridge.aiPartialPlan(),
+      phaseCount:() => runtime.bridge.aiPhaseCount(),
+      terminalOutcome:aiCooperativeTerminalOutcome,
+      yieldBetweenSlices:yieldForGameplayPaint,
+      cancelled:() => token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge
+    });
+    if (result.outcome === 'cancelled' || token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
+    aiAutoplay.planningSlices = result.slices;
+    aiAutoplay.maxPlanningSliceMs = result.maxSliceMs;
+    aiAcceptance.maxPlanningSliceMs = Math.max(aiAcceptance.maxPlanningSliceMs, result.maxSliceMs);
+    const planned = result.phases > 0;
+    recordAiCoachPlan({ reason, fullRoom:true, restart, planned, elapsedMs:result.elapsedMs });
+    if (result.outcome === 'complete') {
+      const finished = finishAiPlanning(before, true, planned, result.elapsedMs);
+      if (finished)
+        setAiPlayStatus(`${aiExecutionSummary(before)} · full room precomputed in ${result.slices} slices · max ${result.maxSliceMs.toFixed(1)}ms`, 'running');
+      return finished;
+    }
+    aiAutoplay.active = false;
+    aiAutoplay.planning = false;
+    aiAutoplay.partialReady = planned && runtime.bridge.aiPartialPlan();
+    aiAutoplay.heldResult = true;
+    aiAutoplay.planSubmap = Number(before?.submap ?? runtime.bridge.submap()) >>> 0;
+    aiAutoplay.planStartedAtSerial = Number(before?.frameSerial || 0) >>> 0;
+    updateAiPlayButtons();
+    const label = result.outcome === 'no-progress' ? 'made no further progress' :
+      (result.outcome === 'no-route' ? 'found no certified route from this state' : 'reached its search limit');
+    setAiPlayStatus(`AI ${label} after ${result.slices} held slices · ${result.phases} certified phases · ` +
+      (aiAutoplay.partialReady ? 'choose “Play certified partial” to execute it' : 'no playable certificate'), 'warn');
+    refreshGaiRouteInspectorPlan();
+    return false;
+  } catch (error) {
+    console.error('[rdx/ai] held precompute failed', error?.message || String(error));
+    stopAiAutoplay(`AI precompute failed: ${error?.message || error} · use “Copy AI debug”`, 'error');
+    return false;
+  } finally {
+    if (runtime.bridge && token === aiAutoplay.nextPlanToken) {
+      runtime.bridge.setAiAudioHold?.(false);
+      runtime.bridge.setAiTransitionHold?.(false);
+      if (aiAutoplay.active && !aiAutoplay.planning) runtime.bridge.setFrontendPaused(false);
+    }
+  }
 }
 
 function runDeterministicAiPlan(reason = 'Restarting and precomputing complete deterministic route…') {
@@ -1358,7 +1528,17 @@ function scheduleAiPlan(reason = 'Planning certified route…', { fullRoom = fal
 function startAiAutoplay() {
   if (!runtime.bridge || aiAutoplay.active || aiAutoplay.planning) return;
   aiAutoplay.coachControlled = false;
-  runtime.bridge.setFrontendPaused(false);
+  if (aiAutoplay.partialReady) {
+    aiAutoplay.partialReady = false;
+    aiAutoplay.heldResult = false;
+    aiAutoplay.active = true;
+    aiAutoplay.planning = false;
+    aiAutoplay.deterministicRestart = false;
+    runtime.bridge.setFrontendPaused(false);
+    updateAiPlayButtons();
+    setAiPlayStatus(`${aiExecutionSummary()} · playing explicit certified partial`, 'running');
+    return;
+  }
   if (runtime.previewWorkspaceMode === 'editor' || runtime.mapEditorPlaytestActive) {
     setAiPlayStatus('AI Play controls drive the standard Playtest. Leave Map Editor playtest first.', 'warn');
     return;
@@ -1366,10 +1546,9 @@ function startAiAutoplay() {
   try {
     ensureAiDescriptorCollision();
     if (!runtime.bridge.aiBackendAvailable()) throw new Error('WASM rollback backend is unavailable. Rebuild xrick.js/.wasm with GAI enabled.');
-    aiAutoplay.deterministicRestart = false;
     aiAutoplay.autoReplans = 0;
     globalThis.xrickFocusPage?.();
-    scheduleAiPlan(`Planning ${submapAssetName(runtime.bridge.submap())} from the current live state…`, { fullRoom:false });
+    void runVisibleAiPrecompute(`Holding ${submapAssetName(runtime.bridge.submap())} while precomputing its complete certificate…`);
   } catch (error) {
     stopAiAutoplay(`AI cannot start: ${error?.message || error}`, 'error');
   }
@@ -1378,7 +1557,6 @@ function startAiAutoplay() {
 function startAiRestartAutoplay() {
   if (!runtime.bridge || aiAutoplay.active || aiAutoplay.planning) return;
   aiAutoplay.coachControlled = false;
-  runtime.bridge.setFrontendPaused(false);
   if (runtime.previewWorkspaceMode === 'editor' || runtime.mapEditorPlaytestActive) {
     setAiPlayStatus('AI Play controls drive the standard Playtest. Leave Map Editor playtest first.', 'warn');
     return;
@@ -1395,7 +1573,7 @@ function startAiRestartAutoplay() {
       runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
     aiAutoplay.autoReplans = 0;
     globalThis.xrickFocusPage?.();
-    runDeterministicAiPlan(`Restarting ${submapAssetName(runtime.bridge.submap())} and precomputing the complete deterministic route…`);
+    void runVisibleAiPrecompute(`Restarting ${submapAssetName(runtime.bridge.submap())} and precomputing its complete certificate…`, { restart:true });
   } catch (error) {
     stopAiAutoplay(`AI cannot restart: ${error?.message || error} · use “Copy AI debug”`, 'error');
   }
@@ -1449,13 +1627,35 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
       if ((Number(before?.submap) >>> 0) !== (Number(renderedSnapshot.submap) >>> 0))
         throw new Error('destination room changed before AI continuation planning');
       const scenario = configureAiPlanningMode({ fullRoom });
-      const started = performance.now();
-      const planned = fullRoom ? runtime.bridge.aiPlanFull(scenario) : runtime.bridge.aiPlan(scenario);
-      const elapsed = Math.max(0, performance.now() - started);
-      finishAiPlanning(before, fullRoom, planned, elapsed);
-      recordAiCoachPlan({ reason:planningReason, fullRoom, restart:false, planned, elapsedMs:elapsed });
+      if (!runtime.bridge.aiValidationBudget())
+        runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
+      const result = fullRoom ? await precomputeAiRoomCertificate({
+        firstSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
+        continueSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
+        complete:() => runtime.bridge.aiCompletePlan(),
+        phaseCount:() => runtime.bridge.aiPhaseCount(),
+        terminalOutcome:aiCooperativeTerminalOutcome,
+        yieldBetweenSlices:yieldForGameplayPaint,
+        cancelled:() => token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge
+      }) : { outcome:'complete', planned:runtime.bridge.aiPlan(scenario), slices:1,
+        phases:runtime.bridge.aiPhaseCount(), elapsedMs:0, maxSliceMs:0 };
+      if (result.outcome === 'cancelled') return;
+      const planned = result.phases > 0;
+      if (result.outcome === 'complete') finishAiPlanning(before, fullRoom, planned, result.elapsedMs);
+      else {
+        aiAutoplay.active = false;
+        aiAutoplay.planning = false;
+        aiAutoplay.partialReady = planned && runtime.bridge.aiPartialPlan();
+        aiAutoplay.heldResult = true;
+        runtime.bridge.setFrontendPaused(true);
+        aiAutoplay.planSubmap = Number(before.submap) >>> 0;
+        updateAiPlayButtons();
+        setAiPlayStatus(`AI destination precompute ${result.outcome} after ${result.slices} held slices` +
+          (aiAutoplay.partialReady ? ' · choose “Play certified partial”' : ''), 'warn');
+      }
+      recordAiCoachPlan({ reason:planningReason, fullRoom, restart:false, planned, elapsedMs:result.elapsedMs });
     } catch (error) {
-      console.error('[rdx/ai] destination-entry planning failed', error, aiPlannerDebugRecord('rendered-room-entry-planning-exception'));
+      console.error('[rdx/ai] destination-entry planning failed', error?.message || String(error));
       stopAiAutoplay(`AI destination planning failed: ${error?.message || error} · use “Copy AI debug”`, 'error');
     } finally {
       if (runtime.bridge && token === aiAutoplay.nextPlanToken) {
@@ -1470,6 +1670,15 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
 function tickAiAutoplay(snapshot) {
   if (!runtime.bridge || !aiAutoplay.active || aiAutoplay.planning || !snapshot) return;
   refreshGaiRouteInspectorProgress(snapshot);
+  const playbackNow = performance.now();
+  if (aiAcceptance.lastPlaybackAt) {
+    const gap = playbackNow - aiAcceptance.lastPlaybackAt;
+    if (gap > aiAcceptance.maxPlaybackFrameGapMs) aiAcceptance.maxPlaybackFrameGapMs = gap;
+    if (!aiAcceptance.firstPlaybackGap && gap > 50)
+      aiAcceptance.firstPlaybackGap = { frameSerial:snapshot.frameSerial >>> 0, gapMs:gap };
+  }
+  aiAcceptance.lastPlaybackAt = playbackNow;
+  aiAcceptance.playbackFrames += 1;
   if (runtime.mapEditorPlaytestActive) {
     stopAiAutoplay('AI stopped because another playtest took control.', 'warn');
     return;
@@ -1503,25 +1712,6 @@ function tickAiAutoplay(snapshot) {
   clearAiControl();
   if (executorStatus === AI_EXECUTOR_COMPLETE) {
     if (runtime.bridge.aiPartialPlan() && !runtime.bridge.aiCompletePlan()) {
-      const executedFrames = (snapshot.frameSerial >>> 0) -
-        (aiAutoplay.planStartedAtSerial >>> 0);
-      const continuationState = {
-        controller:{active:false},
-        planner:{
-          partial:true,
-          executor:{statusLabel:'complete'},
-          routeMetrics:aiRouteMetrics(runtime.bridge)
-        }
-      };
-      if (!aiAutoplay.coachControlled && shouldAutoContinueAiHorizon(
-        {status:'handoff_required',framesAdvanced:executedFrames},
-        continuationState, aiAutoplay.autoReplans)) {
-        aiAutoplay.autoReplans += 1;
-        runImmediateAiLivePlan(
-          `GAI committed an irreversible native prerequisite; recapturing exact live state (${aiAutoplay.autoReplans}/8)…`,
-          {fullRoom:aiAutoplay.fullRoomPlanning});
-        return;
-      }
       stopAiAutoplay(`AI reached a safe certified prefix but cannot extend it${aiBlockerSummary()} · ${aiExecutionSummary(snapshot)}`, 'warn');
       return;
     }
@@ -1551,7 +1741,7 @@ function tickAiAutoplay(snapshot) {
   }
 }
 
-  function busy() { return !!(aiAutoplay.active || aiAutoplay.planning); }
+  function busy() { return !!(aiAutoplay.active || aiAutoplay.planning || aiAutoplay.heldResult); }
   function setCoachControlled(value) { aiAutoplay.coachControlled = !!value; return aiAutoplay.coachControlled; }
   function tickFrame(snapshot) {
     if (!snapshot) return;
@@ -1559,7 +1749,12 @@ function tickAiAutoplay(snapshot) {
       aiAutoplay.planSubmap >= 0 && snapshot.submap !== aiAutoplay.planSubmap;
     if (!aiAutoplay.coachControlled || coachNeedsRenderedTransitionPlan) tickAiAutoplay(snapshot);
   }
-  function state() { return Object.freeze({ ...aiAutoplay }); }
+  function state() {
+    return Object.freeze({ ...aiAutoplay, acceptance:{ ...aiAcceptance,
+      planningFrameSerials:aiAcceptance.planningFrameSerials.slice() } });
+  }
+
+  globalThis.__rdxAiAcceptance = Object.freeze({ state });
 
   return Object.freeze({
     speedModeLabel, setPlayStatus:setAiPlayStatus, updateButtons:updateAiPlayButtons, agentState:aiAgentState,

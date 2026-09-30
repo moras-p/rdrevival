@@ -265,6 +265,7 @@ export class XrickWasmBridge {
       aiPlanFullContinue: wrap1('xrick_gai_plan_full_continue'),
       aiPlanFullToPoint: wrapN('xrick_gai_plan_full_to_point', 4),
       aiRestartPlanFull: wrap1('xrick_gai_restart_and_plan_full'),
+      aiRestartPlanFullContinue: wrap1('xrick_gai_restart_and_plan_full_continue'),
       aiTick: wrap0('xrick_gai_tick'),
       aiStatus: wrap0('xrick_gai_status'),
       aiPhaseIndex: wrap0('xrick_gai_phase_index'),
@@ -341,6 +342,10 @@ export class XrickWasmBridge {
       aiBlockingFrom: wrap0('xrick_gai_blocking_from'),
       aiBlockingTo: wrap0('xrick_gai_blocking_to'),
       aiValidationAttempts: wrap0('xrick_gai_validation_attempts'),
+      aiSetSliceLimits: wrapN('xrick_gai_set_slice_limits', 3),
+      aiWorkRollouts: wrap0('xrick_gai_work_rollouts'),
+      aiWorkVariants: wrap0('xrick_gai_work_variants'),
+      aiWorkProofs: wrap0('xrick_gai_work_proofs'),
       aiBudgetExhausted: wrap0('xrick_gai_budget_exhausted'),
       aiBestGoalDistance: wrap0('xrick_gai_best_goal_distance'),
       aiBestPrefixUpdates: wrap0('xrick_gai_best_prefix_updates'),
@@ -858,6 +863,9 @@ export class XrickWasmBridge {
   aiBlockingFrom() { return this.api.aiBlockingFrom() >>> 0; }
   aiBlockingTo() { return this.api.aiBlockingTo() >>> 0; }
   aiValidationAttempts() { return this.api.aiValidationAttempts() >>> 0; }
+  aiSetSliceLimits({rollouts,variants,proofs}) { return this.api.aiSetSliceLimits(rollouts>>>0,variants>>>0,proofs>>>0); }
+  aiWorkUsage() { return {rollouts:this.api.aiWorkRollouts()>>>0,
+    variants:this.api.aiWorkVariants()>>>0,proofs:this.api.aiWorkProofs()>>>0}; }
   aiBudgetExhausted() { return !!this.api.aiBudgetExhausted(); }
   aiBestGoalDistance() { return this.api.aiBestGoalDistance() >>> 0; }
   aiBestPrefixUpdates() { return this.api.aiBestPrefixUpdates() >>> 0; }
@@ -979,6 +987,7 @@ export class XrickWasmBridge {
   aiRejectionLandingX(index) { return this.api.aiRejectionLandingX(Number(index)>>>0) | 0; }
   aiPlanFullContinue(scenario) { return !!this.api.aiPlanFullContinue(Number(scenario)>>>0); }
   aiRestartPlanFull(scenario) { return !!this.api.aiRestartPlanFull(Number(scenario)>>>0); }
+  aiRestartPlanFullContinue(scenario) { return !!this.api.aiRestartPlanFullContinue(Number(scenario)>>>0); }
   aiSupportCount() { return this.api.aiSupportCount() >>> 0; }
   aiSupportId(index) { return this.api.aiSupportId(Number(index)>>>0) >>> 0; }
   aiSupportX0(index) { return this.api.aiSupportX0(Number(index)>>>0) | 0; }
