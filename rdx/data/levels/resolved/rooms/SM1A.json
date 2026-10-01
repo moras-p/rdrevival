@@ -60,12 +60,12 @@
       "nativeControllerAuthority": "xrick-runtime"
     },
     "fingerprints": {
-      "adjustments": "6c465e0dfe65729b81e3e47ac51445e646976e79339dd558d7936d14772edef5",
+      "adjustments": "d8f8f4168667e015018d6eddaa7d4ab59a07c0dba2ace1b830a95a454a214270",
       "alignment": "2f578fe5c83a0b0189bf9a2e7abbe10bfe504c34d328ea18d065843e18dc77fa",
       "presentationDepth": "ee493dcaee2995633d2d000a15790147b2b33d54b65a70ea560b759f0d979666",
-      "resolved": "8c2099af388b7eb4bb9c4c5aa79e0f05c0f1ce88049d460d057e2e0a39424efc",
+      "resolved": "2e3f831710f44f98ff19ec0f5ab6824740ed9b99e260ff631a6770d12cafa759",
       "reviewed": "13f9ca2f0f1f68d8e77d0ddea5cf9b7244b7873313c67d2054cb8b95b6f4b95b",
-      "semantic": "bc6b659976cad285f9e7eb5d806d83e580b12645e69b181093ff9cefb9775287",
+      "semantic": "ea2ecba1928165817c0d05f13a78a5dc41429e9f76cfadcdeb1795d592b60829",
       "sourceClassic": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
       "sourceRdx": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
       "structural": "0f470e286af675de68711e4193a0def6b4c0e35b37b9bcfee99539bfba22a0be",
@@ -92,23 +92,6 @@
             "property": "position",
             "provenance": "offline minimum-displacement support/accessibility audit",
             "target": "SM1A.collectible.mark-302"
-          },
-          {
-            "evidence": {
-              "entity": 16,
-              "neighborDx": 0,
-              "neighborDy": -8,
-              "neighborProvenance": "Classic nearest-solid-neighbour clearance audit; preserve Classic signed clearance/penetration"
-            },
-            "id": "SM1A.collectible.mark-303.position",
-            "operation": {
-              "dxPx": 0,
-              "dyPx": 0,
-              "type": "translate"
-            },
-            "property": "position",
-            "provenance": "offline minimum-displacement support/accessibility audit",
-            "target": "SM1A.collectible.mark-303"
           },
           {
             "evidence": {
@@ -140,37 +123,6 @@
             "property": "visualAnchor",
             "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
             "target": "classic:SM1A:mark:302"
-          },
-          {
-            "evidence": {
-              "allRoomParityReview": true,
-              "correctionKinds": [
-                "classic-nearest-solid-neighbour"
-              ],
-              "currentOrigin": [
-                88,
-                408
-              ],
-              "fittedOrigin": [
-                88,
-                400
-              ],
-              "sourceId": "placement:mark:303",
-              "subjectCategory": "collectible",
-              "supersededVisualDelta": [
-                0,
-                -8
-              ]
-            },
-            "id": "SM1A.mark-303.visual-anchor",
-            "operation": {
-              "dxPx": 0,
-              "dyPx": -17,
-              "type": "translate"
-            },
-            "property": "visualAnchor",
-            "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
-            "target": "classic:SM1A:mark:303"
           }
         ],
         "schema": "rdr.adjustments_resolved.v1"
@@ -1773,28 +1725,7 @@
             }
           },
           {
-            "adjustmentsApplied": [
-              {
-                "id": "SM1A.collectible.mark-303.position",
-                "operation": {
-                  "dxPx": 0,
-                  "dyPx": 0,
-                  "type": "translate"
-                },
-                "property": "position",
-                "provenance": "offline minimum-displacement support/accessibility audit"
-              },
-              {
-                "id": "SM1A.mark-303.visual-anchor",
-                "operation": {
-                  "dxPx": 0,
-                  "dyPx": -17,
-                  "type": "translate"
-                },
-                "property": "visualAnchor",
-                "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px."
-              }
-            ],
+            "adjustmentsApplied": [],
             "alignedBaseline": {
               "authority": "SM1A.effective-room",
               "origin": [
@@ -1855,13 +1786,13 @@
               ],
               "presentationOrigin": [
                 88,
-                415
+                432
               ],
               "supportBounds": null,
               "triggerBounds": null,
               "visualAnchor": [
                 70,
-                389
+                406
               ],
               "visualBounds": null
             },

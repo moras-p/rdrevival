@@ -23,9 +23,9 @@
       "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
       "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
       "presentationDepth": "39639e0a127e56b98115552d7f812135228d9692eb7b2ff12642ac606d6cd6da",
-      "resolved": "40070ab90528468392007bdaf2e01dcd1a25da0a03e8b40b882f7552a1e22e8c",
-      "reviewed": "4cd085db8ebc235e754247f7d90e139fcfdda9597e90ce4bb157a8b78716f478",
-      "semantic": "92a99dc8b783dabf0164ead0ffe357571d4e3a3403703bcf45c08b61cd4209d3",
+      "resolved": "8ab90b9f5c09f3ef86a385066faed86857ea194881b59a9a8d69864c07b11454",
+      "reviewed": "c8440c63042761f059526c746b7cc5e7feb9f68dbfe3b8b3df3413d5c438b74a",
+      "semantic": "be3eb28c491ba8bfcf260389b30fd88316ac76e38c7a6b134387b8a94eef9801",
       "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
       "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
       "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
@@ -175,17 +175,18 @@
             "provenance": {
               "authority": "level-editor-reviewed-fix",
               "evidence": [
-                "patches/sm1e-castle-changes.json",
+                "production-c-presentation-capture",
+                "Classic ent_mvstep remains trajectory/timing authority",
                 "SM1A.actor.mark-297"
               ],
-              "reason": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+              "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
             },
             "target": "SM1E.actor.mark-335",
             "type": "entity-position",
             "value": {
               "position": [
                 128,
-                186
+                178
               ]
             }
           }
@@ -1060,11 +1061,11 @@
               "gameplayBounds": null,
               "position": [
                 128,
-                186
+                178
               ],
               "presentationOrigin": [
                 113,
-                189
+                181
               ],
               "supportBounds": null,
               "triggerBounds": [
@@ -1075,7 +1076,7 @@
               ],
               "visualAnchor": [
                 94,
-                163
+                155
               ],
               "visualBounds": null
             },
@@ -1112,7 +1113,7 @@
             "reviewed": {
               "position": [
                 128,
-                186
+                178
               ]
             },
             "reviewedCorrectionsApplied": [
@@ -1121,10 +1122,11 @@
                 "provenance": {
                   "authority": "level-editor-reviewed-fix",
                   "evidence": [
-                    "patches/sm1e-castle-changes.json",
+                    "production-c-presentation-capture",
+                    "Classic ent_mvstep remains trajectory/timing authority",
                     "SM1A.actor.mark-297"
                   ],
-                  "reason": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+                  "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
                 },
                 "type": "entity-position"
               }
@@ -1172,11 +1174,11 @@
               "anchorAuthority": "rdx-pn-foot",
               "baseDraw": [
                 94,
-                163
+                155
               ],
               "baseOrigin": [
                 113,
-                189
+                181
               ],
               "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
               "terminalPolicy": "classic-ent-mvstep-loop",
@@ -1186,14 +1188,14 @@
               "simulated": {
                 "draw": [
                   94,
-                  162
+                  154
                 ],
                 "front": false,
                 "mirrorX": false,
                 "mirrorY": false,
                 "origin": [
                   113,
-                  188
+                  180
                 ],
                 "pn": 78,
                 "visible": true,
@@ -1202,14 +1204,14 @@
               "snapshot": {
                 "draw": [
                   94,
-                  163
+                  155
                 ],
                 "front": false,
                 "mirrorX": false,
                 "mirrorY": false,
                 "origin": [
                   113,
-                  189
+                  181
                 ],
                 "pn": 79,
                 "renderOrder": 4,
@@ -3019,7 +3021,7 @@
         {
           "after": [
             128,
-            186
+            178
           ],
           "before": [
             128,
@@ -3029,10 +3031,11 @@
           "provenance": {
             "authority": "level-editor-reviewed-fix",
             "evidence": [
-              "patches/sm1e-castle-changes.json",
+              "production-c-presentation-capture",
+              "Classic ent_mvstep remains trajectory/timing authority",
               "SM1A.actor.mark-297"
             ],
-            "reason": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+            "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
           },
           "semantic": "gameplay",
           "target": "SM1E.actor.mark-335",

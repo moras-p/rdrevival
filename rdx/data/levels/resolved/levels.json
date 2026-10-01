@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "39acf324a1ed8c3b837e663547b4152fa19f3fa1a5b10f18052277e92b8dcbc5",
+  "authoredLayersFingerprint": "72f617616409bfc56b1fe787d8728a21f697c32261ed8b3c4b5b9a602d3804b0",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -353,11 +353,11 @@
         },
         {
           "dx": 0,
-          "dy": 23,
+          "dy": 15,
           "entity": 52,
           "mapId": 37,
           "mark": 335,
-          "provenance": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path.",
+          "provenance": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path.",
           "submap": 30
         },
         {
@@ -13738,6 +13738,22 @@
           "targetSubmap": 31
         },
         {
+          "action": "one-way",
+          "authority": "user-reviewed-classic-topology-divergence",
+          "g8Bounds": [
+            22,
+            8,
+            2,
+            1
+          ],
+          "id": "md0038-one-way-top-walkway-right-edge-22-23-8",
+          "mapId": 38,
+          "provenance": "Reviewed SM1F/MD0038 offset is (+32,+64) px, so RDX g8 (22..23,8) corresponds to Classic g8 (18..19,0). Classic source flags are 0x18 (FGND|WAYUP) at both cells, while the source MD0038 logic cell is MT=0/ML=0 and projects open. SM06 md0009-one-way-support-16-17-102-103 is the same exact-g8 one-way provider control.",
+          "reason": "Restore the two missing one-way gameplay cells required by Classic collision authority; keep neighboring cells and the row below unchanged.",
+          "sourceKey": "geometry:rdx:g8:{22,23}:8",
+          "submap": 31
+        },
+        {
           "action": "climb-through",
           "authority": "user-reviewed-level-editor-collision",
           "g8Bounds": [
@@ -14137,14 +14153,6 @@
           "submap": 26
         },
         {
-          "dx": 0,
-          "dy": -17,
-          "mapId": 33,
-          "mark": 303,
-          "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
-          "submap": 26
-        },
-        {
           "dx": 7,
           "dy": 0,
           "mapId": 34,
@@ -14198,14 +14206,14 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "39acf324a1ed8c3b837e663547b4152fa19f3fa1a5b10f18052277e92b8dcbc5",
+    "authoredLayers": "72f617616409bfc56b1fe787d8728a21f697c32261ed8b3c4b5b9a602d3804b0",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "a610f689075a8bc72efeacab618bb8a83c73fea11e71a6aa5830bd1b23fab383",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "b1ccf6f3ef957c467a80ad953bbc126705d40f2c93a60a4e7cf00cf9647977b3",
-    "resolved32": 4237452751,
-    "runtimeSource": "20f440e3e6ef67c1585f9a9796dc2d0a8661582a7888f304ea45be131fdbf1c5",
-    "runtimeSource32": 1454612546,
+    "resolved": "e734d580bf3d738ddeeb16f4b8b468985f62120d822d4b2dfd175985cf12b2cf",
+    "resolved32": 275120342,
+    "runtimeSource": "37883e90477c815caaa3ce754177233c70d21feb8acd238506c7243463663311",
+    "runtimeSource32": 4162261875,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -129459,12 +129467,12 @@
         "nativeControllerAuthority": "xrick-runtime"
       },
       "fingerprints": {
-        "adjustments": "6c465e0dfe65729b81e3e47ac51445e646976e79339dd558d7936d14772edef5",
+        "adjustments": "d8f8f4168667e015018d6eddaa7d4ab59a07c0dba2ace1b830a95a454a214270",
         "alignment": "2f578fe5c83a0b0189bf9a2e7abbe10bfe504c34d328ea18d065843e18dc77fa",
         "presentationDepth": "ee493dcaee2995633d2d000a15790147b2b33d54b65a70ea560b759f0d979666",
-        "resolved": "8c2099af388b7eb4bb9c4c5aa79e0f05c0f1ce88049d460d057e2e0a39424efc",
+        "resolved": "2e3f831710f44f98ff19ec0f5ab6824740ed9b99e260ff631a6770d12cafa759",
         "reviewed": "13f9ca2f0f1f68d8e77d0ddea5cf9b7244b7873313c67d2054cb8b95b6f4b95b",
-        "semantic": "bc6b659976cad285f9e7eb5d806d83e580b12645e69b181093ff9cefb9775287",
+        "semantic": "ea2ecba1928165817c0d05f13a78a5dc41429e9f76cfadcdeb1795d592b60829",
         "sourceClassic": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
         "sourceRdx": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
         "structural": "0f470e286af675de68711e4193a0def6b4c0e35b37b9bcfee99539bfba22a0be",
@@ -129491,23 +129499,6 @@
               "property": "position",
               "provenance": "offline minimum-displacement support/accessibility audit",
               "target": "SM1A.collectible.mark-302"
-            },
-            {
-              "evidence": {
-                "entity": 16,
-                "neighborDx": 0,
-                "neighborDy": -8,
-                "neighborProvenance": "Classic nearest-solid-neighbour clearance audit; preserve Classic signed clearance/penetration"
-              },
-              "id": "SM1A.collectible.mark-303.position",
-              "operation": {
-                "dxPx": 0,
-                "dyPx": 0,
-                "type": "translate"
-              },
-              "property": "position",
-              "provenance": "offline minimum-displacement support/accessibility audit",
-              "target": "SM1A.collectible.mark-303"
             },
             {
               "evidence": {
@@ -129539,37 +129530,6 @@
               "property": "visualAnchor",
               "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
               "target": "classic:SM1A:mark:302"
-            },
-            {
-              "evidence": {
-                "allRoomParityReview": true,
-                "correctionKinds": [
-                  "classic-nearest-solid-neighbour"
-                ],
-                "currentOrigin": [
-                  88,
-                  408
-                ],
-                "fittedOrigin": [
-                  88,
-                  400
-                ],
-                "sourceId": "placement:mark:303",
-                "subjectCategory": "collectible",
-                "supersededVisualDelta": [
-                  0,
-                  -8
-                ]
-              },
-              "id": "SM1A.mark-303.visual-anchor",
-              "operation": {
-                "dxPx": 0,
-                "dyPx": -17,
-                "type": "translate"
-              },
-              "property": "visualAnchor",
-              "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px.",
-              "target": "classic:SM1A:mark:303"
             }
           ],
           "schema": "rdr.adjustments_resolved.v1"
@@ -131172,28 +131132,7 @@
               }
             },
             {
-              "adjustmentsApplied": [
-                {
-                  "id": "SM1A.collectible.mark-303.position",
-                  "operation": {
-                    "dxPx": 0,
-                    "dyPx": 0,
-                    "type": "translate"
-                  },
-                  "property": "position",
-                  "provenance": "offline minimum-displacement support/accessibility audit"
-                },
-                {
-                  "id": "SM1A.mark-303.visual-anchor",
-                  "operation": {
-                    "dxPx": 0,
-                    "dyPx": -17,
-                    "type": "translate"
-                  },
-                  "property": "visualAnchor",
-                  "provenance": "All-room fixed-contact clearance audit: place the RDX pickup opaque bottom adjacent to the same hard floor relation as Classic; replace the insufficient -8px neighbour correction with -17px."
-                }
-              ],
+              "adjustmentsApplied": [],
               "alignedBaseline": {
                 "authority": "SM1A.effective-room",
                 "origin": [
@@ -131254,13 +131193,13 @@
                 ],
                 "presentationOrigin": [
                   88,
-                  415
+                  432
                 ],
                 "supportBounds": null,
                 "triggerBounds": null,
                 "visualAnchor": [
                   70,
-                  389
+                  406
                 ],
                 "visualBounds": null
               },
@@ -139606,9 +139545,9 @@
         "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
         "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
         "presentationDepth": "39639e0a127e56b98115552d7f812135228d9692eb7b2ff12642ac606d6cd6da",
-        "resolved": "40070ab90528468392007bdaf2e01dcd1a25da0a03e8b40b882f7552a1e22e8c",
-        "reviewed": "4cd085db8ebc235e754247f7d90e139fcfdda9597e90ce4bb157a8b78716f478",
-        "semantic": "92a99dc8b783dabf0164ead0ffe357571d4e3a3403703bcf45c08b61cd4209d3",
+        "resolved": "8ab90b9f5c09f3ef86a385066faed86857ea194881b59a9a8d69864c07b11454",
+        "reviewed": "c8440c63042761f059526c746b7cc5e7feb9f68dbfe3b8b3df3413d5c438b74a",
+        "semantic": "be3eb28c491ba8bfcf260389b30fd88316ac76e38c7a6b134387b8a94eef9801",
         "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
         "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
         "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
@@ -139758,17 +139697,18 @@
               "provenance": {
                 "authority": "level-editor-reviewed-fix",
                 "evidence": [
-                  "patches/sm1e-castle-changes.json",
+                  "production-c-presentation-capture",
+                  "Classic ent_mvstep remains trajectory/timing authority",
                   "SM1A.actor.mark-297"
                 ],
-                "reason": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+                "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
               },
               "target": "SM1E.actor.mark-335",
               "type": "entity-position",
               "value": {
                 "position": [
                   128,
-                  186
+                  178
                 ]
               }
             }
@@ -140643,11 +140583,11 @@
                 "gameplayBounds": null,
                 "position": [
                   128,
-                  186
+                  178
                 ],
                 "presentationOrigin": [
                   113,
-                  189
+                  181
                 ],
                 "supportBounds": null,
                 "triggerBounds": [
@@ -140658,7 +140598,7 @@
                 ],
                 "visualAnchor": [
                   94,
-                  163
+                  155
                 ],
                 "visualBounds": null
               },
@@ -140695,7 +140635,7 @@
               "reviewed": {
                 "position": [
                   128,
-                  186
+                  178
                 ]
               },
               "reviewedCorrectionsApplied": [
@@ -140704,10 +140644,11 @@
                   "provenance": {
                     "authority": "level-editor-reviewed-fix",
                     "evidence": [
-                      "patches/sm1e-castle-changes.json",
+                      "production-c-presentation-capture",
+                      "Classic ent_mvstep remains trajectory/timing authority",
                       "SM1A.actor.mark-297"
                     ],
-                    "reason": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+                    "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
                   },
                   "type": "entity-position"
                 }
@@ -140755,11 +140696,11 @@
                 "anchorAuthority": "rdx-pn-foot",
                 "baseDraw": [
                   94,
-                  163
+                  155
                 ],
                 "baseOrigin": [
                   113,
-                  189
+                  181
                 ],
                 "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
                 "terminalPolicy": "classic-ent-mvstep-loop",
@@ -140769,14 +140710,14 @@
                 "simulated": {
                   "draw": [
                     94,
-                    162
+                    154
                   ],
                   "front": false,
                   "mirrorX": false,
                   "mirrorY": false,
                   "origin": [
                     113,
-                    188
+                    180
                   ],
                   "pn": 78,
                   "visible": true,
@@ -140785,14 +140726,14 @@
                 "snapshot": {
                   "draw": [
                     94,
-                    163
+                    155
                   ],
                   "front": false,
                   "mirrorX": false,
                   "mirrorY": false,
                   "origin": [
                     113,
-                    189
+                    181
                   ],
                   "pn": 79,
                   "renderOrder": 4,
@@ -142602,7 +142543,7 @@
           {
             "after": [
               128,
-              186
+              178
             ],
             "before": [
               128,
@@ -142612,10 +142553,11 @@
             "provenance": {
               "authority": "level-editor-reviewed-fix",
               "evidence": [
-                "patches/sm1e-castle-changes.json",
+                "production-c-presentation-capture",
+                "Classic ent_mvstep remains trajectory/timing authority",
                 "SM1A.actor.mark-297"
               ],
-              "reason": "User-reviewed patches/sm1e-castle-changes.json: translate source mark 335 by (0,23) RDX-world pixels. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+              "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
             },
             "semantic": "gameplay",
             "target": "SM1E.actor.mark-335",
@@ -142714,11 +142656,11 @@
         "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
         "alignment": "d29ebb20bbbc10516281a4a72077148e7e9cdce093c43f0b5b84c87b03fbd19c",
         "presentationDepth": "52317d64ee83687941f0872bac1b79904c9dd69cc05d26ab6d22727c2f1bc519",
-        "resolved": "3b0a9134c78c9d506ca5734c5b8da9ef7ca7a7b17b7c402929073a3e12322886",
+        "resolved": "8cb454b644380cb74fcc253158727fc4491b6b9fc677e8f90a59ae6f0e047363",
         "semantic": "f0e42326e565f8976b4c5aaf832805b66ecb9449b60fecf2a2840d33fce34153",
         "sourceClassic": "5fb349931a9214a6dfdd7d4dc36aa7fce3c37ca69f71e13aa1531f4d4e48ca14",
         "sourceRdx": "e45772a3be5599e6eb521b2a383b870610e5a49b767e720b361e7e3e454a0ada",
-        "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+        "structural": "8e2c5feb80ddaaae2c09df3424362a5778742a866b67d3692087ecbaa9ceeb12",
         "transitions": "37ed77efab7ca0ef7efd9d0c0c913a82f4d86d3979f6da8d8133910e2aac3aac"
       },
       "group": "castle",
@@ -144346,7 +144288,23 @@
           }
         },
         "structuralCorrections": {
-          "operations": [],
+          "operations": [
+            {
+              "action": "one-way",
+              "authority": "user-reviewed-classic-topology-divergence",
+              "g8Bounds": [
+                22,
+                8,
+                2,
+                1
+              ],
+              "id": "md0038-one-way-top-walkway-right-edge-22-23-8",
+              "provenance": "Reviewed SM1F/MD0038 offset is (+32,+64) px, so RDX g8 (22..23,8) corresponds to Classic g8 (18..19,0). Classic source flags are 0x18 (FGND|WAYUP) at both cells, while the source MD0038 logic cell is MT=0/ML=0 and projects open. SM06 md0009-one-way-support-16-17-102-103 is the same exact-g8 one-way provider control.",
+              "reason": "Restore the two missing one-way gameplay cells required by Classic collision authority; keep neighboring cells and the row below unchanged.",
+              "sourceKey": "geometry:rdx:g8:{22,23}:8",
+              "type": "gameplay-cell-override"
+            }
+          ],
           "schema": "rdr.structural_corrections_resolved.v1"
         }
       },
@@ -188401,7 +188359,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "20f440e3e6ef67c1585f9a9796dc2d0a8661582a7888f304ea45be131fdbf1c5",
+  "runtimeSourceFingerprint": "37883e90477c815caaa3ce754177233c70d21feb8acd238506c7243463663311",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {

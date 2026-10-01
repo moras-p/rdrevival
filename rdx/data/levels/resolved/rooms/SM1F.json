@@ -23,11 +23,11 @@
       "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
       "alignment": "d29ebb20bbbc10516281a4a72077148e7e9cdce093c43f0b5b84c87b03fbd19c",
       "presentationDepth": "52317d64ee83687941f0872bac1b79904c9dd69cc05d26ab6d22727c2f1bc519",
-      "resolved": "3b0a9134c78c9d506ca5734c5b8da9ef7ca7a7b17b7c402929073a3e12322886",
+      "resolved": "8cb454b644380cb74fcc253158727fc4491b6b9fc677e8f90a59ae6f0e047363",
       "semantic": "f0e42326e565f8976b4c5aaf832805b66ecb9449b60fecf2a2840d33fce34153",
       "sourceClassic": "5fb349931a9214a6dfdd7d4dc36aa7fce3c37ca69f71e13aa1531f4d4e48ca14",
       "sourceRdx": "e45772a3be5599e6eb521b2a383b870610e5a49b767e720b361e7e3e454a0ada",
-      "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+      "structural": "8e2c5feb80ddaaae2c09df3424362a5778742a866b67d3692087ecbaa9ceeb12",
       "transitions": "37ed77efab7ca0ef7efd9d0c0c913a82f4d86d3979f6da8d8133910e2aac3aac"
     },
     "group": "castle",
@@ -1655,7 +1655,23 @@
         }
       },
       "structuralCorrections": {
-        "operations": [],
+        "operations": [
+          {
+            "action": "one-way",
+            "authority": "user-reviewed-classic-topology-divergence",
+            "g8Bounds": [
+              22,
+              8,
+              2,
+              1
+            ],
+            "id": "md0038-one-way-top-walkway-right-edge-22-23-8",
+            "provenance": "Reviewed SM1F/MD0038 offset is (+32,+64) px, so RDX g8 (22..23,8) corresponds to Classic g8 (18..19,0). Classic source flags are 0x18 (FGND|WAYUP) at both cells, while the source MD0038 logic cell is MT=0/ML=0 and projects open. SM06 md0009-one-way-support-16-17-102-103 is the same exact-g8 one-way provider control.",
+            "reason": "Restore the two missing one-way gameplay cells required by Classic collision authority; keep neighboring cells and the row below unchanged.",
+            "sourceKey": "geometry:rdx:g8:{22,23}:8",
+            "type": "gameplay-cell-override"
+          }
+        ],
         "schema": "rdr.structural_corrections_resolved.v1"
       }
     },
