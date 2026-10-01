@@ -89,7 +89,8 @@ export class RealtimeAiController {
     try { choiceName=realtimeActionName(pending.decision.choice); }
     catch (error) { this.providerErrorCount+=1; this.lastError=String(error?.message || error); this.trace.reject(pending.receiptId,'invalid-action',pending.decision); this.#releaseMask(); return; }
     const choice=legal.find(item=>item.name===choiceName);
-    if (!choice || !pending.offeredActions.includes(choiceName)) { this.providerErrorCount+=1; this.lastError=`Provider selected unavailable action '${choiceName}'`; this.trace.reject(pending.receiptId,choice?'unoffered-action':'illegal-action',pending.decision); this.#releaseMask(); return; }
+    if (!pending.offeredActions.includes(choiceName)) { this.providerErrorCount+=1; this.lastError=`Provider selected unoffered action '${choiceName}'`; this.trace.reject(pending.receiptId,'unoffered-action',pending.decision); this.#releaseMask(); return; }
+    if (!choice) { this.staleDiscardCount+=1; this.trace.reject(pending.receiptId,'stale-legality',pending.decision); this.#releaseMask(); return; }
     let confidence;
     try { confidence=this.confidenceCalibration.evaluate(pending.decision,{providerFamily:this.provider.family||'unknown',providerProfile:this.providerProfile,model:pending.decision?.model,modelVersion:pending.decision?.modelVersion,projection:pending.calibrationKey}); }
     catch(error){this.providerErrorCount+=1;this.lastError=String(error?.message||error);this.trace.reject(pending.receiptId,'invalid-confidence',pending.decision);this.#releaseMask();return;}
