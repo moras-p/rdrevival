@@ -662,3 +662,34 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
   .gai-route-detail { grid-template-columns:1fr; }
   .gai-route-detail-map canvas { height:230px; }
 }
+
+/* Realtime decision models are development/playtest tooling. Keep them visually
+ * separate from certified GAI so shadow/live network inference cannot be
+ * mistaken for a certified deterministic route. */
+.ai-control-panel { display:block; width:min(1180px,100%); }
+.ai-control-panel[hidden] { display:none; }
+.ai-lanes { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; width:100%; }
+.ai-lane { min-width:0; padding:12px; border:1px solid #314450; border-radius:10px; background:#09131b; box-sizing:border-box; }
+.ai-lane-certified { border-color:#3d5360; }
+.ai-lane-realtime { border-color:#36566a; background:linear-gradient(145deg,#08151f,#0a1822); }
+.ai-lane-heading { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
+.ai-lane-heading > div { display:flex; flex-direction:column; gap:2px; min-width:0; }
+.ai-lane-kicker { color:#75d9ed; font:800 9px/1.2 ui-monospace,monospace; letter-spacing:.13em; text-transform:uppercase; }
+.ai-lane-heading strong { color:#eef7fa; font-size:13px; line-height:1.25; }
+.ai-lane-badge { flex:none; max-width:44%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:4px 7px; border:1px solid #365d70; border-radius:999px; color:#a7dae8; background:#0c2531; font:700 9px/1 ui-monospace,monospace; }
+.realtime-config-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; }
+.realtime-config-grid label { display:grid; gap:4px; min-width:0; color:#85a0ad; font:700 9px/1.2 ui-monospace,monospace; text-transform:uppercase; letter-spacing:.04em; }
+.realtime-config-grid input,.realtime-config-grid select { width:100%; min-width:0; box-sizing:border-box; }
+.realtime-wide { grid-column:1/-1; }
+.realtime-actions { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 8px; }
+.realtime-actions button { min-height:30px; }
+.realtime-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; margin:9px 0 0; }
+.realtime-metrics > div { min-width:0; padding:6px 7px; border:1px solid #203743; border-radius:6px; background:#071019; }
+.realtime-metrics dt { color:#6f8c9a; font:700 8px/1.2 ui-monospace,monospace; text-transform:uppercase; }
+.realtime-metrics dd { margin:2px 0 0; overflow:hidden; text-overflow:ellipsis; color:#d9e8ee; font:700 10px/1.25 ui-monospace,monospace; }
+#rdx-realtime-status { display:block; margin-top:5px; }
+#rdx-realtime-status[data-kind="warn"] { color:#ffc16d; }
+#rdx-realtime-status[data-kind="error"] { color:#ff8f7d; }
+#rdx-realtime-status[data-kind="ok"] { color:#8de6b2; }
+@media (max-width:920px) { .ai-lanes { grid-template-columns:1fr; } }
+@media (max-width:620px) { .realtime-config-grid,.realtime-metrics { grid-template-columns:1fr; } .realtime-wide { grid-column:auto; } .ai-lane-badge { max-width:50%; } }

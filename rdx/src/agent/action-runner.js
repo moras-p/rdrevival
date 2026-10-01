@@ -1,4 +1,4 @@
-import { gameplayAgentState, forceGameplayDebugFrame } from './gameplay-control.js';
+import { acquireGameplayControlLease, gameplayAgentState, forceGameplayDebugFrame, releaseGameplayControlLease, setGameplayControlMask } from './gameplay-control.js';
 import { readGameplayTrace } from './debug-tools.js';
 import { XRICK_GAMEPLAY_CONTROL_BY_NAME as bits } from '../runtime/controls.js';
 
@@ -58,18 +58,24 @@ export function createHeroActionRunner(bridge, {beforeRun = () => {}, afterRun =
     checkAvailable();
     if ((baselineId || replay) && (!baseline || (baselineId && baseline.id !== baselineId))) throw new Error('Missing or stale baselineId; create a new run from current state');
     if (replay && !artifact) throw new Error('No action tape to replay');
-    beforeRun();
-    bridge.setFrontendPaused(true);
-    bridge.setDebugControl(0);
-    if (baselineId || replay) {
-      if (!bridge.debugCheckpointLoad(SLOT)) throw new Error('Native baseline is no longer available');
+    const controlLease = acquireGameplayControlLease('webmcp-actions');
+    try {
+      beforeRun();
       bridge.setFrontendPaused(true);
-    } else {
-      if (!bridge.debugCheckpointSave(SLOT)) throw new Error('Could not save native baseline');
-      artifact = null;
-      baseline = {id:`actions-${nextId++}`, observation:observe()};
+      setGameplayControlMask(bridge, controlLease, 0);
+      if (baselineId || replay) {
+        if (!bridge.debugCheckpointLoad(SLOT)) throw new Error('Native baseline is no longer available');
+        bridge.setFrontendPaused(true);
+      } else {
+        if (!bridge.debugCheckpointSave(SLOT)) throw new Error('Could not save native baseline');
+        artifact = null;
+        baseline = {id:`actions-${nextId++}`, observation:observe()};
+      }
+      if (fingerprint(observe()) !== fingerprint(baseline.observation)) throw new Error('Baseline restore diverged; create a new run');
+    } catch (error) {
+      releaseGameplayControlLease(controlLease, bridge);
+      throw error;
     }
-    if (fingerprint(observe()) !== fingerprint(baseline.observation)) throw new Error('Baseline restore diverged; create a new run');
     running = true; cancelled = false;
     const reference = artifact;
     const tape = [], history = [], completed = [];
@@ -78,7 +84,7 @@ export function createHeroActionRunner(bridge, {beforeRun = () => {}, afterRun =
       const before = observe();
       if (dead(before.state)) return {reason:'hero_dead', before};
       bridge.debugTraceBegin(mask);
-      bridge.setDebugControl(mask);
+      setGameplayControlMask(bridge, controlLease, mask);
       forceGameplayDebugFrame(bridge);
       bridge.debugTraceFinish();
       const after = observe();
@@ -93,7 +99,7 @@ export function createHeroActionRunner(bridge, {beforeRun = () => {}, afterRun =
         const trace = readGameplayTrace(bridge);
         return {reason:problem,before,after,cause:trace.deaths?.find(event => event.cause !== 'unattributed_native_death') || trace.deaths?.[0] || null,trace};
       }
-      if (tape.length % 32 === 0) { bridge.setDebugControl(0); await yieldFrame(); }
+      if (tape.length % 32 === 0) { setGameplayControlMask(bridge, controlLease, 0); await yieldFrame(); }
       return null;
     };
     try {
@@ -125,7 +131,7 @@ export function createHeroActionRunner(bridge, {beforeRun = () => {}, afterRun =
     } catch (error) {
       reason = 'runtime_error'; failure = {message:String(error?.message || error)};
     } finally {
-      bridge.setDebugControl(0); bridge.debugTraceFinish(); bridge.setFrontendPaused(true); running = false;
+      releaseGameplayControlLease(controlLease, bridge); bridge.debugTraceFinish(); bridge.setFrontendPaused(true); running = false;
     }
     if (!replay) artifact = {tape,reason};
     const result = {schema:'rdr.gameplay.actions.v1',baselineId:baseline.id,start:baseline.observation.state,reason,frames:tape.length,completed,

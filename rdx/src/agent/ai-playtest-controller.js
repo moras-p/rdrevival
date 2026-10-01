@@ -1,5 +1,5 @@
 import { CollisionPolicyName } from '../collision/dataset.js';
-import { forceGameplayDebugFrame, gameplayAgentState } from './gameplay-control.js';
+import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentState, gameplayControlLeaseStatus, releaseGameplayControlLease, setGameplayControlMask } from './gameplay-control.js';
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
 
@@ -93,6 +93,31 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   let aiCoachSession = null;
   let aiRouteSequence = 0;
   let aiRouteArtifact = null;
+  let gaiControlLease = null;
+
+function ensureAiControlLease() {
+  if (!gaiControlLease) gaiControlLease = acquireGameplayControlLease('certified-gai');
+  return gaiControlLease;
+}
+
+function assertAiControlAvailable() {
+  const status = gameplayControlLeaseStatus();
+  if (status.active && (!gaiControlLease || status.id !== gaiControlLease.id))
+    throw new Error(`Gameplay control is already owned by ${status.owner}`);
+}
+
+function releaseAiControlLease() {
+  if (!gaiControlLease) return false;
+  const released = releaseGameplayControlLease(gaiControlLease, runtime.bridge);
+  gaiControlLease = null;
+  return released;
+}
+
+function setAiControlMask(mask) {
+  const lease = ensureAiControlLease();
+  setGameplayControlMask(runtime.bridge, lease, mask);
+  if ((Number(mask) & 0xff) === 0 && !aiAutoplay.active && !aiAutoplay.planning) releaseAiControlLease();
+}
 
 function speedModeLabel(mode) {
   return ({ 1: '1×', 2: '1.5×', 3: '2×' })[Number(mode)] || '1×';
@@ -125,7 +150,9 @@ function updateAiPlayButtons() {
 
 function clearAiControl() {
   aiAutoplay.lastInputMask = 0;
-  if (runtime.bridge) runtime.bridge.setDebugControl(0);
+  if (!runtime.bridge || !gaiControlLease) return;
+  setGameplayControlMask(runtime.bridge, gaiControlLease, 0);
+  if (!aiAutoplay.active && !aiAutoplay.planning) releaseAiControlLease();
 }
 
 const AI_FAILURE_STAGE_LABELS = Object.freeze({
@@ -781,6 +808,7 @@ function planReusableAiRoute({
   if (!runtime.bridge.debugCheckpointSave(AI_ROUTE_LIVE_SLOT))
     throw new Error('Could not save live state before GAI route planning.');
   try {
+    assertAiControlAvailable();
     ensureAiDescriptorCollision();
     runtime.bridge.setFrontendPaused(true);
     runtime.bridge.setDebugInvincible(mode === 'immortal');
@@ -817,7 +845,7 @@ function planReusableAiRoute({
         const status = runtime.bridge.aiStatus() >>> 0;
         if (status !== AI_EXECUTOR_RUNNING) break;
         const beforeSerial = runtime.bridge.snapshot().frameSerial >>> 0;
-        runtime.bridge.setDebugControl(input);
+        setAiControlMask(input);
         forceGameplayDebugFrame(runtime.bridge);
         const after = gameplayAgentState(runtime.bridge);
         if ((after.frameSerial >>> 0) === beforeSerial) {
@@ -832,7 +860,7 @@ function planReusableAiRoute({
         inputMasks.push(input);
         referenceFrames.push(aiRouteComparableState(after));
       }
-      runtime.bridge.setDebugControl(0);
+      clearAiControl();
       /* One final tick lets the executor consume a terminal guard reached by
        * the last replayed production frame without advancing gameplay. */
       if (runtime.bridge.aiStatus() === AI_EXECUTOR_RUNNING) runtime.bridge.aiTick();
@@ -876,7 +904,7 @@ function planReusableAiRoute({
       }
     }
   } finally {
-    runtime.bridge.setDebugControl(0);
+    clearAiControl();
     if (!runtime.bridge.debugCheckpointLoad(AI_ROUTE_LIVE_SLOT))
       restoreError = new Error('Could not restore live state after GAI route planning.');
     runtime.bridge.debugCheckpointDiscard(AI_ROUTE_LIVE_SLOT);
@@ -921,7 +949,7 @@ async function replayReusableAiRoute(routeId = null, { freeze = true } = {}) {
        * neutral landing frame is not mistaken for a tape divergence. */
       for (let attempt = 0; attempt < 3; attempt += 1) {
         const beforeSerial = runtime.bridge.snapshot().frameSerial >>> 0;
-        runtime.bridge.setDebugControl(input);
+        setAiControlMask(input);
         forceGameplayDebugFrame(runtime.bridge);
         state = gameplayAgentState(runtime.bridge);
         if ((state.frameSerial >>> 0) !== beforeSerial) {
@@ -943,7 +971,7 @@ async function replayReusableAiRoute(routeId = null, { freeze = true } = {}) {
       }
     }
   } finally {
-    runtime.bridge.setDebugControl(0);
+    clearAiControl();
     if (!freeze) runtime.bridge.setFrontendPaused(false);
   }
   const end = gameplayAgentState(runtime.bridge);
@@ -971,6 +999,7 @@ async function replayReusableAiRoute(routeId = null, { freeze = true } = {}) {
 
 function startAiCoach(options = {}) {
   if (!runtime.bridge) throw new Error('xrick runtime is not ready');
+  assertAiControlAvailable();
   if (aiAutoplay.active || aiAutoplay.planning)
     stopAiAutoplay('Restarting GAI under a new external-agent coaching session.', 'warn');
   aiCoachSession = null;
@@ -1096,7 +1125,7 @@ async function runAiUntilBlocked({ restart = false, validationBudget = 24, maxFr
         edge:state.planner.blocker, proof:state.planner.lastProof, rejections:state.planner.recentRejections, dropSearch:diagnostics.dropSearch,
         controller:state.controller},
       guidance:'State is held. Apply native gameplay actions, then call run_until_blocked again without restart. Search/frame limits may need a larger budget.'};
-  } finally { runtime.bridge.setDebugControl(0); runtime.bridge.setFrontendPaused(true); }
+  } finally { clearAiControl(); runtime.bridge.setFrontendPaused(true); }
 }
 
 function stopAiCoach(reason = 'External agent stopped GAI coaching.') {
@@ -1206,6 +1235,7 @@ function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntim
   runtime.bridge?.setAiTransitionHold?.(false);
   runtime.bridge?.setFrontendPaused?.(false);
   clearAiControl();
+  releaseAiControlLease();
   if ((resetRuntime || cancelledPlanning) && runtime.bridge) {
     runtime.bridge.aiReset();
     gaiRouteInspector?.clear();
@@ -1465,6 +1495,7 @@ function runDeterministicAiPlan(reason = 'Restarting and precomputing complete d
 
 function runImmediateAiLivePlan(reason = 'Planning from coached live state…', { fullRoom = true } = {}) {
   if (!runtime.bridge) return false;
+  assertAiControlAvailable();
   ++aiAutoplay.nextPlanToken;
   aiAutoplay.active = true;
   aiAutoplay.planning = true;
@@ -1494,6 +1525,7 @@ function runImmediateAiLivePlan(reason = 'Planning from coached live state…', 
 
 function scheduleAiPlan(reason = 'Planning certified route…', { fullRoom = false } = {}) {
   if (!runtime.bridge) return;
+  assertAiControlAvailable();
   const token = ++aiAutoplay.nextPlanToken;
   aiAutoplay.active = true;
   aiAutoplay.planning = true;
@@ -1528,6 +1560,10 @@ function scheduleAiPlan(reason = 'Planning certified route…', { fullRoom = fal
 function startAiAutoplay() {
   if (!runtime.bridge || aiAutoplay.active || aiAutoplay.planning) return;
   aiAutoplay.coachControlled = false;
+  try { assertAiControlAvailable(); } catch (error) {
+    setAiPlayStatus(`AI cannot start: ${error?.message || error}`, 'error');
+    return;
+  }
   if (aiAutoplay.partialReady) {
     aiAutoplay.partialReady = false;
     aiAutoplay.heldResult = false;
@@ -1562,6 +1598,7 @@ function startAiRestartAutoplay() {
     return;
   }
   try {
+    assertAiControlAvailable();
     ensureAiDescriptorCollision();
     if (!runtime.bridge.aiBackendAvailable()) throw new Error('WASM rollback backend is unavailable. Rebuild xrick.js/.wasm with GAI enabled.');
     /* The visible button must return an anytime certificate instead of
@@ -1698,7 +1735,7 @@ function tickAiAutoplay(snapshot) {
   const input = runtime.bridge.aiTick() & AI_INPUT_MASK;
   const executorStatus = runtime.bridge.aiStatus();
   aiAutoplay.lastInputMask = input;
-  runtime.bridge.setDebugControl(input);
+  setAiControlMask(input);
 
   if (executorStatus === AI_EXECUTOR_RUNNING) {
     aiAutoplay.completedAtSerial = -1;

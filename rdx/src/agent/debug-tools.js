@@ -1,4 +1,4 @@
-import { forceGameplayDebugFrame, gameplayAgentState, setGameplayFrameObserver, withGameplayFrontendFreeze } from './gameplay-control.js';
+import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentState, releaseGameplayControlLease, setGameplayControlMask, subscribeGameplayFrameObserver, withGameplayFrontendFreeze } from './gameplay-control.js';
 
 export const DEBUG_ACTION_MASKS = Object.freeze({
   none: 0,
@@ -207,18 +207,19 @@ export function explainGameplayAction(bridge, { action, apply = false, freeze = 
     const before = gameplayAgentState(bridge);
     const beforeSnapshot = bridge.snapshot();
     if (!apply && !bridge.debugCheckpointSave(checkpointSlot)) throw new Error('Could not save native debug checkpoint');
+    const controlLease = acquireGameplayControlLease('debug-explain');
     let attemptedAfter = before;
     let trace;
     try {
       bridge.debugTraceBegin(mask);
-      bridge.setDebugControl(mask);
+      setGameplayControlMask(bridge, controlLease, mask);
       forceGameplayDebugFrame(bridge);
-      bridge.setDebugControl(0);
+      setGameplayControlMask(bridge, controlLease, 0);
       bridge.debugTraceFinish();
       attemptedAfter = gameplayAgentState(bridge);
       trace = enrichTraceMappings(bridge, decodeTrace(bridge.debugTraceEvents()));
     } finally {
-      bridge.setDebugControl(0);
+      releaseGameplayControlLease(controlLease, bridge);
       bridge.debugTraceFinish();
       if (!apply) {
         if (!loadCheckpointPreservingFrontendPause(bridge, checkpointSlot)) throw new Error('Could not restore native debug checkpoint');
@@ -574,8 +575,9 @@ export function createGameplayDebugController(bridge, {
     }
   };
 
-  function installObserver() { setGameplayFrameObserver(observer); }
-  function removeObserver() { setGameplayFrameObserver(null); }
+  let observerUnsubscribe = null;
+  function installObserver() { if (!observerUnsubscribe) observerUnsubscribe = subscribeGameplayFrameObserver(observer); }
+  function removeObserver() { if (observerUnsubscribe) { observerUnsubscribe(); observerUnsubscribe = null; } }
 
   function releaseRecordingFreeze(target) {
     if (!target?.freezeHeld || typeof bridge.setFrontendPaused !== 'function') return;
@@ -653,18 +655,19 @@ export function createGameplayDebugController(bridge, {
     if (presentation) bridge.setClassicAssets(presentation === 'classic');
     if (collisionPolicy != null) bridge.setCollisionPolicy(collisionPolicy);
     const frames = [];
+    const controlLease = acquireGameplayControlLease('debug-replay');
     try {
       for (let index = 0; index < target.inputMasks.length; index += 1) {
         const controlMask = target.inputMasks[index];
         const before = gameplayAgentState(bridge);
         bridge.debugTraceBegin(controlMask);
-        bridge.setDebugControl(controlMask);
+        setGameplayControlMask(bridge, controlLease, controlMask);
         forceGameplayDebugFrame(bridge);
         bridge.debugTraceFinish();
         frames.push({ index:frames.length, controlMask, before, after:gameplayAgentState(bridge), trace:enrichTraceMappings(bridge, decodeTrace(bridge.debugTraceEvents())) });
       }
     } finally {
-      bridge.setDebugControl(0);
+      releaseGameplayControlLease(controlLease, bridge);
       bridge.debugTraceFinish();
     }
     return frames;
@@ -732,10 +735,11 @@ export function createGameplayDebugController(bridge, {
       };
     }
 
+    const controlLease = acquireGameplayControlLease('debug-visual-comparison');
     try {
       for (let index = 0; index < target.inputMasks.length; index += 1) {
         const controlMask = target.inputMasks[index];
-        bridge.setDebugControl(controlMask);
+        setGameplayControlMask(bridge, controlLease, controlMask);
         forceGameplayDebugFrame(bridge);
         const state = gameplayAgentState(bridge);
         const gameplayFrameSerial = state.frameSerial >>> 0;
@@ -764,7 +768,7 @@ export function createGameplayDebugController(bridge, {
         }
       }
     } finally {
-      bridge.setDebugControl(0);
+      releaseGameplayControlLease(controlLease, bridge);
       bridge.debugCheckpointDiscard(visualSlot);
       bridge.setClassicAssets(originalClassic);
     }

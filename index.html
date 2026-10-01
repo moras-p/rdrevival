@@ -40,24 +40,43 @@
           <span id="rdx-runtime-options"></span>
         </div>
         <div class="controls control-group-panel ai-control-panel" data-control-group-panel="ai" hidden>
-          <div class="ai-control-primary">
-            <button id="rdx-ai-restart-run" class="primary ai-primary-action" type="button" disabled title="Canonical deterministic workflow: restart and prime the room, precompute the route, restore the identical start, then replay it. Invulnerable uses route-only planning and ignores lethal contacts.">↻ Restart + certified AI play</button>
-            <button id="rdx-ai-stop" type="button" disabled title="Stop AI and immediately return control to the player">■ Stop AI</button>
-            <label class="collision-policy"><input id="rdx-ai-continue" type="checkbox" checked> Continue into next rooms</label>
-          </div>
-          <div class="ai-control-secondary">
-            <label class="collision-policy">Live-state objective
-              <select id="rdx-ai-mode" title="Live-state objective. Invulnerable overrides AI planning to Debug reachability so lethal contacts do not affect routing.">
-                <option value="2" selected>Mortal · certified safe</option>
-                <option value="1">Debug reachability · unsafe</option>
-              </select>
-            </label>
-            <button id="rdx-ai-run" type="button" disabled title="Diagnostic path: plan from the current live state without canonical restart">▶ Plan current live state</button>
-            <button id="rdx-ai-copy-debug" type="button" disabled title="Copy planner topology, proof failures, rejection history, gameplay tuning and runtime diagnostics as JSON">Copy AI debug</button>
-          </div>
-          <div class="ai-control-status-row">
-            <strong id="rdx-ai-status" class="ai-play-status" role="status" aria-live="polite">AI idle</strong>
-            <span class="ai-control-help">Primary workflow: native deterministic compile/certify → fixed-plan replay. Libretro remains the second parity gate; browser/WASM is the final gate.</span>
+          <div class="ai-lanes">
+            <section class="ai-lane ai-lane-certified" aria-labelledby="rdx-certified-ai-title">
+              <div class="ai-lane-heading"><div><span class="ai-lane-kicker">Certified GAI</span><strong id="rdx-certified-ai-title">Deterministic plan + certify + replay</strong></div><span class="ai-lane-badge">native proof</span></div>
+              <div class="ai-control-primary">
+                <button id="rdx-ai-restart-run" class="primary ai-primary-action" type="button" disabled title="Canonical deterministic workflow: restart and prime the room, precompute the route, restore the identical start, then replay it. Invulnerable uses route-only planning and ignores lethal contacts.">↻ Restart + certified AI play</button>
+                <button id="rdx-ai-stop" type="button" disabled title="Stop AI and immediately return control to the player">■ Stop AI</button>
+                <label class="collision-policy"><input id="rdx-ai-continue" type="checkbox" checked> Continue into next rooms</label>
+              </div>
+              <div class="ai-control-secondary">
+                <label class="collision-policy">Live-state objective
+                  <select id="rdx-ai-mode" title="Live-state objective. Invulnerable overrides AI planning to Debug reachability so lethal contacts do not affect routing.">
+                    <option value="2" selected>Mortal · certified safe</option>
+                    <option value="1">Debug reachability · unsafe</option>
+                  </select>
+                </label>
+                <button id="rdx-ai-run" type="button" disabled title="Diagnostic path: plan from the current live state without canonical restart">▶ Plan current live state</button>
+                <button id="rdx-ai-copy-debug" type="button" disabled title="Copy planner topology, proof failures, rejection history, gameplay tuning and runtime diagnostics as JSON">Copy AI debug</button>
+              </div>
+              <div class="ai-control-status-row">
+                <strong id="rdx-ai-status" class="ai-play-status" role="status" aria-live="polite">AI idle</strong>
+                <span class="ai-control-help">Native deterministic compile/certify → fixed-plan replay.</span>
+              </div>
+            </section>
+            <section class="ai-lane ai-lane-realtime" aria-labelledby="rdx-realtime-title">
+              <div class="ai-lane-heading"><div><span class="ai-lane-kicker">Realtime model</span><strong id="rdx-realtime-title">Asynchronous decision provider</strong></div><span id="rdx-realtime-gateway-state" class="ai-lane-badge">gateway not checked</span></div>
+              <div class="realtime-config-grid">
+                <label>Profile<select id="rdx-realtime-profile"><option value="typesafe-jev">TypeSafe Jev</option><option value="openai-responses">OpenAI Responses</option><option value="laya-local">Laya local</option><option value="system-one-local" selected>System One local</option><option value="system-one-custom">System One custom</option></select></label>
+                <label>Mode<select id="rdx-realtime-mode"><option value="shadow" selected>Shadow · observe only</option><option value="live">Live · control Rick</option></select></label>
+                <label class="realtime-wide">Loopback gateway<input id="rdx-realtime-gateway" type="url" value="http://127.0.0.1:8787" autocomplete="off" spellcheck="false"></label>
+                <label>Model<input id="rdx-realtime-model" type="text" placeholder="gateway/profile default" autocomplete="off"></label>
+                <label>Decision cadence<input id="rdx-realtime-cadence" type="number" min="1" max="120" value="4"></label>
+                <label class="realtime-wide">Calibration<input id="rdx-realtime-calibration" type="text" value="uncalibrated" readonly></label>
+              </div>
+              <div class="realtime-actions"><button id="rdx-realtime-start" class="primary" type="button">▶ Start realtime</button><button id="rdx-realtime-stop" type="button" disabled>■ Stop</button><button id="rdx-realtime-refresh" type="button">↻ Gateway</button><button id="rdx-realtime-export" type="button" disabled>Export trace</button></div>
+              <strong id="rdx-realtime-status" class="ai-play-status" role="status" aria-live="polite">Realtime model idle</strong>
+              <dl class="realtime-metrics"><div><dt>Action</dt><dd id="rdx-realtime-current-action">—</dd></div><div><dt>Confidence</dt><dd id="rdx-realtime-confidence">—</dd></div><div><dt>Latency</dt><dd id="rdx-realtime-latency">—</dd></div><div><dt>Decisions</dt><dd id="rdx-realtime-decisions">0</dd></div><div><dt>Stale</dt><dd id="rdx-realtime-stale">0</dd></div><div><dt>Errors</dt><dd id="rdx-realtime-errors">0</dd></div><div class="realtime-wide"><dt>Projection</dt><dd id="rdx-realtime-projection">—</dd></div></dl>
+            </section>
           </div>
         </div>
         <div class="controls control-group-panel" data-control-group-panel="audio" hidden>

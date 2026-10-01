@@ -1,11 +1,71 @@
 let gameplayFrameObserver = null;
+const gameplayFrameSubscribers = new Set();
+let activeGameplayControlLease = null;
+let nextGameplayControlLeaseId = 1;
 
-export function setGameplayFrameObserver(observer = null) {
+function validateFrameObserver(observer) {
   if (observer != null && (typeof observer.beforeFrame !== 'function' || typeof observer.afterFrame !== 'function'))
     throw new TypeError('gameplay frame observer requires beforeFrame and afterFrame callbacks');
+}
+
+export function setGameplayFrameObserver(observer = null) {
+  validateFrameObserver(observer);
   const previous = gameplayFrameObserver;
   gameplayFrameObserver = observer;
   return previous;
+}
+
+export function subscribeGameplayFrameObserver(observer) {
+  validateFrameObserver(observer);
+  if (!observer) throw new TypeError('gameplay frame observer is required');
+  gameplayFrameSubscribers.add(observer);
+  let active = true;
+  return () => {
+    if (!active) return false;
+    active = false;
+    return gameplayFrameSubscribers.delete(observer);
+  };
+}
+
+export function gameplayControlLeaseStatus() {
+  return activeGameplayControlLease ? Object.freeze({
+    active:true, owner:activeGameplayControlLease.owner, id:activeGameplayControlLease.id
+  }) : Object.freeze({ active:false, owner:null, id:null });
+}
+
+export function acquireGameplayControlLease(owner, { shadow = false } = {}) {
+  const name = String(owner || '').trim();
+  if (!name) throw new TypeError('gameplay control lease owner is required');
+  if (shadow) return Object.freeze({ id:0, owner:name, shadow:true });
+  if (activeGameplayControlLease) {
+    throw new Error(`Gameplay control is already owned by ${activeGameplayControlLease.owner}`);
+  }
+  const lease = Object.freeze({ id:nextGameplayControlLeaseId++, owner:name, shadow:false });
+  activeGameplayControlLease = lease;
+  return lease;
+}
+
+function requireGameplayControlLease(lease) {
+  if (!lease || lease.shadow || !activeGameplayControlLease || lease.id !== activeGameplayControlLease.id)
+    throw new Error('Active gameplay control lease is required');
+  return lease;
+}
+
+export function setGameplayControlMask(bridge, lease, mask) {
+  requireGameplayControlLease(lease);
+  if (!bridge || typeof bridge.setDebugControl !== 'function') throw new Error('Gameplay debug control bridge is not ready');
+  bridge.setDebugControl(Number(mask) & 0xff);
+}
+
+export function releaseGameplayControlLease(lease, bridge = null) {
+  if (!lease || lease.shadow) return false;
+  if (!activeGameplayControlLease || lease.id !== activeGameplayControlLease.id) return false;
+  try {
+    if (bridge && typeof bridge.setDebugControl === 'function') bridge.setDebugControl(0);
+  } finally {
+    activeGameplayControlLease = null;
+  }
+  return true;
 }
 
 function requireBridge(bridge) {
@@ -104,8 +164,13 @@ function movementDelta(start, end) {
 
 function forceOneSimulationFrame(bridge, controlMask = 0) {
   const before = bridge.snapshot().frameSerial >>> 0;
-  const observer = gameplayFrameObserver;
-  const token = observer?.beforeFrame?.({ bridge, controlMask: Number(controlMask) & 0xff, frameSerial: before });
+  const observers = [];
+  if (gameplayFrameObserver) observers.push(gameplayFrameObserver);
+  for (const observer of gameplayFrameSubscribers) if (observer !== gameplayFrameObserver) observers.push(observer);
+  const tokens = observers.map(observer => ({
+    observer,
+    token:observer.beforeFrame({ bridge, controlMask:Number(controlMask) & 0xff, frameSerial:before })
+  }));
   let after = before;
   let error = null;
   try {
@@ -116,9 +181,9 @@ function forceOneSimulationFrame(bridge, controlMask = 0) {
     error = caught;
     throw caught;
   } finally {
-    observer?.afterFrame?.({
-      bridge, controlMask: Number(controlMask) & 0xff, beforeFrameSerial: before,
-      afterFrameSerial: after, advanced: after !== before, token, error
+    for (const entry of tokens) entry.observer.afterFrame({
+      bridge, controlMask:Number(controlMask) & 0xff, beforeFrameSerial:before,
+      afterFrameSerial:after, advanced:after !== before, token:entry.token, error
     });
   }
 }
@@ -130,10 +195,11 @@ export function stepGameplayControls(bridge, mask, frames = 1) {
   }
   const requestedFrames = Math.max(1, Math.min(600, Number(frames) | 0));
   const start = gameplayAgentState(bridge);
+  const lease = acquireGameplayControlLease('webmcp-step');
   let stepCalls = 0;
   let advancingSteps = 0;
   let stalledSteps = 0;
-  bridge.setDebugControl(Number(mask) & 0xff);
+  setGameplayControlMask(bridge, lease, mask);
   try {
     while (advancingSteps < requestedFrames && stalledSteps < 3) {
       stepCalls += 1;
@@ -145,7 +211,7 @@ export function stepGameplayControls(bridge, mask, frames = 1) {
       }
     }
   } finally {
-    bridge.setDebugControl(0);
+    releaseGameplayControlLease(lease, bridge);
   }
   const end = gameplayAgentState(bridge);
   const completed = advancingSteps === requestedFrames;
@@ -222,7 +288,8 @@ export function walkGameplayUntil(bridge, {
     };
   }
 
-  bridge.setDebugControl(Number(directionMask) & 0xff);
+  const lease = acquireGameplayControlLease('webmcp-walk');
+  setGameplayControlMask(bridge, lease, directionMask);
   try {
     while (advancingSteps < limit && stalledSteps < 3) {
       stepCalls += 1;
@@ -246,7 +313,7 @@ export function walkGameplayUntil(bridge, {
       if (conditionReached({ until, state, start, targetX, blockedFrames, wasAirborne })) break;
     }
   } finally {
-    bridge.setDebugControl(0);
+    releaseGameplayControlLease(lease, bridge);
   }
 
   const matched = conditionReached({

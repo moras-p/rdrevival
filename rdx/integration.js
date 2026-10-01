@@ -17,6 +17,7 @@ import { bindRuntimeOptions } from './src/runtime/options.js';
 import { canConnectRdxRomDirectory, connectRdxRomDirectory, loadRememberedRdxRom, rememberRdxRom } from './src/runtime/rom-store.js';
 import { XRICK_CONTROL } from './src/runtime/controls.js';
 import { createAiPlaytestController } from './src/agent/ai-playtest-controller.js';
+import { createRealtimeModelWorkbench } from './src/agent/realtime-model-workbench.js';
 import { installGameplayWebMcp } from './src/agent/gameplay-webmcp.js';
 import { collectWorkbenchElements } from './src/workbench/elements.js';
 import { createMapEditorSession } from './src/workbench/map-editor-session.js';
@@ -24,7 +25,7 @@ import { createPreviewWorkspace } from './src/workbench/preview-workspace.js';
 
 const workbenchElements = collectWorkbenchElements(document);
 const { backgroundCanvas, spriteCanvas, classicCanvas, foregroundCanvas, frontSpriteCanvas, collisionOverlayCanvas, annotationCanvas, sourceCanvas, stage, status, detail, playtestPanel, playtestOpenButton, playtestDebugToggle, playtestDebug, fileInput, romFolderButton, assetToggleButton, soundToggleButton, audioQualitySelect, collisionPolicySelect, spriteModeSelect, bulletSourceSelect, dynamiteSourceSelect, fallbackModeSelect, mapSelect, mapPrevButton, mapNextButton, invulnerabilityWarning, resetLevelButton, resetTriggersButton, unpauseButton } = workbenchElements.runtime;
-const { aiModeSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton, gaiRouteInspectorRoot } = workbenchElements.ai;
+const { aiModeSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton, gaiRouteInspectorRoot, realtime: realtimeElements } = workbenchElements.ai;
 const { debugOverlayToggle, invulnerableToggle, movementFeelPreviewToggle, crawlFallToggle, enemyDeathModeToggle, collisionTraceButton, ignoreExplodableToggle, playthroughRecordButton, annotateButton, diagnosticsExportButton, annotationDataElement, annotationNoteInput, annotationClearButton, annotationCopyButton, annotationCountElement, selectElementButton, selectedElementLabel, expectedActionSelect, saveElementAnnotationButton, puzzleSelect, puzzlePrevButton, puzzleNextButton, puzzleStartButton, puzzleRecordButton, puzzleFinishButton, puzzleCopyButton, puzzleStatus, puzzleDataElement } = workbenchElements.diagnostics;
 const controlGroupButtons = workbenchElements.controlGroups.buttons;
 const controlGroupPanels = workbenchElements.controlGroups.panels;
@@ -200,6 +201,11 @@ const aiPlaytestController = createAiPlaytestController({
   },
   resourcesProvider: () => previewWorkspace.resources(),
   appVersion: PREVIEW_APP_VERSION
+});
+
+const realtimeModelWorkbench = createRealtimeModelWorkbench({
+  runtime: { get bridge() { return bridge; } },
+  elements: realtimeElements
 });
 
 function mdAssetName(mapId) {
@@ -1394,6 +1400,7 @@ function frame() {
     updateCollisionRuntime(snapshot);
     const aiSnapshot = bridge.snapshot();
     aiPlaytestController.tickFrame(aiSnapshot);
+    realtimeModelWorkbench.tickFrame(aiSnapshot);
   } catch (error) {
     console.error(error);
     bridge?.setSpriteReplacementMask(0);

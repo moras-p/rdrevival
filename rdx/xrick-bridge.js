@@ -1,5 +1,7 @@
 import { RDX_WEB_CONTRACT_VERSION } from './generated/rdx-web-contract.js';
 import { RUNTIME_OPTIONS, RUNTIME_OPTION_BY_ID, RUNTIME_OPTION_BY_KEY } from './generated/runtime-options.js';
+import { decodeRealtimeObservation, REALTIME_OBSERVATION_ABI_SIZE, REALTIME_OBSERVATION_SCHEMA_VERSION } from './src/agent/realtime-observation.js';
+import { REALTIME_ACTIONS, REALTIME_ACTION_ABI_VERSION, legalRealtimeActions, realtimeActionId } from './src/agent/realtime-actions.js';
 export { RDX_WEB_CONTRACT_VERSION };
 export { RUNTIME_OPTIONS, RUNTIME_OPTION_BY_ID, RUNTIME_OPTION_BY_KEY };
 
@@ -170,6 +172,14 @@ export class XrickWasmBridge {
       getLives: wrap0('xrick_rdx_get_lives'),
       getScore: wrap0('xrick_rdx_get_score'),
       getFrameSerial: wrap0('xrick_rdx_get_frame_serial'),
+      agentObservationVersion: wrap0('xrick_rdx_agent_observation_version'),
+      agentObservationSize: wrap0('xrick_rdx_agent_observation_size'),
+      copyAgentObservation: wrap0('xrick_rdx_copy_agent_observation'),
+      agentActionVersion: wrap0('xrick_rdx_agent_action_version'),
+      agentActionCount: wrap0('xrick_rdx_agent_action_count'),
+      agentActionLegalMask: wrap0('xrick_rdx_agent_action_legal_mask'),
+      agentActionStepMask: wrapN('xrick_rdx_agent_action_step_mask', 2),
+      agentActionStepDone: wrapN('xrick_rdx_agent_action_step_done', 2),
       getBombTicker: wrap0('xrick_rdx_get_bomb_ticker'),
       getBombLethal: wrap0('xrick_rdx_get_bomb_lethal'),
       getBombNearMissSerial: wrap0('xrick_rdx_get_bomb_near_miss_serial'),
@@ -1415,6 +1425,42 @@ export class XrickWasmBridge {
       throw new Error(`C inspection copy failed: copied ${copied} of ${expected} bytes`);
     }
     return pixels;
+  }
+
+  agentActions() {
+    const version = this.api.agentActionVersion() >>> 0;
+    const count = this.api.agentActionCount() >>> 0;
+    if (version !== REALTIME_ACTION_ABI_VERSION || count !== REALTIME_ACTIONS.length) {
+      throw new Error(`Realtime action ABI mismatch: version ${version}, count ${count}`);
+    }
+    const legalMask = this.api.agentActionLegalMask() >>> 0;
+    return Object.freeze({ version, legalMask, choices: Object.freeze(legalRealtimeActions(legalMask)) });
+  }
+
+  agentActionStep(action, age) {
+    const actionId = realtimeActionId(action);
+    const actionAge = Number(age) >>> 0;
+    return Object.freeze({
+      id: actionId,
+      name: REALTIME_ACTIONS[actionId],
+      age: actionAge,
+      mask: this.api.agentActionStepMask(actionId, actionAge) >>> 0,
+      done: !!this.api.agentActionStepDone(actionId, actionAge)
+    });
+  }
+
+  agentObservation() {
+    const version = this.api.agentObservationVersion() >>> 0;
+    const size = this.api.agentObservationSize() >>> 0;
+    if (version !== REALTIME_OBSERVATION_SCHEMA_VERSION || size !== REALTIME_OBSERVATION_ABI_SIZE) {
+      throw new Error(`Realtime observation ABI mismatch: schema ${version}, size ${size}`);
+    }
+    const copied = this.api.copyAgentObservation() >>> 0;
+    const bytes = this.module.rdxAgentObservationBytes;
+    if (copied !== size || !(bytes instanceof Uint8Array) || bytes.length !== size) {
+      throw new Error(`C realtime observation copy failed: copied ${copied} of ${size} bytes`);
+    }
+    return decodeRealtimeObservation(bytes);
   }
 
   presentationStats() {

@@ -44,6 +44,14 @@ export function collectWorkbenchElements(root = document) {
       aiStatus: byId('rdx-ai-status'),
       aiCopyDebugButton: byId('rdx-ai-copy-debug'),
       gaiRouteInspectorRoot: byId('rdx-gai-route-inspector'),
+      realtime: {
+        gatewayUrl: byId('rdx-realtime-gateway'), profile: byId('rdx-realtime-profile'), model: byId('rdx-realtime-model'),
+        mode: byId('rdx-realtime-mode'), cadence: byId('rdx-realtime-cadence'), calibration: byId('rdx-realtime-calibration'),
+        start: byId('rdx-realtime-start'), stop: byId('rdx-realtime-stop'), refresh: byId('rdx-realtime-refresh'), exportTrace: byId('rdx-realtime-export'),
+        status: byId('rdx-realtime-status'), gatewayState: byId('rdx-realtime-gateway-state'), currentAction: byId('rdx-realtime-current-action'),
+        confidence: byId('rdx-realtime-confidence'), latency: byId('rdx-realtime-latency'), decisions: byId('rdx-realtime-decisions'),
+        stale: byId('rdx-realtime-stale'), errors: byId('rdx-realtime-errors'), projection: byId('rdx-realtime-projection')
+      },
     },
     diagnostics: {
       debugOverlayToggle: byId('rdx-debug-overlay-toggle'),
