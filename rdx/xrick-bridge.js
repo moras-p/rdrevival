@@ -1,7 +1,7 @@
 import { RDX_WEB_CONTRACT_VERSION } from './generated/rdx-web-contract.js';
 import { RUNTIME_OPTIONS, RUNTIME_OPTION_BY_ID, RUNTIME_OPTION_BY_KEY } from './generated/runtime-options.js';
 import { decodeRealtimeObservation, REALTIME_OBSERVATION_ABI_SIZE, REALTIME_OBSERVATION_SCHEMA_VERSION } from './src/agent/realtime-observation.js';
-import { REALTIME_ACTIONS, REALTIME_ACTION_ABI_VERSION, legalRealtimeActions, realtimeActionId } from './src/agent/realtime-actions.js';
+import { REALTIME_ACTIONS, REALTIME_ACTION_ABI_VERSION, REALTIME_EXECUTION_ABI_VERSION, REALTIME_CONTINUATION_STATUS_ABI_VERSION, REALTIME_EXECUTION_KIND_NAME, legalRealtimeActions, realtimeActionId } from './src/agent/realtime-actions.js';
 export { RDX_WEB_CONTRACT_VERSION };
 export { RUNTIME_OPTIONS, RUNTIME_OPTION_BY_ID, RUNTIME_OPTION_BY_KEY };
 
@@ -180,6 +180,21 @@ export class XrickWasmBridge {
       agentActionLegalMask: wrap0('xrick_rdx_agent_action_legal_mask'),
       agentActionStepMask: wrapN('xrick_rdx_agent_action_step_mask', 2),
       agentActionStepDone: wrapN('xrick_rdx_agent_action_step_done', 2),
+      agentExecutionVersion: wrap0('xrick_rdx_agent_execution_version'),
+      agentExecutionKind: wrap1('xrick_rdx_agent_execution_kind'),
+      agentExecutionMask: wrap1('xrick_rdx_agent_execution_mask'),
+      agentExecutionMinCommitFrames: wrap1('xrick_rdx_agent_execution_min_commit_frames'),
+      agentExecutionFlags: wrap1('xrick_rdx_agent_execution_flags'),
+      agentIntentStepMask: wrapN('xrick_rdx_agent_intent_step_mask', 2),
+      agentIntentStepDone: wrapN('xrick_rdx_agent_intent_step_done', 2),
+      agentContinuationStatusVersion: wrap0('xrick_rdx_agent_continuation_status_version'),
+      agentContinuationFrameSerial: wrap0('xrick_rdx_agent_continuation_frame_serial'),
+      agentContinuationRoomGeneration: wrap0('xrick_rdx_agent_continuation_room_generation'),
+      agentContinuationLifeGeneration: wrap0('xrick_rdx_agent_continuation_life_generation'),
+      agentContinuationLegalMask: wrap0('xrick_rdx_agent_continuation_legal_mask'),
+      agentContinuationPlayerXfp: wrap0('xrick_rdx_agent_continuation_player_x_fp'),
+      agentContinuationPlayerYfp: wrap0('xrick_rdx_agent_continuation_player_y_fp'),
+      agentContinuationStateBits: wrap0('xrick_rdx_agent_continuation_state_bits'),
       getBombTicker: wrap0('xrick_rdx_get_bomb_ticker'),
       getBombLethal: wrap0('xrick_rdx_get_bomb_lethal'),
       getBombNearMissSerial: wrap0('xrick_rdx_get_bomb_near_miss_serial'),
@@ -1434,7 +1449,30 @@ export class XrickWasmBridge {
       throw new Error(`Realtime action ABI mismatch: version ${version}, count ${count}`);
     }
     const legalMask = this.api.agentActionLegalMask() >>> 0;
-    return Object.freeze({ version, legalMask, choices: Object.freeze(legalRealtimeActions(legalMask)) });
+    const executionVersion = this.api.agentExecutionVersion() >>> 0;
+    if (executionVersion !== REALTIME_EXECUTION_ABI_VERSION) {
+      throw new Error(`Realtime execution ABI mismatch: version ${executionVersion}`);
+    }
+    const choices = legalRealtimeActions(legalMask).map(choice => Object.freeze({
+      ...choice,
+      execution:this.agentActionExecutionInfo(choice.id)
+    }));
+    return Object.freeze({ version, executionVersion, legalMask, choices:Object.freeze(choices) });
+  }
+
+  agentActionExecutionInfo(action) {
+    const actionId = realtimeActionId(action);
+    const kindId = this.api.agentExecutionKind(actionId) >>> 0;
+    const kind = REALTIME_EXECUTION_KIND_NAME[kindId];
+    if (!kind) throw new Error(`Unknown realtime execution kind ${kindId} for action ${actionId}`);
+    return Object.freeze({
+      version:REALTIME_EXECUTION_ABI_VERSION,
+      kindId,
+      kind,
+      continuousMask:this.api.agentExecutionMask(actionId) >>> 0,
+      minCommitFrames:this.api.agentExecutionMinCommitFrames(actionId) >>> 0,
+      flags:this.api.agentExecutionFlags(actionId) >>> 0
+    });
   }
 
   agentActionStep(action, age) {
@@ -1446,6 +1484,34 @@ export class XrickWasmBridge {
       age: actionAge,
       mask: this.api.agentActionStepMask(actionId, actionAge) >>> 0,
       done: !!this.api.agentActionStepDone(actionId, actionAge)
+    });
+  }
+
+  agentIntentStep(action, age) {
+    const actionId = realtimeActionId(action);
+    const actionAge = Number(age) >>> 0;
+    return Object.freeze({
+      id:actionId,
+      name:REALTIME_ACTIONS[actionId],
+      age:actionAge,
+      mask:this.api.agentIntentStepMask(actionId, actionAge) >>> 0,
+      done:!!this.api.agentIntentStepDone(actionId, actionAge)
+    });
+  }
+
+  agentContinuationStatus() {
+    const version=this.api.agentContinuationStatusVersion()>>>0;
+    if(version!==REALTIME_CONTINUATION_STATUS_ABI_VERSION) throw new Error(`Realtime continuation-status ABI mismatch: version ${version}`);
+    const bits=this.api.agentContinuationStateBits()>>>0;
+    return Object.freeze({
+      version,
+      frameSerial:this.api.agentContinuationFrameSerial()>>>0,
+      roomGeneration:this.api.agentContinuationRoomGeneration()>>>0,
+      lifeGeneration:this.api.agentContinuationLifeGeneration()>>>0,
+      legalMask:this.api.agentContinuationLegalMask()>>>0,
+      playerXfp:this.api.agentContinuationPlayerXfp()|0,
+      playerYfp:this.api.agentContinuationPlayerYfp()|0,
+      grounded:!!(bits&1),airborne:!!(bits&2),climbing:!!(bits&4),crawling:!!(bits&8),dead:!!(bits&16)
     });
   }
 

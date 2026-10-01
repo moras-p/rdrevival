@@ -1,4 +1,8 @@
 export const REALTIME_ACTION_ABI_VERSION = 1;
+export const REALTIME_EXECUTION_ABI_VERSION = 1;
+export const REALTIME_CONTINUATION_STATUS_ABI_VERSION = 1;
+export const REALTIME_EXECUTION_KIND = Object.freeze({ atomic:0, continuous:1, hybrid:2 });
+export const REALTIME_EXECUTION_KIND_NAME = Object.freeze(['atomic','continuous','hybrid']);
 
 export const REALTIME_ACTIONS = Object.freeze([
   'wait',

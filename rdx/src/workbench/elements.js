@@ -49,8 +49,9 @@ export function collectWorkbenchElements(root = document) {
         mode: byId('rdx-realtime-mode'), cadence: byId('rdx-realtime-cadence'), calibration: byId('rdx-realtime-calibration'),
         start: byId('rdx-realtime-start'), stop: byId('rdx-realtime-stop'), refresh: byId('rdx-realtime-refresh'), exportTrace: byId('rdx-realtime-export'),
         status: byId('rdx-realtime-status'), gatewayState: byId('rdx-realtime-gateway-state'), currentAction: byId('rdx-realtime-current-action'),
-        confidence: byId('rdx-realtime-confidence'), latency: byId('rdx-realtime-latency'), decisions: byId('rdx-realtime-decisions'),
-        stale: byId('rdx-realtime-stale'), errors: byId('rdx-realtime-errors'), projection: byId('rdx-realtime-projection')
+        control: byId('rdx-realtime-control'), intentAge: byId('rdx-realtime-intent-age'), request: byId('rdx-realtime-request'),
+        safeContinue: byId('rdx-realtime-safe-continue'), neutralGaps: byId('rdx-realtime-neutral-gaps'), confidence: byId('rdx-realtime-confidence'),
+        latency: byId('rdx-realtime-latency'), decisions: byId('rdx-realtime-decisions'), stale: byId('rdx-realtime-stale'), errors: byId('rdx-realtime-errors'), projection: byId('rdx-realtime-projection')
       },
     },
     diagnostics: {

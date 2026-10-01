@@ -5,167 +5,50 @@ import { createRealtimeLoopMemory } from './realtime-loop-memory.js';
 import { createRealtimeCadencePolicy } from './realtime-cadence.js';
 import { createRealtimeConfidenceCalibration } from './realtime-confidence-calibration.js';
 import { captureBrowserRealtimeFrame, prepareRealtimeDecisionInput, resolveRealtimeProviderInput } from './realtime-decision-input.js';
+import { createRealtimeIntentExecutor } from './realtime-intent-executor.js';
+import { createRealtimeContinuationPolicy } from './realtime-continuation-policy.js';
 
 const MODES=new Set(['off','shadow','live']);
 const abortError=()=>Object.assign(new Error('Realtime AI decision aborted'),{name:'AbortError'});
 
 export class RealtimeAiController {
-  constructor({bridge,provider,projection='compact-v1',inputMode='auto',captureFrame=null,maxStateBytes=8192,decisionCadenceFrames=4,maxAdaptiveCadenceFrames=24,maxObservationAgeFrames=24,decisionTimeoutMs=1000,trace=null,loopMemory=null,cadencePolicy=null,confidenceCalibration=null,providerProfile=null,endpointLocality='none',now=()=>performance.now(),scheduleTimer=(fn,ms)=>setTimeout(fn,ms),cancelTimer=id=>clearTimeout(id)}={}) {
-    if (!bridge) throw new Error('RealtimeAiController requires bridge');
-    if (!provider || typeof provider.decide!=='function') throw new Error('RealtimeAiController requires DecisionProvider');
-    this.bridge=bridge; this.provider=provider; this.projection=projection; this.providerInput=resolveRealtimeProviderInput(provider,{inputMode}); this.captureFrame=captureFrame||((observation)=>captureBrowserRealtimeFrame(bridge,observation)); this.previousDecisionFrame=null; this.maxStateBytes=maxStateBytes;
-    this.decisionCadenceFrames=Math.max(1,decisionCadenceFrames|0); this.cadencePolicy=cadencePolicy||createRealtimeCadencePolicy({configuredCadenceFrames:this.decisionCadenceFrames,maxCadenceFrames:maxAdaptiveCadenceFrames}); this.confidenceCalibration=confidenceCalibration||createRealtimeConfidenceCalibration(); this.maxObservationAgeFrames=Math.max(1,maxObservationAgeFrames|0); this.decisionTimeoutMs=Math.max(1,decisionTimeoutMs|0); this.trace=trace||createRealtimeDecisionTrace(); this.loopMemory=loopMemory||createRealtimeLoopMemory(); this.providerProfile=providerProfile||provider.family||'unknown'; this.endpointLocality=endpointLocality; this.now=now; this.scheduleTimer=scheduleTimer; this.cancelTimer=cancelTimer;
-    this.mode='off'; this.sessionGeneration=0; this.lease=null; this.inflight=null; this.pending=null; this.activeAction=null;
-    this.lastDecisionFrame=-Infinity; this.lastError=null; this.decisionCount=0; this.staleDiscardCount=0; this.providerErrorCount=0; this.lowConfidenceCount=0; this.applied=[];
+  constructor({bridge,provider,projection='compact-v1',inputMode='auto',captureFrame=null,maxStateBytes=8192,decisionCadenceFrames=4,maxAdaptiveCadenceFrames=24,maxObservationAgeFrames=24,decisionTimeoutMs=1000,trace=null,loopMemory=null,cadencePolicy=null,continuationPolicy=null,confidenceCalibration=null,providerProfile=null,endpointLocality='none',now=()=>performance.now(),scheduleTimer=(fn,ms)=>setTimeout(fn,ms),cancelTimer=id=>clearTimeout(id)}={}) {
+    if(!bridge)throw new Error('RealtimeAiController requires bridge');
+    if(!provider||typeof provider.decide!=='function')throw new Error('RealtimeAiController requires DecisionProvider');
+    this.bridge=bridge;this.provider=provider;this.projection=projection;this.providerInput=resolveRealtimeProviderInput(provider,{inputMode});this.captureFrame=captureFrame||((observation)=>captureBrowserRealtimeFrame(bridge,observation));this.previousDecisionFrame=null;this.maxStateBytes=maxStateBytes;
+    this.decisionCadenceFrames=Math.max(1,decisionCadenceFrames|0);this.cadencePolicy=cadencePolicy||createRealtimeCadencePolicy({configuredCadenceFrames:this.decisionCadenceFrames,maxCadenceFrames:maxAdaptiveCadenceFrames});this.continuationPolicy=continuationPolicy||createRealtimeContinuationPolicy();this.confidenceCalibration=confidenceCalibration||createRealtimeConfidenceCalibration();this.maxObservationAgeFrames=Math.max(1,maxObservationAgeFrames|0);this.decisionTimeoutMs=Math.max(1,decisionTimeoutMs|0);this.trace=trace||createRealtimeDecisionTrace();this.loopMemory=loopMemory||createRealtimeLoopMemory();this.providerProfile=providerProfile||provider.family||'unknown';this.endpointLocality=endpointLocality;this.now=now;this.scheduleTimer=scheduleTimer;this.cancelTimer=cancelTimer;
+    this.mode='off';this.sessionGeneration=0;this.lease=null;this.inflight=null;this.pending=null;this.lastDecisionFrame=-Infinity;this.lastRequestFrame=-Infinity;this.lastTickFrame=null;this.lastError=null;this.decisionCount=0;this.staleDiscardCount=0;this.providerErrorCount=0;this.lowConfidenceCount=0;this.applied=[];this.urgentDecisionReason=null;
+    this.executor=createRealtimeIntentExecutor({bridge,continuationPolicy:this.continuationPolicy,trace:this.trace,captureObservation:()=>this.bridge.agentObservation(),applyMask:mask=>{if(this.mode==='live'&&this.lease&&!this.lease.shadow)setGameplayControlMask(this.bridge,this.lease,mask);}});
   }
 
-  status(){ return {mode:this.mode,sessionGeneration:this.sessionGeneration,inflight:!!this.inflight,pending:!!this.pending,
-    activeAction:this.activeAction?.name || null,activeActionAge:this.activeAction?.age || 0,inputMode:this.providerInput.mode,decisionCount:this.decisionCount,
-    staleDiscardCount:this.staleDiscardCount,providerErrorCount:this.providerErrorCount,lowConfidenceCount:this.lowConfidenceCount,lastError:this.lastError,applied:[...this.applied],receiptCount:this.trace.list().length,loop:this.loopMemory.snapshot(),cadence:this.cadencePolicy.snapshot()}; }
+  get activeAction(){return this.executor.status().active;}
+  status(){const exec=this.executor.status(),active=exec.active,cadence=this.cadencePolicy.snapshot(),frame=this.lastTickFrame;return {mode:this.mode,sessionGeneration:this.sessionGeneration,frameSerial:frame,inflight:!!this.inflight,pending:!!this.pending,requestAgeMs:this.inflight?.requestStartMs==null?null:Math.max(0,this.now()-this.inflight.requestStartMs),activeAction:active?.name||null,activeActionAge:active?.age||0,executionKind:active?.kind||null,currentMask:exec.currentMask,intentId:active?.intentId||null,safeUntilFrame:active?.safeUntilFrame??null,safeContinueFrames:active&&frame!=null?Math.max(0,active.safeUntilFrame-frame):null,hardExpiryFrame:active?.hardExpiryFrame??null,lastDisposition:exec.lastDisposition,lastEndReason:exec.lastEndReason,neutralGapFramesBetweenEquivalentContinuousIntents:exec.neutralGapFramesBetweenEquivalentContinuousIntents,inputMode:this.providerInput.mode,decisionCount:this.decisionCount,staleDiscardCount:this.staleDiscardCount,providerErrorCount:this.providerErrorCount,lowConfidenceCount:this.lowConfidenceCount,lastError:this.lastError,applied:[...this.applied],receiptCount:this.trace.list().length,loop:this.loopMemory.snapshot(),cadence,urgentDecisionReason:this.urgentDecisionReason};}
 
-  start({mode='shadow'}={}) {
-    if (!MODES.has(mode) || mode==='off') throw new Error("Realtime AI start mode must be 'shadow' or 'live'");
-    this.stop();
-    this.sessionGeneration += 1;
-    this.mode=mode;
-    this.lease=acquireGameplayControlLease(`realtime-ai-${mode}`,{shadow:mode==='shadow'});
-    this.lastDecisionFrame=-Infinity;
-    return this.status();
+  start({mode='shadow'}={}){if(!MODES.has(mode)||mode==='off')throw new Error("Realtime AI start mode must be 'shadow' or 'live'");this.stop();this.sessionGeneration+=1;this.mode=mode;this.lease=acquireGameplayControlLease(`realtime-ai-${mode}`,{shadow:mode==='shadow'});this.lastDecisionFrame=-Infinity;this.lastRequestFrame=-Infinity;this.lastTickFrame=null;this.lastError=null;this.urgentDecisionReason='start';return this.status();}
+  stop(){this.sessionGeneration+=1;if(this.inflight){this.inflight.controller.abort();if(this.inflight.timer!=null)this.cancelTimer(this.inflight.timer);this.inflight=null;}this.pending=null;this.executor.reset({release:true});this.previousDecisionFrame=null;this.loopMemory.reset();this.cadencePolicy.reset();if(this.lease&&!this.lease.shadow)releaseGameplayControlLease(this.lease,this.bridge);this.lease=null;this.mode='off';this.urgentDecisionReason=null;return this.status();}
+  dispose(){return this.stop();}
+
+  #legal(){const contract=this.bridge.agentActions();const choices=contract.choices||contract.actions||legalRealtimeActions(contract.legalMask);return {contract,choices};}
+  #continuationStatus(){if(typeof this.bridge.agentContinuationStatus==='function')return this.bridge.agentContinuationStatus();const observation=this.bridge.agentObservation();return {version:0,frameSerial:observation.episode.frameSerial,roomGeneration:observation.episode.roomGeneration,lifeGeneration:observation.episode.lifeGeneration,legalMask:this.#legal().contract.legalMask,playerXfp:observation.player.xFp,playerYfp:observation.player.yFp,grounded:!!observation.player.grounded,airborne:!observation.player.grounded&&!observation.player.climbing,climbing:!!observation.player.climbing,crawling:!!observation.player.crawling,dead:!!observation.player.dead};}
+  #releaseMask(){if(this.mode==='live'&&this.lease&&!this.lease.shadow)setGameplayControlMask(this.bridge,this.lease,0);}
+  #consumeCompleted(){for(const event of this.executor.drainCompleted()){this.applied.push({action:event.action,startFrame:event.startFrame,endFrame:event.endFrame,reason:event.reason});if(this.applied.length>32)this.applied.shift();if(event.endObservation)this.loopMemory.observe(event.endObservation);if(event.outcome)this.loopMemory.recordOutcome(event.action,event.outcome);}}
+
+  #acceptPending(observation,frameSerial){if(!this.pending)return;const pending=this.pending;this.pending=null;this.trace.responseFrame?.(pending.receiptId,frameSerial);if(pending.sessionGeneration!==this.sessionGeneration||pending.roomGeneration!==observation.episode.roomGeneration||pending.lifeGeneration!==observation.episode.lifeGeneration||(frameSerial-pending.observationFrame)>this.maxObservationAgeFrames){this.staleDiscardCount+=1;this.trace.reject(pending.receiptId,'stale');return;}
+    const legal=this.#legal().choices;let choiceName;try{choiceName=realtimeActionName(pending.decision.choice);}catch(error){this.providerErrorCount+=1;this.lastError=String(error?.message||error);this.trace.reject(pending.receiptId,'invalid-action',pending.decision);if(!this.executor.isContinuous())this.#releaseMask();return;}
+    const choice=legal.find(item=>item.name===choiceName);if(!pending.offeredActions.includes(choiceName)){this.providerErrorCount+=1;this.lastError=`Provider selected unoffered action '${choiceName}'`;this.trace.reject(pending.receiptId,'unoffered-action',pending.decision);if(!this.executor.isContinuous())this.#releaseMask();return;}if(!choice){this.staleDiscardCount+=1;this.trace.reject(pending.receiptId,'stale-legality',pending.decision);return;}
+    let confidence;try{confidence=this.confidenceCalibration.evaluate(pending.decision,{providerFamily:this.provider.family||'unknown',providerProfile:this.providerProfile,model:pending.decision?.model,modelVersion:pending.decision?.modelVersion,projection:pending.calibrationKey});}catch(error){this.providerErrorCount+=1;this.lastError=String(error?.message||error);this.trace.reject(pending.receiptId,'invalid-confidence',pending.decision);if(!this.executor.isContinuous())this.#releaseMask();return;}this.trace.calibration(pending.receiptId,confidence);if(!confidence.apply){this.lowConfidenceCount+=1;this.trace.reject(pending.receiptId,'low-confidence',pending.decision);return;}
+    this.decisionCount+=1;this.lastDecisionFrame=frameSerial;this.lastError=null;this.trace.decision(pending.receiptId,pending.decision,{accepted:true,reason:this.mode==='shadow'?'shadow':'accepted',requestEndMs:this.now()});if(this.mode==='shadow'){this.trace.finalize(pending.receiptId,{accepted:true,reason:'shadow',outcome:null});return;}
+    this.executor.accept({choice,observation,frameSerial,receiptId:pending.receiptId,decision:pending.decision});this.urgentDecisionReason=null;this.#consumeCompleted();
   }
 
-  stop() {
-    this.sessionGeneration += 1;
-    if (this.inflight) { this.inflight.controller.abort(); if (this.inflight.timer != null) this.cancelTimer(this.inflight.timer); this.inflight=null; }
-    this.pending=null; this.activeAction=null; this.previousDecisionFrame=null; this.loopMemory.reset(); this.cadencePolicy.reset();
-    if (this.lease && !this.lease.shadow) releaseGameplayControlLease(this.lease,this.bridge);
-    this.lease=null; this.mode='off';
-    return this.status();
+  #decisionDue(frameSerial){if(this.inflight||this.pending)return false;const cadence=this.cadencePolicy.snapshot();if(frameSerial-this.lastRequestFrame<cadence.minimumInterRequestFrames)return false;if(this.mode==='shadow')return frameSerial-this.lastDecisionFrame>=cadence.refreshCadenceFrames;if(this.executor.isAtomic())return false;const active=this.executor.status().active;if(!active)return true;const cadenceDue=frameSerial-this.lastDecisionFrame>=cadence.refreshCadenceFrames;const prefetchDue=frameSerial>=Math.max(active.minCommitUntilFrame,active.safeUntilFrame-cadence.prefetchLeadFrames);return cadenceDue||prefetchDue||!!this.urgentDecisionReason;}
+
+  #request(observation,choices,frameSerial){let frame=null;try{if(this.providerInput.mode!=='structured')frame=this.captureFrame(observation);}catch(error){this.providerErrorCount+=1;this.lastError=String(error?.message||error);if(!this.executor.isContinuous())this.#releaseMask();return;}const controller=new AbortController(),sessionGeneration=this.sessionGeneration,requestStartMs=this.now();let prepared;try{prepared=prepareRealtimeDecisionInput({provider:this.provider,inputMode:this.providerInput.mode,observation,choices,projection:this.projection,maxStateBytes:this.maxStateBytes,history:this.loopMemory.snapshot(),timingContext:this.cadencePolicy.snapshot(),frame,previousFrame:this.previousDecisionFrame,signal:controller.signal});}catch(error){this.providerErrorCount+=1;this.lastError=String(error?.message||error);if(!this.executor.isContinuous())this.#releaseMask();return;}if(frame)this.previousDecisionFrame=frame;const receiptId=this.trace.begin({observation,projection:prepared.projected,input:prepared.input,choices,providerFamily:this.provider.family||'unknown',providerProfile:this.providerProfile,endpointLocality:this.endpointLocality,model:null,calibration:this.confidenceCalibration.metadata(),requestStartMs,earlyDecisionReason:this.urgentDecisionReason});const request=prepared.request;this.lastRequestFrame=frameSerial;const token={controller,sessionGeneration,receiptId,requestStartMs,calibrationKey:prepared.calibrationKey,observationFrame:observation.episode.frameSerial,roomGeneration:observation.episode.roomGeneration,lifeGeneration:observation.episode.lifeGeneration,offeredActions:choices.map(choice=>choice.name),timer:null};token.timer=this.scheduleTimer(()=>{if(this.inflight!==token||sessionGeneration!==this.sessionGeneration)return;controller.abort();this.inflight=null;this.providerErrorCount+=1;this.lastError=`Decision timed out after ${this.decisionTimeoutMs} ms`;this.trace.reject(receiptId,'timeout');this.urgentDecisionReason='timeout';if(!this.executor.isContinuous())this.#releaseMask();},this.decisionTimeoutMs);this.inflight=token;
+    Promise.resolve().then(()=>this.provider.decide(request)).then(decision=>{if(controller.signal.aborted)throw abortError();if(this.inflight!==token||sessionGeneration!==this.sessionGeneration){this.staleDiscardCount+=1;return;}const requestEndMs=this.now();this.cadencePolicy.observe({latencyMs:Math.max(0,Number(decision?.latencyMs??(requestEndMs-requestStartMs))||0),tickRate:observation.timing?.gameplayTickRate||25});this.trace.decision(receiptId,decision,{requestEndMs});this.pending={...token,decision};}).catch(error=>{if(error?.name==='AbortError')return;if(sessionGeneration!==this.sessionGeneration)return;this.providerErrorCount+=1;this.lastError=String(error?.message||error);this.trace.reject(receiptId,'provider-error');this.urgentDecisionReason='provider-error';if(!this.executor.isContinuous())this.#releaseMask();}).finally(()=>{if(token.timer!=null)this.cancelTimer(token.timer);if(this.inflight===token)this.inflight=null;});
   }
 
-  dispose(){ return this.stop(); }
-
-  #legal() {
-    const contract=this.bridge.agentActions();
-    return {contract,choices:contract.actions || legalRealtimeActions(contract.legalMask)};
-  }
-
-  #releaseMask(){ if (this.mode==='live' && this.lease && !this.lease.shadow) setGameplayControlMask(this.bridge,this.lease,0); }
-
-  #finishActive(reason='complete') {
-    if (!this.activeAction) return;
-    this.#releaseMask();
-    const endFrame=this.bridge.snapshot().frameSerial>>>0;
-    const endObservation=this.bridge.agentObservation();
-    const outcome={dx:(endObservation.player.xFp-this.activeAction.startXfp)/256,dy:(endObservation.player.yFp-this.activeAction.startYfp)/256,
-      blocked:reason==='became-illegal',landed:!!endObservation.player.grounded,death:!!endObservation.player.dead,
-      transition:endObservation.episode.roomGeneration!==this.activeAction.roomGeneration,
-      bulletsUsed:Math.max(0,this.activeAction.startBullets-endObservation.player.bullets),dynamiteUsed:Math.max(0,this.activeAction.startDynamite-endObservation.player.dynamite)};
-    this.applied.push({action:this.activeAction.name,startFrame:this.activeAction.startFrame,endFrame,reason});
-    this.loopMemory.observe(endObservation); this.loopMemory.recordOutcome(this.activeAction.name,outcome);
-    if (this.activeAction.receiptId) this.trace.finalize(this.activeAction.receiptId,{accepted:true,reason,outcome});
-    if (this.applied.length>32) this.applied.shift();
-    this.activeAction=null;
-  }
-
-  #advanceAction(frameSerial) {
-    if (!this.activeAction) return;
-    const legal=this.#legal();
-    if (!legal.choices.some(choice=>choice.id===this.activeAction.id)) { this.#finishActive('became-illegal'); return; }
-    const step=this.bridge.agentActionStep(this.activeAction.id,this.activeAction.age);
-    if (this.mode==='live') setGameplayControlMask(this.bridge,this.lease,step.mask);
-    this.activeAction.masks.push(step.mask>>>0);
-    if (this.activeAction.receiptId) this.trace.actionMask(this.activeAction.receiptId,step.mask);
-    this.activeAction.age += 1;
-    if (step.done) this.#finishActive('macro-complete');
-  }
-
-  #acceptPending(observation,frameSerial) {
-    if (!this.pending) return;
-    const pending=this.pending; this.pending=null;
-    if (pending.sessionGeneration!==this.sessionGeneration || pending.roomGeneration!==observation.episode.roomGeneration || pending.lifeGeneration!==observation.episode.lifeGeneration ||
-        (frameSerial-pending.observationFrame)>this.maxObservationAgeFrames) { this.staleDiscardCount+=1; this.trace.reject(pending.receiptId,'stale'); return; }
-    const legal=this.#legal().choices;
-    let choiceName;
-    try { choiceName=realtimeActionName(pending.decision.choice); }
-    catch (error) { this.providerErrorCount+=1; this.lastError=String(error?.message || error); this.trace.reject(pending.receiptId,'invalid-action',pending.decision); this.#releaseMask(); return; }
-    const choice=legal.find(item=>item.name===choiceName);
-    if (!pending.offeredActions.includes(choiceName)) { this.providerErrorCount+=1; this.lastError=`Provider selected unoffered action '${choiceName}'`; this.trace.reject(pending.receiptId,'unoffered-action',pending.decision); this.#releaseMask(); return; }
-    if (!choice) { this.staleDiscardCount+=1; this.trace.reject(pending.receiptId,'stale-legality',pending.decision); this.#releaseMask(); return; }
-    let confidence;
-    try { confidence=this.confidenceCalibration.evaluate(pending.decision,{providerFamily:this.provider.family||'unknown',providerProfile:this.providerProfile,model:pending.decision?.model,modelVersion:pending.decision?.modelVersion,projection:pending.calibrationKey}); }
-    catch(error){this.providerErrorCount+=1;this.lastError=String(error?.message||error);this.trace.reject(pending.receiptId,'invalid-confidence',pending.decision);this.#releaseMask();return;}
-    this.trace.calibration(pending.receiptId,confidence);
-    if(!confidence.apply){this.lowConfidenceCount+=1;this.trace.reject(pending.receiptId,'low-confidence',pending.decision);this.#releaseMask();return;}
-    this.decisionCount+=1;
-    this.trace.decision(pending.receiptId,pending.decision,{accepted:true,reason:this.mode==='shadow'?'shadow':'accepted',requestEndMs:this.now()});
-    if (this.mode==='shadow') { this.trace.finalize(pending.receiptId,{accepted:true,reason:'shadow',outcome:null}); return; }
-    this.#finishActive('superseded');
-    this.trace.actionBegan(pending.receiptId,frameSerial);
-    this.activeAction={id:choice.id,name:choice.name,age:0,startFrame:frameSerial,masks:[],decision:pending.decision,receiptId:pending.receiptId,
-      startXfp:observation.player.xFp,startYfp:observation.player.yFp,startBullets:observation.player.bullets,startDynamite:observation.player.dynamite,roomGeneration:observation.episode.roomGeneration};
-  }
-
-  #decisionDue(frameSerial) { return !this.inflight && !this.pending && !this.activeAction && frameSerial-this.lastDecisionFrame>=this.cadencePolicy.snapshot().effectiveCadenceFrames; }
-
-  #request(observation,choices,frameSerial) {
-    let frame=null;
-    try {
-      if(this.providerInput.mode!=='structured') frame=this.captureFrame(observation);
-    } catch(error) {
-      this.providerErrorCount+=1; this.lastError=String(error?.message||error); this.#releaseMask(); return;
-    }
-    const controller=new AbortController();
-    const sessionGeneration=this.sessionGeneration;
-    const requestStartMs=this.now();
-    let prepared;
-    try {
-      prepared=prepareRealtimeDecisionInput({provider:this.provider,inputMode:this.providerInput.mode,observation,choices,projection:this.projection,maxStateBytes:this.maxStateBytes,
-        history:this.loopMemory.snapshot(),timingContext:this.cadencePolicy.snapshot(),frame,previousFrame:this.previousDecisionFrame,signal:controller.signal});
-    } catch(error) {
-      this.providerErrorCount+=1; this.lastError=String(error?.message||error); this.#releaseMask(); return;
-    }
-    if(frame) this.previousDecisionFrame=frame;
-    const receiptId=this.trace.begin({observation,projection:prepared.projected,input:prepared.input,choices,providerFamily:this.provider.family||'unknown',providerProfile:this.providerProfile,endpointLocality:this.endpointLocality,model:null,calibration:this.confidenceCalibration.metadata(),requestStartMs});
-    const request=prepared.request;
-    this.lastDecisionFrame=frameSerial;
-    const token={controller,sessionGeneration,receiptId,calibrationKey:prepared.calibrationKey,observationFrame:observation.episode.frameSerial,roomGeneration:observation.episode.roomGeneration,lifeGeneration:observation.episode.lifeGeneration,offeredActions:choices.map(choice=>choice.name),timer:null};
-    token.timer=this.scheduleTimer(()=>{
-      if (this.inflight!==token || sessionGeneration!==this.sessionGeneration) return;
-      controller.abort(); this.inflight=null; this.providerErrorCount+=1;
-      this.lastError=`Decision timed out after ${this.decisionTimeoutMs} ms`; this.trace.reject(receiptId,'timeout'); this.#releaseMask();
-    },this.decisionTimeoutMs);
-    this.inflight=token;
-    Promise.resolve().then(()=>this.provider.decide(request)).then(decision=>{
-      if (controller.signal.aborted) throw abortError();
-      if (this.inflight!==token || sessionGeneration!==this.sessionGeneration) { this.staleDiscardCount+=1; return; }
-      const requestEndMs=this.now();
-      this.cadencePolicy.observe({latencyMs:Math.max(0,Number(decision?.latencyMs ?? (requestEndMs-requestStartMs))||0),tickRate:observation.timing?.gameplayTickRate||25});
-      this.trace.decision(receiptId,decision,{requestEndMs});
-      this.pending={...token,decision};
-    }).catch(error=>{
-      if (error?.name==='AbortError') return;
-      if (sessionGeneration!==this.sessionGeneration) return;
-      this.providerErrorCount+=1; this.lastError=String(error?.message || error); this.trace.reject(receiptId,'provider-error'); this.#releaseMask();
-    }).finally(()=>{ if (token.timer != null) this.cancelTimer(token.timer); if (this.inflight===token) this.inflight=null; });
-  }
-
-  tick() {
-    if (this.mode==='off') return this.status();
-    const frameSerial=this.bridge.snapshot().frameSerial>>>0;
-    if (this.pending) {
-      const observation=this.bridge.agentObservation();
-      this.#acceptPending(observation,frameSerial);
-    }
-    this.#advanceAction(frameSerial);
-    if (this.#decisionDue(frameSerial)) {
-      const observation=this.bridge.agentObservation();
-      this.loopMemory.observe(observation);
-      const {choices}=this.#legal();
-      const offeredChoices=this.loopMemory.offerChoices(choices);
-      if (offeredChoices.length) this.#request(observation,offeredChoices,frameSerial);
-    }
-    return this.status();
-  }
+  tick(){if(this.mode==='off')return this.status();const frameSerial=this.bridge.snapshot().frameSerial>>>0;this.lastTickFrame=frameSerial;if(this.pending){const observation=this.bridge.agentObservation();this.#acceptPending(observation,frameSerial);}if(this.mode==='live'&&this.executor.hasActive()){const result=this.executor.tick(this.#continuationStatus());this.#consumeCompleted();if(result.urgent)this.urgentDecisionReason=result.reason||'native-event';if(this.inflight)this.executor.recordRequestPendingFrame();}
+    if(this.#decisionDue(frameSerial)){const observation=this.bridge.agentObservation();this.loopMemory.observe(observation);const {choices}=this.#legal();const offeredChoices=this.loopMemory.offerChoices(choices);if(offeredChoices.length)this.#request(observation,offeredChoices,frameSerial);}return this.status();}
 }
 
-export function createRealtimeAiController(options){ return new RealtimeAiController(options); }
+export function createRealtimeAiController(options){return new RealtimeAiController(options);}

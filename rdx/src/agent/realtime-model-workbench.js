@@ -54,6 +54,15 @@ function saveConfig(storage, config) {
 function text(el, value) { if (el) el.textContent = String(value ?? '—'); }
 function setStatus(el, message, kind = 'neutral') { if (el) { el.textContent = message; el.dataset.kind = kind; } }
 
+const CONTROL_BITS = Object.freeze([[0x08,'UP'],[0x04,'DOWN'],[0x02,'LEFT'],[0x01,'RIGHT'],[0x10,'FIRE']]);
+export function formatRealtimeControlMask(mask) {
+  const value=Number(mask)>>>0;if(!value)return 'NEUTRAL';
+  const names=CONTROL_BITS.filter(([bit])=>value&bit).map(([,name])=>name);
+  const known=CONTROL_BITS.reduce((all,[bit])=>all|bit,0),unknown=value&~known;
+  if(unknown)names.push(`0x${unknown.toString(16)}`);
+  return names.join('+');
+}
+
 function defaultDownload(name, body) {
   const blob = new Blob([body], { type:'application/x-ndjson' });
   const url = URL.createObjectURL(blob);
@@ -143,6 +152,11 @@ export function createRealtimeModelWorkbench({
   function render() {
     const status = controller?.status?.() || { mode:'off', activeAction:null, decisionCount:0, staleDiscardCount:0, providerErrorCount:0, receiptCount:trace.list().length };
     text(elements.currentAction, status.activeAction || '—');
+    text(elements.control, status.mode==='shadow' ? '—' : formatRealtimeControlMask(status.currentMask || 0));
+    text(elements.intentAge, status.activeAction ? `${status.activeActionAge || 0}f` : '—');
+    text(elements.request, status.inflight ? `in flight${status.requestAgeMs==null?'':` · ${Math.round(status.requestAgeMs)} ms`}` : status.pending ? 'response pending apply' : 'idle');
+    text(elements.safeContinue, status.safeContinueFrames==null ? '—' : `${status.safeContinueFrames}f`);
+    text(elements.neutralGaps, status.neutralGapFramesBetweenEquivalentContinuousIntents || 0);
     text(elements.decisions, status.decisionCount || 0);
     text(elements.stale, status.staleDiscardCount || 0);
     text(elements.errors, status.providerErrorCount || 0);
@@ -155,7 +169,14 @@ export function createRealtimeModelWorkbench({
     if (elements.exportTrace) elements.exportTrace.disabled = trace.list().length === 0;
     if (status.mode === 'off' && !status.lastError) setStatus(elements.status, gatewayStatus ? 'Realtime model idle' : 'Realtime model idle · gateway not checked', 'neutral');
     else if (status.lastError) setStatus(elements.status, `Realtime ${status.mode} · ${status.lastError}`, 'warn');
-    else setStatus(elements.status, `Realtime ${status.mode} · ${status.activeAction || 'waiting for decision'}`, 'ok');
+    else {
+      let detail='waiting for decision';
+      if(status.activeAction)detail=`${status.activeAction} · ${status.inflight?'request in flight':status.lastDisposition==='renew'?'renewed':status.executionKind==='atomic'?'atomic':'active'}`;
+      else if(status.lastEndReason==='safety-expiry')detail='neutral · safety lease expired';
+      else if(status.lastEndReason==='hard-expiry')detail='neutral · hard lease expired';
+      else if(status.lastEndReason==='became-illegal')detail='neutral · action became illegal';
+      setStatus(elements.status, `Realtime ${status.mode} · ${detail}`, 'ok');
+    }
     return status;
   }
 
