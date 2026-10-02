@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "773f1aeb8050f724a29c3062db02b3c011124293bfd891973d2484fbf00e7a46",
+  "authoredLayersFingerprint": "fe9e149f061264573ede20d96e045a9c80361ecd6ae7d2e715e39470b638a9b6",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -350,6 +350,15 @@
           "mark": 231,
           "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [127,160], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin.",
           "submap": 19
+        },
+        {
+          "dx": 0,
+          "dy": 8,
+          "entity": 52,
+          "mapId": 37,
+          "mark": 335,
+          "provenance": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes.",
+          "submap": 30
         },
         {
           "dx": 16,
@@ -13035,22 +13044,22 @@
           "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
           "bounds": [
             192,
-            504,
+            488,
             32,
-            8
+            24
           ],
           "clearLayer": "B",
           "id": "sm25-restore-brick-behind-mark411",
           "layer": null,
           "mapId": 44,
-          "provenance": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
-          "reason": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+          "provenance": "2026-10-02 follow-up: restore the full inactive mark 411 backdrop with the reviewed Castle brick donor field across the trap sprite footprint, not only the top strip, so the lowered trap no longer reveals the large black void in its transparent lower area.",
+          "reason": "2026-10-02 follow-up: restore the full inactive mark 411 backdrop with the reviewed Castle brick donor field across the trap sprite footprint, not only the top strip, so the lowered trap no longer reveals the large black void in its transparent lower area.",
           "sourceBounds": null,
           "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411:backdrop",
           "submap": 37,
           "tiles": [
             {
-              "globalTile": 10805,
+              "globalTile": 12715,
               "offset": [
                 0,
                 0
@@ -13059,7 +13068,7 @@
               "plane": "B"
             },
             {
-              "globalTile": 10804,
+              "globalTile": 10774,
               "offset": [
                 8,
                 0
@@ -13068,7 +13077,7 @@
               "plane": "B"
             },
             {
-              "globalTile": 11150,
+              "globalTile": 10819,
               "offset": [
                 16,
                 0
@@ -13077,10 +13086,82 @@
               "plane": "B"
             },
             {
-              "globalTile": 11151,
+              "globalTile": 10896,
               "offset": [
                 24,
                 0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10877,
+              "offset": [
+                0,
+                8
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10878,
+              "offset": [
+                8,
+                8
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10897,
+              "offset": [
+                16,
+                8
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10898,
+              "offset": [
+                24,
+                8
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 11907,
+              "offset": [
+                0,
+                16
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 12916,
+              "offset": [
+                8,
+                16
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 12991,
+              "offset": [
+                16,
+                16
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 12916,
+              "offset": [
+                24,
+                16
               ],
               "paletteLine": 2,
               "plane": "B"
@@ -14343,12 +14424,12 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "773f1aeb8050f724a29c3062db02b3c011124293bfd891973d2484fbf00e7a46",
+    "authoredLayers": "fe9e149f061264573ede20d96e045a9c80361ecd6ae7d2e715e39470b638a9b6",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "a610f689075a8bc72efeacab618bb8a83c73fea11e71a6aa5830bd1b23fab383",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "24a29b48b24788adb1b692246cb6115b0340de7406e24c203534fc2fb10e72b2",
-    "resolved32": 936737429,
+    "resolved": "caf87732981398c95261765e99761af8aca714c5fc259927cff7e44809aa7c1a",
+    "resolved32": 1132513406,
     "runtimeSource": "0430cfd8481be82d4381c54ca8cba3864da38c7a0604af2d40030fdcf2371235",
     "runtimeSource32": 1193858087,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
@@ -139681,10 +139762,10 @@
       "fingerprints": {
         "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
         "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
-        "presentationDepth": "39639e0a127e56b98115552d7f812135228d9692eb7b2ff12642ac606d6cd6da",
-        "resolved": "dbbb0e096e3427ceae4cb04018760e098d58b37ffde54f933f33ad3969f63ac8",
-        "reviewed": "68458fa13064f415194a47ba59c9f8a7e05947edf2e6446310f824e2ab55d661",
-        "semantic": "b29ac62e1d67588abf7ed1002ce11b1776af5fc8ecb9cc5af1ecb50fbc421caf",
+        "presentationDepth": "7bbc57a097eb183592e34fa05c4d39ddc7bb76d80fad3a8dbb47458c0f72d9fa",
+        "resolved": "b4bec32a96ae288f1b156976f15854cac47256868c1b25212368dbe5f7643d4b",
+        "reviewed": "f0b3539001723864a400b8d63b695b0f0f20732591ef20ffe2b6d8413fdc38ec",
+        "semantic": "7a67706d41ec67dd50ceb95cfe872d09ef3d6a9c4f1fe4b4eb02b93c69ce8756",
         "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
         "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
         "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
@@ -139805,7 +139886,28 @@
               }
             }
           ],
-          "overrides": [],
+          "overrides": [
+            {
+              "band": "midground",
+              "bounds": [
+                192,
+                224,
+                24,
+                32
+              ],
+              "id": "switch-notch-reveal",
+              "plane": "A",
+              "provenance": {
+                "authority": "level-editor-reviewed-fix",
+                "evidence": [
+                  "MD0037 actor 34 source placement at x=216,y=253",
+                  "matching Castle switch recess presentation in SM14 and SM17"
+                ],
+                "reason": "Reveal the existing MD0037 actor 34 wall-notch/coffin recess around the far-right SM1E switch by moving the overlapping Plane-A wall cells behind source visuals, matching the same Castle switch recess used in SM14 and SM17."
+              },
+              "source": "reviewed-room"
+            }
+          ],
           "planeDefaults": {
             "A": "foreground",
             "B": "midground"
@@ -139834,19 +139936,42 @@
               "provenance": {
                 "authority": "user-reviewed-classic-clearance-parity",
                 "evidence": [
-                  "Classic entity 52 start position and -32px travel",
+                  "user screenshot showing the corridor reopening too early",
                   "production-c-presentation-capture",
-                  "user-reviewed SM1E gameplay clearance"
+                  "user-requested far-right switch safety check"
                 ],
-                "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
+                "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
               },
               "target": "SM1E.actor.mark-335",
               "type": "entity-position",
               "value": {
                 "position": [
                   128,
-                  163
+                  171
                 ]
+              }
+            },
+            {
+              "id": "SM1E.editor.presentation-depth.switch-notch-reveal.1",
+              "provenance": {
+                "authority": "level-editor-reviewed-fix",
+                "evidence": [
+                  "MD0037 actor 34 source placement at x=216,y=253",
+                  "matching Castle switch recess presentation in SM14 and SM17"
+                ],
+                "reason": "Reveal the existing MD0037 actor 34 wall-notch/coffin recess around the far-right SM1E switch by moving the overlapping Plane-A wall cells behind source visuals, matching the same Castle switch recess used in SM14 and SM17."
+              },
+              "target": "room:SM1E:presentation-depth:switch-notch-reveal",
+              "type": "presentation-depth",
+              "value": {
+                "band": "midground",
+                "bounds": [
+                  192,
+                  224,
+                  24,
+                  32
+                ],
+                "plane": "A"
               }
             }
           ],
@@ -140720,11 +140845,11 @@
                 "gameplayBounds": null,
                 "position": [
                   128,
-                  163
+                  171
                 ],
                 "presentationOrigin": [
                   113,
-                  166
+                  174
                 ],
                 "supportBounds": null,
                 "triggerBounds": [
@@ -140735,7 +140860,7 @@
                 ],
                 "visualAnchor": [
                   94,
-                  140
+                  148
                 ],
                 "visualBounds": null
               },
@@ -140772,7 +140897,7 @@
               "reviewed": {
                 "position": [
                   128,
-                  163
+                  171
                 ]
               },
               "reviewedCorrectionsApplied": [
@@ -140781,11 +140906,11 @@
                   "provenance": {
                     "authority": "user-reviewed-classic-clearance-parity",
                     "evidence": [
-                      "Classic entity 52 start position and -32px travel",
+                      "user screenshot showing the corridor reopening too early",
                       "production-c-presentation-capture",
-                      "user-reviewed SM1E gameplay clearance"
+                      "user-requested far-right switch safety check"
                     ],
-                    "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
+                    "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
                   },
                   "type": "entity-position"
                 }
@@ -140833,11 +140958,11 @@
                 "anchorAuthority": "rdx-pn-foot",
                 "baseDraw": [
                   94,
-                  140
+                  148
                 ],
                 "baseOrigin": [
                   113,
-                  166
+                  174
                 ],
                 "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
                 "terminalPolicy": "classic-ent-mvstep-loop",
@@ -140847,14 +140972,14 @@
                 "simulated": {
                   "draw": [
                     94,
-                    139
+                    147
                   ],
                   "front": false,
                   "mirrorX": false,
                   "mirrorY": false,
                   "origin": [
                     113,
-                    165
+                    173
                   ],
                   "pn": 78,
                   "visible": true,
@@ -140863,14 +140988,14 @@
                 "snapshot": {
                   "draw": [
                     94,
-                    140
+                    148
                   ],
                   "front": false,
                   "mirrorX": false,
                   "mirrorY": false,
                   "origin": [
                     113,
-                    166
+                    174
                   ],
                   "pn": 79,
                   "renderOrder": 4,
@@ -142680,7 +142805,7 @@
           {
             "after": [
               128,
-              163
+              171
             ],
             "before": [
               128,
@@ -142690,15 +142815,40 @@
             "provenance": {
               "authority": "user-reviewed-classic-clearance-parity",
               "evidence": [
-                "Classic entity 52 start position and -32px travel",
+                "user screenshot showing the corridor reopening too early",
                 "production-c-presentation-capture",
-                "user-reviewed SM1E gameplay clearance"
+                "user-requested far-right switch safety check"
               ],
-              "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
+              "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
             },
             "semantic": "gameplay",
             "target": "SM1E.actor.mark-335",
             "type": "entity-position"
+          },
+          {
+            "after": {
+              "band": "midground",
+              "bounds": [
+                192,
+                224,
+                24,
+                32
+              ],
+              "plane": "A"
+            },
+            "before": null,
+            "id": "SM1E.editor.presentation-depth.switch-notch-reveal.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "MD0037 actor 34 source placement at x=216,y=253",
+                "matching Castle switch recess presentation in SM14 and SM17"
+              ],
+              "reason": "Reveal the existing MD0037 actor 34 wall-notch/coffin recess around the far-right SM1E switch by moving the overlapping Plane-A wall cells behind source visuals, matching the same Castle switch recess used in SM14 and SM17."
+            },
+            "semantic": "visual",
+            "target": "room:SM1E:presentation-depth:switch-notch-reveal",
+            "type": "presentation-depth"
           }
         ]
       },
@@ -159080,12 +159230,12 @@
         "adjustments": "56988a1132dd07244c3d4c4b2c4f322505eebbf31dd97af8a6289fca99d2dd80",
         "alignment": "7328f0a25ba3a99c85e0bfe8e14ff326a51e36562abc9b242c7cad67fdbceb9e",
         "presentationDepth": "4224f1fe16a5538e86a91b73242d6a5700470d9bc5524411c8fab1a217a08e5c",
-        "resolved": "3f68c0b5a974b5399ef91e18e4f13b88a3ad24ae30f83c30fc1323eafccb42db",
+        "resolved": "4bedf7d75402014847d55fc2d7b14515660f446c91553dca392bac9c1176e5e5",
         "reviewed": "8b9032043e89a9ad015f90736f479a02df6e9dbe66ff2a117a074731f1aa94bb",
         "semantic": "82b16e4fd8b79a365f1f1dee5bc0538e3dcdcbd5658cb5dcb56bd372b6745fce",
         "sourceClassic": "dc544f88c2fe4ee82ff60d7328294aef2df22d62176c1de136d6ad2385cbd776",
         "sourceRdx": "77858cc19e5d311b55191aba9f796c2ca5953ae2ad642aa4ce5854eefa7fa71e",
-        "structural": "d7eeed949eeac3cb6e8313455939b621df538fcc6b583ed9cc927839a5fede16",
+        "structural": "5628282073ffc5164414abe4191eafe56075b1a3f1be00c780424b3e10b39f39",
         "transitions": "91fb18b1aaffbed098d85d00745dacde9c5d0c54090a3781cecb9fa9cd9cd445"
       },
       "group": "castle",
@@ -161986,20 +162136,20 @@
               "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
               "bounds": [
                 192,
-                504,
+                488,
                 32,
-                8
+                24
               ],
               "clearLayer": "B",
               "id": "sm25-restore-brick-behind-mark411",
               "layer": null,
-              "provenance": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
-              "reason": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+              "provenance": "2026-10-02 follow-up: restore the full inactive mark 411 backdrop with the reviewed Castle brick donor field across the trap sprite footprint, not only the top strip, so the lowered trap no longer reveals the large black void in its transparent lower area.",
+              "reason": "2026-10-02 follow-up: restore the full inactive mark 411 backdrop with the reviewed Castle brick donor field across the trap sprite footprint, not only the top strip, so the lowered trap no longer reveals the large black void in its transparent lower area.",
               "sourceBounds": null,
               "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411:backdrop",
               "tiles": [
                 {
-                  "globalTile": 10805,
+                  "globalTile": 12715,
                   "offset": [
                     0,
                     0
@@ -162008,7 +162158,7 @@
                   "plane": "B"
                 },
                 {
-                  "globalTile": 10804,
+                  "globalTile": 10774,
                   "offset": [
                     8,
                     0
@@ -162017,7 +162167,7 @@
                   "plane": "B"
                 },
                 {
-                  "globalTile": 11150,
+                  "globalTile": 10819,
                   "offset": [
                     16,
                     0
@@ -162026,10 +162176,82 @@
                   "plane": "B"
                 },
                 {
-                  "globalTile": 11151,
+                  "globalTile": 10896,
                   "offset": [
                     24,
                     0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10877,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10878,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10897,
+                  "offset": [
+                    16,
+                    8
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10898,
+                  "offset": [
+                    24,
+                    8
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 11907,
+                  "offset": [
+                    0,
+                    16
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 12916,
+                  "offset": [
+                    8,
+                    16
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 12991,
+                  "offset": [
+                    16,
+                    16
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 12916,
+                  "offset": [
+                    24,
+                    16
                   ],
                   "paletteLine": 2,
                   "plane": "B"

@@ -22,10 +22,10 @@
     "fingerprints": {
       "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
       "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
-      "presentationDepth": "39639e0a127e56b98115552d7f812135228d9692eb7b2ff12642ac606d6cd6da",
-      "resolved": "dbbb0e096e3427ceae4cb04018760e098d58b37ffde54f933f33ad3969f63ac8",
-      "reviewed": "68458fa13064f415194a47ba59c9f8a7e05947edf2e6446310f824e2ab55d661",
-      "semantic": "b29ac62e1d67588abf7ed1002ce11b1776af5fc8ecb9cc5af1ecb50fbc421caf",
+      "presentationDepth": "7bbc57a097eb183592e34fa05c4d39ddc7bb76d80fad3a8dbb47458c0f72d9fa",
+      "resolved": "b4bec32a96ae288f1b156976f15854cac47256868c1b25212368dbe5f7643d4b",
+      "reviewed": "f0b3539001723864a400b8d63b695b0f0f20732591ef20ffe2b6d8413fdc38ec",
+      "semantic": "7a67706d41ec67dd50ceb95cfe872d09ef3d6a9c4f1fe4b4eb02b93c69ce8756",
       "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
       "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
       "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
@@ -146,7 +146,28 @@
             }
           }
         ],
-        "overrides": [],
+        "overrides": [
+          {
+            "band": "midground",
+            "bounds": [
+              192,
+              224,
+              24,
+              32
+            ],
+            "id": "switch-notch-reveal",
+            "plane": "A",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "MD0037 actor 34 source placement at x=216,y=253",
+                "matching Castle switch recess presentation in SM14 and SM17"
+              ],
+              "reason": "Reveal the existing MD0037 actor 34 wall-notch/coffin recess around the far-right SM1E switch by moving the overlapping Plane-A wall cells behind source visuals, matching the same Castle switch recess used in SM14 and SM17."
+            },
+            "source": "reviewed-room"
+          }
+        ],
         "planeDefaults": {
           "A": "foreground",
           "B": "midground"
@@ -175,19 +196,42 @@
             "provenance": {
               "authority": "user-reviewed-classic-clearance-parity",
               "evidence": [
-                "Classic entity 52 start position and -32px travel",
+                "user screenshot showing the corridor reopening too early",
                 "production-c-presentation-capture",
-                "user-reviewed SM1E gameplay clearance"
+                "user-requested far-right switch safety check"
               ],
-              "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
+              "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
             },
             "target": "SM1E.actor.mark-335",
             "type": "entity-position",
             "value": {
               "position": [
                 128,
-                163
+                171
               ]
+            }
+          },
+          {
+            "id": "SM1E.editor.presentation-depth.switch-notch-reveal.1",
+            "provenance": {
+              "authority": "level-editor-reviewed-fix",
+              "evidence": [
+                "MD0037 actor 34 source placement at x=216,y=253",
+                "matching Castle switch recess presentation in SM14 and SM17"
+              ],
+              "reason": "Reveal the existing MD0037 actor 34 wall-notch/coffin recess around the far-right SM1E switch by moving the overlapping Plane-A wall cells behind source visuals, matching the same Castle switch recess used in SM14 and SM17."
+            },
+            "target": "room:SM1E:presentation-depth:switch-notch-reveal",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                192,
+                224,
+                24,
+                32
+              ],
+              "plane": "A"
             }
           }
         ],
@@ -1061,11 +1105,11 @@
               "gameplayBounds": null,
               "position": [
                 128,
-                163
+                171
               ],
               "presentationOrigin": [
                 113,
-                166
+                174
               ],
               "supportBounds": null,
               "triggerBounds": [
@@ -1076,7 +1120,7 @@
               ],
               "visualAnchor": [
                 94,
-                140
+                148
               ],
               "visualBounds": null
             },
@@ -1113,7 +1157,7 @@
             "reviewed": {
               "position": [
                 128,
-                163
+                171
               ]
             },
             "reviewedCorrectionsApplied": [
@@ -1122,11 +1166,11 @@
                 "provenance": {
                   "authority": "user-reviewed-classic-clearance-parity",
                   "evidence": [
-                    "Classic entity 52 start position and -32px travel",
+                    "user screenshot showing the corridor reopening too early",
                     "production-c-presentation-capture",
-                    "user-reviewed SM1E gameplay clearance"
+                    "user-requested far-right switch safety check"
                   ],
-                  "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
+                  "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
                 },
                 "type": "entity-position"
               }
@@ -1174,11 +1218,11 @@
               "anchorAuthority": "rdx-pn-foot",
               "baseDraw": [
                 94,
-                140
+                148
               ],
               "baseOrigin": [
                 113,
-                166
+                174
               ],
               "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
               "terminalPolicy": "classic-ent-mvstep-loop",
@@ -1188,14 +1232,14 @@
               "simulated": {
                 "draw": [
                   94,
-                  139
+                  147
                 ],
                 "front": false,
                 "mirrorX": false,
                 "mirrorY": false,
                 "origin": [
                   113,
-                  165
+                  173
                 ],
                 "pn": 78,
                 "visible": true,
@@ -1204,14 +1248,14 @@
               "snapshot": {
                 "draw": [
                   94,
-                  140
+                  148
                 ],
                 "front": false,
                 "mirrorX": false,
                 "mirrorY": false,
                 "origin": [
                   113,
-                  166
+                  174
                 ],
                 "pn": 79,
                 "renderOrder": 4,
@@ -3021,7 +3065,7 @@
         {
           "after": [
             128,
-            163
+            171
           ],
           "before": [
             128,
@@ -3031,15 +3075,40 @@
           "provenance": {
             "authority": "user-reviewed-classic-clearance-parity",
             "evidence": [
-              "Classic entity 52 start position and -32px travel",
+              "user screenshot showing the corridor reopening too early",
               "production-c-presentation-capture",
-              "user-reviewed SM1E gameplay clearance"
+              "user-requested far-right switch safety check"
             ],
-            "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
+            "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
           },
           "semantic": "gameplay",
           "target": "SM1E.actor.mark-335",
           "type": "entity-position"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              192,
+              224,
+              24,
+              32
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM1E.editor.presentation-depth.switch-notch-reveal.1",
+          "provenance": {
+            "authority": "level-editor-reviewed-fix",
+            "evidence": [
+              "MD0037 actor 34 source placement at x=216,y=253",
+              "matching Castle switch recess presentation in SM14 and SM17"
+            ],
+            "reason": "Reveal the existing MD0037 actor 34 wall-notch/coffin recess around the far-right SM1E switch by moving the overlapping Plane-A wall cells behind source visuals, matching the same Castle switch recess used in SM14 and SM17."
+          },
+          "semantic": "visual",
+          "target": "room:SM1E:presentation-depth:switch-notch-reveal",
+          "type": "presentation-depth"
         }
       ]
     },
