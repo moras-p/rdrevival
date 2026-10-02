@@ -23,12 +23,12 @@
       "adjustments": "56988a1132dd07244c3d4c4b2c4f322505eebbf31dd97af8a6289fca99d2dd80",
       "alignment": "7328f0a25ba3a99c85e0bfe8e14ff326a51e36562abc9b242c7cad67fdbceb9e",
       "presentationDepth": "4224f1fe16a5538e86a91b73242d6a5700470d9bc5524411c8fab1a217a08e5c",
-      "resolved": "a87e327efed2beb99c0e62a72696a92424efe46475f5c398f7699f0665375a23",
+      "resolved": "3f68c0b5a974b5399ef91e18e4f13b88a3ad24ae30f83c30fc1323eafccb42db",
       "reviewed": "8b9032043e89a9ad015f90736f479a02df6e9dbe66ff2a117a074731f1aa94bb",
       "semantic": "82b16e4fd8b79a365f1f1dee5bc0538e3dcdcbd5658cb5dcb56bd372b6745fce",
       "sourceClassic": "dc544f88c2fe4ee82ff60d7328294aef2df22d62176c1de136d6ad2385cbd776",
       "sourceRdx": "77858cc19e5d311b55191aba9f796c2ca5953ae2ad642aa4ce5854eefa7fa71e",
-      "structural": "4d9aefbf95fb0bc746411fbe422d3edf6a0ce598d11228eff53f1abf3fa051df",
+      "structural": "d7eeed949eeac3cb6e8313455939b621df538fcc6b583ed9cc927839a5fede16",
       "transitions": "91fb18b1aaffbed098d85d00745dacde9c5d0c54090a3781cecb9fa9cd9cd445"
     },
     "group": "castle",
@@ -2836,7 +2836,7 @@
         "operations": [
           {
             "action": "suppress",
-            "authority": "user-reviewed-activated-trap-parity",
+            "authority": "user-reviewed-activated-trap-foreground-suppression",
             "bounds": [
               64,
               152,
@@ -2844,16 +2844,72 @@
               8
             ],
             "id": "sm25-remove-static-spikes-mark407",
-            "layer": "AB",
-            "provenance": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 407; the source-owned on/off trap is the sole visible hazard at this location.",
-            "reason": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 407; the source-owned on/off trap is the sole visible hazard at this location.",
+            "layer": "A",
+            "provenance": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 407. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
+            "reason": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 407. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
             "sourceBounds": null,
             "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark407",
             "type": "visual-plane-patch"
           },
           {
+            "action": "overlay-tiles",
+            "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
+            "bounds": [
+              64,
+              152,
+              32,
+              8
+            ],
+            "clearLayer": "B",
+            "id": "sm25-restore-brick-behind-mark407",
+            "layer": null,
+            "provenance": "2026-10-02 follow-up: restore the inactive mark 407 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0039 px [64,184,32,8] (score 247.75). The donor matches the surrounding pale-block/dark-wall seam; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+            "reason": "2026-10-02 follow-up: restore the inactive mark 407 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0039 px [64,184,32,8] (score 247.75). The donor matches the surrounding pale-block/dark-wall seam; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+            "sourceBounds": null,
+            "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark407:backdrop",
+            "tiles": [
+              {
+                "globalTile": 10609,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 10610,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 10609,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 10610,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
             "action": "suppress",
-            "authority": "user-reviewed-activated-trap-parity",
+            "authority": "user-reviewed-activated-trap-foreground-suppression",
             "bounds": [
               192,
               504,
@@ -2861,11 +2917,67 @@
               8
             ],
             "id": "sm25-remove-static-spikes-mark411",
-            "layer": "AB",
-            "provenance": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 411; the source-owned on/off trap is the sole visible hazard at this location.",
-            "reason": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 411; the source-owned on/off trap is the sole visible hazard at this location.",
+            "layer": "A",
+            "provenance": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 411. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
+            "reason": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 411. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
             "sourceBounds": null,
             "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411",
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
+            "bounds": [
+              192,
+              504,
+              32,
+              8
+            ],
+            "clearLayer": "B",
+            "id": "sm25-restore-brick-behind-mark411",
+            "layer": null,
+            "provenance": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+            "reason": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+            "sourceBounds": null,
+            "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411:backdrop",
+            "tiles": [
+              {
+                "globalTile": 10805,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 10804,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 11150,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 11151,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              }
+            ],
             "type": "visual-plane-patch"
           },
           {

@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "72f617616409bfc56b1fe787d8728a21f697c32261ed8b3c4b5b9a602d3804b0",
+  "authoredLayersFingerprint": "773f1aeb8050f724a29c3062db02b3c011124293bfd891973d2484fbf00e7a46",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -350,15 +350,6 @@
           "mark": 231,
           "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [127,160], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin.",
           "submap": 19
-        },
-        {
-          "dx": 0,
-          "dy": 15,
-          "entity": 52,
-          "mapId": 37,
-          "mark": 335,
-          "provenance": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path.",
-          "submap": 30
         },
         {
           "dx": 16,
@@ -12948,7 +12939,7 @@
         },
         {
           "action": "suppress",
-          "authority": "user-reviewed-activated-trap-parity",
+          "authority": "user-reviewed-activated-trap-foreground-suppression",
           "bounds": [
             64,
             152,
@@ -12956,17 +12947,74 @@
             8
           ],
           "id": "sm25-remove-static-spikes-mark407",
-          "layer": "AB",
+          "layer": "A",
           "mapId": 44,
-          "provenance": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 407; the source-owned on/off trap is the sole visible hazard at this location.",
-          "reason": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 407; the source-owned on/off trap is the sole visible hazard at this location.",
+          "provenance": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 407. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
+          "reason": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 407. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
           "sourceBounds": null,
           "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark407",
           "submap": 37
         },
         {
+          "action": "overlay-tiles",
+          "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
+          "bounds": [
+            64,
+            152,
+            32,
+            8
+          ],
+          "clearLayer": "B",
+          "id": "sm25-restore-brick-behind-mark407",
+          "layer": null,
+          "mapId": 44,
+          "provenance": "2026-10-02 follow-up: restore the inactive mark 407 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0039 px [64,184,32,8] (score 247.75). The donor matches the surrounding pale-block/dark-wall seam; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+          "reason": "2026-10-02 follow-up: restore the inactive mark 407 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0039 px [64,184,32,8] (score 247.75). The donor matches the surrounding pale-block/dark-wall seam; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+          "sourceBounds": null,
+          "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark407:backdrop",
+          "submap": 37,
+          "tiles": [
+            {
+              "globalTile": 10609,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10610,
+              "offset": [
+                8,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10609,
+              "offset": [
+                16,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10610,
+              "offset": [
+                24,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            }
+          ]
+        },
+        {
           "action": "suppress",
-          "authority": "user-reviewed-activated-trap-parity",
+          "authority": "user-reviewed-activated-trap-foreground-suppression",
           "bounds": [
             192,
             504,
@@ -12974,13 +13022,70 @@
             8
           ],
           "id": "sm25-remove-static-spikes-mark411",
-          "layer": "AB",
+          "layer": "A",
           "mapId": 44,
-          "provenance": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 411; the source-owned on/off trap is the sole visible hazard at this location.",
-          "reason": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 411; the source-owned on/off trap is the sole visible hazard at this location.",
+          "provenance": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 411. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
+          "reason": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 411. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
           "sourceBounds": null,
           "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411",
           "submap": 37
+        },
+        {
+          "action": "overlay-tiles",
+          "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
+          "bounds": [
+            192,
+            504,
+            32,
+            8
+          ],
+          "clearLayer": "B",
+          "id": "sm25-restore-brick-behind-mark411",
+          "layer": null,
+          "mapId": 44,
+          "provenance": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+          "reason": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+          "sourceBounds": null,
+          "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411:backdrop",
+          "submap": 37,
+          "tiles": [
+            {
+              "globalTile": 10805,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 10804,
+              "offset": [
+                8,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 11150,
+              "offset": [
+                16,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            },
+            {
+              "globalTile": 11151,
+              "offset": [
+                24,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B"
+            }
+          ]
         },
         {
           "action": "overlay-tiles",
@@ -13818,6 +13923,38 @@
           "submap": 32
         },
         {
+          "action": "open",
+          "authority": "user-reviewed-classic-microgeometry",
+          "g8Bounds": [
+            20,
+            50,
+            2,
+            2
+          ],
+          "id": "md0039-open-coarse-mt1-block-20-21-50-51",
+          "mapId": 39,
+          "provenance": "2026-10-01 Castle collision review: raw MD0039 MT mode 1 expands one 16x16 descriptor into four solid g8 cells at x=20..21,y=50..51, while the reviewed aligned Classic 2x2 mask is fully open and RDX artwork has no blocking structure.",
+          "reason": "Remove the reviewed false 2x2 solid block created by coarse ordinary-MT projection; preserve raw MT semantics everywhere else.",
+          "sourceKey": "geometry:rdx:g8:{20,21}:{50,51}",
+          "submap": 32
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-classic-microgeometry",
+          "g8Bounds": [
+            7,
+            12,
+            1,
+            4
+          ],
+          "id": "md0039-open-coarse-mt1-right-half-7-12-15",
+          "mapId": 39,
+          "provenance": "2026-10-01 Castle collision review: MD0039 MT mode 1 at the two underlying 16x16 cells expands both halves to solid, but reviewed aligned Classic masks are [solid,open;solid,open]. Keep the left g8 column x=6 solid and open only x=7,y=12..15.",
+          "reason": "Restore the reviewed open right half of two coarse MT1 cells without weakening the adjacent Classic-solid left half.",
+          "sourceKey": "geometry:rdx:g8:7:{12-15}",
+          "submap": 32
+        },
+        {
           "action": "lethal",
           "authority": "classic-broken-bottle-hazard-restoration",
           "g8Bounds": [
@@ -14206,14 +14343,14 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "72f617616409bfc56b1fe787d8728a21f697c32261ed8b3c4b5b9a602d3804b0",
+    "authoredLayers": "773f1aeb8050f724a29c3062db02b3c011124293bfd891973d2484fbf00e7a46",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "a610f689075a8bc72efeacab618bb8a83c73fea11e71a6aa5830bd1b23fab383",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "e734d580bf3d738ddeeb16f4b8b468985f62120d822d4b2dfd175985cf12b2cf",
-    "resolved32": 275120342,
-    "runtimeSource": "1a0f3147ef52967fa8df72d408a5db586f9fadd5e145272de4ea516e4dfaf1ff",
-    "runtimeSource32": 1806092656,
+    "resolved": "24a29b48b24788adb1b692246cb6115b0340de7406e24c203534fc2fb10e72b2",
+    "resolved32": 936737429,
+    "runtimeSource": "0430cfd8481be82d4381c54ca8cba3864da38c7a0604af2d40030fdcf2371235",
+    "runtimeSource32": 1193858087,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -139545,9 +139682,9 @@
         "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
         "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
         "presentationDepth": "39639e0a127e56b98115552d7f812135228d9692eb7b2ff12642ac606d6cd6da",
-        "resolved": "8ab90b9f5c09f3ef86a385066faed86857ea194881b59a9a8d69864c07b11454",
-        "reviewed": "c8440c63042761f059526c746b7cc5e7feb9f68dbfe3b8b3df3413d5c438b74a",
-        "semantic": "be3eb28c491ba8bfcf260389b30fd88316ac76e38c7a6b134387b8a94eef9801",
+        "resolved": "dbbb0e096e3427ceae4cb04018760e098d58b37ffde54f933f33ad3969f63ac8",
+        "reviewed": "68458fa13064f415194a47ba59c9f8a7e05947edf2e6446310f824e2ab55d661",
+        "semantic": "b29ac62e1d67588abf7ed1002ce11b1776af5fc8ecb9cc5af1ecb50fbc421caf",
         "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
         "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
         "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
@@ -139695,20 +139832,20 @@
               ],
               "id": "SM1E.editor.entity-position.SM1E.actor.mark-335.1",
               "provenance": {
-                "authority": "level-editor-reviewed-fix",
+                "authority": "user-reviewed-classic-clearance-parity",
                 "evidence": [
+                  "Classic entity 52 start position and -32px travel",
                   "production-c-presentation-capture",
-                  "Classic ent_mvstep remains trajectory/timing authority",
-                  "SM1A.actor.mark-297"
+                  "user-reviewed SM1E gameplay clearance"
                 ],
-                "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+                "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
               },
               "target": "SM1E.actor.mark-335",
               "type": "entity-position",
               "value": {
                 "position": [
                   128,
-                  178
+                  163
                 ]
               }
             }
@@ -140583,11 +140720,11 @@
                 "gameplayBounds": null,
                 "position": [
                   128,
-                  178
+                  163
                 ],
                 "presentationOrigin": [
                   113,
-                  181
+                  166
                 ],
                 "supportBounds": null,
                 "triggerBounds": [
@@ -140598,7 +140735,7 @@
                 ],
                 "visualAnchor": [
                   94,
-                  155
+                  140
                 ],
                 "visualBounds": null
               },
@@ -140635,20 +140772,20 @@
               "reviewed": {
                 "position": [
                   128,
-                  178
+                  163
                 ]
               },
               "reviewedCorrectionsApplied": [
                 {
                   "id": "SM1E.editor.entity-position.SM1E.actor.mark-335.1",
                   "provenance": {
-                    "authority": "level-editor-reviewed-fix",
+                    "authority": "user-reviewed-classic-clearance-parity",
                     "evidence": [
+                      "Classic entity 52 start position and -32px travel",
                       "production-c-presentation-capture",
-                      "Classic ent_mvstep remains trajectory/timing authority",
-                      "SM1A.actor.mark-297"
+                      "user-reviewed SM1E gameplay clearance"
                     ],
-                    "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+                    "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
                   },
                   "type": "entity-position"
                 }
@@ -140696,11 +140833,11 @@
                 "anchorAuthority": "rdx-pn-foot",
                 "baseDraw": [
                   94,
-                  155
+                  140
                 ],
                 "baseOrigin": [
                   113,
-                  181
+                  166
                 ],
                 "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
                 "terminalPolicy": "classic-ent-mvstep-loop",
@@ -140710,14 +140847,14 @@
                 "simulated": {
                   "draw": [
                     94,
-                    154
+                    139
                   ],
                   "front": false,
                   "mirrorX": false,
                   "mirrorY": false,
                   "origin": [
                     113,
-                    180
+                    165
                   ],
                   "pn": 78,
                   "visible": true,
@@ -140726,14 +140863,14 @@
                 "snapshot": {
                   "draw": [
                     94,
-                    155
+                    140
                   ],
                   "front": false,
                   "mirrorX": false,
                   "mirrorY": false,
                   "origin": [
                     113,
-                    181
+                    166
                   ],
                   "pn": 79,
                   "renderOrder": 4,
@@ -142543,7 +142680,7 @@
           {
             "after": [
               128,
-              178
+              163
             ],
             "before": [
               128,
@@ -142551,13 +142688,13 @@
             ],
             "id": "SM1E.editor.entity-position.SM1E.actor.mark-335.1",
             "provenance": {
-              "authority": "level-editor-reviewed-fix",
+              "authority": "user-reviewed-classic-clearance-parity",
               "evidence": [
+                "Classic entity 52 start position and -32px travel",
                 "production-c-presentation-capture",
-                "Classic ent_mvstep remains trajectory/timing authority",
-                "SM1A.actor.mark-297"
+                "user-reviewed SM1E gameplay clearance"
               ],
-              "reason": "User-reviewed SM1E mark 335 correction: move the existing reviewed placement one 8px cell higher, from +23px to +15px relative to Classic. Preserve Classic entity 52 controller and PN79/PN78 state presentation; same-family SM1A mark 297 retains its existing shared native presentation path."
+              "reason": "2026-10-01 follow-up: mark 335 remained impossible to pass after the prior one-cell adjustment. Restore the canonical Classic-relative controller placement (zero residual offset); Classic entity 52 remains trajectory/timing authority and PN79/PN78 remain presentation-only."
             },
             "semantic": "gameplay",
             "target": "SM1E.actor.mark-335",
@@ -144386,11 +144523,11 @@
         "adjustments": "85cd6821d179e14a7f567e3108b481daa778263d7a6dfe36efadc994661a2ba8",
         "alignment": "d7b8fb37d8085b64387e013ba4c048c86f4581e17050dcb2e69e451bea1619af",
         "presentationDepth": "77393a087b282aace9e64a49635ab2b9261148b366d6971cc5cd386b7c16a7f3",
-        "resolved": "bb73703a17a17f402f62fc584151594f0be7c312277a884dfe1d4f685373977d",
+        "resolved": "23213c9eda5f483d903fa5fe57add92be6b456c833efa5dc12598440cba7263a",
         "semantic": "a762b106622a0fc5b182bbaa4c2085132734abd15481155d628ae9542f789222",
         "sourceClassic": "ed430cd8a4f6d6c7103cfd9b9dba0b21977708ac171431031f3c1424c5177b69",
         "sourceRdx": "be0a9326e03840241942013891b4c290bdbdc6e207f9b35473ddfab580cca9ff",
-        "structural": "f08ba52c367447271f88a5bfef3920bc97c4aa1a4f95d014c7d8f33f95b7e0e8",
+        "structural": "091dcc2983d771e95167c89deba69a1bf4ffe0168521386fa8097b8ef4faa715",
         "transitions": "b3ab7dfc68b8d0533ee5ecd8fa57f44a7b31da951ba38542a2e01f0f5ba89a1c"
       },
       "group": "castle",
@@ -146941,6 +147078,36 @@
               "provenance": "2026-09-14 Level Editor review: g8 x=15, y=56 is fully open in the intended MD0039 gameplay topology rather than one-way support.",
               "reason": "Remove the reviewed unwanted one-way collision from this MD0039 cell.",
               "sourceKey": "geometry:rdx:g8:15:56",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-classic-microgeometry",
+              "g8Bounds": [
+                20,
+                50,
+                2,
+                2
+              ],
+              "id": "md0039-open-coarse-mt1-block-20-21-50-51",
+              "provenance": "2026-10-01 Castle collision review: raw MD0039 MT mode 1 expands one 16x16 descriptor into four solid g8 cells at x=20..21,y=50..51, while the reviewed aligned Classic 2x2 mask is fully open and RDX artwork has no blocking structure.",
+              "reason": "Remove the reviewed false 2x2 solid block created by coarse ordinary-MT projection; preserve raw MT semantics everywhere else.",
+              "sourceKey": "geometry:rdx:g8:{20,21}:{50,51}",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-classic-microgeometry",
+              "g8Bounds": [
+                7,
+                12,
+                1,
+                4
+              ],
+              "id": "md0039-open-coarse-mt1-right-half-7-12-15",
+              "provenance": "2026-10-01 Castle collision review: MD0039 MT mode 1 at the two underlying 16x16 cells expands both halves to solid, but reviewed aligned Classic masks are [solid,open;solid,open]. Keep the left g8 column x=6 solid and open only x=7,y=12..15.",
+              "reason": "Restore the reviewed open right half of two coarse MT1 cells without weakening the adjacent Classic-solid left half.",
+              "sourceKey": "geometry:rdx:g8:7:{12-15}",
               "type": "gameplay-cell-override"
             }
           ],
@@ -158913,12 +159080,12 @@
         "adjustments": "56988a1132dd07244c3d4c4b2c4f322505eebbf31dd97af8a6289fca99d2dd80",
         "alignment": "7328f0a25ba3a99c85e0bfe8e14ff326a51e36562abc9b242c7cad67fdbceb9e",
         "presentationDepth": "4224f1fe16a5538e86a91b73242d6a5700470d9bc5524411c8fab1a217a08e5c",
-        "resolved": "a87e327efed2beb99c0e62a72696a92424efe46475f5c398f7699f0665375a23",
+        "resolved": "3f68c0b5a974b5399ef91e18e4f13b88a3ad24ae30f83c30fc1323eafccb42db",
         "reviewed": "8b9032043e89a9ad015f90736f479a02df6e9dbe66ff2a117a074731f1aa94bb",
         "semantic": "82b16e4fd8b79a365f1f1dee5bc0538e3dcdcbd5658cb5dcb56bd372b6745fce",
         "sourceClassic": "dc544f88c2fe4ee82ff60d7328294aef2df22d62176c1de136d6ad2385cbd776",
         "sourceRdx": "77858cc19e5d311b55191aba9f796c2ca5953ae2ad642aa4ce5854eefa7fa71e",
-        "structural": "4d9aefbf95fb0bc746411fbe422d3edf6a0ce598d11228eff53f1abf3fa051df",
+        "structural": "d7eeed949eeac3cb6e8313455939b621df538fcc6b583ed9cc927839a5fede16",
         "transitions": "91fb18b1aaffbed098d85d00745dacde9c5d0c54090a3781cecb9fa9cd9cd445"
       },
       "group": "castle",
@@ -161726,7 +161893,7 @@
           "operations": [
             {
               "action": "suppress",
-              "authority": "user-reviewed-activated-trap-parity",
+              "authority": "user-reviewed-activated-trap-foreground-suppression",
               "bounds": [
                 64,
                 152,
@@ -161734,16 +161901,72 @@
                 8
               ],
               "id": "sm25-remove-static-spikes-mark407",
-              "layer": "AB",
-              "provenance": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 407; the source-owned on/off trap is the sole visible hazard at this location.",
-              "reason": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 407; the source-owned on/off trap is the sole visible hazard at this location.",
+              "layer": "A",
+              "provenance": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 407. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
+              "reason": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 407. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
               "sourceBounds": null,
               "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark407",
               "type": "visual-plane-patch"
             },
             {
+              "action": "overlay-tiles",
+              "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
+              "bounds": [
+                64,
+                152,
+                32,
+                8
+              ],
+              "clearLayer": "B",
+              "id": "sm25-restore-brick-behind-mark407",
+              "layer": null,
+              "provenance": "2026-10-02 follow-up: restore the inactive mark 407 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0039 px [64,184,32,8] (score 247.75). The donor matches the surrounding pale-block/dark-wall seam; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+              "reason": "2026-10-02 follow-up: restore the inactive mark 407 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0039 px [64,184,32,8] (score 247.75). The donor matches the surrounding pale-block/dark-wall seam; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+              "sourceBounds": null,
+              "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark407:backdrop",
+              "tiles": [
+                {
+                  "globalTile": 10609,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10610,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10609,
+                  "offset": [
+                    16,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10610,
+                  "offset": [
+                    24,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                }
+              ],
+              "type": "visual-plane-patch"
+            },
+            {
               "action": "suppress",
-              "authority": "user-reviewed-activated-trap-parity",
+              "authority": "user-reviewed-activated-trap-foreground-suppression",
               "bounds": [
                 192,
                 504,
@@ -161751,11 +161974,67 @@
                 8
               ],
               "id": "sm25-remove-static-spikes-mark411",
-              "layer": "AB",
-              "provenance": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 411; the source-owned on/off trap is the sole visible hazard at this location.",
-              "reason": "User-reviewed activated-trap parity audit: remove the embedded static spike strip under mark 411; the source-owned on/off trap is the sole visible hazard at this location.",
+              "layer": "A",
+              "provenance": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 411. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
+              "reason": "2026-10-02 follow-up: suppress only the embedded static spike foreground for mark 411. The paired reviewed Plane-B overlay restores a Castle brick strip behind the on/off trap so the inactive state has no baked spike silhouette or black fill.",
               "sourceBounds": null,
               "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411",
+              "type": "visual-plane-patch"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-reviewed-smart-scissors-castle-backdrop-parity",
+              "bounds": [
+                192,
+                504,
+                32,
+                8
+              ],
+              "clearLayer": "B",
+              "id": "sm25-restore-brick-behind-mark411",
+              "layer": null,
+              "provenance": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+              "reason": "2026-10-02 follow-up: restore the inactive mark 411 backdrop with the top-ranked Castle Smart Scissors Plane-B donor, MD0034 px [256,184,32,8] (score 217.25). The donor is the same brick-strip-over-pale-block structure and matches the target seams; its four raw tiles are materialized here so runtime output does not depend on another room remaining unchanged.",
+              "sourceBounds": null,
+              "sourceKey": "terrain-hazard:sm25-remove-static-spikes-mark411:backdrop",
+              "tiles": [
+                {
+                  "globalTile": 10805,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 10804,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 11150,
+                  "offset": [
+                    16,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                },
+                {
+                  "globalTile": 11151,
+                  "offset": [
+                    24,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B"
+                }
+              ],
               "type": "visual-plane-patch"
             },
             {
@@ -188359,7 +188638,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "1a0f3147ef52967fa8df72d408a5db586f9fadd5e145272de4ea516e4dfaf1ff",
+  "runtimeSourceFingerprint": "0430cfd8481be82d4381c54ca8cba3864da38c7a0604af2d40030fdcf2371235",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {

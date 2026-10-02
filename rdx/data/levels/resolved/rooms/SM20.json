@@ -23,11 +23,11 @@
       "adjustments": "85cd6821d179e14a7f567e3108b481daa778263d7a6dfe36efadc994661a2ba8",
       "alignment": "d7b8fb37d8085b64387e013ba4c048c86f4581e17050dcb2e69e451bea1619af",
       "presentationDepth": "77393a087b282aace9e64a49635ab2b9261148b366d6971cc5cd386b7c16a7f3",
-      "resolved": "bb73703a17a17f402f62fc584151594f0be7c312277a884dfe1d4f685373977d",
+      "resolved": "23213c9eda5f483d903fa5fe57add92be6b456c833efa5dc12598440cba7263a",
       "semantic": "a762b106622a0fc5b182bbaa4c2085132734abd15481155d628ae9542f789222",
       "sourceClassic": "ed430cd8a4f6d6c7103cfd9b9dba0b21977708ac171431031f3c1424c5177b69",
       "sourceRdx": "be0a9326e03840241942013891b4c290bdbdc6e207f9b35473ddfab580cca9ff",
-      "structural": "f08ba52c367447271f88a5bfef3920bc97c4aa1a4f95d014c7d8f33f95b7e0e8",
+      "structural": "091dcc2983d771e95167c89deba69a1bf4ffe0168521386fa8097b8ef4faa715",
       "transitions": "b3ab7dfc68b8d0533ee5ecd8fa57f44a7b31da951ba38542a2e01f0f5ba89a1c"
     },
     "group": "castle",
@@ -2578,6 +2578,36 @@
             "provenance": "2026-09-14 Level Editor review: g8 x=15, y=56 is fully open in the intended MD0039 gameplay topology rather than one-way support.",
             "reason": "Remove the reviewed unwanted one-way collision from this MD0039 cell.",
             "sourceKey": "geometry:rdx:g8:15:56",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-classic-microgeometry",
+            "g8Bounds": [
+              20,
+              50,
+              2,
+              2
+            ],
+            "id": "md0039-open-coarse-mt1-block-20-21-50-51",
+            "provenance": "2026-10-01 Castle collision review: raw MD0039 MT mode 1 expands one 16x16 descriptor into four solid g8 cells at x=20..21,y=50..51, while the reviewed aligned Classic 2x2 mask is fully open and RDX artwork has no blocking structure.",
+            "reason": "Remove the reviewed false 2x2 solid block created by coarse ordinary-MT projection; preserve raw MT semantics everywhere else.",
+            "sourceKey": "geometry:rdx:g8:{20,21}:{50,51}",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-classic-microgeometry",
+            "g8Bounds": [
+              7,
+              12,
+              1,
+              4
+            ],
+            "id": "md0039-open-coarse-mt1-right-half-7-12-15",
+            "provenance": "2026-10-01 Castle collision review: MD0039 MT mode 1 at the two underlying 16x16 cells expands both halves to solid, but reviewed aligned Classic masks are [solid,open;solid,open]. Keep the left g8 column x=6 solid and open only x=7,y=12..15.",
+            "reason": "Restore the reviewed open right half of two coarse MT1 cells without weakening the adjacent Classic-solid left half.",
+            "sourceKey": "geometry:rdx:g8:7:{12-15}",
             "type": "gameplay-cell-override"
           }
         ],
