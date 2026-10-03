@@ -23,9 +23,9 @@
       "adjustments": "b51d712d25b0bc55153f2606bf98498eb9710e2a00612cb46509a5541eac4284",
       "alignment": "dabe4b9a3780784bf4ee09f4dde0d7f5ca271cdc5b0cb5862d5defc0b412030e",
       "presentationDepth": "25b8f4c32799d8563f209cbc8b819e424a30e650159bda3e3f2f6a2e056c9f03",
-      "resolved": "3803ba5e9ddf44f74934777bead756d2c7de333674db2d40a5385f0eb8b4ea06",
+      "resolved": "2633934647891959c9c3b33a74d1625b376ceeea81f2d8bc752f9fe6f0419472",
       "reviewed": "f3806cfa450395af2adc7c50a1069a92d768c0ab8d351fc37d730d1e90769f6a",
-      "semantic": "fc48522fd85bb37eee4032430abe4d9fac018dd190f9ab35d10ae800d90dbbb4",
+      "semantic": "290d9ac1496487100493087df83c09aec21574babf0aeefc2dfe9ccdb045ee7d",
       "sourceClassic": "1ce5c8048ec95e979eb3cd8cdf789bc9330d3e2c592e27b862204dc9912da79c",
       "sourceRdx": "10541ab27aeb8ff183ff7b6ca8a9d98c0dc737959f3664709cfa1018a62cdca5",
       "structural": "4862a00adc8393bf38f6eb22cc1f6f3aa86d2499867542b7d0eb9a361428f488",
@@ -1837,6 +1837,7 @@
           {
             "adjustmentsApplied": [],
             "authority": "classic-broken-bottle-visual+hazard-pair",
+            "classicParentSourceKey": "terrain-hazard:classic-sm36-0",
             "contact": {
               "bounds": [
                 104,
@@ -1898,6 +1899,81 @@
                 ],
                 "size": [
                   8,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+            "classicParentSourceKey": "terrain-hazard:classic-sm36-2",
+            "contact": {
+              "bounds": [
+                64,
+                568,
+                48,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                64,
+                568,
+                48,
+                8
+              ],
+              "position": [
+                64,
+                568
+              ],
+              "visualBounds": [
+                64,
+                568,
+                48,
+                8
+              ]
+            },
+            "evidence": [
+              "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [64, 568, 48, 8].",
+              "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+            ],
+            "family": "castle-static-map-trap",
+            "featureMatch": {
+              "basis": "layer-c-to-layer-f-landmark-fit",
+              "classicAlignedBounds": [
+                64,
+                568,
+                48,
+                8
+              ],
+              "rdxEffectiveBounds": [
+                64,
+                568,
+                48,
+                8
+              ]
+            },
+            "id": "auto-sm24-classic-sm36-2",
+            "mounting": "embedded-map-art",
+            "position": [
+              64,
+              568
+            ],
+            "semanticId": "SM00.trap.auto-sm24-classic-sm36-2",
+            "sourceId": 48142,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm36-2",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  64,
+                  568
+                ],
+                "size": [
+                  48,
                   8
                 ],
                 "visible": true

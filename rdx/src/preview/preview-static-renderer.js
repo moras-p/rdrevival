@@ -20,6 +20,12 @@ function resolvedPatchTileBytes(renderer, tile, cache = new Map()) {
   return cache.get(assetId)?.tileBytes || null;
 }
 
+function addUncroppedPlaneBCell(set, x, y) {
+  const wx=Number(x), wy=Number(y);
+  if (!Number.isFinite(wx) || !Number.isFinite(wy) || (wx % 8) !== 0 || (wy % 8) !== 0) return;
+  set.add(`${Math.trunc(wx / 8)},${Math.trunc(wy / 8)}`);
+}
+
 export function sceneryAssemblyFrame(spriteDecoder, palette, state, context = {}) {
   if (state?.kind === 'authored-visual-asset') {
     const asset = authoredVisualAssetById(context?.authoredVisualAssets, String(state.assetId || ''));
@@ -300,6 +306,7 @@ export function staticLayers(phase = 0) {
   const foreground = this.mapDecoder.renderPlane(mapId, palette, { plane: 'A', phase: normalized, viewport, topology });
   const backgroundPixels = background.pixels || background;
   const foregroundPixels = foreground.pixels || foreground;
+  const uncroppedPlaneB = new Set();
   /* Map Editor visual replacements deliberately source the raw decoded ROM
    * piece, then override the final reviewed production picture at the target.
    * Native local playtest uses the same order. This keeps every final tile
@@ -343,6 +350,7 @@ export function staticLayers(phase = 0) {
       drawMegaDriveTile(backgroundPixels, resolved.tileBytes, detachment.x + tile.offset[0], detachment.y + tile.offset[1], palette, {
         paletteLine:tile.paletteLine, hFlip:tile.hFlip, vFlip:tile.vFlip, transparentZero:false
       });
+      addUncroppedPlaneBCell(uncroppedPlaneB,detachment.x + tile.offset[0],detachment.y + tile.offset[1]);
     }
   }
   for (const patch of this.reviewedMapVisualPatches) {
@@ -374,6 +382,7 @@ export function staticLayers(phase = 0) {
       drawMegaDriveTile(target, tileBytes, bounds[0] + offset[0], bounds[1] + offset[1], palette, {
         paletteLine:Number(tile.paletteLine || 0), hFlip:!!tile.hFlip, vFlip:!!tile.vFlip, transparentZero:plane === 'A'
       });
+      if (plane === 'B') addUncroppedPlaneBCell(uncroppedPlaneB,bounds[0] + offset[0],bounds[1] + offset[1]);
     }
   }
   for (const patch of this.reviewedMapVisualPatches) {
@@ -426,6 +435,7 @@ export function staticLayers(phase = 0) {
         drawMegaDriveTile(backgroundPixels, resolved.tileBytes, suppression.x + tile.offset[0], suppression.y + tile.offset[1], palette, {
           paletteLine:tile.paletteLine, hFlip:tile.hFlip, vFlip:tile.vFlip, transparentZero:false
         });
+        addUncroppedPlaneBCell(uncroppedPlaneB,suppression.x + tile.offset[0],suppression.y + tile.offset[1]);
       }
     }
     if (suppression.plane === 'A') clearRect(foregroundPixels, local);
@@ -447,7 +457,10 @@ export function staticLayers(phase = 0) {
       const crop = sourceBuffer.crop(Math.round(sourceGx)*8, Math.round(sourceGy)*8, 8, 8);
       targetBuffer.blit(crop, target.x, target.y, { useAlpha:true, mirrorX:!!edit.mirrorX });
     };
-    if (layers.includes('B')) copyCell(backgroundPixels, palette[0] || [0,0,0,255], 'B');
+    if (layers.includes('B')) {
+      copyCell(backgroundPixels, palette[0] || [0,0,0,255], 'B');
+      addUncroppedPlaneBCell(uncroppedPlaneB,target.x,target.y);
+    }
     if (layers.includes('A')) copyCell(foregroundPixels, null, 'A');
   }
   const productionRoom = this._productionRoom?.() || null;
@@ -460,7 +473,7 @@ export function staticLayers(phase = 0) {
   const effectiveClasses = applyPresentationDepthClassEdits(baseDepth.classes || [], depthClassEdits);
   const effectiveDepth = Object.freeze({ ...baseDepth, classes:effectiveClasses, overrides:Object.freeze([...reviewedOverrides, ...depthDrafts]) });
   const splitB = splitPlaneByPresentationDepth({ source:backgroundPixels, model:effectiveDepth, mapDecoder:this.mapDecoder,
-    mapId, plane:'B', phase:normalized, topology, viewport, cropToVisibleSource:true });
+    mapId, plane:'B', phase:normalized, topology, viewport, cropToVisibleSource:true, uncroppedCells:uncroppedPlaneB });
   const splitA = splitPlaneByPresentationDepth({ source:foregroundPixels, model:effectiveDepth, mapDecoder:this.mapDecoder,
     mapId, plane:'A', phase:normalized, topology, viewport });
   const composedDepth = composePresentationDepthPlanes(splitB, splitA);

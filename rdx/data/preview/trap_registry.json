@@ -5734,11 +5734,16 @@
       ]
     },
     {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit"
+      },
       "mapId": 41,
       "submap": 34,
       "traps": [
         {
           "authority": "classic-broken-bottle-visual+hazard-pair",
+          "classicParentSourceKey": "terrain-hazard:classic-sm34-0",
           "contact": {
             "bounds": [
               136,
@@ -5788,7 +5793,64 @@
           }
         },
         {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm34-1",
+          "contact": {
+            "bounds": [
+              160,
+              472,
+              16,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [160, 472, 16, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact.",
+            "SM22 was rechecked with reviewed Layer-F visual patches applied, including the restored broken-bottle hazard artwork."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              160,
+              472,
+              16,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              160,
+              472,
+              16,
+              8
+            ]
+          },
+          "id": "auto-sm22-classic-sm34-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            160,
+            472
+          ],
+          "sourceId": 48135,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm34-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                160,
+                472
+              ],
+              "size": [
+                16,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
           "authority": "classic-broken-bottle-visual+hazard-pair",
+          "classicParentSourceKey": "terrain-hazard:classic-sm34-2",
           "contact": {
             "bounds": [
               136,
@@ -5831,6 +5893,62 @@
               ],
               "size": [
                 8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm34-3",
+          "contact": {
+            "bounds": [
+              96,
+              952,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [96, 952, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact.",
+            "SM22 was rechecked with reviewed Layer-F visual patches applied, including the restored broken-bottle hazard artwork."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              96,
+              952,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              96,
+              952,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm22-classic-sm34-3",
+          "mounting": "embedded-map-art",
+          "position": [
+            96,
+            952
+          ],
+          "sourceId": 48137,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm34-3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                96,
+                952
+              ],
+              "size": [
+                48,
                 8
               ],
               "visible": true
@@ -6045,6 +6163,7 @@
       "traps": [
         {
           "authority": "classic-broken-bottle-visual+hazard-pair",
+          "classicParentSourceKey": "terrain-hazard:classic-sm36-0",
           "contact": {
             "bounds": [
               104,
@@ -6092,15 +6211,185 @@
               "visible": true
             }
           }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm36-2",
+          "contact": {
+            "bounds": [
+              64,
+              568,
+              48,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [64, 568, 48, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              64,
+              568,
+              48,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              64,
+              568,
+              48,
+              8
+            ]
+          },
+          "id": "auto-sm24-classic-sm36-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            568
+          ],
+          "sourceId": 48142,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm36-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                568
+              ],
+              "size": [
+                48,
+                8
+              ],
+              "visible": true
+            }
+          }
         }
       ]
     },
     {
+      "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+      "evidence": {
+        "source": "2026-09-09 47-map Classic Layer C vs Revival Layer F effective hazard audit"
+      },
       "mapId": 44,
       "submap": 37,
       "traps": [
         {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm37-0",
+          "contact": {
+            "bounds": [
+              128,
+              120,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [128, 120, 32, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              128,
+              120,
+              32,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              128,
+              120,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm25-classic-sm37-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            120
+          ],
+          "sourceId": 48143,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm37-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                120
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "user-reviewed-layer-c-to-layer-f-hazard-parity-v1",
+          "classicParentSourceKey": "terrain-hazard:classic-sm37-1",
+          "contact": {
+            "bounds": [
+              192,
+              120,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "2026-09-09 47-map hazard parity review: Layer C Classic lethal geometry aligns to the visible Layer F effective hazard at px [192, 120, 32, 8].",
+            "The final Layer-F effective composition is the visual placement authority; raw/pre-adjustment RDX map pixels are not used for this contact."
+          ],
+          "family": "castle-static-map-trap",
+          "featureMatch": {
+            "basis": "layer-c-to-layer-f-landmark-fit",
+            "classicAlignedBounds": [
+              192,
+              120,
+              32,
+              8
+            ],
+            "rdxEffectiveBounds": [
+              192,
+              120,
+              32,
+              8
+            ]
+          },
+          "id": "auto-sm25-classic-sm37-1",
+          "mounting": "embedded-map-art",
+          "position": [
+            192,
+            120
+          ],
+          "sourceId": 48144,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm37-1",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                192,
+                120
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
           "authority": "classic-broken-bottle-visual+hazard-pair",
+          "classicParentSourceKey": "terrain-hazard:classic-sm37-2",
           "contact": {
             "bounds": [
               104,
@@ -6153,6 +6442,6 @@
     }
   ],
   "schema": "rdx.trap_registry.v1",
-  "sourceSha256": "0116196496319a68546fd7d200068c7f686d86fd9759cbdcaf741547bd0f838a",
+  "sourceSha256": "f83d7569c2a41d286a2fa91666e1d61b6cc9d96a701b11ea737e02ad8faeca57",
   "version": "2.1.104"
 }

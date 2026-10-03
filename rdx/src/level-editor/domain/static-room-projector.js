@@ -25,6 +25,41 @@ function fillPixelRect(buffer, rect, color) {
 
 function clearPixelRect(buffer, rect) { fillPixelRect(buffer, rect, [0, 0, 0, 0]); }
 
+function addTileAlignedCell(set, x, y) {
+  if (!Number.isFinite(Number(x)) || !Number.isFinite(Number(y))) return;
+  const wx=Number(x), wy=Number(y);
+  if ((wx % CELL) !== 0 || (wy % CELL) !== 0) return;
+  set.add(`${Math.trunc(wx / CELL)},${Math.trunc(wy / CELL)}`);
+}
+
+function authoredPlaneBReplacementCells(room, draftVisualOperations = []) {
+  const cells=new Set();
+  for (const hazard of room?.layers?.semanticCorpus?.terrainHazards || []) {
+    const bounds=rectFromArray(hazard?.sourceBounds), restore=hazard?.sourceMapDetachment?.backgroundRestore || null;
+    if (!bounds || String(restore?.plane || '').toUpperCase() !== 'B') continue;
+    for (const tile of restore?.tiles || []) {
+      const offset=Array.isArray(tile?.offset) ? tile.offset.map(Number) : [];
+      if (offset.length === 2) addTileAlignedCell(cells,bounds.x+offset[0],bounds.y+offset[1]);
+    }
+  }
+  for (const operation of room?.layers?.structuralCorrections?.operations || []) {
+    if (operation?.type !== 'visual-plane-patch' || operation?.action !== 'overlay-tiles') continue;
+    const bounds=rectFromArray(operation.bounds);
+    if (!bounds) continue;
+    for (const tile of operation.tiles || []) {
+      if (String(tile?.plane || 'A').toUpperCase() !== 'B') continue;
+      const offset=Array.isArray(tile?.offset) ? tile.offset.map(Number) : [];
+      if (offset.length === 2) addTileAlignedCell(cells,bounds.x+offset[0],bounds.y+offset[1]);
+    }
+  }
+  for (const operation of draftVisualOperations || []) {
+    if (operation?.kind !== 'visual-map-cell-replacement' || String(operation.layer || 'B').toUpperCase() !== 'B') continue;
+    const visualCell=Array.isArray(operation.visualCell) ? operation.visualCell.map(Number) : [];
+    if (visualCell.length === 2 && visualCell.every(Number.isFinite)) cells.add(`${Math.trunc(visualCell[0])},${Math.trunc(visualCell[1])}`);
+  }
+  return cells;
+}
+
 function resolvedPatchTileBytes(tile, mapDecoder, authoredVisualAssets, cache = new Map()) {
   const assetId = String(tile?.assetId || '').trim();
   if (!assetId) {
@@ -510,10 +545,8 @@ export class StaticRoomProjector {
         applyTerrainHazardDetachments(room, assets.mapDecoder, palette, rdxPlaneB, rdxPlaneA);
         applyVisualCorrections(room, assets, assets.mapDecoder, palette, rdxPlaneB, rdxPlaneA);
         applyDraftVisualOperations(draftVisualOperations, assets, room, rdxPlaneB, rdxPlaneA);
-        const uncroppedDraftB=new Set((draftVisualOperations || [])
-          .filter(operation => operation?.kind === 'visual-map-cell-replacement' && String(operation.layer || 'B').toUpperCase() === 'B')
-          .map(operation => `${number(operation.visualCell?.[0])},${number(operation.visualCell?.[1])}`));
-        const splitB=splitPlaneByPresentationDepth({ source:rdxPlaneB, model:room?.layers?.presentationDepth, mapDecoder:assets.mapDecoder, mapId:room.mapId, plane:'B', phase:0, topology, viewport, cropToVisibleSource:true, uncroppedCells:uncroppedDraftB });
+        const uncroppedPlaneB=authoredPlaneBReplacementCells(room,draftVisualOperations);
+        const splitB=splitPlaneByPresentationDepth({ source:rdxPlaneB, model:room?.layers?.presentationDepth, mapDecoder:assets.mapDecoder, mapId:room.mapId, plane:'B', phase:0, topology, viewport, cropToVisibleSource:true, uncroppedCells:uncroppedPlaneB });
         const splitA=splitPlaneByPresentationDepth({ source:rdxPlaneA, model:room?.layers?.presentationDepth, mapDecoder:assets.mapDecoder, mapId:room.mapId, plane:'A', phase:0, topology, viewport });
         const composedDepth=composePresentationDepthPlanes(splitB,splitA);
         rdxBackdrop=composedDepth.backdrop;
