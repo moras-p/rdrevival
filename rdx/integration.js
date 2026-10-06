@@ -1736,6 +1736,9 @@ aiStopButton?.addEventListener('click', () => {
   bridge?.setFrontendPaused(false);
 });
 aiCopyDebugButton?.addEventListener('click', () => { void aiPlaytestController.copyPlannerDebug(); });
+window.addEventListener('xrick-gameplay-input', event => {
+  aiPlaytestController.releaseManualRecordingHold(event?.detail?.mask || 0);
+});
 window.addEventListener('xrick-keyboard-owner-changed', event => {
   if ((aiPlaytestController.busy()) && event?.detail?.owner === 'game')
     aiPlaytestController.stopAutoplay('AI stopped; manual keyboard control took over.', 'neutral', { resetRuntime: true });

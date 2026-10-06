@@ -34,6 +34,15 @@ function snapshotSummary(snapshot) {
 }
 
 /** Reduce legacy/full evidence without inferring a native path or input tape. */
+function compactExecution(run) {
+  if (!run) return null;
+  const { certificates, lastSerial, lastSupportId, ...observations } = run;
+  return { ...observations, certificates:(certificates || []).map(record => ({
+    capturedAt:record.capturedAt, metadata:record.metadata, submap:record.plan?.submap,
+    complete:record.plan?.complete, partial:record.plan?.partial,
+    certificateProgram:record.diagnostics?.certificateProgram })) };
+}
+
 export function compactWalkthroughEvidence(report) {
   const manual = report.manual;
   const rows = manual?.samples || [];
@@ -87,9 +96,11 @@ export function compactWalkthroughEvidence(report) {
     metadata:report.metadata,
     comparison:{ positionUnits:'native world pixels', controlEncoding:'native input mask; controls are decoded names',
       manualInputRuns:'manual.inputRuns', plannedInputRuns:'gai.certificateProgram.phases',
+      executedInputRuns:'execution.inputRuns', executedNodeTraversal:'execution.nodeTraversal',
       plannedStopCondition:'guards; watchdogFrames is a limit, not a duration',
       manualSupportTransitions:'unavailable in this capture; establish by native replay',
       plannedSupportTransitions:'gai.proofTransitions; independent proofs, not an executed path' },
+    execution:compactExecution(report.execution), executions:(report.executions || []).map(compactExecution),
     manual:manual ? { startedAt:manual.startedAt, stoppedAt:manual.stoppedAt,
       active:manual.active, stopReason:manual.stopReason, metadata:manual.metadata,
       completion:'not-asserted', captureKind:'observed-native-controls', replayable:false,
@@ -129,6 +140,8 @@ export class WalkthroughEvidence {
     this.maxSamples = maxSamples;
     this.manual = null;
     this.gai = null;
+    this.execution = null;
+    this.executions = [];
   }
 
   start(snapshot, metadata = {}) {
@@ -167,9 +180,57 @@ export class WalkthroughEvidence {
     this.manual.stoppedAt = new Date().toISOString();
   }
 
+  beginExecution(snapshot, metadata = {}) {
+    if (this.execution?.active) return;
+    this.execution = { active:true, metadata:clone(metadata), baseline:snapshotSummary(snapshot),
+      endpoint:snapshotSummary(snapshot), completion:'in-progress', captureKind:'observed-native-execution', replayable:false, frames:0, skippedFrames:0,
+      inputRuns:[], nodeTraversal:[], certificates:[], lastSerial:snapshot.frameSerial, lastSupportId:0 };
+    if (this.gai) this.execution.certificates.push(clone(this.gai));
+  }
+
+  observeExecution(snapshot, { supportId = 0, nodeId = null, inputMask } = {}) {
+    const run = this.execution;
+    if (!run?.active || !snapshot) return false;
+    const endpoint = snapshotSummary(snapshot);
+    const point = { frameSerial:snapshot.frameSerial, submap:snapshot.submap,
+      position:endpoint.position, supportId, nodeId };
+    const lastNode = run.nodeTraversal.at(-1);
+    if (supportId && (!lastNode || run.lastSupportId !== supportId || lastNode.submap !== snapshot.submap))
+      run.nodeTraversal.push(point);
+    run.lastSupportId = supportId;
+    const delta = snapshot.frameSerial - run.lastSerial;
+    if (delta > 0) {
+      run.skippedFrames += Math.max(0, delta - 1);
+      run.frames += delta;
+      const mask = inputMask ?? snapshot.rick?.control ?? null;
+      const last = run.inputRuns.at(-1);
+      if (delta === 1 && last && last.inputMask === mask && last.submap === run.endpoint.submap) {
+        last.lastFrame = snapshot.frameSerial; last.frames += 1; last.to = endpoint.position;
+      } else run.inputRuns.push({ firstFrame:snapshot.frameSerial, lastFrame:snapshot.frameSerial,
+        frames:1, inputMask:mask, controls:mask == null ? [] : decodeAiInputMask(mask),
+        submap:run.endpoint.submap, from:run.endpoint.position, to:endpoint.position });
+      run.lastSerial = snapshot.frameSerial;
+    }
+    if (snapshot.submap !== run.baseline.submap) {
+      run.completion = 'room-exit';
+      run.roomExit = { from:run.baseline.submap, to:snapshot.submap, frameSerial:snapshot.frameSerial };
+    }
+    run.endpoint = endpoint;
+    return delta > 0;
+  }
+
+  stopExecution(reason) {
+    if (!this.execution?.active) return;
+    this.execution.active = false;
+    this.execution.stopReason = reason;
+    if (this.execution.completion === 'in-progress') this.execution.completion = 'stopped';
+    this.executions.push(clone(this.execution));
+  }
+
   retainPlan(plan, diagnostics, metadata = {}) {
     this.gai = { capturedAt:new Date().toISOString(), metadata:clone(metadata),
       plan:clone(plan), diagnostics:clone(diagnostics) };
+    if (this.execution?.active) this.execution.certificates.push(clone(this.gai));
   }
 
   export(metadata = {}) {
@@ -178,7 +239,7 @@ export class WalkthroughEvidence {
       manual:this.manual ? { ...this.manual, sampleFields:WALKTHROUGH_SAMPLE_FIELDS,
         captureKind:'observed-native-snapshots', replayable:false,
         completion:'not-asserted' } : null,
-      gai:this.gai,
+      gai:this.gai, execution:this.execution, executions:this.executions,
       guidance:'Partial manual observations and a separately retained GAI plan. Controls are sampled observations, not an exact input tape. Compare baseline, policy and frame gaps before drawing conclusions.' });
   }
 

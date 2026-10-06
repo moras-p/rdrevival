@@ -137,6 +137,12 @@ export class GaiRouteInspector {
         <summary>GAI walkthrough analysis</summary>
         <p class="gai-route-provenance">Effective RDX · canonical Level Editor ResolvedLevel + PreviewRenderer pipeline</p>
       <p class="gai-route-provenance" data-route-recording-status>Record any partial manual run, then export here. No room completion required. Export before reloading this page.</p>
+      <section data-route-execution hidden aria-label="Executed walkthrough">
+        <h3>Executed walkthrough</h3>
+        <p data-route-execution-status></p>
+        <details><summary>Executed input runs</summary><ol data-route-executed-inputs></ol></details>
+        <details><summary>Executed node traversal</summary><ol data-route-executed-nodes></ol></details>
+      </section>
       <div class="gai-route-summary" data-route-summary></div>
       <details class="gai-route-program" data-route-program hidden>
         <summary data-route-program-title>Executable input program</summary>
@@ -159,6 +165,10 @@ export class GaiRouteInspector {
     this.ui = {
       badge:root.querySelector('[data-route-status]'),
       summary:root.querySelector('[data-route-summary]'),
+      execution:root.querySelector('[data-route-execution]'),
+      executionStatus:root.querySelector('[data-route-execution-status]'),
+      executedInputs:root.querySelector('[data-route-executed-inputs]'),
+      executedNodes:root.querySelector('[data-route-executed-nodes]'),
       program:root.querySelector('[data-route-program]'),
       programTitle:root.querySelector('[data-route-program-title]'),
       phases:root.querySelector('[data-route-phases]'),
@@ -203,10 +213,22 @@ export class GaiRouteInspector {
     this.renderEmpty();
   }
 
-  updateEvidence({ active = false, samples = 0, hasManual = false, hasPlan = false, message = '' } = {}) {
+  updateEvidence({ active = false, samples = 0, hasManual = false, hasPlan = false, execution = null, message = '' } = {}) {
     setIconButton(this.ui.record, active ? 'stop' : 'record', active ? 'Stop manual recording' : hasManual ? 'Record new manual walkthrough' : 'Record manual walkthrough');
     this.ui.record.setAttribute('aria-pressed', String(active));
-    this.ui.export.disabled = !(hasManual || hasPlan);
+    this.ui.export.disabled = !(hasManual || hasPlan || execution);
+    this.ui.execution.hidden = !execution;
+    if (execution) {
+      this.ui.executionStatus.textContent = `${execution.completion} · ${execution.frames} native frames · ${execution.skippedFrames} missing observations` +
+        (execution.roomExit ? ` · SM${execution.roomExit.from.toString(16).padStart(2,'0')} → SM${execution.roomExit.to.toString(16).padStart(2,'0')}` : '');
+      for (const [list, rows, describe] of [
+        [this.ui.executedInputs, execution.inputRuns, run => `${run.controls.join(' + ') || 'neutral'} · frames ${run.firstFrame}–${run.lastFrame} · ${run.from?.join(',')} → ${run.to?.join(',')}`],
+        [this.ui.executedNodes, execution.nodeTraversal, node => `${node.nodeId == null ? 'Support' : `N${node.nodeId}`} · support ${node.supportId} · frame ${node.frameSerial} · ${node.position?.join(',')}`]
+      ]) {
+        list.replaceChildren();
+        for (const row of rows) { const li = document.createElement('li'); li.textContent = describe(row); list.append(li); }
+      }
+    }
     this.ui.recordingStatus.textContent = message || (hasManual
       ? `${active ? 'Recording' : 'Retained partial manual run'} · ${samples} observed frames. Export now; starting AI keeps this recording. A new manual recording replaces it.`
       : 'Record any partial manual run, then export here. No room completion required. Export before reloading this page.');

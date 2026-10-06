@@ -430,6 +430,8 @@ export class XrickWasmBridge {
       aiPlayerX: wrap0('xrick_gai_player_x'),
       aiPlayerY: wrap0('xrick_gai_player_y'),
       aiPlayerSupportId: wrap0('xrick_gai_player_support_id'),
+      aiLivePlayerSupportId: wrap0('xrick_gai_live_player_support_id'),
+      aiLivePlayerSupportIndex: wrap0('xrick_gai_live_player_support_index'),
       aiActorCount: wrap0('xrick_gai_actor_count'),
       aiMechanismCount: wrap0('xrick_gai_mechanism_count'),
       aiWorldFrameSerial: wrap0('xrick_gai_world_frame_serial'),
@@ -1014,6 +1016,12 @@ export class XrickWasmBridge {
   aiRestartPlanFull(scenario) { return !!this.api.aiRestartPlanFull(Number(scenario)>>>0); }
   aiRestartPlanFullContinue(scenario) { return !!this.api.aiRestartPlanFullContinue(Number(scenario)>>>0); }
   aiSupportCount() { return this.api.aiSupportCount() >>> 0; }
+  aiLivePlayerSupportId() { return this.api.aiLivePlayerSupportId() >>> 0; }
+  aiLivePlayerSupport() {
+    const supportId = this.api.aiLivePlayerSupportId() >>> 0;
+    const index = this.api.aiLivePlayerSupportIndex() | 0;
+    return { supportId, nodeId:index >= 0 ? index : null };
+  }
   aiSupportId(index) { return this.api.aiSupportId(Number(index)>>>0) >>> 0; }
   aiSupportX0(index) { return this.api.aiSupportX0(Number(index)>>>0) | 0; }
   aiSupportX1(index) { return this.api.aiSupportX1(Number(index)>>>0) | 0; }

@@ -111,6 +111,10 @@
     event.preventDefault();
     if (pressed) gameControlMask |= bit;
     else gameControlMask &= ~bit;
+    /* Releasing the frontend hold clears native keys. Resume before applying
+     * this key so the input that starts a manual recording is preserved. */
+    if (pressed && !event.repeat && (bit & 0x1f))
+      window.dispatchEvent(new CustomEvent('xrick-gameplay-input', { detail:{mask:gameControlMask} }));
     callKeyboardBridge(bit, pressed);
   }
   if (gameStage) {

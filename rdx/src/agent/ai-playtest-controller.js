@@ -70,6 +70,7 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   const { aiModeSelect, aiExportFormatSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
     collisionPolicySelect, invulnerableToggle, gaiRouteInspectorRoot } = elements;
   const walkthroughEvidence = new WalkthroughEvidence();
+  let manualWaitingForInput = false;
   const gaiRouteInspector = gaiRouteInspectorRoot ? new GaiRouteInspector({ root:gaiRouteInspectorRoot, resourcesProvider,
     onRecordManual:toggleManualWalkthrough, onExportEvidence:exportWalkthroughEvidence,
     onGeneratePlan:generateWalkthroughPlan, onTogglePlayback:toggleWalkthroughPlayback, onToggleMortality:toggleWalkthroughMortality }) : null;
@@ -1209,7 +1210,7 @@ function aiExecutionSummary(snapshot = null) {
 }
 
 function refreshGaiRouteInspectorPlan() {
-  if (!runtime.bridge || !gaiRouteInspector) return;
+  if (!runtime.bridge) return;
   const submap = runtime.bridge.submap() >>> 0;
   const plan = readGaiRoutePlan(runtime.bridge, { submap, room:submapAssetName(submap) });
   const diagnostics = aiPlannerDebugRecord('Walkthrough evidence');
@@ -1218,7 +1219,7 @@ function refreshGaiRouteInspectorPlan() {
     maxSliceMs:aiAutoplay.maxPlanningSliceMs, usage:runtime.bridge.aiWorkUsage?.() ?? null };
   walkthroughEvidence.retainPlan(plan, diagnostics, evidenceMetadata());
   updateWalkthroughEvidenceUi();
-  void gaiRouteInspector.updatePlan(plan, { statusText:aiStatus?.textContent || '' }).catch(error => {
+  if (gaiRouteInspector) void gaiRouteInspector.updatePlan(plan, { statusText:aiStatus?.textContent || '' }).catch(error => {
     console.error('[rdx/gai-route-inspector] update failed', error);
   });
 }
@@ -1238,7 +1239,8 @@ function evidenceMetadata() {
 function updateWalkthroughEvidenceUi(message = '') {
   const run = walkthroughEvidence.manual;
   gaiRouteInspector?.updateEvidence({ active:!!run?.active, samples:run?.samples.length || 0,
-    hasManual:!!run, hasPlan:!!walkthroughEvidence.gai, message });
+    hasManual:!!run, hasPlan:!!walkthroughEvidence.gai, execution:walkthroughEvidence.execution,
+    message:manualWaitingForInput ? 'Initial state held; press a gameplay key to begin recording.' : message });
 }
 
 function toggleWalkthroughMortality() {
@@ -1257,17 +1259,41 @@ function toggleManualWalkthrough() {
     if (walkthroughEvidence.manual?.active) {
       walkthroughEvidence.observe(runtime.bridge?.snapshot());
       walkthroughEvidence.stop();
+      manualWaitingForInput = false;
+      runtime.bridge?.setAiAudioHold?.(false);
+      runtime.bridge?.setFrontendPaused?.(false);
     } else {
       // Recording explicitly hands control to the user. A held certificate is
       // not playback; preserve its exported evidence while releasing native AI.
       if (busy() || aiAutoplay.certificateReady)
         stopAiAutoplay('Manual recording took control; the generated plan remains in the JSON export.', 'neutral', { resetRuntime:true });
-      walkthroughEvidence.start(runtime.bridge?.snapshot(), evidenceMetadata());
+      assertAiControlAvailable();
+      ensureAiDescriptorCollision();
+      clearAiControl();
+      runtime.bridge.setFrontendPaused(true);
+      runtime.bridge.setAiAudioHold?.(true);
+      if (!runtime.bridge.restartCurrentLevelForAi()) throw new Error('Native initial-state reset failed.');
+      runtime.bridge.setFrontendPaused(true);
+      walkthroughEvidence.start(runtime.bridge.snapshot(), { ...evidenceMetadata(), canonicalInitialState:true });
+      manualWaitingForInput = true;
+      globalThis.xrickFocusGame?.();
     }
     updateWalkthroughEvidenceUi();
   } catch (error) {
+    manualWaitingForInput = false;
+    runtime.bridge?.setAiAudioHold?.(false);
+    runtime.bridge?.setFrontendPaused?.(false);
     updateWalkthroughEvidenceUi(error?.message || String(error));
   }
+}
+
+function releaseManualRecordingHold(inputMask) {
+  if (!manualWaitingForInput || !walkthroughEvidence.manual?.active || !(inputMask & AI_INPUT_MASK)) return false;
+  manualWaitingForInput = false;
+  runtime.bridge.setAiAudioHold?.(false);
+  runtime.bridge.setFrontendPaused(false);
+  updateWalkthroughEvidenceUi();
+  return true;
 }
 
 function exportWalkthroughEvidence(format = aiExportFormatSelect?.value || 'compact') {
@@ -1297,6 +1323,8 @@ function refreshGaiRouteInspectorProgress(snapshot = null) {
 }
 
 function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntime = false } = {}) {
+  walkthroughEvidence.stopExecution(message);
+  updateWalkthroughEvidenceUi();
   const cancelledPlanning = aiAutoplay.planning || aiAutoplay.heldResult;
   aiAutoplay.nextPlanToken += 1;
   aiAutoplay.active = false;
@@ -1421,6 +1449,7 @@ function aiPlanningScenario({ fullRoom = false } = {}) {
 
 function configureAiPlanningMode({ fullRoom = false } = {}) {
   walkthroughEvidence.stop('ai-planning-started');
+  manualWaitingForInput = false;
   updateWalkthroughEvidenceUi();
   const invulnerable = aiInvulnerableRouteEnabled();
   const scenario = aiPlanningScenario({ fullRoom });
@@ -1723,6 +1752,7 @@ function toggleWalkthroughPlayback() {
       setAiPlayStatus(`GAI cannot play: ${error?.message || error}`, 'error');
       return;
     }
+    if (!walkthroughEvidence.execution?.active) observeGaiExecution(runtime.bridge.snapshot());
     aiAutoplay.active = true;
     aiAutoplay.paused = false;
     aiAutoplay.heldResult = false;
@@ -1825,8 +1855,17 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
   return true;
 }
 
+function observeGaiExecution(snapshot) {
+  if (!walkthroughEvidence.execution?.active) walkthroughEvidence.beginExecution(snapshot, evidenceMetadata());
+  // The native pair shares one capture. Array getters each capture again;
+  // walking them per frame makes playback cost depend on the support index.
+  const { supportId = 0, nodeId = null } = runtime.bridge.aiLivePlayerSupport?.() || {};
+  if (walkthroughEvidence.observeExecution(snapshot, { supportId, nodeId })) updateWalkthroughEvidenceUi();
+}
+
 function tickAiAutoplay(snapshot) {
   if (!runtime.bridge || !aiAutoplay.active || aiAutoplay.planning || aiAutoplay.paused || !snapshot) return;
+  observeGaiExecution(snapshot);
   refreshGaiRouteInspectorProgress(snapshot);
   const playbackNow = performance.now();
   if (aiAcceptance.lastPlaybackAt) {
@@ -1845,6 +1884,8 @@ function tickAiAutoplay(snapshot) {
   if (aiAutoplay.planSubmap >= 0 && snapshot.submap !== aiAutoplay.planSubmap) {
     clearAiControl();
     const previous = aiAutoplay.planSubmap;
+    walkthroughEvidence.stopExecution('room-exit');
+    updateWalkthroughEvidenceUi();
     if (aiAutoplay.continueRooms) {
       planRenderedDestinationRoom(previous, snapshot);
     } else {
@@ -1909,7 +1950,7 @@ function tickAiAutoplay(snapshot) {
     if (!aiAutoplay.coachControlled || coachNeedsRenderedTransitionPlan) tickAiAutoplay(snapshot);
   }
   function state() {
-    return Object.freeze({ ...aiAutoplay, acceptance:{ ...aiAcceptance,
+    return Object.freeze({ ...aiAutoplay, manualWaitingForInput, acceptance:{ ...aiAcceptance,
       planningFrameSerials:aiAcceptance.planningFrameSerials.slice() } });
   }
 
@@ -1924,7 +1965,7 @@ function tickAiAutoplay(snapshot) {
     coachSessionReport:aiCoachSessionReport, copyPlannerDebug:copyAiPlannerDebug, stopAutoplay:stopAiAutoplay,
     startAutoplay:startAiAutoplay, startRestartAutoplay:startAiRestartAutoplay, tickAutoplay:tickAiAutoplay,
     generateInitialPlan:generateWalkthroughPlan, togglePlayback:toggleWalkthroughPlayback, toggleMortality:toggleWalkthroughMortality,
-    toggleManualRecording:toggleManualWalkthrough, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
+    toggleManualRecording:toggleManualWalkthrough, releaseManualRecordingHold, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
     exportFullWalkthroughEvidence:() => exportWalkthroughEvidence('full'),
     tickFrame, busy, setCoachControlled, state
   });
