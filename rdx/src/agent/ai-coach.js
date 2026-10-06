@@ -64,6 +64,24 @@ export function decodeAiInputMask(mask) {
   return controls;
 }
 
+/** Common wording for planned input-run stop conditions in UI and exports. */
+export function describeAiPhaseGuard(guard, supports = []) {
+  const kind = guard.kindLabel;
+  if (kind === 'always') return 'immediately';
+  if (kind === 'grounded') return 'grounded';
+  if (kind === 'not-climbing') return 'not climbing';
+  if (kind === 'x-in' || kind === 'y-in') {
+    const axis = kind[0];
+    return guard.a === guard.b ? `${axis} = ${guard.a} px` : `${axis} in ${guard.a}…${guard.b} px`;
+  }
+  if (kind === 'phase-frames-ge') return `${guard.a} elapsed frames`;
+  if (kind === 'support-is') {
+    const support = supports.find(support => support?.id === guard.id);
+    return `on support ${support ? `N${support.index} ` : ''}(ID ${guard.id})`;
+  }
+  return `${kind} (${guard.a}, ${guard.b}, ${guard.c}, ${guard.d}; ID ${guard.id})`;
+}
+
 function phaseGuard(bridge, phase, guard) {
   const kind = call(bridge, 'aiPhaseGuardKind', [phase, guard]) >>> 0;
   return {
@@ -211,10 +229,37 @@ function routePoint(x, y, support) {
 }
 
 /**
- * Read the exact native GAI route certificate into a renderer-neutral model.
+ * Group accumulated native proof records into independent inspection pairs.
  * Route coordinates are native RDX world pixels. Consumers may pair this with
  * the Level Editor projector without duplicating world/collision semantics.
  */
+export function buildGaiProofInspection(certifiedEdges, blocker, capturedPlayer, startNode) {
+  const groups = new Map();
+  for (const edge of certifiedEdges) {
+    const { index, ...evidence } = edge;
+    const key = JSON.stringify(evidence);
+    if (groups.has(key)) groups.get(key).occurrences.push(index);
+    else groups.set(key, { ...edge, occurrences:[index] });
+  }
+  const proofRecords = [...groups.values()];
+  const initialSupport = certifiedEdges.flatMap(edge => [edge.sourceSupport, edge.targetSupport])
+    .find(support => support?.id === capturedPlayer.supportId);
+  const steps = [{ index:0, nodeId:initialSupport?.index ?? startNode,
+    point:{ x:capturedPlayer.x, y:capturedPlayer.y }, support:initialSupport || null,
+    incoming:null, blocked:false, role:'initial', recordIndex:null }];
+  for (const [recordIndex, edge] of [...proofRecords, ...(blocker ? [blocker] : [])].entries()) {
+    const sourceIndex = steps.length;
+    const targetIndex = sourceIndex + 1;
+    steps.push({ index:sourceIndex, nodeId:edge.from, point:edge.source, support:edge.sourceSupport,
+      incoming:null, blocked:false, role:edge.blocked ? 'blocker-source' : 'proof-source',
+      recordIndex, targetIndex, repetitions:edge.occurrences?.length || 1 });
+    steps.push({ index:targetIndex, nodeId:edge.to, point:edge.target, support:edge.targetSupport,
+      incoming:edge, blocked:!!edge.blocked, role:edge.blocked ? 'blocker-target' : 'proof-target',
+      recordIndex, sourceIndex, repetitions:edge.occurrences?.length || 1 });
+  }
+  return { proofRecords, steps };
+}
+
 export function readGaiRoutePlan(bridge, { submap = null, room = '' } = {}) {
   const supportCount = Math.min(512, call(bridge, 'aiSupportCount') >>> 0);
   const supportCache = new Map();
@@ -340,21 +385,11 @@ export function readGaiRoutePlan(bridge, { submap = null, room = '' } = {}) {
   }
 
   const edges = blocker ? [...certifiedEdges, blocker] : certifiedEdges;
-  const steps = [];
-  if (edges.length) {
-    const first = edges[0];
-    steps.push({ index:0, nodeId:first.from, point:first.source, support:first.sourceSupport, incoming:null, blocked:false });
-    for (const edge of edges) {
-      const previous = steps.at(-1);
-      if (previous?.nodeId !== edge.from) {
-        steps.push({ index:steps.length, nodeId:edge.from, point:edge.source, support:edge.sourceSupport, incoming:null, blocked:!edge.certified });
-      }
-      steps.push({
-        index:steps.length, nodeId:edge.to, point:edge.target, support:edge.targetSupport,
-        incoming:edge, blocked:!edge.certified
-      });
-    }
-  }
+  const capturedPlayer = { x:call(bridge, 'aiPlayerX') | 0, y:call(bridge, 'aiPlayerY') | 0,
+    supportId:call(bridge, 'aiPlayerSupportId') >>> 0 };
+  const startNode = call(bridge, 'aiStartNode') >>> 0;
+  const { steps, proofRecords } = buildGaiProofInspection(certifiedEdges, blocker, capturedPlayer, startNode);
+  const phaseCount = call(bridge, 'aiPhaseCount') >>> 0;
 
   const complete = !!call(bridge, 'aiCompletePlan');
   const partial = !!call(bridge, 'aiPartialPlan');
@@ -366,19 +401,21 @@ export function readGaiRoutePlan(bridge, { submap = null, room = '' } = {}) {
     status:complete ? 'complete' : partial ? 'partial' : blocker ? 'blocked' : count ? 'certified-prefix' : 'empty',
     supportCount,
     certifiedEdgeCount:certifiedEdges.length,
+    proofRecordCount:certifiedEdges.length,
+    uniqueProofRecordCount:proofRecords.length,
+    proofRecords,
+    inspectionKind:'independent proof records; no inferred route continuity',
     routeEdgeCount:call(bridge, 'aiRouteEdgeCount') >>> 0,
-    phaseCount:call(bridge, 'aiPhaseCount') >>> 0,
-    startNode:call(bridge, 'aiStartNode') >>> 0,
+    phaseCount,
+    certificateProgram:{ phaseCount, truncated:phaseCount > 512,
+      phases:Array.from({ length:Math.min(512, phaseCount) }, (_, index) => aiPhaseRecord(bridge, index)) },
+    startNode,
     goalNode:call(bridge, 'aiGoalNode') >>> 0,
     layoutHash:call(bridge, 'aiLayoutHash') >>> 0,
-    blocker, edges, steps,
+    blocker, edges, steps:phaseCount || edges.length ? steps : [],
     metrics:aiRouteMetrics(bridge),
     planner:aiPlannerDiagnostics(bridge),
-    capturedPlayer:{
-      x:call(bridge, 'aiPlayerX') | 0,
-      y:call(bridge, 'aiPlayerY') | 0,
-      supportId:call(bridge, 'aiPlayerSupportId') >>> 0
-    }
+    capturedPlayer
   };
 }
 

@@ -37,6 +37,7 @@ export function collectWorkbenchElements(root = document) {
     },
     ai: {
       aiModeSelect: byId('rdx-ai-mode'),
+      aiExportFormatSelect: byId('rdx-ai-export-format'),
       aiContinueToggle: byId('rdx-ai-continue'),
       aiRestartRunButton: byId('rdx-ai-restart-run'),
       aiRunButton: byId('rdx-ai-run'),

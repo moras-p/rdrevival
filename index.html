@@ -56,6 +56,12 @@
                   </select>
                 </label>
                 <button id="rdx-ai-run" type="button" disabled title="Diagnostic path: plan from the current live state without canonical restart">▶ Plan current live state</button>
+                <label class="collision-policy">Walkthrough export
+                  <select id="rdx-ai-export-format" title="Detail included when exporting a manual walkthrough and GAI plan">
+                    <option value="compact" selected>Compact JSON</option>
+                    <option value="full">Full JSON</option>
+                  </select>
+                </label>
                 <button id="rdx-ai-copy-debug" type="button" disabled title="Copy planner topology, proof failures, rejection history, gameplay tuning and runtime diagnostics as JSON">Copy AI debug</button>
               </div>
               <div class="ai-control-status-row">

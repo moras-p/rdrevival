@@ -627,9 +627,20 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
 .gai-route-badge { padding:4px 7px; border:1px solid #3b6072; border-radius:999px; background:#0e2530; color:#aeeafa; font:750 10px/1 ui-monospace,monospace; }
 .gai-route-inspector[data-kind="blocked"] .gai-route-badge { border-color:#925a49; background:#2a1714; color:#ffad8d; }
 .gai-route-inspector[data-kind="complete"] .gai-route-badge { border-color:#488163; background:#10281d; color:#a7e9bd; }
-.gai-route-actions button { min-height:30px; padding:5px 9px; font-size:10px; }
+.gai-route-actions { display:flex; flex-wrap:wrap; gap:6px; flex-shrink:0; }
+.gai-route-actions button { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; min-height:36px; padding:7px; }
+.gai-route-actions button svg { width:20px; height:20px; }
+.gai-route-analysis { margin-top:12px; }
+.gai-route-analysis > summary { cursor:pointer; color:#6ee7ff; font:800 11px/1.4 ui-monospace,monospace; }
+.gai-route-analysis[open] > summary { margin-bottom:10px; }
+.gai-route-actions [data-route-record] { color:#ff8585; }
+.gai-route-actions [data-route-generate] { color:#6ee7ff; }
+.gai-route-actions [aria-busy="true"] { opacity:.5; }
+.gai-route-actions [hidden] { display:none; }
 .gai-route-summary { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
 .gai-route-summary:empty { display:none; }
+.gai-route-program { margin-top:12px; color:#aeeafa; font:600 11px/1.5 ui-monospace,monospace; }
+.gai-route-program ol { padding-left:24px; color:#98b6c4; }
 .gai-route-summary span { padding:4px 7px; border:1px solid #253c49; border-radius:5px; background:#091a24; color:#98b6c4; font:650 10px/1.2 ui-monospace,monospace; }
 .gai-route-empty { margin-top:12px; padding:16px; border:1px dashed #2c4655; border-radius:8px; background:#061019; color:#7f98a5; text-align:center; font:600 11px/1.45 ui-monospace,monospace; }
 .gai-route-node-strip { display:flex; align-items:stretch; gap:8px; margin:13px -2px 0; padding:2px 2px 10px; overflow-x:auto; scroll-snap-type:x proximity; scrollbar-color:#365768 #08121a; }
@@ -658,7 +669,7 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
   .gai-route-inspector { padding:11px; }
   .gai-route-header { flex-direction:column; }
   .gai-route-actions { width:100%; }
-  .gai-route-actions button { width:100%; }
+  .gai-route-actions button { width:44px; height:44px; }
   .gai-route-detail { grid-template-columns:1fr; }
   .gai-route-detail-map canvas { height:230px; }
 }

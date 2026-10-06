@@ -2,6 +2,7 @@ import { CollisionPolicyName } from '../collision/dataset.js';
 import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentState, gameplayControlLeaseStatus, releaseGameplayControlLease, setGameplayControlMask } from './gameplay-control.js';
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
+import { WalkthroughEvidence, downloadWalkthroughEvidence } from './walkthrough-evidence.js';
 
 export function aiHorizonLoopDecision({
   advance, state, framesAdvanced = 0, maxFrames = 0, autoReplans = 0
@@ -66,9 +67,12 @@ export async function precomputeAiRoomCertificate({
 export function createAiPlaytestController({ runtime, elements = {}, resourcesProvider = () => null, appVersion = 'unknown' } = {}) {
   if (!runtime) throw new Error('GAI browser controller requires a live runtime dependency object');
   const submapAssetName = submap => `SM${Number(submap).toString(16).toUpperCase().padStart(2, '0')}`;
-  const { aiModeSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
+  const { aiModeSelect, aiExportFormatSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
     collisionPolicySelect, invulnerableToggle, gaiRouteInspectorRoot } = elements;
-  const gaiRouteInspector = gaiRouteInspectorRoot ? new GaiRouteInspector({ root:gaiRouteInspectorRoot, resourcesProvider }) : null;
+  const walkthroughEvidence = new WalkthroughEvidence();
+  const gaiRouteInspector = gaiRouteInspectorRoot ? new GaiRouteInspector({ root:gaiRouteInspectorRoot, resourcesProvider,
+    onRecordManual:toggleManualWalkthrough, onExportEvidence:exportWalkthroughEvidence,
+    onGeneratePlan:generateWalkthroughPlan, onTogglePlayback:toggleWalkthroughPlayback, onToggleMortality:toggleWalkthroughMortality }) : null;
 
   const AI_EXECUTOR_IDLE = 0;
   const AI_EXECUTOR_RUNNING = 1;
@@ -83,7 +87,7 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
     active:false, planning:false, scenario:2, deterministicRestart:true, fullRoomPlanning:true, continueRooms:true,
     planSubmap:-1, lastInputMask:0, completedAtSerial:-1, nextPlanToken:0, lastStatusSerial:-1, lastStop:null, coachControlled:false,
     autoReplans:0, planStartedAtSerial:0, partialReady:false, heldResult:false,
-    planningSlices:0, maxPlanningSliceMs:0
+    planningSlices:0, maxPlanningSliceMs:0, certificateReady:false, paused:false
   };
   const aiAcceptance = {
     runId:0, reason:'', api:'', plannerCalls:0, playbackPlannerCalls:0, planningFrameSerials:[], playbackFrames:0,
@@ -141,11 +145,15 @@ function updateAiPlayButtons() {
     aiRunButton.disabled = !runtime.bridge || !runtime.renderer || aiAutoplay.planning || aiAutoplay.active;
     aiRunButton.setAttribute('aria-pressed', aiAutoplay.active && !aiAutoplay.deterministicRestart ? 'true' : 'false');
     aiRunButton.textContent = aiAutoplay.planning && !aiAutoplay.deterministicRestart ? 'Precomputing…' :
-      (aiAutoplay.partialReady ? '▶ Play certified partial' : '▶ AI live state');
+      (aiAutoplay.partialReady ? '▶ Play certified partial' : aiAutoplay.certificateReady ? '▶ Play certified plan' : '▶ AI live state');
   }
   if (aiStopButton) aiStopButton.disabled = !aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.heldResult;
   if (aiCopyDebugButton) aiCopyDebugButton.disabled = !runtime.bridge;
   if (aiModeSelect) aiModeSelect.disabled = aiAutoplay.active || aiAutoplay.planning;
+  gaiRouteInspector?.updatePlayback({ available:!!(runtime.bridge && runtime.renderer),
+    planning:aiAutoplay.planning, ready:aiAutoplay.certificateReady,
+    playing:aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.paused,
+    paused:aiAutoplay.paused, immortal:aiInvulnerableRouteEnabled() });
 }
 
 function clearAiControl() {
@@ -1204,10 +1212,77 @@ function refreshGaiRouteInspectorPlan() {
   if (!runtime.bridge || !gaiRouteInspector) return;
   const submap = runtime.bridge.submap() >>> 0;
   const plan = readGaiRoutePlan(runtime.bridge, { submap, room:submapAssetName(submap) });
+  const diagnostics = aiPlannerDebugRecord('Walkthrough evidence');
+  diagnostics.certificateProgram = plan.certificateProgram;
+  diagnostics.planningWork = { slices:aiAutoplay.planningSlices,
+    maxSliceMs:aiAutoplay.maxPlanningSliceMs, usage:runtime.bridge.aiWorkUsage?.() ?? null };
+  walkthroughEvidence.retainPlan(plan, diagnostics, evidenceMetadata());
+  updateWalkthroughEvidenceUi();
   void gaiRouteInspector.updatePlan(plan, { statusText:aiStatus?.textContent || '' }).catch(error => {
     console.error('[rdx/gai-route-inspector] update failed', error);
   });
 }
+
+function evidenceMetadata() {
+  const resources = resourcesProvider?.();
+  return { appVersion, romSha256:resources?.rom?.hash || null,
+    bridgeContract:runtime.bridge?.contractVersion?.() ?? null,
+    page:typeof location === 'object' ? location.pathname : null,
+    validationBudget:runtime.bridge?.aiValidationBudget?.() ?? null,
+    continueRooms:aiContinueToggle?.checked !== false,
+    walkSpeed:runtime.bridge?.walkSpeed?.() ?? null,
+    coyoteFrames:runtime.bridge?.coyoteFrames?.() ?? null,
+    jumpBufferFrames:runtime.bridge?.jumpBufferFrames?.() ?? null };
+}
+
+function updateWalkthroughEvidenceUi(message = '') {
+  const run = walkthroughEvidence.manual;
+  gaiRouteInspector?.updateEvidence({ active:!!run?.active, samples:run?.samples.length || 0,
+    hasManual:!!run, hasPlan:!!walkthroughEvidence.gai, message });
+}
+
+function toggleWalkthroughMortality() {
+  if (!runtime.bridge || aiAutoplay.planning || (aiAutoplay.active && !aiAutoplay.paused)) return;
+  const immortal = !aiInvulnerableRouteEnabled();
+  // A certificate is bound to the mortality policy used to prove it.
+  if (aiAutoplay.certificateReady || aiAutoplay.paused)
+    stopAiAutoplay('GAI mortality changed; generate a new certificate.', 'neutral', { resetRuntime:true });
+  configureAiCoach({ mode:immortal ? 'invulnerable_reachability' : 'mortal' });
+  updateAiPlayButtons();
+  updateWalkthroughEvidenceUi(`${immortal ? 'Immortal' : 'Mortal'} GAI mode selected. Generate a new plan; previous exported evidence keeps its original policy.`);
+}
+
+function toggleManualWalkthrough() {
+  try {
+    if (walkthroughEvidence.manual?.active) {
+      walkthroughEvidence.observe(runtime.bridge?.snapshot());
+      walkthroughEvidence.stop();
+    } else {
+      // Recording explicitly hands control to the user. A held certificate is
+      // not playback; preserve its exported evidence while releasing native AI.
+      if (busy() || aiAutoplay.certificateReady)
+        stopAiAutoplay('Manual recording took control; the generated plan remains in the JSON export.', 'neutral', { resetRuntime:true });
+      walkthroughEvidence.start(runtime.bridge?.snapshot(), evidenceMetadata());
+    }
+    updateWalkthroughEvidenceUi();
+  } catch (error) {
+    updateWalkthroughEvidenceUi(error?.message || String(error));
+  }
+}
+
+function exportWalkthroughEvidence(format = aiExportFormatSelect?.value || 'compact') {
+  // Exporting is a non-destructive snapshot; the run may still be in progress.
+  try {
+    walkthroughEvidence.observe(runtime.bridge?.snapshot());
+    downloadWalkthroughEvidence(format === 'full'
+      ? walkthroughEvidence.export(evidenceMetadata())
+      : walkthroughEvidence.exportCompact(evidenceMetadata()));
+    updateWalkthroughEvidenceUi();
+  } catch (error) {
+    updateWalkthroughEvidenceUi(`Could not export: ${error?.message || String(error)}`);
+  }
+}
+
 
 function refreshGaiRouteInspectorProgress(snapshot = null) {
   if (!runtime.bridge || !gaiRouteInspector) return;
@@ -1228,6 +1303,8 @@ function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntim
   aiAutoplay.planning = false;
   aiAutoplay.partialReady = false;
   aiAutoplay.heldResult = false;
+  aiAutoplay.certificateReady = false;
+  aiAutoplay.paused = false;
   aiAutoplay.planSubmap = -1;
   aiAutoplay.completedAtSerial = -1;
   aiAutoplay.lastStatusSerial = -1;
@@ -1320,6 +1397,7 @@ function finishAiPlanning(before, fullRoom, planned, elapsed) {
   aiAutoplay.planStartedAtSerial = Number(before?.frameSerial || 0) >>> 0;
   aiAutoplay.completedAtSerial = -1;
   aiAutoplay.lastStatusSerial = -1;
+  aiAutoplay.certificateReady = true;
   updateAiPlayButtons();
   const planKind = fullRoom
     ? (runtime.bridge.aiCompletePlan() ? 'full room precomputed' : 'longest certified prefix; stops at blocker')
@@ -1342,6 +1420,8 @@ function aiPlanningScenario({ fullRoom = false } = {}) {
 }
 
 function configureAiPlanningMode({ fullRoom = false } = {}) {
+  walkthroughEvidence.stop('ai-planning-started');
+  updateWalkthroughEvidenceUi();
   const invulnerable = aiInvulnerableRouteEnabled();
   const scenario = aiPlanningScenario({ fullRoom });
   /* Invulnerability is a route-testing contract, not just a rendering/debug
@@ -1364,7 +1444,7 @@ function aiCooperativeTerminalOutcome() {
   return '';
 }
 
-async function runVisibleAiPrecompute(reason, { restart = false } = {}) {
+async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanning = true } = {}) {
   if (!runtime.bridge) return false;
   if (aiAutoplay.heldResult) runtime.bridge.aiReset();
   Object.assign(aiAcceptance, {
@@ -1378,10 +1458,13 @@ async function runVisibleAiPrecompute(reason, { restart = false } = {}) {
   aiAutoplay.planning = true;
   aiAutoplay.partialReady = false;
   aiAutoplay.heldResult = false;
+  aiAutoplay.certificateReady = false;
+  aiAutoplay.paused = false;
   aiAutoplay.deterministicRestart = !!restart;
   aiAutoplay.fullRoomPlanning = true;
   aiAutoplay.continueRooms = aiContinueToggle?.checked !== false;
   aiAutoplay.lastStop = null;
+  if (!playAfterPlanning) gaiRouteInspector?.clear();
   clearAiControl();
   runtime.bridge.setFrontendPaused(true);
   runtime.bridge.setAiTransitionHold?.(true);
@@ -1430,14 +1513,20 @@ async function runVisibleAiPrecompute(reason, { restart = false } = {}) {
     const planned = result.phases > 0;
     recordAiCoachPlan({ reason, fullRoom:true, restart, planned, elapsedMs:result.elapsedMs });
     if (result.outcome === 'complete') {
+      if (!playAfterPlanning) {
+        aiAutoplay.active = false;
+        aiAutoplay.heldResult = true;
+      }
       const finished = finishAiPlanning(before, true, planned, result.elapsedMs);
       if (finished)
-        setAiPlayStatus(`${aiExecutionSummary(before)} · full room precomputed in ${result.slices} slices · max ${result.maxSliceMs.toFixed(1)}ms`, 'running');
+        setAiPlayStatus(`${aiExecutionSummary(before)} · full room precomputed in ${result.slices} slices · max ${result.maxSliceMs.toFixed(1)}ms` +
+          (playAfterPlanning ? '' : ' · ready; press Play'), playAfterPlanning ? 'running' : 'ok');
       return finished;
     }
     aiAutoplay.active = false;
     aiAutoplay.planning = false;
     aiAutoplay.partialReady = planned && runtime.bridge.aiPartialPlan();
+    aiAutoplay.certificateReady = aiAutoplay.partialReady;
     aiAutoplay.heldResult = true;
     aiAutoplay.planSubmap = Number(before?.submap ?? runtime.bridge.submap()) >>> 0;
     aiAutoplay.planStartedAtSerial = Number(before?.frameSerial || 0) >>> 0;
@@ -1564,15 +1653,15 @@ function startAiAutoplay() {
     setAiPlayStatus(`AI cannot start: ${error?.message || error}`, 'error');
     return;
   }
-  if (aiAutoplay.partialReady) {
+  if (aiAutoplay.certificateReady || aiAutoplay.partialReady) {
+    const partial = aiAutoplay.partialReady;
     aiAutoplay.partialReady = false;
     aiAutoplay.heldResult = false;
     aiAutoplay.active = true;
     aiAutoplay.planning = false;
-    aiAutoplay.deterministicRestart = false;
     runtime.bridge.setFrontendPaused(false);
     updateAiPlayButtons();
-    setAiPlayStatus(`${aiExecutionSummary()} · playing explicit certified partial`, 'running');
+    setAiPlayStatus(`${aiExecutionSummary()} · playing retained certified ${partial ? 'partial' : 'plan'}`, 'running');
     return;
   }
   if (runtime.previewWorkspaceMode === 'editor' || runtime.mapEditorPlaytestActive) {
@@ -1590,7 +1679,7 @@ function startAiAutoplay() {
   }
 }
 
-function startAiRestartAutoplay() {
+function startAiRestartAutoplay({ playAfterPlanning = true } = {}) {
   if (!runtime.bridge || aiAutoplay.active || aiAutoplay.planning) return;
   aiAutoplay.coachControlled = false;
   if (runtime.previewWorkspaceMode === 'editor' || runtime.mapEditorPlaytestActive) {
@@ -1610,10 +1699,42 @@ function startAiRestartAutoplay() {
       runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
     aiAutoplay.autoReplans = 0;
     globalThis.xrickFocusPage?.();
-    void runVisibleAiPrecompute(`Restarting ${submapAssetName(runtime.bridge.submap())} and precomputing its complete certificate…`, { restart:true });
+    return runVisibleAiPrecompute(`Restarting ${submapAssetName(runtime.bridge.submap())} and precomputing its complete certificate…`, { restart:true, playAfterPlanning });
   } catch (error) {
     stopAiAutoplay(`AI cannot restart: ${error?.message || error} · use “Copy AI debug”`, 'error');
   }
+}
+
+function generateWalkthroughPlan() {
+  if (aiAutoplay.planning || (aiAutoplay.active && !aiAutoplay.paused)) return;
+  if (aiAutoplay.paused) stopAiAutoplay('Generating a new initial-state certificate.', 'neutral', { resetRuntime:true });
+  return startAiRestartAutoplay({ playAfterPlanning:false });
+}
+
+function toggleWalkthroughPlayback() {
+  if (!runtime.bridge || aiAutoplay.planning || !aiAutoplay.certificateReady) return;
+  if (aiAutoplay.active && !aiAutoplay.paused) {
+    aiAutoplay.paused = true;
+    runtime.bridge.setFrontendPaused(true);
+    runtime.bridge.setAiAudioHold?.(true);
+    setAiPlayStatus('GAI playback paused; the certificate and native state are retained.', 'neutral');
+  } else {
+    try { assertAiControlAvailable(); } catch (error) {
+      setAiPlayStatus(`GAI cannot play: ${error?.message || error}`, 'error');
+      return;
+    }
+    aiAutoplay.active = true;
+    aiAutoplay.paused = false;
+    aiAutoplay.heldResult = false;
+    aiAutoplay.partialReady = false;
+    aiAutoplay.coachControlled = false;
+    aiAcceptance.lastPlaybackAt = 0;
+    runtime.bridge.setAiAudioHold?.(false);
+    runtime.bridge.setFrontendPaused(false);
+    globalThis.xrickFocusPage?.();
+    setAiPlayStatus('Playing the retained certified plan from its current native state.', 'running');
+  }
+  updateAiPlayButtons();
 }
 
 const AI_TRANSITION_AUDIO_QUIESCE_MS = 120;
@@ -1705,7 +1826,7 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
 }
 
 function tickAiAutoplay(snapshot) {
-  if (!runtime.bridge || !aiAutoplay.active || aiAutoplay.planning || !snapshot) return;
+  if (!runtime.bridge || !aiAutoplay.active || aiAutoplay.planning || aiAutoplay.paused || !snapshot) return;
   refreshGaiRouteInspectorProgress(snapshot);
   const playbackNow = performance.now();
   if (aiAcceptance.lastPlaybackAt) {
@@ -1749,7 +1870,7 @@ function tickAiAutoplay(snapshot) {
   clearAiControl();
   if (executorStatus === AI_EXECUTOR_COMPLETE) {
     if (runtime.bridge.aiPartialPlan() && !runtime.bridge.aiCompletePlan()) {
-      stopAiAutoplay(`AI reached a safe certified prefix but cannot extend it${aiBlockerSummary()} · ${aiExecutionSummary(snapshot)}`, 'warn');
+      stopAiAutoplay(`AI reached a ${aiInvulnerableRouteEnabled() ? 'reachable' : 'safe'} certified prefix but cannot extend it${aiBlockerSummary()} · ${aiExecutionSummary(snapshot)}`, 'warn');
       return;
     }
     if (runtime.bridge.aiCompletePlan()) {
@@ -1782,6 +1903,7 @@ function tickAiAutoplay(snapshot) {
   function setCoachControlled(value) { aiAutoplay.coachControlled = !!value; return aiAutoplay.coachControlled; }
   function tickFrame(snapshot) {
     if (!snapshot) return;
+    if (walkthroughEvidence.observe(snapshot)) updateWalkthroughEvidenceUi();
     const coachNeedsRenderedTransitionPlan = aiAutoplay.coachControlled && aiAutoplay.active && !aiAutoplay.planning &&
       aiAutoplay.planSubmap >= 0 && snapshot.submap !== aiAutoplay.planSubmap;
     if (!aiAutoplay.coachControlled || coachNeedsRenderedTransitionPlan) tickAiAutoplay(snapshot);
@@ -1801,6 +1923,9 @@ function tickAiAutoplay(snapshot) {
     runUntilBlocked:runAiUntilBlocked, startCoach:startAiCoach, advanceCoach:advanceAiCoach, replanCoach:replanAiCoach, stopCoach:stopAiCoach,
     coachSessionReport:aiCoachSessionReport, copyPlannerDebug:copyAiPlannerDebug, stopAutoplay:stopAiAutoplay,
     startAutoplay:startAiAutoplay, startRestartAutoplay:startAiRestartAutoplay, tickAutoplay:tickAiAutoplay,
+    generateInitialPlan:generateWalkthroughPlan, togglePlayback:toggleWalkthroughPlayback, toggleMortality:toggleWalkthroughMortality,
+    toggleManualRecording:toggleManualWalkthrough, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
+    exportFullWalkthroughEvidence:() => exportWalkthroughEvidence('full'),
     tickFrame, busy, setCoachControlled, state
   });
 }

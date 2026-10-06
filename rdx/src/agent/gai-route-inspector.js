@@ -1,7 +1,30 @@
+import { describeAiPhaseGuard } from './ai-coach.js';
 import { ViewportModel } from '../level-editor/domain/viewport-model.js';
 import { CanonicalLevelEditorRoomRenderer } from '../level-editor/rendering/canonical-room-renderer.js';
 import { drawPixelBuffer } from '../level-editor/rendering/pixel-canvas-renderer.js';
 const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+const ICONS = {
+  mortal:'<path d="M12 21s-8-5-8-11a4 4 0 0 1 8-2 4 4 0 0 1 8 2c0 6-8 11-8 11Z"/>',
+  immortal:'<path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6Z"/><path d="m8 12 3 3 5-6"/>',
+  record:'<circle cx="12" cy="12" r="7" fill="currentColor" stroke="none"/>',
+  stop:'<rect x="6" y="6" width="12" height="12" rx="1" fill="currentColor" stroke="none"/>',
+  export:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
+  copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/>',
+  generate:'<path d="M3 11a9 9 0 1 1 2.7 7M3 4v7h7"/>',
+  play:'<path d="m8 4 12 8-12 8Z" fill="currentColor" stroke="none"/>',
+  pause:'<path d="M7 4v16M17 4v16" stroke-width="4"/>',
+  check:'<path d="m4 12 5 5L20 6"/>'
+};
+
+function setIconButton(button, icon, label) {
+  // Preserve the pointer target between down/up while recording updates each frame.
+  if (button.dataset.icon !== icon) {
+    button.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[icon]}</svg>`;
+    button.dataset.icon = icon;
+  }
+  if (button.title !== label) button.title = label;
+  if (button.getAttribute('aria-label') !== label) button.setAttribute('aria-label', label);
+}
 
 function routeStatusLabel(plan) {
   if (plan?.complete) return 'Complete certificate';
@@ -47,7 +70,10 @@ function setCanvasSize(canvas, viewport, { fallbackWidth, fallbackHeight }) {
 function drawRouteOverlay(context, viewport, steps, index) {
   const selected = steps[index];
   if (!selected?.point) return;
-  const neighboring = [steps[index - 1], selected, steps[index + 1]].filter(Boolean);
+  // Only draw the witness explicitly attached to this inspection point.
+  // Adjacent proof records are not a continuous executable route.
+  const neighboring = selected.sourceIndex != null ? [steps[selected.sourceIndex], selected]
+    : selected.targetIndex != null ? [selected, steps[selected.targetIndex]] : [selected];
   context.save();
   context.lineCap = 'round';
   context.lineJoin = 'round';
@@ -75,7 +101,8 @@ function drawRouteOverlay(context, viewport, steps, index) {
 }
 
 export class GaiRouteInspector {
-  constructor({ root, resourcesProvider, roomRenderer = null } = {}) {
+  constructor({ root, resourcesProvider, roomRenderer = null, onRecordManual = null, onExportEvidence = null,
+    onGeneratePlan = null, onTogglePlayback = null, onToggleMortality = null } = {}) {
     if (!root) throw new TypeError('GaiRouteInspector requires a root element');
     this.root = root;
     this.roomRenderer = roomRenderer || new CanonicalLevelEditorRoomRenderer({ resourcesProvider });
@@ -92,20 +119,31 @@ export class GaiRouteInspector {
     this.root.innerHTML = `
       <div class="gai-route-header">
         <div>
-          <p class="gai-route-eyebrow">GAI walkthrough analysis</p>
           <div class="gai-route-title-row">
-            <h2>Current route plan</h2>
+            <h2>Current certificate</h2>
             <span class="gai-route-badge" data-route-status>Waiting for plan</span>
           </div>
-          <p class="gai-route-provenance">Effective RDX · canonical Level Editor ResolvedLevel + PreviewRenderer pipeline</p>
         </div>
         <div class="gai-route-actions">
+          <button type="button" data-route-mortality></button>
+          <button type="button" data-route-generate disabled></button>
+          <button type="button" data-route-playback hidden></button>
+          <button type="button" data-route-record>Record manual walkthrough</button>
+          <button type="button" data-route-export disabled>Export walkthrough + GAI JSON</button>
           <button type="button" data-route-copy disabled>Copy route JSON</button>
         </div>
       </div>
+      <details class="gai-route-analysis" data-route-analysis>
+        <summary>GAI walkthrough analysis</summary>
+        <p class="gai-route-provenance">Effective RDX · canonical Level Editor ResolvedLevel + PreviewRenderer pipeline</p>
+      <p class="gai-route-provenance" data-route-recording-status>Record any partial manual run, then export here. No room completion required. Export before reloading this page.</p>
       <div class="gai-route-summary" data-route-summary></div>
-      <div class="gai-route-empty" data-route-empty>Run GAI to display its certified route nodes and blocker here.</div>
-      <div class="gai-route-node-strip" data-route-nodes role="list" aria-label="GAI route nodes" hidden></div>
+      <details class="gai-route-program" data-route-program hidden>
+        <summary data-route-program-title>Executable input program</summary>
+        <ol data-route-phases></ol>
+      </details>
+      <div class="gai-route-empty" data-route-empty>Generate a GAI certificate to inspect its input phases, proof records and blocker here.</div>
+      <div class="gai-route-node-strip" data-route-nodes role="list" aria-label="Initial position, independent proof records and blocker" hidden></div>
       <div class="gai-route-detail" data-route-detail hidden>
         <div class="gai-route-detail-map">
           <canvas data-route-detail-canvas width="640" height="360" aria-label="Selected GAI route node rendered with Level Editor map layers"></canvas>
@@ -116,10 +154,14 @@ export class GaiRouteInspector {
           <p data-route-detail-action></p>
           <dl data-route-detail-fields></dl>
         </div>
-      </div>`;
+      </div>
+      </details>`;
     this.ui = {
       badge:root.querySelector('[data-route-status]'),
       summary:root.querySelector('[data-route-summary]'),
+      program:root.querySelector('[data-route-program]'),
+      programTitle:root.querySelector('[data-route-program-title]'),
+      phases:root.querySelector('[data-route-phases]'),
       empty:root.querySelector('[data-route-empty]'),
       nodes:root.querySelector('[data-route-nodes]'),
       detail:root.querySelector('[data-route-detail]'),
@@ -127,17 +169,59 @@ export class GaiRouteInspector {
       detailTitle:root.querySelector('[data-route-detail-title]'),
       detailAction:root.querySelector('[data-route-detail-action]'),
       detailFields:root.querySelector('[data-route-detail-fields]'),
-      copy:root.querySelector('[data-route-copy]')
+      copy:root.querySelector('[data-route-copy]'),
+      record:root.querySelector('[data-route-record]'),
+      export:root.querySelector('[data-route-export]'),
+      recordingStatus:root.querySelector('[data-route-recording-status]')
     };
+    this.ui.mortality = root.querySelector('[data-route-mortality]');
+    setIconButton(this.ui.mortality, 'mortal', 'Mortal GAI run — switch to immortal');
+    this.ui.generate = root.querySelector('[data-route-generate]');
+    this.ui.playback = root.querySelector('[data-route-playback]');
+    setIconButton(this.ui.generate, 'generate', 'Generate plan from initial map state');
+    setIconButton(this.ui.playback, 'play', 'Play certified plan');
+    setIconButton(this.ui.record, 'record', 'Record manual walkthrough');
+    setIconButton(this.ui.export, 'export', 'Export walkthrough + GAI JSON');
+    setIconButton(this.ui.copy, 'copy', 'Copy route JSON');
     this.ui.nodes.addEventListener('click', event => {
       const button = event.target.closest('[data-route-step]');
       if (!button) return;
       this.select(Number(button.dataset.routeStep) | 0, { scroll:false });
     });
     this.ui.copy.addEventListener('click', () => void this.copyPlan());
+    this.ui.record.hidden = !onRecordManual;
+    this.ui.export.hidden = !onExportEvidence;
+    this.ui.record.addEventListener('click', () => onRecordManual?.());
+    this.ui.export.addEventListener('click', () => onExportEvidence?.());
+    this.ui.mortality.hidden = !onToggleMortality;
+    this.ui.mortality.addEventListener('click', () => onToggleMortality?.());
+    this.ui.generate.hidden = !onGeneratePlan;
+    this.ui.generate.addEventListener('click', () => void onGeneratePlan?.());
+    this.ui.playback.addEventListener('click', () => onTogglePlayback?.());
     this.resizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(() => this.scheduleSelectedRender()) : null;
     this.resizeObserver?.observe(this.ui.detail);
     this.renderEmpty();
+  }
+
+  updateEvidence({ active = false, samples = 0, hasManual = false, hasPlan = false, message = '' } = {}) {
+    setIconButton(this.ui.record, active ? 'stop' : 'record', active ? 'Stop manual recording' : hasManual ? 'Record new manual walkthrough' : 'Record manual walkthrough');
+    this.ui.record.setAttribute('aria-pressed', String(active));
+    this.ui.export.disabled = !(hasManual || hasPlan);
+    this.ui.recordingStatus.textContent = message || (hasManual
+      ? `${active ? 'Recording' : 'Retained partial manual run'} · ${samples} observed frames. Export now; starting AI keeps this recording. A new manual recording replaces it.`
+      : 'Record any partial manual run, then export here. No room completion required. Export before reloading this page.');
+  }
+
+  updatePlayback({ available = false, planning = false, ready = false, playing = false, paused = false, immortal = false } = {}) {
+    setIconButton(this.ui.mortality, immortal ? 'immortal' : 'mortal', immortal ? 'Immortal GAI run — switch to mortal' : 'Mortal GAI run — switch to immortal');
+    this.ui.mortality.setAttribute('aria-pressed', String(immortal));
+    this.ui.mortality.disabled = !available || planning || playing;
+    this.ui.generate.disabled = !available || planning || playing;
+    this.ui.generate.setAttribute('aria-busy', String(planning));
+    this.ui.playback.hidden = !(ready || playing || paused) || planning;
+    this.ui.playback.disabled = !available;
+    setIconButton(this.ui.playback, playing ? 'pause' : 'play', playing ? 'Pause GAI playback' : paused ? 'Resume GAI playback' : 'Play certified plan');
+    this.ui.playback.setAttribute('aria-pressed', String(playing));
   }
 
   async frameForSubmap(submap) {
@@ -199,12 +283,14 @@ export class GaiRouteInspector {
     this.ui.badge.textContent = routeStatusLabel(plan);
     this.ui.summary.replaceChildren();
     this.ui.nodes.replaceChildren();
+    this.ui.program.hidden = true;
+    this.ui.phases.replaceChildren();
     this.ui.nodes.hidden = true;
     this.ui.detail.hidden = true;
     this.ui.empty.hidden = false;
     this.ui.empty.textContent = plan?.blocker
       ? `GAI reported ${plan.blocker.kindLabel} ${plan.blocker.from}→${plan.blocker.to}, but this WASM build does not expose route-node coordinates.`
-      : 'Run GAI to display its certified route nodes and blocker here.';
+      : 'Generate a GAI certificate to inspect its input phases, proof records and blocker here.';
     this.ui.copy.disabled = !plan;
   }
 
@@ -215,12 +301,22 @@ export class GaiRouteInspector {
     this.ui.summary.replaceChildren();
     const summary = [
       plan.room || `SM${String(plan.submap).padStart(2, '0')}`,
-      `${plan.certifiedEdgeCount} certified edges`,
-      `${plan.phaseCount} phases`,
+      `${plan.proofRecordCount ?? plan.certifiedEdgeCount} proof records · ${plan.uniqueProofRecordCount ?? plan.certifiedEdgeCount} distinct`,
+      `${plan.phaseCount} executable phases`,
       plan.blocker ? `blocker: ${plan.blocker.kindLabel} ${plan.blocker.from}→${plan.blocker.to}` : null
     ].filter(Boolean);
     for (const value of summary) {
       const span = document.createElement('span'); span.textContent = value; this.ui.summary.append(span);
+    }
+    this.ui.program.hidden = !plan.certificateProgram?.phases?.length;
+    this.ui.program.open = plan.phaseCount <= 8;
+    this.ui.programTitle.textContent = `Planned input runs · ${plan.phaseCount} phases`;
+    this.ui.phases.replaceChildren();
+    for (const phase of plan.certificateProgram?.phases || []) {
+      const li = document.createElement('li');
+      const guards = phase.guards.map(guard => describeAiPhaseGuard(guard, plan.steps.map(step => step.support))).join(' and ');
+      li.textContent = `${phase.controls.join(' + ') || 'neutral'} → ${guards || 'native phase boundary'} · watchdog ${phase.watchdogFrames} frames`;
+      this.ui.phases.append(li);
     }
     this.ui.empty.hidden = true;
     this.ui.nodes.hidden = false;
@@ -233,7 +329,7 @@ export class GaiRouteInspector {
       button.className = 'gai-route-node';
       button.dataset.routeStep = String(step.index);
       button.dataset.blocked = step.blocked ? 'true' : 'false';
-      button.setAttribute('aria-label', `Route step ${step.index + 1}, node ${step.nodeId}${step.incoming ? `, ${step.incoming.kindLabel}` : ''}`);
+      button.setAttribute('aria-label', `${step.role || 'Inspection point'}, node ${step.nodeId}${step.incoming ? `, ${step.incoming.kindLabel}` : ''}`);
       button.classList.toggle('is-selected', step.index === this.selectedIndex);
       button.classList.toggle('is-current', step.index === this.currentIndex);
       const canvas = document.createElement('canvas');
@@ -244,9 +340,10 @@ export class GaiRouteInspector {
       const coordinate = document.createElement('small'); coordinate.textContent = `${Math.round(step.point.x)}, ${Math.round(step.point.y)}`;
       meta.append(label, coordinate);
       const action = document.createElement('span'); action.className = 'gai-route-node-action';
-      action.textContent = step.incoming
-        ? `${step.incoming.certified ? '→' : '×'} ${step.incoming.kindLabel}`
-        : step.index ? 'BLOCKER SOURCE' : 'START';
+      action.textContent = step.role === 'initial' ? 'INITIAL STATE'
+        : step.role === 'blocker-source' ? 'BLOCKER SOURCE'
+        : step.role === 'proof-source' ? `PROOF ${step.recordIndex + 1} SOURCE${step.repetitions > 1 ? ` · ×${step.repetitions}` : ''}`
+        : `${step.blocked ? '× unresolved' : '→ proved'} ${step.incoming?.kindLabel || ''}${step.repetitions > 1 ? ` · ×${step.repetitions}` : ''}`;
       button.append(canvas, meta, action);
       this.ui.nodes.append(button);
     }
@@ -268,10 +365,12 @@ export class GaiRouteInspector {
     const step = this.plan?.steps?.[this.selectedIndex];
     if (!step) return;
     const edge = step.incoming;
-    this.ui.detailTitle.textContent = `Node ${step.nodeId} · step ${step.index + 1}/${this.plan.steps.length}`;
+    this.ui.detailTitle.textContent = `Node ${step.nodeId} · inspection point ${step.index + 1}/${this.plan.steps.length}`;
     this.ui.detailAction.textContent = edge
-      ? `${edge.certified ? 'Certified' : 'Unresolved'} ${edge.kindLabel} from node ${edge.from} to ${edge.to}`
-      : 'Native route start position';
+      ? `${edge.certified ? 'Proved witness' : 'Unresolved blocker'}: ${edge.kindLabel} ${edge.from}→${edge.to}. Proof records do not imply route continuity.`
+      : step.role === 'initial' ? 'Canonical native initial position'
+      : step.role === 'blocker-source' ? 'Unresolved blocker source'
+      : `Independent proof record ${step.recordIndex + 1} source; ${step.repetitions} recorded occurrence(s)`;
     const fields = [
       ['World position', `${Math.round(step.point.x)}, ${Math.round(step.point.y)} px`],
       ['Support', step.support ? `#${step.support.index} · x ${step.support.x0}–${step.support.x1} · y ${step.support.y}` : 'synthetic exit/goal'],
@@ -330,12 +429,10 @@ export class GaiRouteInspector {
     const text = JSON.stringify(this.plan, null, 2);
     try {
       await navigator.clipboard.writeText(text);
-      const previous = this.ui.copy.textContent;
-      this.ui.copy.textContent = 'Copied';
-      setTimeout(() => { this.ui.copy.textContent = previous; }, 1200);
+      setIconButton(this.ui.copy, 'check', 'Route JSON copied');
+      setTimeout(() => setIconButton(this.ui.copy, 'copy', 'Copy route JSON'), 1200);
     } catch (_) {
-      console.info('[rdx/gai-route-inspector]', text);
-      this.ui.copy.textContent = 'Written to console';
+      setIconButton(this.ui.copy, 'copy', 'Copy failed; use Export walkthrough + GAI JSON');
     }
   }
 }
