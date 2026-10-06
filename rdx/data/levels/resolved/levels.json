@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "7c31f325ca7e1c551ee03bfaaf63db684aa30abb1a73d0f30c70e38a3f09517b",
+  "authoredLayersFingerprint": "5d14937e995ac834efc7f3454b7cd376598dd59ee360610c1227fbcfa4b4e93a",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -14352,14 +14352,14 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "7c31f325ca7e1c551ee03bfaaf63db684aa30abb1a73d0f30c70e38a3f09517b",
+    "authoredLayers": "5d14937e995ac834efc7f3454b7cd376598dd59ee360610c1227fbcfa4b4e93a",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "a610f689075a8bc72efeacab618bb8a83c73fea11e71a6aa5830bd1b23fab383",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "0ce2734c04b4505f7acf2fd24dce3953dd82f4cce284df262b802b3d75f0b0d3",
-    "resolved32": 1547659574,
-    "runtimeSource": "66b3a4d4bdccf3383841d93047033fd0b00d4a712693f7df6637b03de8b04cc4",
-    "runtimeSource32": 3394668376,
+    "resolved": "78aab3d0b768e401c7a4a6aae425c842d6f5a718f2aa78748656d295b9c764fd",
+    "resolved32": 4212062701,
+    "runtimeSource": "47a99fc4449c7aded3062665da2d8acde4fefa277c11156cef727ddf229af689",
+    "runtimeSource32": 3048203267,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -165363,11 +165363,11 @@
         "nativeControllerAuthority": "xrick-runtime"
       },
       "fingerprints": {
-        "adjustments": "e489ebd2ef2232dc92e8cfad6895d62b5cd1dea983e4be8853d46fbfec16e5c0",
+        "adjustments": "009a993bf2ad0a3bc3a68b8914b827e75a3eae45375c3f26471c1f03464c251f",
         "alignment": "b8b607bcd383420c96f6aa45ef6ffa39e4f5255f97fa1e63cc46cb9122e41c8a",
         "presentationDepth": "d7eb07c1b5b4f2ca8a6e13cf1a88a6cf766ed1d485cdfdcbe6bf8f261977152a",
-        "resolved": "0bed806cc544fe731920a42bd5561e978e472f990f262e61103e4aaaa99c3073",
-        "semantic": "17cd809ffd530aea0a5c931913b361b6cd0f5e9efce04a3561a03b7577a1d112",
+        "resolved": "b17404554651460afbfd3b80b5eb379b447a1670fe7b7862947d849bd6d0c1e9",
+        "semantic": "2a9b0604ebc8ed8ed9ea0626e7e4f9646705d42f99b871cf72a11ed9e4279205",
         "sourceClassic": "a491fe44d18eca204dfec7bc68ff4f3f43c3863d7276132240e9f2a7b29e9281",
         "sourceRdx": "c82ebb166c383b83e207c269c5599d66ae9905d6d497d8be0c0e09977a8462ca",
         "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
@@ -165391,6 +165391,21 @@
               "property": "position",
               "provenance": "offline minimum-displacement support/accessibility audit",
               "target": "SM27.collectible.mark-430"
+            },
+            {
+              "id": "SM27.actor.mark-436.trigger-bounds",
+              "operation": {
+                "rect": [
+                  240,
+                  659,
+                  16,
+                  24
+                ],
+                "type": "set-rect"
+              },
+              "property": "triggerBounds",
+              "provenance": "User-requested Classic visual/gameplay parity 2026-10-03: Classic M436 spans the 16 px ladder plus an 8 px open clearance strip. MD0047 removes that strip and places solid wall directly beside the ladder, so restrict the Revival activation box to the corresponding 16x24 ladder footprint while preserving the Classic vertical reach.",
+              "target": "SM27.actor.mark-436"
             }
           ],
           "schema": "rdr.adjustments_resolved.v1"
@@ -167798,7 +167813,22 @@
               }
             },
             {
-              "adjustmentsApplied": [],
+              "adjustmentsApplied": [
+                {
+                  "id": "SM27.actor.mark-436.trigger-bounds",
+                  "operation": {
+                    "rect": [
+                      240,
+                      659,
+                      16,
+                      24
+                    ],
+                    "type": "set-rect"
+                  },
+                  "property": "triggerBounds",
+                  "provenance": "User-requested Classic visual/gameplay parity 2026-10-03: Classic M436 spans the 16 px ladder plus an 8 px open clearance strip. MD0047 removes that strip and places solid wall directly beside the ladder, so restrict the Revival activation box to the corresponding 16x24 ladder footprint while preserving the Classic vertical reach."
+                }
+              ],
               "alignedBaseline": {
                 "authority": "SM27.whole-room",
                 "origin": [
@@ -167878,7 +167908,7 @@
                 "triggerBounds": [
                   240,
                   659,
-                  24,
+                  16,
                   24
                 ],
                 "visualAnchor": [
@@ -189097,7 +189127,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "66b3a4d4bdccf3383841d93047033fd0b00d4a712693f7df6637b03de8b04cc4",
+  "runtimeSourceFingerprint": "47a99fc4449c7aded3062665da2d8acde4fefa277c11156cef727ddf229af689",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {

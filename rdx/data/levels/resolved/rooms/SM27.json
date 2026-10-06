@@ -20,11 +20,11 @@
       "nativeControllerAuthority": "xrick-runtime"
     },
     "fingerprints": {
-      "adjustments": "e489ebd2ef2232dc92e8cfad6895d62b5cd1dea983e4be8853d46fbfec16e5c0",
+      "adjustments": "009a993bf2ad0a3bc3a68b8914b827e75a3eae45375c3f26471c1f03464c251f",
       "alignment": "b8b607bcd383420c96f6aa45ef6ffa39e4f5255f97fa1e63cc46cb9122e41c8a",
       "presentationDepth": "d7eb07c1b5b4f2ca8a6e13cf1a88a6cf766ed1d485cdfdcbe6bf8f261977152a",
-      "resolved": "0bed806cc544fe731920a42bd5561e978e472f990f262e61103e4aaaa99c3073",
-      "semantic": "17cd809ffd530aea0a5c931913b361b6cd0f5e9efce04a3561a03b7577a1d112",
+      "resolved": "b17404554651460afbfd3b80b5eb379b447a1670fe7b7862947d849bd6d0c1e9",
+      "semantic": "2a9b0604ebc8ed8ed9ea0626e7e4f9646705d42f99b871cf72a11ed9e4279205",
       "sourceClassic": "a491fe44d18eca204dfec7bc68ff4f3f43c3863d7276132240e9f2a7b29e9281",
       "sourceRdx": "c82ebb166c383b83e207c269c5599d66ae9905d6d497d8be0c0e09977a8462ca",
       "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
@@ -48,6 +48,21 @@
             "property": "position",
             "provenance": "offline minimum-displacement support/accessibility audit",
             "target": "SM27.collectible.mark-430"
+          },
+          {
+            "id": "SM27.actor.mark-436.trigger-bounds",
+            "operation": {
+              "rect": [
+                240,
+                659,
+                16,
+                24
+              ],
+              "type": "set-rect"
+            },
+            "property": "triggerBounds",
+            "provenance": "User-requested Classic visual/gameplay parity 2026-10-03: Classic M436 spans the 16 px ladder plus an 8 px open clearance strip. MD0047 removes that strip and places solid wall directly beside the ladder, so restrict the Revival activation box to the corresponding 16x24 ladder footprint while preserving the Classic vertical reach.",
+            "target": "SM27.actor.mark-436"
           }
         ],
         "schema": "rdr.adjustments_resolved.v1"
@@ -2455,7 +2470,22 @@
             }
           },
           {
-            "adjustmentsApplied": [],
+            "adjustmentsApplied": [
+              {
+                "id": "SM27.actor.mark-436.trigger-bounds",
+                "operation": {
+                  "rect": [
+                    240,
+                    659,
+                    16,
+                    24
+                  ],
+                  "type": "set-rect"
+                },
+                "property": "triggerBounds",
+                "provenance": "User-requested Classic visual/gameplay parity 2026-10-03: Classic M436 spans the 16 px ladder plus an 8 px open clearance strip. MD0047 removes that strip and places solid wall directly beside the ladder, so restrict the Revival activation box to the corresponding 16x24 ladder footprint while preserving the Classic vertical reach."
+              }
+            ],
             "alignedBaseline": {
               "authority": "SM27.whole-room",
               "origin": [
@@ -2535,7 +2565,7 @@
               "triggerBounds": [
                 240,
                 659,
-                24,
+                16,
                 24
               ],
               "visualAnchor": [
