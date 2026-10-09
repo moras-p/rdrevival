@@ -1737,7 +1737,7 @@ aiStopButton?.addEventListener('click', () => {
 });
 aiCopyDebugButton?.addEventListener('click', () => { void aiPlaytestController.copyPlannerDebug(); });
 window.addEventListener('xrick-gameplay-input', event => {
-  aiPlaytestController.releaseManualRecordingHold(event?.detail?.mask || 0);
+  aiPlaytestController.releaseGameplayHold(event?.detail?.mask || 0);
 });
 window.addEventListener('xrick-keyboard-owner-changed', event => {
   if ((aiPlaytestController.busy()) && event?.detail?.owner === 'game')

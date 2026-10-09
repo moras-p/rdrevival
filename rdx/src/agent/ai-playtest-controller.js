@@ -2,6 +2,7 @@ import { CollisionPolicyName } from '../collision/dataset.js';
 import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentState, gameplayControlLeaseStatus, releaseGameplayControlLease, setGameplayControlMask } from './gameplay-control.js';
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
+import { createPlanReadySound } from './plan-ready-sound.js';
 import { WalkthroughEvidence, downloadWalkthroughEvidence } from './walkthrough-evidence.js';
 
 export function aiHorizonLoopDecision({
@@ -64,13 +65,33 @@ export async function precomputeAiRoomCertificate({
     elapsedMs:Math.max(0, performance.now() - started), maxSliceMs };
 }
 
+// Scheduling slices are smaller than the logical room-search effort budget.
+// Initial and destination rooms receive the same bounded search effort.
+// A 48-variant scheduling slice is smaller than a room query: certified SM03
+// needs 3,356 variants. Keep native rollout/proof ceilings and cancellation.
+export function aiRoomPrecomputeEffort(bridge) {
+  const maxWork = {rollouts:64 * 8192,variants:64 * 128,proofs:64 * bridge.aiValidationBudget()};
+  return {
+    // A slice is a scheduling boundary, not a search-effort unit. Allow every
+    // budgeted unit to make progress even if each needs its own short call;
+    // the work ceilings, elapsed-time guard and no-progress guard bound runs.
+    maxSlices:Object.values(maxWork).reduce((sum, value) => sum + value, 8),
+    maxWork,
+    maxElapsedMs:600000,
+    workUsed:() => bridge.aiWorkUsage?.(),
+    prepareSlice:remaining => bridge.aiSetSliceLimits(remaining)
+  };
+}
+
 export function createAiPlaytestController({ runtime, elements = {}, resourcesProvider = () => null, appVersion = 'unknown' } = {}) {
+  const planReadySound = createPlanReadySound();
   if (!runtime) throw new Error('GAI browser controller requires a live runtime dependency object');
   const submapAssetName = submap => `SM${Number(submap).toString(16).toUpperCase().padStart(2, '0')}`;
   const { aiModeSelect, aiExportFormatSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
     collisionPolicySelect, invulnerableToggle, gaiRouteInspectorRoot } = elements;
   const walkthroughEvidence = new WalkthroughEvidence();
   let manualWaitingForInput = false;
+  let terminalPlaybackHold = false;
   const gaiRouteInspector = gaiRouteInspectorRoot ? new GaiRouteInspector({ root:gaiRouteInspectorRoot, resourcesProvider,
     onRecordManual:toggleManualWalkthrough, onExportEvidence:exportWalkthroughEvidence,
     onGeneratePlan:generateWalkthroughPlan, onTogglePlayback:toggleWalkthroughPlayback, onToggleMortality:toggleWalkthroughMortality }) : null;
@@ -152,7 +173,7 @@ function updateAiPlayButtons() {
   if (aiCopyDebugButton) aiCopyDebugButton.disabled = !runtime.bridge;
   if (aiModeSelect) aiModeSelect.disabled = aiAutoplay.active || aiAutoplay.planning;
   gaiRouteInspector?.updatePlayback({ available:!!(runtime.bridge && runtime.renderer),
-    planning:aiAutoplay.planning, ready:aiAutoplay.certificateReady,
+    planning:aiAutoplay.planning, ready:aiAutoplay.certificateReady, partial:aiAutoplay.partialReady,
     playing:aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.paused,
     paused:aiAutoplay.paused, immortal:aiInvulnerableRouteEnabled() });
 }
@@ -1275,6 +1296,7 @@ function toggleManualWalkthrough() {
       if (!runtime.bridge.restartCurrentLevelForAi()) throw new Error('Native initial-state reset failed.');
       runtime.bridge.setFrontendPaused(true);
       walkthroughEvidence.start(runtime.bridge.snapshot(), { ...evidenceMetadata(), canonicalInitialState:true });
+      terminalPlaybackHold = false;
       manualWaitingForInput = true;
       globalThis.xrickFocusGame?.();
     }
@@ -1293,6 +1315,15 @@ function releaseManualRecordingHold(inputMask) {
   runtime.bridge.setAiAudioHold?.(false);
   runtime.bridge.setFrontendPaused(false);
   updateWalkthroughEvidenceUi();
+  return true;
+}
+
+function releaseGameplayHold(inputMask) {
+  if (releaseManualRecordingHold(inputMask)) return true;
+  if (!terminalPlaybackHold || !(inputMask & AI_INPUT_MASK)) return false;
+  terminalPlaybackHold = false;
+  runtime.bridge.setAiAudioHold?.(false);
+  runtime.bridge.setFrontendPaused(false);
   return true;
 }
 
@@ -1322,7 +1353,8 @@ function refreshGaiRouteInspectorProgress(snapshot = null) {
   });
 }
 
-function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntime = false } = {}) {
+function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntime = false, holdState = false } = {}) {
+  terminalPlaybackHold = holdState;
   walkthroughEvidence.stopExecution(message);
   updateWalkthroughEvidenceUi();
   const cancelledPlanning = aiAutoplay.planning || aiAutoplay.heldResult;
@@ -1336,9 +1368,9 @@ function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntim
   aiAutoplay.planSubmap = -1;
   aiAutoplay.completedAtSerial = -1;
   aiAutoplay.lastStatusSerial = -1;
-  runtime.bridge?.setAiAudioHold?.(false);
+  runtime.bridge?.setAiAudioHold?.(holdState);
   runtime.bridge?.setAiTransitionHold?.(false);
-  runtime.bridge?.setFrontendPaused?.(false);
+  runtime.bridge?.setFrontendPaused?.(holdState);
   clearAiControl();
   releaseAiControlLease();
   if ((resetRuntime || cancelledPlanning) && runtime.bridge) {
@@ -1449,6 +1481,7 @@ function aiPlanningScenario({ fullRoom = false } = {}) {
 
 function configureAiPlanningMode({ fullRoom = false } = {}) {
   walkthroughEvidence.stop('ai-planning-started');
+  terminalPlaybackHold = false;
   manualWaitingForInput = false;
   updateWalkthroughEvidenceUi();
   const invulnerable = aiInvulnerableRouteEnabled();
@@ -1478,7 +1511,7 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
   if (aiAutoplay.heldResult) runtime.bridge.aiReset();
   Object.assign(aiAcceptance, {
     runId:aiAcceptance.runId + 1, reason:String(reason || ''),
-    api:restart ? 'aiRestartPlanFullContinue' : 'aiPlanFullContinue',
+    api:restart ? 'restartCurrentLevelForAi + aiPlanFullContinue' : 'aiPlanFullContinue',
     plannerCalls:0, playbackPlannerCalls:0, planningFrameSerials:[], playbackFrames:0,
     maxPlanningSliceMs:0, maxPlaybackFrameGapMs:0, firstPlaybackGap:null, lastPlaybackAt:0
   });
@@ -1501,6 +1534,14 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
   setAiPlayStatus(reason, 'running');
   try {
     runtime.bridge.setAiAudioHold?.(true);
+    // Regenerate owns the canonical entrance before yielding for status paint.
+    // Later planning slices retain and restore this state; they do not restart.
+    if (restart) {
+      configureAiPlanningMode({ fullRoom:true });
+      runtime.bridge.aiReset();
+      if (!runtime.bridge.restartCurrentLevelForAi()) throw new Error('Native initial-state reset failed.');
+      runtime.bridge.setFrontendPaused(true);
+    }
     await new Promise(resolve => setTimeout(resolve, AI_TRANSITION_AUDIO_QUIESCE_MS));
     if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
     const before = ensureAiDescriptorCollision();
@@ -1510,15 +1551,10 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
     if (!runtime.bridge.aiValidationBudget())
       runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
     const result = await precomputeAiRoomCertificate({
-      // Smaller scheduling calls retain the former 64-slice effort ceiling.
-      // The native deadline changes granularity, not the amount of search.
-      maxSlices:64 * 48,
-      maxWork:{rollouts:64 * 8192,variants:64 * 48,proofs:64 * runtime.bridge.aiValidationBudget()},
-      workUsed:() => runtime.bridge.aiWorkUsage?.(),
-      prepareSlice:remaining => runtime.bridge.aiSetSliceLimits(remaining),
+      ...aiRoomPrecomputeEffort(runtime.bridge),
       firstSlice:() => {
         aiAcceptance.plannerCalls += 1;
-        const planned = restart ? runtime.bridge.aiRestartPlanFullContinue(scenario) : runtime.bridge.aiPlanFullContinue(scenario);
+        const planned = runtime.bridge.aiPlanFullContinue(scenario);
         aiAcceptance.planningFrameSerials.push(runtime.bridge.snapshot()?.frameSerial >>> 0);
         return planned;
       },
@@ -1574,7 +1610,15 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
     if (runtime.bridge && token === aiAutoplay.nextPlanToken) {
       runtime.bridge.setAiAudioHold?.(false);
       runtime.bridge.setAiTransitionHold?.(false);
-      if (aiAutoplay.active && !aiAutoplay.planning) runtime.bridge.setFrontendPaused(false);
+      if (aiAutoplay.active && !aiAutoplay.planning) {
+        // Apply the first certified input before the browser can step the room.
+        tickAiAutoplay(runtime.bridge.snapshot());
+        if (aiAutoplay.active) {
+          runtime.bridge.setFrontendPaused(false);
+          // Releasing the frontend hold clears native controls synchronously.
+          setAiControlMask(aiAutoplay.lastInputMask);
+        }
+      }
     }
   }
 }
@@ -1735,9 +1779,16 @@ function startAiRestartAutoplay({ playAfterPlanning = true } = {}) {
 }
 
 function generateWalkthroughPlan() {
-  if (aiAutoplay.planning || (aiAutoplay.active && !aiAutoplay.paused)) return;
-  if (aiAutoplay.paused) stopAiAutoplay('Generating a new initial-state certificate.', 'neutral', { resetRuntime:true });
-  return startAiRestartAutoplay({ playAfterPlanning:false });
+  if (aiAutoplay.planning) return;
+  if (aiAutoplay.active || aiAutoplay.certificateReady || aiAutoplay.heldResult) stopAiAutoplay('Generating a new initial-state certificate.', 'neutral', { resetRuntime:true });
+  planReadySound.prepare();
+  const generation = startAiRestartAutoplay({ playAfterPlanning:false });
+  const token = aiAutoplay.nextPlanToken;
+  return Promise.resolve(generation).then(result => {
+    if (token === aiAutoplay.nextPlanToken && aiAutoplay.certificateReady)
+      planReadySound.play();
+    return result;
+  });
 }
 
 function toggleWalkthroughPlayback() {
@@ -1759,9 +1810,16 @@ function toggleWalkthroughPlayback() {
     aiAutoplay.partialReady = false;
     aiAutoplay.coachControlled = false;
     aiAcceptance.lastPlaybackAt = 0;
+    // Native executor ticks are idempotent at an unchanged frame serial.
+    // Prime Play/Resume while held; releasing first inserts a neutral frame.
+    tickAiAutoplay(runtime.bridge.snapshot());
+    if (!aiAutoplay.active) return;
     runtime.bridge.setAiAudioHold?.(false);
     runtime.bridge.setFrontendPaused(false);
     globalThis.xrickFocusPage?.();
+    // Hold release and keyboard-focus handoff clear keys; restore the primed
+    // mask in this same task before the native browser loop can advance.
+    setAiControlMask(aiAutoplay.lastInputMask);
     setAiPlayStatus('Playing the retained certified plan from its current native state.', 'running');
   }
   updateAiPlayButtons();
@@ -1779,6 +1837,10 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
   const token = ++aiAutoplay.nextPlanToken;
   aiAutoplay.active = true;
   aiAutoplay.planning = true;
+  aiAutoplay.certificateReady = false;
+  aiAutoplay.partialReady = false;
+  aiAutoplay.paused = false;
+  gaiRouteInspector?.clear();
   runtime.bridge.setAiTransitionHold(true);
   clearAiControl();
   updateAiPlayButtons();
@@ -1796,9 +1858,10 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
       });
       if (!ready.ready || token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge) return;
 
-      const settled = settleAiDestinationEntry({
+      const settled = await settleAiDestinationEntry({
         snapshot:() => runtime.bridge?.snapshot(),
         forceNeutralFrame:() => forceGameplayDebugFrame(runtime.bridge),
+        yieldForPaint:yieldForGameplayPaint,
         expectedSubmap:renderedSnapshot.submap,
         cancelled:() => token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge
       });
@@ -1814,10 +1877,14 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
       const before = ensureAiDescriptorCollision();
       if ((Number(before?.submap) >>> 0) !== (Number(renderedSnapshot.submap) >>> 0))
         throw new Error('destination room changed before AI continuation planning');
+      // Completed-room checkpoints cannot serve this destination and consume
+      // its finite label store. Begin a fresh native search at the settled entry.
+      runtime.bridge.aiReset();
       const scenario = configureAiPlanningMode({ fullRoom });
       if (!runtime.bridge.aiValidationBudget())
         runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
       const result = fullRoom ? await precomputeAiRoomCertificate({
+        ...aiRoomPrecomputeEffort(runtime.bridge),
         firstSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
         continueSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
         complete:() => runtime.bridge.aiCompletePlan(),
@@ -1834,12 +1901,15 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
         aiAutoplay.active = false;
         aiAutoplay.planning = false;
         aiAutoplay.partialReady = planned && runtime.bridge.aiPartialPlan();
+        aiAutoplay.certificateReady = aiAutoplay.partialReady;
         aiAutoplay.heldResult = true;
         runtime.bridge.setFrontendPaused(true);
         aiAutoplay.planSubmap = Number(before.submap) >>> 0;
+        aiAutoplay.planStartedAtSerial = Number(before.frameSerial) >>> 0;
         updateAiPlayButtons();
         setAiPlayStatus(`AI destination precompute ${result.outcome} after ${result.slices} held slices` +
-          (aiAutoplay.partialReady ? ' · choose “Play certified partial”' : ''), 'warn');
+          (aiAutoplay.partialReady ? ' · choose “Play certified partial”' : ' · no playable certificate'), 'warn');
+        refreshGaiRouteInspectorPlan();
       }
       recordAiCoachPlan({ reason:planningReason, fullRoom, restart:false, planned, elapsedMs:result.elapsedMs });
     } catch (error) {
@@ -1911,7 +1981,7 @@ function tickAiAutoplay(snapshot) {
   clearAiControl();
   if (executorStatus === AI_EXECUTOR_COMPLETE) {
     if (runtime.bridge.aiPartialPlan() && !runtime.bridge.aiCompletePlan()) {
-      stopAiAutoplay(`AI reached a ${aiInvulnerableRouteEnabled() ? 'reachable' : 'safe'} certified prefix but cannot extend it${aiBlockerSummary()} · ${aiExecutionSummary(snapshot)}`, 'warn');
+      stopAiAutoplay(`AI reached a ${aiInvulnerableRouteEnabled() ? 'reachable' : 'safe'} certified prefix but cannot extend it${aiBlockerSummary()} · ${aiExecutionSummary(snapshot)} · held; regenerate or press a gameplay key to take control`, 'warn', { holdState:true });
       return;
     }
     if (runtime.bridge.aiCompletePlan()) {
@@ -1950,7 +2020,7 @@ function tickAiAutoplay(snapshot) {
     if (!aiAutoplay.coachControlled || coachNeedsRenderedTransitionPlan) tickAiAutoplay(snapshot);
   }
   function state() {
-    return Object.freeze({ ...aiAutoplay, manualWaitingForInput, acceptance:{ ...aiAcceptance,
+    return Object.freeze({ ...aiAutoplay, manualWaitingForInput, terminalPlaybackHold, acceptance:{ ...aiAcceptance,
       planningFrameSerials:aiAcceptance.planningFrameSerials.slice() } });
   }
 
@@ -1965,7 +2035,7 @@ function tickAiAutoplay(snapshot) {
     coachSessionReport:aiCoachSessionReport, copyPlannerDebug:copyAiPlannerDebug, stopAutoplay:stopAiAutoplay,
     startAutoplay:startAiAutoplay, startRestartAutoplay:startAiRestartAutoplay, tickAutoplay:tickAiAutoplay,
     generateInitialPlan:generateWalkthroughPlan, togglePlayback:toggleWalkthroughPlayback, toggleMortality:toggleWalkthroughMortality,
-    toggleManualRecording:toggleManualWalkthrough, releaseManualRecordingHold, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
+    toggleManualRecording:toggleManualWalkthrough, releaseManualRecordingHold, releaseGameplayHold, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
     exportFullWalkthroughEvidence:() => exportWalkthroughEvidence('full'),
     tickFrame, busy, setCoachControlled, state
   });

@@ -234,15 +234,15 @@ export class GaiRouteInspector {
       : 'Record any partial manual run, then export here. No room completion required. Export before reloading this page.');
   }
 
-  updatePlayback({ available = false, planning = false, ready = false, playing = false, paused = false, immortal = false } = {}) {
+  updatePlayback({ available = false, planning = false, ready = false, partial = false, playing = false, paused = false, immortal = false } = {}) {
     setIconButton(this.ui.mortality, immortal ? 'immortal' : 'mortal', immortal ? 'Immortal GAI run — switch to mortal' : 'Mortal GAI run — switch to immortal');
     this.ui.mortality.setAttribute('aria-pressed', String(immortal));
     this.ui.mortality.disabled = !available || planning || playing;
-    this.ui.generate.disabled = !available || planning || playing;
+    this.ui.generate.disabled = !available || planning;
     this.ui.generate.setAttribute('aria-busy', String(planning));
     this.ui.playback.hidden = !(ready || playing || paused) || planning;
     this.ui.playback.disabled = !available;
-    setIconButton(this.ui.playback, playing ? 'pause' : 'play', playing ? 'Pause GAI playback' : paused ? 'Resume GAI playback' : 'Play certified plan');
+    setIconButton(this.ui.playback, playing ? 'pause' : 'play', playing ? 'Pause GAI playback' : paused ? 'Resume GAI playback' : partial ? 'Play certified partial' : 'Play certified plan');
     this.ui.playback.setAttribute('aria-pressed', String(playing));
   }
 

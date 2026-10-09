@@ -441,9 +441,10 @@ export async function waitForAiTransitionReady({
   return { ready:true, cancelled:false, audioHeld:true };
 }
 
-export function settleAiDestinationEntry({
+export async function settleAiDestinationEntry({
   snapshot,
   forceNeutralFrame,
+  yieldForPaint,
   cancelled = () => false,
   expectedSubmap = null,
   maxFrames = 96
@@ -457,16 +458,19 @@ export function settleAiDestinationEntry({
     const native = current?.collision?.native || {};
     if (expectedSubmap != null && submap !== (Number(expectedSubmap) >>> 0))
       return { ready:false, cancelled:false, frames, reason:'room-changed', snapshot:current };
-    if (native.playerActive && native.playerSpawnValid && native.playerGrounded)
+    if (native.playerActive && native.playerSpawnValid && native.playerGrounded &&
+        !Number(native.transitionCoverage || 0))
       return { ready:true, cancelled:false, frames, reason:'grounded', snapshot:current };
     if (frames === limit || typeof forceNeutralFrame !== 'function') break;
     const before = Number(current?.frameSerial || 0) >>> 0;
     forceNeutralFrame();
+    if (typeof yieldForPaint === 'function') await yieldForPaint();
     current = typeof snapshot === 'function' ? snapshot() : null;
     if ((Number(current?.frameSerial || 0) >>> 0) === before)
       return { ready:false, cancelled:false, frames, reason:'simulation-not-advancing', snapshot:current };
   }
-  return { ready:false, cancelled:false, frames, reason:'entry-not-grounded', snapshot:current };
+  const reason = Number(current?.collision?.native?.transitionCoverage || 0) ? 'entry-not-revealed' : 'entry-not-grounded';
+  return { ready:false, cancelled:false, frames, reason, snapshot:current };
 }
 
 function advanceGuidance(status) {
