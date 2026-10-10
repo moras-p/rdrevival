@@ -63,7 +63,7 @@ export function sourceStateVisualOffsets(row) {
 }
 
 export function sourceOcclusionLayer(row) {
-  return ['behind-midground','normal','front'].includes(String(row?.occlusionLayer || '')) ? String(row.occlusionLayer) : null;
+  return ['behind-midground','normal','front','over-scenery'].includes(String(row?.occlusionLayer || '')) ? String(row.occlusionLayer) : null;
 }
 
 export function sourceOverrideHasAuthoredChange(row) {

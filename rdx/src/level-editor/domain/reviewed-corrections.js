@@ -206,7 +206,7 @@ function validateValue(correction, context) {
     case 'presentation':
       if (!value || typeof value !== 'object') throw correctionError('presentation requires an object value', context);
       if (value.pn != null && (!Number.isInteger(Number(value.pn)) || Number(value.pn) < 0 || Number(value.pn) > 254)) throw correctionError('presentation.pn must be 0..254', context);
-      if (value.layer != null && !['behind-midground','normal','front'].includes(String(value.layer))) throw correctionError('presentation.layer must be behind-midground, normal, or front', context);
+      if (value.layer != null && !['behind-midground','normal','front','over-scenery'].includes(String(value.layer))) throw correctionError('presentation.layer must be behind-midground, normal, front, or over-scenery', context);
       if (value.registration != null && !['origin','draw'].includes(String(value.registration))) throw correctionError('presentation.registration must be origin or draw', context);
       if (value.preserveClassicContact != null && typeof value.preserveClassicContact !== 'boolean') throw correctionError('presentation.preserveClassicContact must be boolean', context);
       if (value.stateVisualOffsetsByPn != null) {

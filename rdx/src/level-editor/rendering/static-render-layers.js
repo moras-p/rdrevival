@@ -1,3 +1,4 @@
+import { drawOverSceneryActors } from './over-scenery-actors.js';
 import { drawPixelBuffer, drawWorldRect, worldToScreen } from './pixel-canvas-renderer.js';
 
 const ENTITY_STROKE = Object.freeze({
@@ -90,6 +91,17 @@ export function createStaticRenderLayers() {
       render(context, frame) {
         const item = pane(frame, 'rdx');
         if (item?.foreground) drawPixelBuffer(context, frame.viewport, item.foreground, item.x, item.y);
+      }
+    },
+    {
+      id:'over-scenery-entities', order:26,
+      render(context, frame) {
+        const entities = (frame.project?.entities || []).filter(entity =>
+          entity.kind === 'semantic-object' && !animatedByRuntime(frame, entity)).map(entity => ({
+            depth:String(entity.actorDepth || (entity.front ? 'front' : 'normal')),
+            visible:entity.visible !== false, sprite:entity.sprite, draw:entity.spriteDraw
+          }));
+        drawOverSceneryActors(context, frame.viewport, entities);
       }
     },
     {

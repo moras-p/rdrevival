@@ -22,8 +22,8 @@
     "fingerprints": {
       "adjustments": "28d8f7c4c8aa97a9400a7295c37baa1712032c980e71f084ccbcec051f7b7f83",
       "alignment": "c900d3cd90733eefe8b780de9c6b013fc88ab8ec4584f33f90ba1176990ffe45",
-      "presentationDepth": "9a9592d25c6c70df01fa34f4afbee4d59d1c4797455ea10301940fd2ff9a9cb3",
-      "resolved": "b2f2174af47b8884144020548a2c90e5cea705246d184524c6c4bebc6c0188d4",
+      "presentationDepth": "daf735788f54e11df2bb2df72c211e1898c5e07c235277eb7a2130ec7b525416",
+      "resolved": "0dfceb766fbb5f192aed922e58a366ba157e49ba13121ecc46d0cc713fdd1713",
       "semantic": "12a273572b2aca17d6726adbbd2c7f31664c038a83cfc84e05bb884a854371dc",
       "sourceClassic": "dd78a48a30178e9db2a9ba63647a7911e3883ce99c1b83bbb0a2fb9a55778b69",
       "sourceRdx": "284e60b7f877e750d242e375ca1c30c921fa2b447e0d88ff596bd03bd0425c63",
@@ -105,22 +105,38 @@
           {
             "band": "backdrop",
             "globalTiles": [
-              8793,
-              8794,
-              8796,
-              8798,
-              8834,
               9046,
               9049,
               9066,
               9068
             ],
             "id": "egypt.decorative-strips-plane-a",
-            "label": "Egypt decorative strips and ladder highlights",
+            "label": "Egypt backdrop ladder and decorative highlights",
             "plane": "A",
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
-              "reason": "Backdrop-authored Egypt ladder/strip motifs must not occlude behind-midground trap actors."
+              "reason": "Only Egypt ladder and backdrop-authored decorative highlights stay behind embedded traps; architectural columns are separate foreground Plane-A art."
+            }
+          },
+          {
+            "band": "foreground",
+            "globalTiles": [
+              8777,
+              8779,
+              8793,
+              8794,
+              8796,
+              8798,
+              8800,
+              8801,
+              8834
+            ],
+            "id": "egypt.columns-plane-a",
+            "label": "Egypt architectural column capitals, shafts, and base shoulders",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-egypt-column-occlusion-20261010",
+              "reason": "The complete Egypt column, including the two Plane-A base shoulders 8800/8834 around center 8801, occludes Rick in every Egypt room; Plane B remains backdrop support and is not promoted."
             }
           },
           {

@@ -202,7 +202,7 @@ export function createNativeDraftPlan(document, {
       const targetPn=Number(state.pn),offset=state.offset||[0,0],stateDx=Number(offset[0]||0),stateDy=Number(offset[1]||0);
       plan.sourceStatePresentation.push(Object.freeze({ type:'source-state-presentation', sourceMark:Number(row.mark), sourceKey:String(state.sourceKey), stateKey:String(state.stateKey), sourcePn:Number(state.sourcePn), targetPn:Number.isInteger(targetPn)?targetPn:null, offset:Object.freeze([stateDx,stateDy]), runtime:Object.freeze({ submap:Number(d.base.submap), mark:Number(row.mark), sourcePn:Number(state.sourcePn), targetPn:Number.isInteger(targetPn)?targetPn:null, dx:stateDx, dy:stateDy }) }));
     }
-    if (['behind-midground','normal','front'].includes(String(row.occlusionLayer || ''))) plan.sourceOcclusion.push(Object.freeze({ type:'source-occlusion', sourceMark:Number(row.mark), layer:String(row.occlusionLayer), runtime:Object.freeze({ submap:Number(d.base.submap), mark:Number(row.mark), depth:String(row.occlusionLayer) }) }));
+    if (['behind-midground','normal','front','over-scenery'].includes(String(row.occlusionLayer || ''))) plan.sourceOcclusion.push(Object.freeze({ type:'source-occlusion', sourceMark:Number(row.mark), layer:String(row.occlusionLayer), runtime:Object.freeze({ submap:Number(d.base.submap), mark:Number(row.mark), depth:String(row.occlusionLayer) }) }));
   }
   for (const mark of sourcePlacementMarks) {
     const row=d.sourceEntityOverrides.find(candidate=>Number(candidate.mark)===Number(mark)) || null;

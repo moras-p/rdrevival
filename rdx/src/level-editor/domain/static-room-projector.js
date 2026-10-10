@@ -361,7 +361,7 @@ function classicDisplayRoom(room) {
 
 function semanticActorDepth(object, state = null) {
   const depth=String(state?.actorDepth || state?.depth || object?.presentation?.layer || '');
-  if (depth === 'behind-midground' || depth === 'normal' || depth === 'front') return depth;
+  if (depth === 'behind-midground' || depth === 'normal' || depth === 'front' || depth === 'over-scenery') return depth;
   return state?.front === true ? 'front' : 'normal';
 }
 

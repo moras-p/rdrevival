@@ -11,7 +11,7 @@ function num(value, fallback = 0) {
 
 function presentationActorDepth(presentation, state = null) {
   const value = String(state?.actorDepth || state?.depth || presentation?.layer || '');
-  if (value === 'behind-midground' || value === 'normal' || value === 'front') return value;
+  if (value === 'behind-midground' || value === 'normal' || value === 'front' || value === 'over-scenery') return value;
   return state?.front === true ? 'front' : 'normal';
 }
 

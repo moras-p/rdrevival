@@ -1,3 +1,4 @@
+import { drawOverSceneryActors } from './over-scenery-actors.js';
 import { DEBUG_PRIMITIVE } from '../runtime/runtime-sample.js';
 import { drawPixelBuffer, drawWorldRect } from './pixel-canvas-renderer.js';
 
@@ -120,6 +121,14 @@ export function createRuntimeRenderLayers({ runtime, runtimeView, visibility={} 
   return [
     { id:'runtime-embedded-actors', order:17, render(ctx,frame){ drawRuntimeActors(ctx,frame,{depth:'behind-midground'}); } },
     { id:'runtime-actors', order:24, render(ctx,frame){ drawRuntimeActors(ctx,frame,{depth:'normal'}); } },
+    { id:'runtime-over-scenery-actors', order:26, render(ctx,frame) {
+      if (!frame.runtime?.active) return;
+      const entities = (frame.project?.entities || []).filter(entity => entity.kind === 'semantic-object')
+        .map(entity => runtimeEntityGeometry(frame, entity))
+        .filter(Boolean).map(geometry => ({ depth:geometry.actorDepth, visible:geometry.visible,
+          sprite:geometry.sprite, draw:geometry.draw }));
+      drawOverSceneryActors(ctx, frame.viewport, entities);
+    } },
     { id:'runtime-front-actors', order:28, render(ctx,frame){ drawRuntimeActors(ctx,frame,{depth:'front'}); } },
     {
       id:'native-intended-paths', order:70, visible:()=>visibility.intended?.()!==false,

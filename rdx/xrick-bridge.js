@@ -1152,7 +1152,7 @@ export class XrickWasmBridge {
   overrideMapEditorSourceVisualOffset(submap, mark, dx, dy) { return !!this.api.mapEditorOverrideSourceVisualOffset(Number(submap)>>>0, Number(mark)>>>0, Number(dx)|0, Number(dy)|0); }
   overrideMapEditorSourceStateVisualOffset(submap, mark, pn, dx, dy) { return !!this.api.mapEditorOverrideSourceStateVisualOffset(Number(submap)>>>0, Number(mark)>>>0, Number(pn)>>>0, Number(dx)|0, Number(dy)|0); }
   overrideMapEditorSourceStatePn(submap, mark, sourcePn, targetPn) { return !!this.api.mapEditorOverrideSourceStatePn(Number(submap)>>>0, Number(mark)>>>0, Number(sourcePn)>>>0, Number(targetPn)>>>0); }
-  overrideMapEditorSourceDepth(submap, mark, depth) { const value = depth === 'front' ? 1 : depth === 'behind-midground' ? 2 : 0; return !!this.api.mapEditorOverrideSourceDepth(Number(submap)>>>0, Number(mark)>>>0, value); }
+  overrideMapEditorSourceDepth(submap, mark, depth) { const value = depth === 'front' ? 1 : depth === 'behind-midground' ? 2 : depth === 'over-scenery' ? 3 : 0; return !!this.api.mapEditorOverrideSourceDepth(Number(submap)>>>0, Number(mark)>>>0, value); }
   overrideMapEditorSourceFront(submap, mark, front) { return !!this.api.mapEditorOverrideSourceFront(Number(submap)>>>0, Number(mark)>>>0, front ? 1 : 0); }
 
   resetCollision() {
@@ -1855,7 +1855,7 @@ export class XrickWasmBridge {
       width: this.api.presentationAuditWidth(index) >>> 0,
       height: this.api.presentationAuditHeight(index) >>> 0,
       visiblePixels: this.api.presentationAuditVisiblePixels(index) >>> 0,
-      actorDepth: ['normal','front','behind-midground'][this.api.presentationAuditActorDepth(index) >>> 0] || 'normal',
+      actorDepth: ['normal','front','behind-midground','over-scenery'][this.api.presentationAuditActorDepth(index) >>> 0] || 'normal',
       front: !!this.api.presentationAuditFront(index),
       mirrorX: !!this.api.presentationAuditMirrorX(index),
       mirrorY: !!this.api.presentationAuditMirrorY(index),
