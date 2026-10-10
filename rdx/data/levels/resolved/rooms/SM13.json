@@ -22,13 +22,14 @@
     "fingerprints": {
       "adjustments": "2a518c6c059529583b97bafede6877c9998e37943507a5b74e920866fdd8c071",
       "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
-      "presentationDepth": "7c8a22b1c354c940b99a8decede9c2bcd7c6fa6987b476611a646ba4a7759b58",
-      "resolved": "22d584feed58de631df1734d8bb1f50c5fce0eab4c582c7e81faadc54864a526",
+      "presentationDepth": "44753e5b522b44fbb19a7d55686f90bac60fccf1e7ac119589db4ace729bbbf3",
+      "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
+      "resolved": "a436d86ad039d601a8e992ac65ab8f4a84606f74a8c57fb30bbf69187fa7828a",
       "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
-      "semantic": "9e4565abbb7327b8b1a93923e7ddb77a3eeb741bb8f725b6a654b065eb662e59",
+      "semantic": "2ca5e74c983f847d1e3f40a542c5436a2c5657169df2b71317e114548af195ea",
       "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
       "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
-      "structural": "599dce63b1e7b6dec9fd0a3fa21bf76d7ee88a197fd5187e28c64fc1653ecc9b",
+      "structural": "028dd0066f35c41bff8a799a86ec5bb551c0ff8b3f1ca2d641596b3d49dc4ea2",
       "transitions": "fd2b37fad8e77c1f9589ecd26ac7bd5d31f2770e54763523b8e31acfe9fc45ef"
     },
     "group": "egypt",
@@ -261,22 +262,6 @@
       "presentationDepth": {
         "classes": [
           {
-            "band": "backdrop",
-            "globalTiles": [
-              9046,
-              9049,
-              9066,
-              9068
-            ],
-            "id": "egypt.decorative-strips-plane-a",
-            "label": "Egypt backdrop ladder and decorative highlights",
-            "plane": "A",
-            "provenance": {
-              "authority": "visual-parity-audit-affected-traps-20260911",
-              "reason": "Only Egypt ladder and backdrop-authored decorative highlights stay behind embedded traps; architectural columns are separate foreground Plane-A art."
-            }
-          },
-          {
             "band": "foreground",
             "globalTiles": [
               8777,
@@ -287,14 +272,18 @@
               8798,
               8800,
               8801,
-              8834
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
             ],
             "id": "egypt.columns-plane-a",
-            "label": "Egypt architectural column capitals, shafts, and base shoulders",
+            "label": "Egypt architectural column capitals, shafts, long-shaft variants, and base shoulders",
             "plane": "A",
             "provenance": {
               "authority": "user-reviewed-egypt-column-occlusion-20261010",
-              "reason": "The complete Egypt column, including the two Plane-A base shoulders 8800/8834 around center 8801, occludes Rick in every Egypt room; Plane B remains backdrop support and is not promoted."
+              "reason": "All Plane-A Egypt column artwork occludes Rick: include the long striped shaft/end variants 9046/9049/9066/9068 used by SM0A and other Egypt rooms, plus capitals and the two base shoulders 8800/8834 around center 8801. Plane B remains backdrop support and is not promoted."
             }
           },
           {
@@ -750,7 +739,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 85,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -1423,7 +1412,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 81,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -1855,7 +1844,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 81,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -2528,7 +2517,7 @@
               "actorId": 0,
               "authoredOverride": true,
               "behavior": "suppress",
-              "layer": "behind-midground",
+              "layer": "normal",
               "mirrorPolicy": "explicit",
               "mirrorX": true,
               "mirrorY": true,
@@ -2741,7 +2730,7 @@
               "actorId": 0,
               "authoredOverride": true,
               "behavior": "suppress",
-              "layer": "behind-midground",
+              "layer": "normal",
               "mirrorPolicy": "explicit",
               "mirrorX": true,
               "mirrorY": true,
@@ -3213,6 +3202,84 @@
         "reviewedCorrections": [],
         "schema": "rdr.semantic_corpus_resolved.v1",
         "terrainHazards": [
+          {
+            "adjustmentsApplied": [],
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "classicParentSourceKey": "terrain-hazard:classic-sm19-0",
+            "contact": {
+              "bounds": [
+                64,
+                48,
+                192,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                64,
+                48,
+                192,
+                8
+              ],
+              "position": [
+                64,
+                48
+              ],
+              "visualBounds": [
+                64,
+                48,
+                192,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt ceiling-spike tile 94 group terrain-hazard:classic-sm19-0 occupies [32, 32, 192, 8].",
+              "The reviewed SM13 room transform projects that strip to [64, 48, 192, 8] / Layer-C g8:8..31:6.",
+              "User visual-parity review supersedes the prior accepted absence; extend the established SM13 Plane-A tile-9179 ceiling-blade restoration to this complete top strip and restore matching lethal contact."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "classic-verified-missing-rdx-spike-reconstruction",
+              "family": "ceiling",
+              "gridBounds": [
+                8,
+                6,
+                24,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9179
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0023-classic-sm19-0",
+            "mounting": "embedded-map-art",
+            "position": [
+              64,
+              48
+            ],
+            "semanticId": "SM00.trap.auto-md0023-classic-sm19-0",
+            "sourceId": 46976,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm19-0",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  64,
+                  48
+                ],
+                "size": [
+                  192,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
           {
             "adjustmentsApplied": [],
             "authority": "classic-verified-egypt-ceiling-spike-restoration-v1",
@@ -3698,6 +3765,249 @@
       },
       "structuralCorrections": {
         "operations": [
+          {
+            "action": "overlay-tiles",
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "bounds": [
+              64,
+              48,
+              192,
+              8
+            ],
+            "clearLayer": null,
+            "id": "md0023-sm13-classic-ceiling-blades-top",
+            "introducedInVersion": "2.1.105",
+            "layer": null,
+            "provenance": "Classic Egypt ceiling-spike tile 94 group terrain-hazard:classic-sm19-0 occupies [32,32,192,8]. The reviewed SM13 alignment projects it to [64,48,192,8] / g8:8..31:6. User review supersedes the accepted absence; restore the missing Revival ceiling blades with the same canonical Egypt Plane-A tile 9179 already used by the two lower SM13 restorations, preserving Plane-B room artwork.",
+            "reason": "Restore the user-confirmed top Classic ceiling-spike strip with the established SM13 Plane-A ceiling-blade motif.",
+            "role": "trap",
+            "sourceBounds": [
+              32,
+              32,
+              192,
+              8
+            ],
+            "sourceKey": "terrain-hazard:classic-sm19-0",
+            "tiles": [
+              {
+                "globalTile": 9179,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  32,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  40,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  48,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  56,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  64,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  72,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  80,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  88,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  96,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  104,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  112,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  120,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  128,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  136,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  144,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  152,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  160,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  168,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  176,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  184,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
           {
             "action": "overlay-tiles",
             "authority": "classic-verified-egypt-ceiling-spike-restoration-v1",

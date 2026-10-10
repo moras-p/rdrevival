@@ -602,6 +602,8 @@ export class XrickWasmBridge {
       mapEditorOverrideSourceStateVisualOffset: wrapN('xrick_rdx_map_editor_override_source_state_visual_offset', 5),
       mapEditorOverrideSourceStatePn: wrapN('xrick_rdx_map_editor_override_source_state_pn', 4),
       mapEditorOverrideSourceDepth: wrapN('xrick_rdx_map_editor_override_source_depth', 3),
+      mapEditorClearSourceClipWindows: wrap0('xrick_rdx_map_editor_clear_source_clip_windows', null),
+      mapEditorOverrideSourceClipWindow: wrapN('xrick_rdx_map_editor_override_source_clip_window', 6),
       mapEditorOverrideSourceFront: wrapN('xrick_rdx_map_editor_override_source_front', 3),
       mapEditorClearTransitions: wrap0('xrick_rdx_map_editor_clear_transitions', null),
       mapEditorAddTransition: wrapN('xrick_rdx_map_editor_add_transition', 8),
@@ -1153,6 +1155,11 @@ export class XrickWasmBridge {
   overrideMapEditorSourceStateVisualOffset(submap, mark, pn, dx, dy) { return !!this.api.mapEditorOverrideSourceStateVisualOffset(Number(submap)>>>0, Number(mark)>>>0, Number(pn)>>>0, Number(dx)|0, Number(dy)|0); }
   overrideMapEditorSourceStatePn(submap, mark, sourcePn, targetPn) { return !!this.api.mapEditorOverrideSourceStatePn(Number(submap)>>>0, Number(mark)>>>0, Number(sourcePn)>>>0, Number(targetPn)>>>0); }
   overrideMapEditorSourceDepth(submap, mark, depth) { const value = depth === 'front' ? 1 : depth === 'behind-midground' ? 2 : depth === 'over-scenery' ? 3 : 0; return !!this.api.mapEditorOverrideSourceDepth(Number(submap)>>>0, Number(mark)>>>0, value); }
+  clearMapEditorSourceClipWindows() { this.api.mapEditorClearSourceClipWindows(); return true; }
+  overrideMapEditorSourceClipWindow(submap, mark, bounds) {
+    const [x,y,width,height]=bounds || [0,0,0,0];
+    return !!this.api.mapEditorOverrideSourceClipWindow(Number(submap)>>>0,Number(mark)>>>0,Number(x)|0,Number(y)|0,Number(width)>>>0,Number(height)>>>0);
+  }
   overrideMapEditorSourceFront(submap, mark, front) { return !!this.api.mapEditorOverrideSourceFront(Number(submap)>>>0, Number(mark)>>>0, front ? 1 : 0); }
 
   resetCollision() {

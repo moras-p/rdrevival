@@ -780,6 +780,7 @@ export function createResolvedEditorProjection(resolved, { runtimeEvidence = nul
       actors, classicActors, fallbacks, replacementSourceKeys, projectileEmitters,
       terrainHazards: [...terrainHazards],
       presentationDepth: room?.layers?.presentationDepth || null,
+      presentationOcclusion: room?.layers?.presentationOcclusion || null,
       children: evidenceRoom?.children || [], activators: evidenceRoom?.activators || [], actionAliases: evidenceRoom?.actionAliases || {},
       captures: evidenceRoom?.captures || [],
       resolvedFingerprint: room?.fingerprints?.resolved || null,

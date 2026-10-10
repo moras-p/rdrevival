@@ -23,10 +23,11 @@
     "fingerprints": {
       "adjustments": "d5b035d1d560f2f3e66195171d9a2bab4521ce6f4d85a00464fd76e5bca7ddae",
       "alignment": "1a1968a9a86217c5f5bee566211ac63e459198525b890cd5755b542a7c7fbbcc",
-      "presentationDepth": "a9c81fc3ba35ae8605f798efd7bbb34f063c6aaff2cda82d09c88c2f248bbb32",
-      "resolved": "376f86051d11626565d2ab5738c211ff0cd4d81af902eae0b2ead3d1e313d757",
+      "presentationDepth": "8812ce977f22a804f93ece07f043ab2bfe51013d19b1536310d0552c17ecf805",
+      "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
+      "resolved": "b4d025a544bd0e6befe9ca9ea2c5c0d6ebf957e91aac2cfee39f3dbb8c62d1cf",
       "reviewed": "237ba64338903292d0cfc6f30f5b43b3838555ff34617c8e8003729d1b56bd05",
-      "semantic": "430dacebcd37a8b4a842a00bf8f46ddf8c2a878fc51047a92889dcf4b6f3f9a3",
+      "semantic": "eaa0064793cd587bea9c1d410225c79e5ef07d3c8e47c7d18765bf98d82fa27c",
       "sourceClassic": "f181df15c7c230e06e94c3bcb8e8bb7409395b226799a329c6b6175437626bf5",
       "sourceRdx": "97f9547c713b4a4a504b8e004c017f84988a563c255d2683a737179f8c398408",
       "structural": "9c94a8b2da439e48b2c377983011987760559c281d299fec5768385ad63b6e35",
@@ -628,22 +629,6 @@
       "presentationDepth": {
         "classes": [
           {
-            "band": "backdrop",
-            "globalTiles": [
-              9046,
-              9049,
-              9066,
-              9068
-            ],
-            "id": "egypt.decorative-strips-plane-a",
-            "label": "Egypt backdrop ladder and decorative highlights",
-            "plane": "A",
-            "provenance": {
-              "authority": "visual-parity-audit-affected-traps-20260911",
-              "reason": "Only Egypt ladder and backdrop-authored decorative highlights stay behind embedded traps; architectural columns are separate foreground Plane-A art."
-            }
-          },
-          {
             "band": "foreground",
             "globalTiles": [
               8777,
@@ -654,14 +639,18 @@
               8798,
               8800,
               8801,
-              8834
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
             ],
             "id": "egypt.columns-plane-a",
-            "label": "Egypt architectural column capitals, shafts, and base shoulders",
+            "label": "Egypt architectural column capitals, shafts, long-shaft variants, and base shoulders",
             "plane": "A",
             "provenance": {
               "authority": "user-reviewed-egypt-column-occlusion-20261010",
-              "reason": "The complete Egypt column, including the two Plane-A base shoulders 8800/8834 around center 8801, occludes Rick in every Egypt room; Plane B remains backdrop support and is not promoted."
+              "reason": "All Plane-A Egypt column artwork occludes Rick: include the long striped shaft/end variants 9046/9049/9066/9068 used by SM0A and other Egypt rooms, plus capitals and the two base shoulders 8800/8834 around center 8801. Plane B remains backdrop support and is not promoted."
             }
           },
           {
@@ -1526,7 +1515,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 85,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -2106,7 +2095,7 @@
               "actorId": 0,
               "authoredOverride": true,
               "behavior": "suppress",
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "classic-action-state-deactivation",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -2560,7 +2549,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 85,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,

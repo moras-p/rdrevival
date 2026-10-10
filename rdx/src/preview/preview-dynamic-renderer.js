@@ -1,4 +1,5 @@
 import { PreviewTrapSystem } from './preview-traps.js';
+import { presentationOcclusionAt } from '../levels/presentation-occlusion.js';
 import { mechanismDirtyBounds, mechanismTransform } from './preview-mechanisms.js';
 import { productionActorPatchMap } from './production-overrides.js';
 import { projectNativeProjectile } from '../editor/runtime-projectiles.js';
@@ -11,6 +12,112 @@ import { revivalDynamiteVariantFromSeed, revivalRollingExplosionFrame } from '..
 
 const RDX_ASSET_FLAG_FLOOR_SPIKE = 0x02;
 const RDX_BLACK_KEY_STATIC_ACTORS = new Set([0x50, 0x51, 0x53, 0x56]);
+
+function sourceOcclusionClassFor(renderer, sourceKey) {
+  const selection = renderer?.selection;
+  const level = selection?.level;
+  const cacheKey = `${Number(selection?.submap ?? -1)}:${Number(selection?.mapId ?? level?.rdxMd ?? -1)}`;
+  if (!renderer._localOcclusionCache || renderer._localOcclusionCache.key !== cacheKey) {
+    const map = new Map();
+    for (const row of renderer?.sourceLocalOcclusionOverrides || []) {
+      if (Number(row?.submap) !== Number(selection?.submap) || Number(row?.mapId) !== Number(selection?.mapId ?? level?.rdxMd)) continue;
+      const mark = Number(row?.mark);
+      const key = Number.isFinite(mark) ? `mark:${mark}` : String(row?.sourceKey || '');
+      const occlusionClass = String(row?.occlusionClass || 'none');
+      if (key && occlusionClass && occlusionClass !== 'none') map.set(key, occlusionClass);
+    }
+    renderer._localOcclusionCache = { key:cacheKey, map };
+  }
+  return renderer._localOcclusionCache.map.get(String(sourceKey || '')) || 'none';
+}
+
+function sourceVisibilityWindowFor(renderer, sourceKey, manualOverride) {
+  // A manual Level Editor clipWindow replaces the reviewed window for this
+  // exact source mark, never the clipping of unrelated actors in the room.
+  if (manualOverride && Object.prototype.hasOwnProperty.call(manualOverride,'clipWindow'))
+    return manualOverride.clipWindow;
+  const selection=renderer?.selection;
+  const cacheKey=`${Number(selection?.submap??-1)}:${Number(selection?.mapId??-1)}`;
+  if (!renderer._sourceClipWindowCache || renderer._sourceClipWindowCache.key !== cacheKey) {
+    const byMark=new Map();
+    for (const row of renderer?.sourceClipWindows || []) {
+      if (Number(row.submap)!==Number(selection?.submap) || Number(row.mapId)!==Number(selection?.mapId)) continue;
+      byMark.set(`mark:${Number(row.mark)}`,row.bounds);
+    }
+    renderer._sourceClipWindowCache={key:cacheKey,byMark};
+  }
+  return renderer._sourceClipWindowCache.byMark.get(String(sourceKey||''))||null;
+}
+
+export function clipActorToWorldWindow(frame, drawX, drawY, clip, window) {
+  if (!Array.isArray(window) || window.length!==4) return clip;
+  const [x,y,width,height]=window.map(Number);
+  if (![x,y,width,height].every(Number.isFinite) || width<=0 || height<=0) return clip;
+  return {
+    top:Math.max(Number(clip?.top||0),Math.max(0,y-drawY)),
+    bottom:Math.max(Number(clip?.bottom||0),Math.max(0,drawY+frame.height-(y+height))),
+    left:Math.max(Number(clip?.left||0),Math.max(0,x-drawX)),
+    right:Math.max(Number(clip?.right||0),Math.max(0,drawX+frame.width-(x+width)))
+  };
+}
+
+function localCoverModel(renderer) {
+  const room = renderer._productionRoom?.();
+  // The resolved Layer-F model includes shared tile classes and room overrides.
+  // Do not use only the flattened override rows: that loses shared classes and
+  // explicit smaller `none` exceptions when another region covers a pixel.
+  return room?.presentationOcclusion || {
+    classes:renderer.presentationOcclusionTileRules || [],
+    overrides:renderer.presentationOcclusionOverrides || []
+  };
+}
+
+// This mirrors native blit_frame_owned: both a reviewed cover rule AND an
+// actually opaque Midground pixel must be present to hide an embedded actor.
+// The pixel's two source tile identities are resolved once per 8x8 cell rather
+// than searching the map for every actor pixel.
+export function previewLocalCoverAt(renderer, x, y, layers = null) {
+  const model = localCoverModel(renderer);
+  if (!(model.classes?.length || model.overrides?.length)) return false;
+  const midground = layers?.midground || renderer.staticLayers(renderer._localCoverPhase || 0).midground;
+  if (!midground || x < 0 || y < 0 || x >= midground.width || y >= midground.height ||
+      midground.data[(y * midground.width + x) * 4 + 3] === 0) return false;
+  const gx=Math.floor(x/8), gy=Math.floor(y/8);
+  const key=`${renderer.selection?.submap}:${renderer.selection?.mapId}:${renderer._localCoverPhase || 0}:${gx}:${gy}`;
+  if (renderer._localCoverCellCache?.key !== key) {
+    // The cache holds only the most recently sampled cell; don't allocate a
+    // full-room intermediate surface for sparse actor-local cover.
+    const inspected=renderer.mapDecoder?.inspectGridCell?.(renderer.selection.mapId,gx,gy,renderer._localCoverPhase || 0,
+      {topology:renderer.selection.topology});
+    renderer._localCoverCellCache={key,ids:{
+      A:inspected?.visual?.foreground?.resolution?.globalTile ?? null,
+      B:inspected?.visual?.background?.resolution?.globalTile ?? null
+    }};
+  }
+  const ids=renderer._localCoverCellCache.ids;
+  return ['B','A'].some(plane=>presentationOcclusionAt(model,{
+    plane,globalTile:ids[plane],x,y
+  }).cover==='embedded');
+}
+
+function blitOpacityWithLocalCover(renderer, target, source, dx, dy, alpha = 1, clip = null, blackKey = false) {
+  const opacity = Math.max(0, Math.min(1, Number(alpha)));
+  const top = Math.max(0, Math.min(source.height, Number(clip?.top || 0)));
+  const bottom = Math.max(0, Math.min(source.height - top, Number(clip?.bottom || 0)));
+  const left = Math.max(0, Math.min(source.width, Number(clip?.left || 0)));
+  const right = Math.max(0, Math.min(source.width - left, Number(clip?.right || 0)));
+  const baseX = Math.round(dx), baseY = Math.round(dy);
+  const yEnd = source.height - bottom, xEnd = source.width - right;
+  for (let y = top; y < yEnd; y += 1) for (let x = left; x < xEnd; x += 1) {
+    const tx = baseX + x, ty = baseY + y;
+    if (previewLocalCoverAt(renderer, tx, ty)) continue;
+    const index = (y * source.width + x) * 4;
+    const a = Math.round(source.data[index + 3] * opacity);
+    if (!a) continue;
+    if (blackKey && source.data[index] === 0 && source.data[index + 1] === 0 && source.data[index + 2] === 0) continue;
+    target.blendPixel(tx, ty, [source.data[index], source.data[index + 1], source.data[index + 2], a]);
+  }
+}
 function normalizedActorDepth(value, fallbackFront = false) {
   const depth=String(value || '');
   if (depth === 'behind-midground' || depth === 'normal' || depth === 'front') return depth;
@@ -104,6 +211,7 @@ export function _placeholder(x, y, actorId, policy, diagnostic = false, target =
 }
 
 export function dynamicFrame(tick) {
+  this._localCoverPhase = this.staticPhaseAtTick(tick);
   if (!this.selection || !this.dynamic) throw new Error('PreviewRenderer.select() must be called first');
   clearRect(this.dynamicBehindMidground, this.previousBehindMidgroundDirty);
   clearRect(this.dynamic, this.previousDirty);
@@ -449,6 +557,7 @@ export function dynamicFrame(tick) {
     const mirrorY = override?.mirrorY == null ? !!state.mirrorY : !!override.mirrorY;
     const actorDepth = actorDepthFor(state, override);
     const front = actorDepth === 'front';
+    const localOcclusionClass = actorDepth === 'normal' ? sourceOcclusionClassFor(this, sourceKey) : 'none';
     if (state.actor.set?.type === 'enemy' || state.actor.role === 'enemy') metrics.invulnerableEnemies += 1;
     const effectPn = state.authority === 'production-c-track' || state.authority === 'production-c-runtime-timeline' || state.authority === 'production-c-strict-trace-replay' ? null : Number(effect?.pn);
     const overridePn = Number(override?.pn);
@@ -605,8 +714,15 @@ export function dynamicFrame(tick) {
       drawX = Math.round(x - decodedAnchor.x);
       drawY = Math.round(y - decodedAnchor.y);
     }
-    const occlusionClip = { top: state.clipTop, bottom: state.clipBottom, left: state.clipLeft, right: state.clipRight };
-    if (!inspectionHidden && !runtimeSuppressed) blitOpacity(target, frame.pixels, drawX, drawY, transform.alpha, occlusionClip, blackKey);
+    const visibilityWindow=sourceVisibilityWindowFor(this, sourceKey, override);
+    const occlusionClip=clipActorToWorldWindow(frame.pixels, drawX, drawY,
+      { top:state.clipTop, bottom:state.clipBottom, left:state.clipLeft, right:state.clipRight },visibilityWindow);
+    if (!inspectionHidden && !runtimeSuppressed) {
+      if (localOcclusionClass === 'embedded' && !visibilityWindow && !Object.prototype.hasOwnProperty.call(override || {}, 'clipWindow'))
+        blitOpacityWithLocalCover(this, target, frame.pixels, drawX, drawY, transform.alpha, occlusionClip, blackKey);
+      else
+        blitOpacity(target, frame.pixels, drawX, drawY, transform.alpha, occlusionClip, blackKey);
+    }
     const actorDirty = mechanismDirtyBounds(drawX, drawY, frame.pixels.width, frame.pixels.height, transform);
     const selectableBounds = syntheticClassicReplacement
       ? { x:drawX, y:drawY, width:frame.pixels.width, height:frame.pixels.height }

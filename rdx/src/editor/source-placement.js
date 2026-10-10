@@ -66,11 +66,20 @@ export function sourceOcclusionLayer(row) {
   return ['behind-midground','normal','front','over-scenery'].includes(String(row?.occlusionLayer || '')) ? String(row.occlusionLayer) : null;
 }
 
+export function normalizeSourceClipWindow(value) {
+  if (!Array.isArray(value) || value.length!==4) return null;
+  const bounds=value.map(Number);
+  if (!bounds.every(Number.isInteger) || bounds[0] < -32768 || bounds[1] < -32768 ||
+      bounds[2] <= 0 || bounds[3] <= 0 || bounds[0]+bounds[2] > 32767 ||
+      bounds[1]+bounds[3] > 32767) return null;
+  return bounds;
+}
+
 export function sourceOverrideHasAuthoredChange(row) {
   if (!row) return false;
   const { dx, dy } = sourcePlacementOffset(row);
   return !!row.suppressed || row.presentationPn != null || row.controllerEntity != null || String(row.enemyKindSetId || '').trim() !== '' || !!row.patrol || dx !== 0 || dy !== 0 ||
-    sourceOcclusionLayer(row) != null || Object.keys(sourceStateVisualOffsets(row)).length > 0 || normalizeStatePresentationOverrides(row).length > 0 ||
+    Object.prototype.hasOwnProperty.call(row,'clipWindow') || sourceOcclusionLayer(row) != null || Object.keys(sourceStateVisualOffsets(row)).length > 0 || normalizeStatePresentationOverrides(row).length > 0 ||
     !!row.projectileShooterPresentation || Array.isArray(row.projectileEmitterOrigin) || ['left','right'].includes(String(row.projectileLaneDirection || '')) ||
     ['left','right'].includes(String(row.movingPlatformDirection || ''));
 }

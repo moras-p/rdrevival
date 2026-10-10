@@ -66,7 +66,7 @@ export function createNativeDraftPlan(document, {
     schema:'rdx.level_editor_native_draft_plan.v1',
     room:Object.freeze({ submap:Number(d.base.submap), mapId:Number(d.base.mapId), blank:!!d.base.blank }),
     mapping:mappingContext(mapping),
-    presentation:[], presentationDepth:[], blankDescriptors:[], gameplayCollision:[], collision:[], alignmentOverrides:[], sourceSuppressions:[], sourceEntity:[], sourcePatrol:[], sourcePlacement:[], sourcePresentation:[], sourceStateVisual:[], sourceStatePresentation:[], sourceOcclusion:[], entities:[], transitions:[],
+    presentation:[], presentationDepth:[], blankDescriptors:[], gameplayCollision:[], collision:[], alignmentOverrides:[], sourceSuppressions:[], sourceEntity:[], sourcePatrol:[], sourcePlacement:[], sourcePresentation:[], sourceStateVisual:[], sourceStatePresentation:[], sourceOcclusion:[], sourceClipWindows:[], entities:[], transitions:[],
     hero:Object.freeze({ type:'hero-start', references:worldReferences(d.heroStart.x,d.heroStart.y,mapping) })
   };
 
@@ -202,6 +202,10 @@ export function createNativeDraftPlan(document, {
       const targetPn=Number(state.pn),offset=state.offset||[0,0],stateDx=Number(offset[0]||0),stateDy=Number(offset[1]||0);
       plan.sourceStatePresentation.push(Object.freeze({ type:'source-state-presentation', sourceMark:Number(row.mark), sourceKey:String(state.sourceKey), stateKey:String(state.stateKey), sourcePn:Number(state.sourcePn), targetPn:Number.isInteger(targetPn)?targetPn:null, offset:Object.freeze([stateDx,stateDy]), runtime:Object.freeze({ submap:Number(d.base.submap), mark:Number(row.mark), sourcePn:Number(state.sourcePn), targetPn:Number.isInteger(targetPn)?targetPn:null, dx:stateDx, dy:stateDy }) }));
     }
+    if (Object.prototype.hasOwnProperty.call(row,'clipWindow')) plan.sourceClipWindows.push(Object.freeze({
+      type:'source-clip-window', sourceMark:Number(row.mark),
+      runtime:Object.freeze({submap:Number(d.base.submap),mark:Number(row.mark),bounds:row.clipWindow || [0,0,0,0]})
+    }));
     if (['behind-midground','normal','front','over-scenery'].includes(String(row.occlusionLayer || ''))) plan.sourceOcclusion.push(Object.freeze({ type:'source-occlusion', sourceMark:Number(row.mark), layer:String(row.occlusionLayer), runtime:Object.freeze({ submap:Number(d.base.submap), mark:Number(row.mark), depth:String(row.occlusionLayer) }) }));
   }
   for (const mark of sourcePlacementMarks) {
@@ -233,14 +237,14 @@ export function createNativeDraftPlan(document, {
 
   return Object.freeze({ ...plan,
     presentation:Object.freeze(plan.presentation), presentationDepth:Object.freeze(plan.presentationDepth), blankDescriptors:Object.freeze(plan.blankDescriptors), gameplayCollision:Object.freeze(plan.gameplayCollision), collision:Object.freeze(plan.collision), alignmentOverrides:Object.freeze(plan.alignmentOverrides),
-    sourceSuppressions:Object.freeze(plan.sourceSuppressions), sourceEntity:Object.freeze(plan.sourceEntity), sourcePatrol:Object.freeze(plan.sourcePatrol), sourcePlacement:Object.freeze(plan.sourcePlacement), sourcePresentation:Object.freeze(plan.sourcePresentation), sourceStateVisual:Object.freeze(plan.sourceStateVisual), sourceStatePresentation:Object.freeze(plan.sourceStatePresentation), sourceOcclusion:Object.freeze(plan.sourceOcclusion), entities:Object.freeze(plan.entities), transitions:Object.freeze(plan.transitions)
+    sourceSuppressions:Object.freeze(plan.sourceSuppressions), sourceEntity:Object.freeze(plan.sourceEntity), sourcePatrol:Object.freeze(plan.sourcePatrol), sourcePlacement:Object.freeze(plan.sourcePlacement), sourcePresentation:Object.freeze(plan.sourcePresentation), sourceStateVisual:Object.freeze(plan.sourceStateVisual), sourceStatePresentation:Object.freeze(plan.sourceStatePresentation), sourceOcclusion:Object.freeze(plan.sourceOcclusion), sourceClipWindows:Object.freeze(plan.sourceClipWindows), entities:Object.freeze(plan.entities), transitions:Object.freeze(plan.transitions)
   });
 }
 
 export function applyNativeDraftPlan(plan, bridge) {
   if (!plan || plan.schema !== 'rdx.level_editor_native_draft_plan.v1') throw new Error('Unsupported Level Editor native draft plan');
   if (!bridge) throw new Error('Native draft bridge is required');
-  bridge.clearMapEditorCollisionOverrides?.();bridge.clearMapEditorVisualOverrides();bridge.clearMapEditorPresentationDepthOverrides?.();bridge.clearMapEditorEntities();bridge.clearMapEditorTransitions();bridge.restoreNativeWorldOriginal();
+  bridge.clearMapEditorCollisionOverrides?.();bridge.clearMapEditorVisualOverrides();bridge.clearMapEditorPresentationDepthOverrides?.();bridge.clearMapEditorSourceClipWindows?.();bridge.clearMapEditorEntities();bridge.clearMapEditorTransitions();bridge.restoreNativeWorldOriginal();
   for (const row of plan.gameplayCollision || []) { const r=row.runtime;if(!bridge.addMapEditorCollisionOverride?.(r.submap,r.mapId,r.g8X,r.g8Y,r.kind))throw new Error(`RDX gameplay collision override rejected at ${r.g8X},${r.g8Y}`); }
   for (const row of plan.presentation) {
     const r=row.runtime;
@@ -257,6 +261,11 @@ export function applyNativeDraftPlan(plan, bridge) {
   for (const row of plan.sourceStateVisual || []) { const r=row.runtime;if(!bridge.overrideMapEditorSourceStateVisualOffset(r.submap,r.mark,r.pn,r.dx,r.dy))throw new Error(`RDX source state visual offset rejected for mark ${r.mark} PN ${r.pn}`); }
   for (const row of plan.sourceStatePresentation || []) { const r=row.runtime;if(r.targetPn!=null&&!bridge.overrideMapEditorSourceStatePn(r.submap,r.mark,r.sourcePn,r.targetPn))throw new Error(`RDX source state PN override rejected for mark ${r.mark} PN ${r.sourcePn} → ${r.targetPn}`);if((r.dx||r.dy)&&!bridge.overrideMapEditorSourceStateVisualOffset(r.submap,r.mark,r.sourcePn,r.dx,r.dy))throw new Error(`RDX source state offset rejected for mark ${r.mark} PN ${r.sourcePn}`); }
   for (const row of plan.sourceOcclusion || []) { const r=row.runtime;if(!bridge.overrideMapEditorSourceDepth(r.submap,r.mark,r.depth))throw new Error(`RDX source occlusion override rejected for mark ${r.mark}`); }
+  for (const row of plan.sourceClipWindows || []) {
+    const v=row.runtime;
+    if (!bridge.overrideMapEditorSourceClipWindow?.(v.submap,v.mark,v.bounds))
+      throw new Error(`RDX source clip window rejected for mark ${v.mark}`);
+  }
   for (const row of plan.entities) {
     const r=row.runtime,mark=bridge.addMapEditorEntity(r.submap,r.entity,r.flags,r.x,r.y,r.patrolX,r.patrolY,r.triggerX,r.triggerY,r.latency,r.actionPeriod,r.front,r.pn,r.mirrorX);
     if(!mark)throw new Error(`RDX entity registry rejected ${row.id}`);

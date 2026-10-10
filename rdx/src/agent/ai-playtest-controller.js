@@ -3,6 +3,8 @@ import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentStat
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
 import { createPlanReadySound } from './plan-ready-sound.js';
+import { GAI_REPLAY_MAX_FRAMES, gaiReplayFrame, gaiReplaySignature, gaiReplayBundle, loadGaiReplay, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
+import { GAI_REPLAY_PROJECT_PATH, fetchCommittedGaiReplays, connectGaiReplayFolder, writeGaiReplayFolder, downloadGaiReplayBundle } from './ai-plan-repository.js';
 import { WalkthroughEvidence, downloadWalkthroughEvidence } from './walkthrough-evidence.js';
 
 export function aiHorizonLoopDecision({
@@ -87,14 +89,33 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   const planReadySound = createPlanReadySound();
   if (!runtime) throw new Error('GAI browser controller requires a live runtime dependency object');
   const submapAssetName = submap => `SM${Number(submap).toString(16).toUpperCase().padStart(2, '0')}`;
-  const { aiModeSelect, aiExportFormatSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
+  const { aiModeSelect, aiExportFormatSelect, aiContinueToggle, aiCacheToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
     collisionPolicySelect, invulnerableToggle, gaiRouteInspectorRoot } = elements;
+  // Browser form restoration must never silently opt into a stale replay.
+  if (aiCacheToggle) aiCacheToggle.checked = false;
+  const replayStorage = () => {
+    try { return globalThis.localStorage; } catch { return null; }
+  };
+  // Repository cache is shipped as a normal static asset, but never used
+  // without the explicit per-page opt-in. Fresh runs record independently.
+  let repoReplayEntries = [];
+  let repoReplayLoad = null;
+  let repoReplayFolder = null;
+  let repoReplayWrite = Promise.resolve();
+  const rejectedReplays = new Set();
+  const loadRepoReplays = () => (repoReplayLoad ||= fetchCommittedGaiReplays().then(entries => {
+    repoReplayEntries = gaiReplayBundle(null, [...entries, ...repoReplayEntries]).entries;
+    return repoReplayEntries;
+  }));
   const walkthroughEvidence = new WalkthroughEvidence();
   let manualWaitingForInput = false;
   let terminalPlaybackHold = false;
   const gaiRouteInspector = gaiRouteInspectorRoot ? new GaiRouteInspector({ root:gaiRouteInspectorRoot, resourcesProvider,
     onRecordManual:toggleManualWalkthrough, onExportEvidence:exportWalkthroughEvidence,
-    onGeneratePlan:generateWalkthroughPlan, onTogglePlayback:toggleWalkthroughPlayback, onToggleMortality:toggleWalkthroughMortality }) : null;
+    onGeneratePlan:generateWalkthroughPlan, onTogglePlayback:toggleWalkthroughPlayback, onToggleMortality:toggleWalkthroughMortality,
+    onCacheToggle:enabled => { if (aiCacheToggle) aiCacheToggle.checked = enabled; updateAiPlayButtons(); },
+    onConnectCacheFolder:connectCacheFolder, onExportReplayCache:exportReplayCache }) : null;
+  aiCacheToggle?.addEventListener('change', updateAiPlayButtons);
 
   const AI_EXECUTOR_IDLE = 0;
   const AI_EXECUTOR_RUNNING = 1;
@@ -109,7 +130,7 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
     active:false, planning:false, scenario:2, deterministicRestart:true, fullRoomPlanning:true, continueRooms:true,
     planSubmap:-1, lastInputMask:0, completedAtSerial:-1, nextPlanToken:0, lastStatusSerial:-1, lastStop:null, coachControlled:false,
     autoReplans:0, planStartedAtSerial:0, partialReady:false, heldResult:false,
-    planningSlices:0, maxPlanningSliceMs:0, certificateReady:false, paused:false
+    planningSlices:0, maxPlanningSliceMs:0, certificateReady:false, cachedReady:false, paused:false
   };
   const aiAcceptance = {
     runId:0, reason:'', api:'', plannerCalls:0, playbackPlannerCalls:0, planningFrameSerials:[], playbackFrames:0,
@@ -120,6 +141,8 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   let aiRouteSequence = 0;
   let aiRouteArtifact = null;
   let gaiControlLease = null;
+  let cachedRoomReplay = null;
+  let freshRoomRecording = null;
 
 function ensureAiControlLease() {
   if (!gaiControlLease) gaiControlLease = acquireGameplayControlLease('certified-gai');
@@ -167,15 +190,62 @@ function updateAiPlayButtons() {
     aiRunButton.disabled = !runtime.bridge || !runtime.renderer || aiAutoplay.planning || aiAutoplay.active;
     aiRunButton.setAttribute('aria-pressed', aiAutoplay.active && !aiAutoplay.deterministicRestart ? 'true' : 'false');
     aiRunButton.textContent = aiAutoplay.planning && !aiAutoplay.deterministicRestart ? 'Precomputing…' :
-      (aiAutoplay.partialReady ? '▶ Play certified partial' : aiAutoplay.certificateReady ? '▶ Play certified plan' : '▶ AI live state');
+      (aiAutoplay.cachedReady ? '▶ Play cached replay (no proof)' : aiAutoplay.partialReady ? '▶ Play certified partial' : aiAutoplay.certificateReady ? '▶ Play certified plan' : '▶ AI live state');
   }
   if (aiStopButton) aiStopButton.disabled = !aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.heldResult;
   if (aiCopyDebugButton) aiCopyDebugButton.disabled = !runtime.bridge;
   if (aiModeSelect) aiModeSelect.disabled = aiAutoplay.active || aiAutoplay.planning;
+  if (aiCacheToggle) aiCacheToggle.disabled = aiAutoplay.active || aiAutoplay.planning || aiAutoplay.heldResult;
+  gaiRouteInspector?.updateCache({ enabled:!!aiCacheToggle?.checked,
+    disabled:!!(aiAutoplay.active || aiAutoplay.planning || aiAutoplay.heldResult),
+    connected:!!repoReplayFolder });
   gaiRouteInspector?.updatePlayback({ available:!!(runtime.bridge && runtime.renderer),
     planning:aiAutoplay.planning, ready:aiAutoplay.certificateReady, partial:aiAutoplay.partialReady,
     playing:aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.paused,
-    paused:aiAutoplay.paused, immortal:aiInvulnerableRouteEnabled() });
+    paused:aiAutoplay.paused, cached:aiAutoplay.cachedReady || !!cachedRoomReplay, immortal:aiInvulnerableRouteEnabled() });
+}
+
+function cacheMessage(message) {
+  gaiRouteInspector?.updateCache({ enabled:!!aiCacheToggle?.checked,
+    disabled:!!(aiAutoplay.active || aiAutoplay.planning || aiAutoplay.heldResult),
+    connected:!!repoReplayFolder, message });
+}
+
+async function connectCacheFolder() {
+  try {
+    // Picker must happen synchronously in this click handler to retain user activation.
+    const connection = await connectGaiReplayFolder();
+    repoReplayFolder = connection.handle;
+    repoReplayEntries = gaiReplayBundle(null, [...repoReplayEntries, ...connection.existing]).entries;
+    cacheMessage(`Repository connected · successful fresh completions auto-save to ${GAI_REPLAY_PROJECT_PATH}. Git commit required.`);
+    await persistRepoReplays(); // Merge any earlier successful local recordings immediately.
+  } catch (error) {
+    cacheMessage(`Repository not connected: ${error?.message || error}. Use ↓ to export JSON instead.`);
+  }
+}
+
+async function exportReplayCache() {
+  await loadRepoReplays();
+  try {
+    downloadGaiReplayBundle(replayStorage(), repoReplayEntries);
+    cacheMessage(`Downloaded room-replays.json · place it at ${GAI_REPLAY_PROJECT_PATH} and commit.`);
+  } catch (error) {
+    cacheMessage(`Cache export failed: ${error?.message || error}`);
+  }
+}
+
+function persistRepoReplays() {
+  if (!repoReplayFolder) return Promise.resolve(false);
+  // Writes are serialized: multiple room transitions cannot race and lose data.
+  repoReplayWrite = repoReplayWrite.catch(() => {}).then(async () => {
+    repoReplayEntries = await writeGaiReplayFolder(repoReplayFolder, replayStorage(), repoReplayEntries);
+    cacheMessage(`Saved completed replay to ${GAI_REPLAY_PROJECT_PATH} · commit this file to distribute it.`);
+    return true;
+  }).catch(error => {
+    cacheMessage(`Repository cache write failed: ${error?.message || error} · use ↓ to export JSON.`);
+    return false;
+  });
+  return repoReplayWrite;
 }
 
 function clearAiControl() {
@@ -665,6 +735,9 @@ function aiAgentState({ includeHistory = false, diagnostic = false } = {}) {
       deterministicRestart:!!aiAutoplay.deterministicRestart,
       fullRoomPlanning:!!aiAutoplay.fullRoomPlanning,
       continueRooms:!!aiAutoplay.continueRooms,
+      replayCacheEnabled:!!aiCacheToggle?.checked,
+      cachedPlayback:!!cachedRoomReplay,
+      cachedPlaybackFrame:cachedRoomReplay?.index ?? null,
       planSubmap:aiAutoplay.planSubmap,
       lastInputMask:aiAutoplay.lastInputMask >>> 0,
       lastInputControls:decodeAiInputMask(aiAutoplay.lastInputMask),
@@ -675,7 +748,9 @@ function aiAgentState({ includeHistory = false, diagnostic = false } = {}) {
     planner:diagnostic ? debug.planner : compactAiPlannerState(debug.planner),
     capturedWorld:debug.capturedWorld,
     session:aiCoachSessionSummary(),
-    guidance:aiCoachGuidance(debug)
+    guidance:cachedRoomReplay
+      ? 'CACHED DISK REPLAY: native planner was skipped; this is not fresh proof. Disable the cache and restart to test current GAI.'
+      : aiCoachGuidance(debug)
   };
   if (includeHistory && aiCoachSession) state.sessionEvents = aiCoachSession.events.slice();
   return state;
@@ -1354,6 +1429,8 @@ function refreshGaiRouteInspectorProgress(snapshot = null) {
 }
 
 function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntime = false, holdState = false } = {}) {
+  cachedRoomReplay = null;
+  freshRoomRecording = null;
   terminalPlaybackHold = holdState;
   walkthroughEvidence.stopExecution(message);
   updateWalkthroughEvidenceUi();
@@ -1364,6 +1441,7 @@ function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntim
   aiAutoplay.partialReady = false;
   aiAutoplay.heldResult = false;
   aiAutoplay.certificateReady = false;
+  aiAutoplay.cachedReady = false;
   aiAutoplay.paused = false;
   aiAutoplay.planSubmap = -1;
   aiAutoplay.completedAtSerial = -1;
@@ -1521,11 +1599,15 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
   aiAutoplay.partialReady = false;
   aiAutoplay.heldResult = false;
   aiAutoplay.certificateReady = false;
+  aiAutoplay.cachedReady = false;
   aiAutoplay.paused = false;
   aiAutoplay.deterministicRestart = !!restart;
   aiAutoplay.fullRoomPlanning = true;
   aiAutoplay.continueRooms = aiContinueToggle?.checked !== false;
   aiAutoplay.lastStop = null;
+  aiAutoplay.cachedReady = false;
+  cachedRoomReplay = null;
+  freshRoomRecording = null;
   if (!playAfterPlanning) gaiRouteInspector?.clear();
   clearAiControl();
   runtime.bridge.setFrontendPaused(true);
@@ -1550,6 +1632,37 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
     const scenario = configureAiPlanningMode({ fullRoom:true });
     if (!runtime.bridge.aiValidationBudget())
       runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
+    // Only a canonical restart can replay prior frames. Live-state and
+    // destination-entry plans always use today's native planner.
+    const cacheSignature = restart
+      ? gaiReplaySignature({ snapshot:before, ...evidenceMetadata(), scenario,
+        collisionPolicy:runtime.bridge.collisionPolicy() }) : null;
+    // Fetch the shipped, Git-committed artifact only when replay is opted in.
+    if (cacheSignature && aiCacheToggle?.checked) await loadRepoReplays();
+    if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
+    const cached = cacheSignature && aiCacheToggle?.checked && !rejectedReplays.has(cacheSignature)
+      ? loadGaiReplay(replayStorage(), cacheSignature, repoReplayEntries) : null;
+    if (cached) {
+      runtime.bridge.aiReset();
+      cachedRoomReplay = { signature:cacheSignature, ...cached, index:0 };
+      aiAutoplay.planning = false;
+      aiAutoplay.active = !!playAfterPlanning;
+      aiAutoplay.heldResult = !playAfterPlanning;
+      aiAutoplay.cachedReady = !playAfterPlanning;
+      aiAutoplay.planSubmap = Number(before.submap) >>> 0;
+      aiAutoplay.planStartedAtSerial = Number(before.frameSerial) >>> 0;
+      aiAcceptance.api = 'cached-disk-input-replay (native planner skipped)';
+      gaiRouteInspector?.clear();
+      gaiRouteInspector?.showCachedReplay(cached.frames.length);
+      walkthroughEvidence.stopExecution('cached-disk-replay');
+      walkthroughEvidence.gai = null; // Never present a previous run's proof as the current one.
+      updateWalkthroughEvidenceUi('Replaying cached inputs; there is no new native certificate.');
+      updateAiPlayButtons();
+      setAiPlayStatus(`${submapAssetName(before.submap)} · CACHED DISK REPLAY (${cached.frames.length} frames)` +
+        (playAfterPlanning ? '' : ' · ready; press Play') +
+        ' · native GAI planner/proof SKIPPED; not a fresh certificate', 'warn');
+      return true;
+    }
     const result = await precomputeAiRoomCertificate({
       ...aiRoomPrecomputeEffort(runtime.bridge),
       firstSlice:() => {
@@ -1583,6 +1696,8 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
         aiAutoplay.heldResult = true;
       }
       const finished = finishAiPlanning(before, true, planned, result.elapsedMs);
+      if (finished && restart && cacheSignature && runtime.bridge.aiCompletePlan())
+        freshRoomRecording = { signature:cacheSignature, frames:[] };
       if (finished)
         setAiPlayStatus(`${aiExecutionSummary(before)} · full room precomputed in ${result.slices} slices · max ${result.maxSliceMs.toFixed(1)}ms` +
           (playAfterPlanning ? '' : ' · ready; press Play'), playAfterPlanning ? 'running' : 'ok');
@@ -1721,12 +1836,13 @@ function scheduleAiPlan(reason = 'Planning certified route…', { fullRoom = fal
 
 function startAiAutoplay() {
   if (!runtime.bridge || aiAutoplay.active || aiAutoplay.planning) return;
+  if (aiAutoplay.cachedReady) return toggleWalkthroughPlayback();
   aiAutoplay.coachControlled = false;
   try { assertAiControlAvailable(); } catch (error) {
     setAiPlayStatus(`AI cannot start: ${error?.message || error}`, 'error');
     return;
   }
-  if (aiAutoplay.certificateReady || aiAutoplay.partialReady) {
+  if (aiAutoplay.certificateReady || aiAutoplay.partialReady || aiAutoplay.cachedReady) {
     const partial = aiAutoplay.partialReady;
     aiAutoplay.partialReady = false;
     aiAutoplay.heldResult = false;
@@ -1734,7 +1850,8 @@ function startAiAutoplay() {
     aiAutoplay.planning = false;
     runtime.bridge.setFrontendPaused(false);
     updateAiPlayButtons();
-    setAiPlayStatus(`${aiExecutionSummary()} · playing retained certified ${partial ? 'partial' : 'plan'}`, 'running');
+    setAiPlayStatus(cachedRoomReplay ? 'CACHED INPUT REPLAY · native planner SKIPPED (not fresh proof)' :
+      `${aiExecutionSummary()} · playing retained certified ${partial ? 'partial' : 'plan'}`, cachedRoomReplay ? 'warn' : 'running');
     return;
   }
   if (runtime.previewWorkspaceMode === 'editor' || runtime.mapEditorPlaytestActive) {
@@ -1780,7 +1897,7 @@ function startAiRestartAutoplay({ playAfterPlanning = true } = {}) {
 
 function generateWalkthroughPlan() {
   if (aiAutoplay.planning) return;
-  if (aiAutoplay.active || aiAutoplay.certificateReady || aiAutoplay.heldResult) stopAiAutoplay('Generating a new initial-state certificate.', 'neutral', { resetRuntime:true });
+  if (aiAutoplay.active || aiAutoplay.certificateReady || aiAutoplay.cachedReady || aiAutoplay.heldResult) stopAiAutoplay('Generating a new initial-state certificate.', 'neutral', { resetRuntime:true });
   planReadySound.prepare();
   const generation = startAiRestartAutoplay({ playAfterPlanning:false });
   const token = aiAutoplay.nextPlanToken;
@@ -1792,7 +1909,7 @@ function generateWalkthroughPlan() {
 }
 
 function toggleWalkthroughPlayback() {
-  if (!runtime.bridge || aiAutoplay.planning || !aiAutoplay.certificateReady) return;
+  if (!runtime.bridge || aiAutoplay.planning || (!aiAutoplay.certificateReady && !aiAutoplay.cachedReady)) return;
   if (aiAutoplay.active && !aiAutoplay.paused) {
     aiAutoplay.paused = true;
     runtime.bridge.setFrontendPaused(true);
@@ -1803,7 +1920,7 @@ function toggleWalkthroughPlayback() {
       setAiPlayStatus(`GAI cannot play: ${error?.message || error}`, 'error');
       return;
     }
-    if (!walkthroughEvidence.execution?.active) observeGaiExecution(runtime.bridge.snapshot());
+    if (!cachedRoomReplay && !walkthroughEvidence.execution?.active) observeGaiExecution(runtime.bridge.snapshot());
     aiAutoplay.active = true;
     aiAutoplay.paused = false;
     aiAutoplay.heldResult = false;
@@ -1820,7 +1937,8 @@ function toggleWalkthroughPlayback() {
     // Hold release and keyboard-focus handoff clear keys; restore the primed
     // mask in this same task before the native browser loop can advance.
     setAiControlMask(aiAutoplay.lastInputMask);
-    setAiPlayStatus('Playing the retained certified plan from its current native state.', 'running');
+    setAiPlayStatus(cachedRoomReplay ? 'Playing COMMITTED/CACHED INPUTS · native planner/proof SKIPPED.' :
+      'Playing the retained certified plan from its current native state.', cachedRoomReplay ? 'warn' : 'running');
   }
   updateAiPlayButtons();
 }
@@ -1935,7 +2053,7 @@ function observeGaiExecution(snapshot) {
 
 function tickAiAutoplay(snapshot) {
   if (!runtime.bridge || !aiAutoplay.active || aiAutoplay.planning || aiAutoplay.paused || !snapshot) return;
-  observeGaiExecution(snapshot);
+  if (!cachedRoomReplay) observeGaiExecution(snapshot);
   refreshGaiRouteInspectorProgress(snapshot);
   const playbackNow = performance.now();
   if (aiAcceptance.lastPlaybackAt) {
@@ -1952,20 +2070,77 @@ function tickAiAutoplay(snapshot) {
   }
 
   if (aiAutoplay.planSubmap >= 0 && snapshot.submap !== aiAutoplay.planSubmap) {
+    const cached = cachedRoomReplay;
+    if (cached && (cached.index !== cached.frames.length || snapshot.submap !== cached.destinationSubmap)) {
+      rejectedReplays.add(cached.signature);
+      removeGaiReplay(replayStorage(), cached.signature);
+      stopAiAutoplay('CACHED DISK REPLAY ended at an unexpected frame/destination; invalidated. Fresh planning required.', 'error');
+      return;
+    }
+    const recording = freshRoomRecording;
+    const saved = recording && saveGaiReplay(replayStorage(),
+      recording.signature, recording.frames, snapshot.submap);
+    if (recording && !saved) {
+      // LocalStorage may be unavailable or at quota; retain the tape in memory
+      // for a connected repository folder and manual JSON export.
+      repoReplayEntries = gaiReplayBundle(null, [...repoReplayEntries, {
+        schema:'rdr.gai.completed-room-replay.v1', signature:recording.signature,
+        frames:recording.frames, destinationSubmap:snapshot.submap
+      }]).entries;
+    }
+    if (recording) {
+      rejectedReplays.delete(recording.signature);
+      void persistRepoReplays();
+    }
+    freshRoomRecording = null;
+    cachedRoomReplay = null;
     clearAiControl();
     const previous = aiAutoplay.planSubmap;
+    if (saved) console.info('[rdx/gai] saved successful native-certified room replay to browser disk (reuse remains opt-in)', submapAssetName(previous));
+    if (cached) console.info('[rdx/gai] cached disk replay reached next room', submapAssetName(snapshot.submap));
     walkthroughEvidence.stopExecution('room-exit');
     updateWalkthroughEvidenceUi();
     if (aiAutoplay.continueRooms) {
       planRenderedDestinationRoom(previous, snapshot);
     } else {
-      stopAiAutoplay(`AI completed ${submapAssetName(previous)} and reached ${submapAssetName(snapshot.submap)}.`, 'ok');
+      stopAiAutoplay(`${cached ? 'CACHED DISK REPLAY' : 'AI'} completed ${submapAssetName(previous)} and reached ${submapAssetName(snapshot.submap)}.`, 'ok');
     }
     return;
   }
 
+  if (cachedRoomReplay) {
+    const { frames, index, signature } = cachedRoomReplay;
+    if (index >= frames.length) {
+      rejectedReplays.add(signature);
+      removeGaiReplay(replayStorage(), signature);
+      stopAiAutoplay('CACHED DISK REPLAY exhausted without the expected room transition; disk entry invalidated. Fresh planning required.', 'warn');
+      return;
+    }
+    const frame = gaiReplayFrame(snapshot);
+    if (!frame || frame.some((value, field) => value !== frames[index][field + 1])) {
+      rejectedReplays.add(signature);
+      removeGaiReplay(replayStorage(), signature);
+      stopAiAutoplay(`CACHED DISK REPLAY diverged at frame ${index}; invalidated disk entry. Rerun with fresh GAI planning.`, 'error');
+      return;
+    }
+    const input = frames[index][0] & AI_INPUT_MASK;
+    cachedRoomReplay.index++;
+    aiAutoplay.lastInputMask = input;
+    setAiControlMask(input);
+    if (snapshot.frameSerial !== aiAutoplay.lastStatusSerial) {
+      aiAutoplay.lastStatusSerial = snapshot.frameSerial;
+      setAiPlayStatus(`${submapAssetName(snapshot.submap)} · CACHED DISK REPLAY ${cachedRoomReplay.index}/${frames.length}` +
+        ' · native planner SKIPPED (not fresh proof)', 'warn');
+    }
+    return;
+  }
   const input = runtime.bridge.aiTick() & AI_INPUT_MASK;
   const executorStatus = runtime.bridge.aiStatus();
+  if (freshRoomRecording) {
+    const frame = gaiReplayFrame(snapshot);
+    if (!frame || freshRoomRecording.frames.length >= GAI_REPLAY_MAX_FRAMES) freshRoomRecording = null;
+    else freshRoomRecording.frames.push([input, ...frame]);
+  }
   aiAutoplay.lastInputMask = input;
   setAiControlMask(input);
 

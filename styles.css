@@ -633,6 +633,11 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
 .gai-route-analysis { margin-top:12px; }
 .gai-route-analysis > summary { cursor:pointer; color:#6ee7ff; font:800 11px/1.4 ui-monospace,monospace; }
 .gai-route-analysis[open] > summary { margin-bottom:10px; }
+.gai-route-cache-switch { display:inline-flex; align-items:center; gap:4px; align-self:center; padding:5px 7px; border:1px solid #37566a; border-radius:7px; font:700 11px/1 ui-monospace,monospace; color:#a8c2d4; cursor:pointer; }
+.gai-route-cache-switch:has(input:checked) { border-color:#bd8238; color:#ffd194; background:#382517; }
+.gai-route-cache-switch input { margin:0; accent-color:#e6a953; }
+.gai-route-cache-message { margin:7px 0 0; font:600 10px/1.3 ui-monospace,monospace; color:#88a8b9; }
+.gai-route-actions [data-route-cache-folder], .gai-route-actions [data-route-cache-export] { width:30px; height:34px; padding:3px; font-size:17px; }
 .gai-route-actions [data-route-record] { color:#ff8585; }
 .gai-route-actions [data-route-generate] { color:#6ee7ff; }
 .gai-route-actions [aria-busy="true"] { opacity:.5; }
@@ -704,3 +709,8 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
 #rdx-realtime-status[data-kind="ok"] { color:#8de6b2; }
 @media (max-width:920px) { .ai-lanes { grid-template-columns:1fr; } }
 @media (max-width:620px) { .realtime-config-grid { grid-template-columns:1fr; } .realtime-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .realtime-config-grid .realtime-wide { grid-column:auto; } .realtime-metrics .realtime-wide { grid-column:1/-1; } .ai-lane-badge { max-width:50%; } }
+
+/* Tiny, read-only filming diagnostic next to the Classic/RDX switch. */
+.switch-safety-dot { display:inline-block; width:10px; height:10px; flex:none; border-radius:50%; background:currentColor; color:#8a96a9; opacity:.65; }
+.switch-safety-dot[data-state="safe"] { color:#70e69b; opacity:1; box-shadow:0 0 5px #3dcc7280; }
+.switch-safety-dot[data-state="unsafe"] { color:#ff8279; opacity:1; }

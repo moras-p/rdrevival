@@ -102,7 +102,8 @@ function drawRouteOverlay(context, viewport, steps, index) {
 
 export class GaiRouteInspector {
   constructor({ root, resourcesProvider, roomRenderer = null, onRecordManual = null, onExportEvidence = null,
-    onGeneratePlan = null, onTogglePlayback = null, onToggleMortality = null } = {}) {
+    onGeneratePlan = null, onTogglePlayback = null, onToggleMortality = null,
+    onCacheToggle = null, onConnectCacheFolder = null, onExportReplayCache = null } = {}) {
     if (!root) throw new TypeError('GaiRouteInspector requires a root element');
     this.root = root;
     this.roomRenderer = roomRenderer || new CanonicalLevelEditorRoomRenderer({ resourcesProvider });
@@ -125,6 +126,9 @@ export class GaiRouteInspector {
           </div>
         </div>
         <div class="gai-route-actions">
+          <label class="gai-route-cache-switch" title="OFF by default. ON skips fresh native planning when an exact successful room replay exists; do not enable during GAI regression testing."><input type="checkbox" data-route-cache-toggle autocomplete="off"> Reuse</label>
+          <button type="button" data-route-cache-folder title="Connect this repository folder; completed fresh room runs will automatically update the tracked replay JSON file">📁</button>
+          <button type="button" data-route-cache-export title="Download all completed replay data as room-replays.json for committing">↓</button>
           <button type="button" data-route-mortality></button>
           <button type="button" data-route-generate disabled></button>
           <button type="button" data-route-playback hidden></button>
@@ -133,6 +137,7 @@ export class GaiRouteInspector {
           <button type="button" data-route-copy disabled>Copy route JSON</button>
         </div>
       </div>
+      <p class="gai-route-cache-message" data-route-cache-message aria-live="polite">Replay reuse OFF · successful fresh runs can be committed via the repository folder button.</p>
       <details class="gai-route-analysis" data-route-analysis>
         <summary>GAI walkthrough analysis</summary>
         <p class="gai-route-provenance">Effective RDX · canonical Level Editor ResolvedLevel + PreviewRenderer pipeline</p>
@@ -184,6 +189,14 @@ export class GaiRouteInspector {
       export:root.querySelector('[data-route-export]'),
       recordingStatus:root.querySelector('[data-route-recording-status]')
     };
+    this.ui.cacheToggle = root.querySelector('[data-route-cache-toggle]');
+    this.ui.cacheFolder = root.querySelector('[data-route-cache-folder]');
+    this.ui.cacheExport = root.querySelector('[data-route-cache-export]');
+    this.ui.cacheMessage = root.querySelector('[data-route-cache-message]');
+    this.ui.cacheToggle.checked = false;
+    this.ui.cacheToggle.addEventListener('change', () => onCacheToggle?.(this.ui.cacheToggle.checked));
+    this.ui.cacheFolder.addEventListener('click', () => void onConnectCacheFolder?.());
+    this.ui.cacheExport.addEventListener('click', () => void onExportReplayCache?.());
     this.ui.mortality = root.querySelector('[data-route-mortality]');
     setIconButton(this.ui.mortality, 'mortal', 'Mortal GAI run — switch to immortal');
     this.ui.generate = root.querySelector('[data-route-generate]');
@@ -213,6 +226,19 @@ export class GaiRouteInspector {
     this.renderEmpty();
   }
 
+  showCachedReplay(frames) {
+    this.root.dataset.kind = 'empty';
+    this.ui.badge.textContent = 'Cached input replay · no new proof';
+    this.ui.empty.textContent = `${frames} saved input frames available. Native GAI planning was SKIPPED. Press Play to replay; disable Reuse for regression testing.`;
+  }
+
+  updateCache({ enabled = false, disabled = false, connected = false, message = '' } = {}) {
+    this.ui.cacheToggle.checked = !!enabled;
+    this.ui.cacheToggle.disabled = disabled;
+    this.ui.cacheFolder.title = connected ? 'Repository connected · successful room runs auto-save to Git-tracked JSON' : 'Choose repository root for automatic recording to the tracked JSON';
+    if (message) this.ui.cacheMessage.textContent = message;
+  }
+
   updateEvidence({ active = false, samples = 0, hasManual = false, hasPlan = false, execution = null, message = '' } = {}) {
     setIconButton(this.ui.record, active ? 'stop' : 'record', active ? 'Stop manual recording' : hasManual ? 'Record new manual walkthrough' : 'Record manual walkthrough');
     this.ui.record.setAttribute('aria-pressed', String(active));
@@ -234,15 +260,15 @@ export class GaiRouteInspector {
       : 'Record any partial manual run, then export here. No room completion required. Export before reloading this page.');
   }
 
-  updatePlayback({ available = false, planning = false, ready = false, partial = false, playing = false, paused = false, immortal = false } = {}) {
+  updatePlayback({ available = false, planning = false, ready = false, partial = false, cached = false, playing = false, paused = false, immortal = false } = {}) {
     setIconButton(this.ui.mortality, immortal ? 'immortal' : 'mortal', immortal ? 'Immortal GAI run — switch to mortal' : 'Mortal GAI run — switch to immortal');
     this.ui.mortality.setAttribute('aria-pressed', String(immortal));
     this.ui.mortality.disabled = !available || planning || playing;
     this.ui.generate.disabled = !available || planning;
     this.ui.generate.setAttribute('aria-busy', String(planning));
-    this.ui.playback.hidden = !(ready || playing || paused) || planning;
+    this.ui.playback.hidden = !(ready || cached || playing || paused) || planning;
     this.ui.playback.disabled = !available;
-    setIconButton(this.ui.playback, playing ? 'pause' : 'play', playing ? 'Pause GAI playback' : paused ? 'Resume GAI playback' : partial ? 'Play certified partial' : 'Play certified plan');
+    setIconButton(this.ui.playback, playing ? 'pause' : 'play', playing ? 'Pause GAI playback' : paused ? 'Resume GAI playback' : cached ? 'Play cached inputs (native planner SKIPPED)' : partial ? 'Play certified partial' : 'Play certified plan');
     this.ui.playback.setAttribute('aria-pressed', String(playing));
   }
 

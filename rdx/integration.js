@@ -4,6 +4,7 @@ import { RdxSpriteDecoder } from './src/core/sprite.js';
 import { RdxMapping } from './src/runtime/mapping.js';
 import { ClassicRdxCellShiftMap } from './src/runtime/classic-rdx-cell-shift-map.js';
 import { switchLivePresentation } from './src/runtime/live-presentation-switch.js';
+import { PresentationSwitchSafety } from './src/runtime/presentation-switch-safety.js';
 import { PaletteRegistry } from './src/data/palettes.js';
 import { loadJsonResponse, loadJsonFallback } from './src/data/json-loader.js';
 import { XrickWasmBridge, RDX_PLAYFIELD, renderClassicFramebuffer, validateRoomManifestParity } from './xrick-bridge.js';
@@ -24,8 +25,8 @@ import { createMapEditorSession } from './src/workbench/map-editor-session.js';
 import { createPreviewWorkspace } from './src/workbench/preview-workspace.js';
 
 const workbenchElements = collectWorkbenchElements(document);
-const { backgroundCanvas, spriteCanvas, classicCanvas, foregroundCanvas, frontSpriteCanvas, collisionOverlayCanvas, annotationCanvas, sourceCanvas, stage, status, detail, playtestPanel, playtestOpenButton, playtestDebugToggle, playtestDebug, fileInput, romFolderButton, assetToggleButton, soundToggleButton, audioQualitySelect, collisionPolicySelect, spriteModeSelect, bulletSourceSelect, dynamiteSourceSelect, fallbackModeSelect, mapSelect, mapPrevButton, mapNextButton, invulnerabilityWarning, resetLevelButton, resetTriggersButton, unpauseButton } = workbenchElements.runtime;
-const { aiModeSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton, gaiRouteInspectorRoot, realtime: realtimeElements } = workbenchElements.ai;
+const { backgroundCanvas, spriteCanvas, classicCanvas, foregroundCanvas, frontSpriteCanvas, collisionOverlayCanvas, annotationCanvas, sourceCanvas, stage, status, detail, playtestPanel, playtestOpenButton, playtestDebugToggle, playtestDebug, fileInput, romFolderButton, assetToggleButton, switchSafetyLight, soundToggleButton, audioQualitySelect, collisionPolicySelect, spriteModeSelect, bulletSourceSelect, dynamiteSourceSelect, fallbackModeSelect, mapSelect, mapPrevButton, mapNextButton, invulnerabilityWarning, resetLevelButton, resetTriggersButton, unpauseButton } = workbenchElements.runtime;
+const { aiModeSelect, aiContinueToggle, aiCacheToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton, gaiRouteInspectorRoot, realtime: realtimeElements } = workbenchElements.ai;
 const { debugOverlayToggle, invulnerableToggle, movementFeelPreviewToggle, crawlFallToggle, enemyDeathModeToggle, collisionTraceButton, ignoreExplodableToggle, playthroughRecordButton, annotateButton, diagnosticsExportButton, annotationDataElement, annotationNoteInput, annotationClearButton, annotationCopyButton, annotationCountElement, selectElementButton, selectedElementLabel, expectedActionSelect, saveElementAnnotationButton, puzzleSelect, puzzlePrevButton, puzzleNextButton, puzzleStartButton, puzzleRecordButton, puzzleFinishButton, puzzleCopyButton, puzzleStatus, puzzleDataElement } = workbenchElements.diagnostics;
 const controlGroupButtons = workbenchElements.controlGroups.buttons;
 const controlGroupPanels = workbenchElements.controlGroups.panels;
@@ -102,6 +103,7 @@ let lastResumeRequestAt = 0;
 let collisionRuntime = null;
 let spriteRuntime = null;
 let cellShiftMap = null;
+let presentationSwitchSafety = null;
 let lastCollisionLogKey = '';
 let lastFrameSerial = -1;
 let lastMapKey = '';
@@ -196,7 +198,7 @@ const aiPlaytestController = createAiPlaytestController({
     get gameplayDebugController() { return gameplayDebugController; }
   },
   elements: {
-    aiModeSelect, aiContinueToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
+    aiModeSelect, aiContinueToggle, aiCacheToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
     collisionPolicySelect, invulnerableToggle, gaiRouteInspectorRoot
   },
   resourcesProvider: () => previewWorkspace.resources(),
@@ -1333,6 +1335,22 @@ function renderCPresentation(snapshot) {
 
 
 
+function updateSwitchSafety(snapshot) {
+  if (!switchSafetyLight) return;
+  const verdict = presentationSwitchSafety?.check(snapshot) || {
+    state: 'unknown', reason: 'Load the Revival ROM to inspect switch clearance.'
+  };
+  const position = Number.isFinite(verdict.classicX)
+    ? `\nSM${verdict.submap.toString(16).padStart(2, '0').toUpperCase()} · Classic (${verdict.classicX}, ${verdict.classicY}) · RDX (${verdict.rdxX}, ${verdict.rdxY})${verdict.residual ? ` · residual (${verdict.residual.join(', ')})` : ''}`
+    : '';
+  const label = `Switch safety: ${verdict.state}. ${verdict.reason}`;
+  const tip = label + position;
+  if (switchSafetyLight.dataset.state === verdict.state && switchSafetyLight.title === tip) return;
+  switchSafetyLight.dataset.state = verdict.state;
+  switchSafetyLight.title = tip;
+  switchSafetyLight.setAttribute('aria-label', label);
+}
+
 function frame() {
   if (!running || !bridge) return;
   try {
@@ -1351,6 +1369,7 @@ function frame() {
       resumeBrowserLoop('stalled-frame-watchdog');
     }
     lastSnapshot = snapshot;
+    updateSwitchSafety(snapshot);
     applyPendingPuzzleStart(snapshot);
     applyPendingMapEditorStart(snapshot);
     recordPlaythroughFrame(snapshot);
@@ -1453,6 +1472,7 @@ async function loadRomBytes(bytes, displayName = 'RDX ROM', { remember = true, d
   const effectiveCollisionData = collisionData || unavailableCollisionData(mapping, mapDecoder, rom.hash);
   const collisionDataset = new RdxCollisionDataset(effectiveCollisionData, { romSha256: rom.hash, strictRomHash: true });
   cellShiftMap = new ClassicRdxCellShiftMap({ classicData: classicPreviewData, mapping, collisionData: effectiveCollisionData });
+  presentationSwitchSafety = new PresentationSwitchSafety({ classicData: classicPreviewData, collisionDataset, shiftMap: cellShiftMap, mapping });
   validateRoomManifestParity(bridge, roomManifest);
   const levelParity = nativeLevelParity(resolvedLevels, bridge);
   if (!levelParity.compatible) {
@@ -1531,6 +1551,7 @@ function resetRomAfterLoadFailure(error) {
   spriteRuntime = null;
   collisionRuntime = null;
   cellShiftMap = null;
+  presentationSwitchSafety = null;
   bridge.setSpriteReplacementMask(0);
   bridge.unloadPresentationRom();
   bridge.resetCollision();

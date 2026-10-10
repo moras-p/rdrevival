@@ -22,12 +22,14 @@
     "fingerprints": {
       "adjustments": "2467f41f75eaccc898fe99b55f0df64c9b5fbd7217c0a198ecfbbfea3f53ea8a",
       "alignment": "246f54a4311032fecaf4f4252565f8762a9bb88cd361814919dbaa6d0bd6bc6e",
-      "presentationDepth": "adc8421e69a0438c85502e7341d74e0fc571c0533e17d3e9120cb6759c9b2ff9",
-      "resolved": "c089600eb25b272bd895991233c05f8cb0eb0d287d0309264bd21c902c366842",
-      "semantic": "9fccb1d8eca3f4d4ede13d8aa39fc808a213707973b56782ac2481b094e5b646",
+      "presentationDepth": "e152245c60a5e58a9faad85089290ea7cc8b4a537e1dc4b25a9702bb5fa855aa",
+      "presentationOcclusion": "9b7c404baf07d07cca0f933aa3680ba8f823ed200eb518ec90d4003e9cf4a02a",
+      "resolved": "b36a855f29b0133342611a913181bf399da8e33c7b02a2013fbcddadfa783168",
+      "reviewed": "e843f6a7817cdceaeb47d5b981ec64c1150fe7858f66eb591d57ea38cc844165",
+      "semantic": "8764ca8ed3d341d75c7ffe62472687facb471dc010d0e84390a95e40c0cd24e5",
       "sourceClassic": "906ff0fc55fc61498568fb85181183f8a2108ae572a0de711dd5c0d0e4c971c5",
       "sourceRdx": "50d34fa54bd13acca0330d7af673c3022075700b0d16fe296d1316073b8288a4",
-      "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+      "structural": "f41b8bcff8c85f6546c85bcc70936817d8d2e89048ca9f7698278796083bce84",
       "transitions": "7a0d1105b06f89047b28a2c47785270c84107c58a49bedec40c709ca1fc2b006"
     },
     "group": "egypt",
@@ -218,22 +220,6 @@
       "presentationDepth": {
         "classes": [
           {
-            "band": "backdrop",
-            "globalTiles": [
-              9046,
-              9049,
-              9066,
-              9068
-            ],
-            "id": "egypt.decorative-strips-plane-a",
-            "label": "Egypt backdrop ladder and decorative highlights",
-            "plane": "A",
-            "provenance": {
-              "authority": "visual-parity-audit-affected-traps-20260911",
-              "reason": "Only Egypt ladder and backdrop-authored decorative highlights stay behind embedded traps; architectural columns are separate foreground Plane-A art."
-            }
-          },
-          {
             "band": "foreground",
             "globalTiles": [
               8777,
@@ -244,14 +230,18 @@
               8798,
               8800,
               8801,
-              8834
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
             ],
             "id": "egypt.columns-plane-a",
-            "label": "Egypt architectural column capitals, shafts, and base shoulders",
+            "label": "Egypt architectural column capitals, shafts, long-shaft variants, and base shoulders",
             "plane": "A",
             "provenance": {
               "authority": "user-reviewed-egypt-column-occlusion-20261010",
-              "reason": "The complete Egypt column, including the two Plane-A base shoulders 8800/8834 around center 8801, occludes Rick in every Egypt room; Plane B remains backdrop support and is not promoted."
+              "reason": "All Plane-A Egypt column artwork occludes Rick: include the long striped shaft/end variants 9046/9049/9066/9068 used by SM0A and other Egypt rooms, plus capitals and the two base shoulders 8800/8834 around center 8801. Plane B remains backdrop support and is not promoted."
             }
           },
           {
@@ -307,7 +297,28 @@
             }
           }
         ],
-        "overrides": [],
+        "overrides": [
+          {
+            "band": "midground",
+            "bounds": [
+              80,
+              472,
+              8,
+              8
+            ],
+            "id": "single-ceiling-spike-behind-collectible",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-sm10-single-spike-parity-20261008",
+              "evidence": [
+                "user-provided SM09 control screenshot",
+                "same-family control SM09 collectible mark 116 + terrain-hazard:classic-sm09-0"
+              ],
+              "reason": "Match the reviewed SM09 collectible-adjacent single ceiling spike: demote only the restored Plane-A spike cell to midground so collectible mark 200 remains in front of the spike while the Plane-B support stays part of the static masonry."
+            },
+            "source": "reviewed-room"
+          }
+        ],
         "planeDefaults": {
           "A": "foreground",
           "B": "midground"
@@ -324,6 +335,39 @@
           "version": 1
         },
         "version": 2
+      },
+      "reviewedCorrections": {
+        "corrections": [
+          {
+            "id": "SM10.editor.presentation-depth.single-ceiling-spike-behind-collectible.1",
+            "provenance": {
+              "authority": "user-reviewed-sm10-single-spike-parity-20261008",
+              "evidence": [
+                "user-provided SM09 control screenshot",
+                "same-family control SM09 collectible mark 116 + terrain-hazard:classic-sm09-0"
+              ],
+              "reason": "Match the reviewed SM09 collectible-adjacent single ceiling spike: demote only the restored Plane-A spike cell to midground so collectible mark 200 remains in front of the spike while the Plane-B support stays part of the static masonry."
+            },
+            "target": "room:SM10:presentation-depth:single-ceiling-spike-behind-collectible",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                80,
+                472,
+                8,
+                8
+              ],
+              "plane": "A"
+            }
+          }
+        ],
+        "room": {
+          "mapId": 20,
+          "submap": 16
+        },
+        "schema": "rdr.reviewed_room_corrections.v1",
+        "version": 1
       },
       "semanticCorpus": {
         "objects": [
@@ -3217,16 +3261,18 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 81,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
               "mirrorY": true,
+              "occlusionClass": "embedded",
               "owner": "rdx",
               "pnByState": {
                 "simulated": 76,
                 "snapshot": 76
-              }
+              },
+              "provenance": "pn76 mounting-stone cover review"
             },
             "previewStateCycle": null,
             "projectileEmitterResolved": null,
@@ -3834,6 +3880,240 @@
         "terrainHazards": [
           {
             "adjustmentsApplied": [],
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "classicParentSourceKey": "terrain-hazard:classic-sm16-2",
+            "contact": {
+              "bounds": [
+                80,
+                472,
+                8,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                80,
+                472,
+                8,
+                8
+              ],
+              "position": [
+                80,
+                472
+              ],
+              "visualBounds": [
+                80,
+                472,
+                8,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt ceiling-spike group terrain-hazard:classic-sm16-2 occupies [48, 456, 8, 8].",
+              "The reviewed SM10 room transform projects that strip to [80, 472, 8, 8] / Layer-C g8:10..10:59.",
+              "User visual-parity review supersedes the prior accepted absence; reconstruct the missing Revival ceiling blade on Plane A and restore matching lethal contact."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "classic-verified-missing-rdx-spike-reconstruction",
+              "family": "ceiling",
+              "gridBounds": [
+                10,
+                59,
+                1,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9153
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0020-classic-sm16-2",
+            "mounting": "embedded-map-art",
+            "position": [
+              80,
+              472
+            ],
+            "semanticId": "SM00.trap.auto-md0020-classic-sm16-2",
+            "sourceId": 46792,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-2",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  80,
+                  472
+                ],
+                "size": [
+                  8,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "classicParentSourceKey": "terrain-hazard:classic-sm16-3",
+            "contact": {
+              "bounds": [
+                128,
+                656,
+                64,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                128,
+                656,
+                64,
+                8
+              ],
+              "position": [
+                128,
+                656
+              ],
+              "visualBounds": [
+                128,
+                656,
+                64,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt ceiling-spike group terrain-hazard:classic-sm16-3 occupies [96, 640, 64, 8].",
+              "The reviewed SM10 room transform projects that strip to [128, 656, 64, 8] / Layer-C g8:16..23:82.",
+              "User visual-parity review supersedes the prior accepted absence; reconstruct the missing Revival ceiling blade on Plane A and restore matching lethal contact."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "classic-verified-missing-rdx-spike-reconstruction",
+              "family": "ceiling",
+              "gridBounds": [
+                16,
+                82,
+                8,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9179
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0020-classic-sm16-3",
+            "mounting": "embedded-map-art",
+            "position": [
+              128,
+              656
+            ],
+            "semanticId": "SM00.trap.auto-md0020-classic-sm16-3",
+            "sourceId": 46796,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-3",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  128,
+                  656
+                ],
+                "size": [
+                  64,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "classicParentSourceKey": "terrain-hazard:classic-sm16-4",
+            "contact": {
+              "bounds": [
+                224,
+                656,
+                32,
+                8
+              ],
+              "lethal": true
+            },
+            "effective": {
+              "gameplayBounds": [
+                224,
+                656,
+                32,
+                8
+              ],
+              "position": [
+                224,
+                656
+              ],
+              "visualBounds": [
+                224,
+                656,
+                32,
+                8
+              ]
+            },
+            "evidence": [
+              "Classic Egypt ceiling-spike group terrain-hazard:classic-sm16-4 occupies [192, 640, 32, 8].",
+              "The reviewed SM10 room transform projects that strip to [224, 656, 32, 8] / Layer-C g8:28..31:82.",
+              "User visual-parity review supersedes the prior accepted absence; reconstruct the missing Revival ceiling blade on Plane A and restore matching lethal contact."
+            ],
+            "family": "egypt-static-map-trap",
+            "featureMatch": {
+              "basis": "classic-verified-missing-rdx-spike-reconstruction",
+              "family": "ceiling",
+              "gridBounds": [
+                28,
+                82,
+                4,
+                1
+              ],
+              "matchedGlobalTiles": [
+                9179
+              ],
+              "templateTiles": [
+                9179,
+                9153
+              ]
+            },
+            "id": "auto-md0020-classic-sm16-4",
+            "mounting": "embedded-map-art",
+            "position": [
+              224,
+              656
+            ],
+            "semanticId": "SM00.trap.auto-md0020-classic-sm16-4",
+            "sourceId": 46800,
+            "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-4",
+            "state": "static",
+            "visuals": {
+              "static": {
+                "position": [
+                  224,
+                  656
+                ],
+                "size": [
+                  32,
+                  8
+                ],
+                "visible": true
+              }
+            }
+          },
+          {
+            "adjustmentsApplied": [],
             "authority": "egypt-static-map-art-spike-run-matching-v3",
             "classicParentSourceKey": "terrain-hazard:classic-sm16-5",
             "contact": {
@@ -4124,14 +4404,348 @@
         }
       },
       "structuralCorrections": {
-        "operations": [],
+        "operations": [
+          {
+            "action": "overlay-tiles",
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "bounds": [
+              80,
+              472,
+              8,
+              8
+            ],
+            "clearLayer": "AB",
+            "id": "md0020-classic-sm16-2-ceiling-blades",
+            "introducedInVersion": "2.1.105",
+            "layer": null,
+            "provenance": "Classic terrain-hazard:classic-sm16-2 was previously accepted as absent. User visual-parity review requires restoring the aligned Revival hazard at [80,472,8,8]. Match the reviewed SM09 collectible-adjacent single-spike composite exactly: replace this cell with the canonical Plane-B support tile 8742 plus Plane-A ceiling spike 9153 so the spike is seated in the masonry instead of floating.",
+            "reason": "Restore the user-confirmed single ceiling hazard using the reviewed SM09 composite support+spike cell, with matching lethal semantics.",
+            "role": "trap",
+            "sourceBounds": [
+              48,
+              456,
+              8,
+              8
+            ],
+            "sourceKey": "terrain-hazard:classic-sm16-2",
+            "tiles": [
+              {
+                "globalTile": 8742,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 9153,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-reviewed-sm09-collectible-stripe-transfer",
+            "bounds": [
+              64,
+              464,
+              32,
+              8
+            ],
+            "clearLayer": "AB",
+            "id": "md0020-sm10-mark200-sm09-overhead-stripe",
+            "introducedInVersion": "2.1.106",
+            "layer": null,
+            "provenance": "User review requires the SM10 mark:200 collectible-adjacent single-spike assembly to preserve the same 32x8 decorative stripe directly above the pickup as the reviewed SM09 mark:116 control. Reuse the exact SM09 row at MD0013 g8 x=8..11,y=94: global tile 8807 on Plane B palette 2 plus the matching Plane A palette 0 overlay for each cell.",
+            "reason": "Restore the exact four-cell SM09 decorative stripe above the SM10 collectible so the single-spike assembly matches the reviewed control.",
+            "role": "scenery",
+            "sourceBounds": [
+              64,
+              752,
+              32,
+              8
+            ],
+            "sourceKey": "sm09-control-stripe:mark-116",
+            "tiles": [
+              {
+                "globalTile": 8807,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B"
+              },
+              {
+                "globalTile": 8807,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "bounds": [
+              128,
+              656,
+              64,
+              8
+            ],
+            "clearLayer": null,
+            "id": "md0020-classic-sm16-3-ceiling-blades",
+            "introducedInVersion": "2.1.105",
+            "layer": null,
+            "provenance": "Classic terrain-hazard:classic-sm16-3 was previously accepted as absent. User visual-parity review requires restoring the aligned Revival hazard at [128,656,64,8] while preserving the decoded Plane-B room artwork beneath it.",
+            "reason": "Restore the user-confirmed Classic ceiling hazard with the canonical Egypt Plane-A ceiling-blade motif and matching lethal semantics.",
+            "role": "trap",
+            "sourceBounds": [
+              96,
+              640,
+              64,
+              8
+            ],
+            "sourceKey": "terrain-hazard:classic-sm16-3",
+            "tiles": [
+              {
+                "globalTile": 9179,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  32,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  40,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  48,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  56,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+            "bounds": [
+              224,
+              656,
+              32,
+              8
+            ],
+            "clearLayer": null,
+            "id": "md0020-classic-sm16-4-ceiling-blades",
+            "introducedInVersion": "2.1.105",
+            "layer": null,
+            "provenance": "Classic terrain-hazard:classic-sm16-4 was previously accepted as absent. User visual-parity review requires restoring the aligned Revival hazard at [224,656,32,8] while preserving the decoded Plane-B room artwork beneath it.",
+            "reason": "Restore the user-confirmed Classic ceiling hazard with the canonical Egypt Plane-A ceiling-blade motif and matching lethal semantics.",
+            "role": "trap",
+            "sourceBounds": [
+              192,
+              640,
+              32,
+              8
+            ],
+            "sourceKey": "terrain-hazard:classic-sm16-4",
+            "tiles": [
+              {
+                "globalTile": 9179,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  8,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  16,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              },
+              {
+                "globalTile": 9179,
+                "offset": [
+                  24,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          }
+        ],
         "schema": "rdr.structural_corrections_resolved.v1"
       }
     },
     "mapId": 20,
     "mapName": "MD0020",
     "provenance": {
-      "migrationStatus": "canonical-layered"
+      "migrationStatus": "canonical-layered+reviewed-overlay",
+      "reviewedCorrections": [
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              80,
+              472,
+              8,
+              8
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM10.editor.presentation-depth.single-ceiling-spike-behind-collectible.1",
+          "provenance": {
+            "authority": "user-reviewed-sm10-single-spike-parity-20261008",
+            "evidence": [
+              "user-provided SM09 control screenshot",
+              "same-family control SM09 collectible mark 116 + terrain-hazard:classic-sm09-0"
+            ],
+            "reason": "Match the reviewed SM09 collectible-adjacent single ceiling spike: demote only the restored Plane-A spike cell to midground so collectible mark 200 remains in front of the spike while the Plane-B support stays part of the static masonry."
+          },
+          "semantic": "visual",
+          "target": "room:SM10:presentation-depth:single-ceiling-spike-behind-collectible",
+          "type": "presentation-depth"
+        }
+      ]
     },
     "submap": 16,
     "transitions": {

@@ -152,7 +152,9 @@ export function classicScriptedActiveSpriteAt(entity, tick, fallbackSprite = 0) 
 }
 
 export function fixedAnchorLifecycle(record) {
-  return !!record?.actionStateOwner && /fixed-anchor/.test(String(record?.lifecycleAuthority || record?.auditAuthority || record?.authority || ''));
+  if (!record?.actionStateOwner) return false;
+  if (String(record?.trajectoryAuthority || '') === 'fixed-contact') return true;
+  return /fixed-anchor/.test(String(record?.lifecycleAuthority || record?.auditAuthority || record?.authority || ''));
 }
 
 export function isClassicRickSprite(spriteId) {

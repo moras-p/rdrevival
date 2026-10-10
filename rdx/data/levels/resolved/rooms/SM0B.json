@@ -22,10 +22,11 @@
     "fingerprints": {
       "adjustments": "d98f5f8fcd03d4d09a36578c096d0212d3af12da3eeccb7a1cf6f55954411f6f",
       "alignment": "3c2773055cdf8af630f64490e7d8d4cc902813b3e9890fbbc7c674b0f4febac4",
-      "presentationDepth": "d269bc8b766e603044d936e475414684144780e8e8fa131464b7d50588719946",
-      "resolved": "226d3baa21554bcb4d797880f78bbdb352a57cd16979b7caeaf36008f928c1d0",
+      "presentationDepth": "c01986e90feb0c284758ebc75bc6a1a81e562007589999ddb7c5e8b2963701ab",
+      "presentationOcclusion": "e7d3290770495841c89e87f98277b10d2d6016d0ad6cd6f4131e686679d9f4d7",
+      "resolved": "0d48bc26fb1e2b8ae1d75989c71c6dd5af2012e05629158782748ec7120e6334",
       "reviewed": "f3fb8b209a97f8c488908c670cc2443489f71c10f37c57cbc5c350ba16418546",
-      "semantic": "e42bb5603811d5ff77e7d72b3867fef1499f99683b4e39d2b14fac1d46ef55ab",
+      "semantic": "d5a5f9968dd179c0541c13e3e270effa9dff1d39c75ce3d1ef545c055040836b",
       "sourceClassic": "e7ea425006c715e0339be5af4595e2495ecbf7297ab62cbe17a1061e982233d0",
       "sourceRdx": "73d63d615bd911f83293774756c9090e49fd43ead8fe200280f5196c62d5bae1",
       "structural": "8f014e4876f7cbea8e095cc34c78b50a0725d2e46e2d341328eb4e0cb71f5198",
@@ -335,22 +336,6 @@
       "presentationDepth": {
         "classes": [
           {
-            "band": "backdrop",
-            "globalTiles": [
-              9046,
-              9049,
-              9066,
-              9068
-            ],
-            "id": "egypt.decorative-strips-plane-a",
-            "label": "Egypt backdrop ladder and decorative highlights",
-            "plane": "A",
-            "provenance": {
-              "authority": "visual-parity-audit-affected-traps-20260911",
-              "reason": "Only Egypt ladder and backdrop-authored decorative highlights stay behind embedded traps; architectural columns are separate foreground Plane-A art."
-            }
-          },
-          {
             "band": "foreground",
             "globalTiles": [
               8777,
@@ -361,14 +346,18 @@
               8798,
               8800,
               8801,
-              8834
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
             ],
             "id": "egypt.columns-plane-a",
-            "label": "Egypt architectural column capitals, shafts, and base shoulders",
+            "label": "Egypt architectural column capitals, shafts, long-shaft variants, and base shoulders",
             "plane": "A",
             "provenance": {
               "authority": "user-reviewed-egypt-column-occlusion-20261010",
-              "reason": "The complete Egypt column, including the two Plane-A base shoulders 8800/8834 around center 8801, occludes Rick in every Egypt room; Plane B remains backdrop support and is not promoted."
+              "reason": "All Plane-A Egypt column artwork occludes Rick: include the long striped shaft/end variants 9046/9049/9066/9068 used by SM0A and other Egypt rooms, plus capitals and the two base shoulders 8800/8834 around center 8801. Plane B remains backdrop support and is not promoted."
             }
           },
           {
@@ -7145,16 +7134,18 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 81,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
               "mirrorY": true,
+              "occlusionClass": "embedded",
               "owner": "rdx",
               "pnByState": {
                 "simulated": 76,
                 "snapshot": 76
-              }
+              },
+              "provenance": "pn76 mounting-stone cover review"
             },
             "previewStateCycle": null,
             "projectileEmitterResolved": null,

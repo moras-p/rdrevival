@@ -554,8 +554,8 @@ export const GAME_JUICE_PRODUCTION_PRESETS = Object.freeze({
     },
     "player_suppressed_lethal": {
       "actorFlash": {
-        "frames": 2,
-        "color": "red"
+        "frames": 1,
+        "color": "white"
       }
     },
     "platform_release_puff": {

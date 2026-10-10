@@ -4201,60 +4201,6 @@
           ],
           "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
           "sourceKey": "terrain-hazard:classic-sm16-1"
-        },
-        {
-          "authority": "egypt-static-map-art-spike-run-absence-v1",
-          "classicBounds": [
-            48,
-            456,
-            8,
-            8
-          ],
-          "family": "ceiling",
-          "projectedBounds": [
-            80,
-            472,
-            8,
-            8
-          ],
-          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
-          "sourceKey": "terrain-hazard:classic-sm16-2"
-        },
-        {
-          "authority": "egypt-static-map-art-spike-run-absence-v1",
-          "classicBounds": [
-            96,
-            640,
-            64,
-            8
-          ],
-          "family": "ceiling",
-          "projectedBounds": [
-            128,
-            656,
-            64,
-            8
-          ],
-          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
-          "sourceKey": "terrain-hazard:classic-sm16-3"
-        },
-        {
-          "authority": "egypt-static-map-art-spike-run-absence-v1",
-          "classicBounds": [
-            192,
-            640,
-            32,
-            8
-          ],
-          "family": "ceiling",
-          "projectedBounds": [
-            224,
-            656,
-            32,
-            8
-          ],
-          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
-          "sourceKey": "terrain-hazard:classic-sm16-4"
         }
       ],
       "authority": "reviewed-RDX-map-art-contact",
@@ -4264,6 +4210,180 @@
       "mapId": 20,
       "submap": 16,
       "traps": [
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+          "classicParentSourceKey": "terrain-hazard:classic-sm16-2",
+          "contact": {
+            "bounds": [
+              80,
+              472,
+              8,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike group terrain-hazard:classic-sm16-2 occupies [48, 456, 8, 8].",
+            "The reviewed SM10 room transform projects that strip to [80, 472, 8, 8] / Layer-C g8:10..10:59.",
+            "User visual-parity review supersedes the prior accepted absence; reconstruct the missing Revival ceiling blade on Plane A and restore matching lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              10,
+              59,
+              1,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9153
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0020-classic-sm16-2",
+          "mounting": "embedded-map-art",
+          "position": [
+            80,
+            472
+          ],
+          "sourceId": 46792,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-2",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                80,
+                472
+              ],
+              "size": [
+                8,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+          "classicParentSourceKey": "terrain-hazard:classic-sm16-3",
+          "contact": {
+            "bounds": [
+              128,
+              656,
+              64,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike group terrain-hazard:classic-sm16-3 occupies [96, 640, 64, 8].",
+            "The reviewed SM10 room transform projects that strip to [128, 656, 64, 8] / Layer-C g8:16..23:82.",
+            "User visual-parity review supersedes the prior accepted absence; reconstruct the missing Revival ceiling blade on Plane A and restore matching lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              16,
+              82,
+              8,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9179
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0020-classic-sm16-3",
+          "mounting": "embedded-map-art",
+          "position": [
+            128,
+            656
+          ],
+          "sourceId": 46796,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-3",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                128,
+                656
+              ],
+              "size": [
+                64,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+          "classicParentSourceKey": "terrain-hazard:classic-sm16-4",
+          "contact": {
+            "bounds": [
+              224,
+              656,
+              32,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike group terrain-hazard:classic-sm16-4 occupies [192, 640, 32, 8].",
+            "The reviewed SM10 room transform projects that strip to [224, 656, 32, 8] / Layer-C g8:28..31:82.",
+            "User visual-parity review supersedes the prior accepted absence; reconstruct the missing Revival ceiling blade on Plane A and restore matching lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              28,
+              82,
+              4,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9179
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0020-classic-sm16-4",
+          "mounting": "embedded-map-art",
+          "position": [
+            224,
+            656
+          ],
+          "sourceId": 46800,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm16-4",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                224,
+                656
+              ],
+              "size": [
+                32,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
         {
           "authority": "egypt-static-map-art-spike-run-matching-v3",
           "classicParentSourceKey": "terrain-hazard:classic-sm16-5",
@@ -4989,26 +5109,7 @@
       ]
     },
     {
-      "absentClassicHazards": [
-        {
-          "authority": "egypt-static-map-art-spike-run-absence-v1",
-          "classicBounds": [
-            32,
-            32,
-            192,
-            8
-          ],
-          "family": "ceiling",
-          "projectedBounds": [
-            64,
-            48,
-            192,
-            8
-          ],
-          "reason": "No decoded RDX spike motif survives near this Classic lethal strip; do not project a floating hazard contact into RDX.",
-          "sourceKey": "terrain-hazard:classic-sm19-0"
-        }
-      ],
+      "absentClassicHazards": [],
       "authority": "reviewed-RDX-map-art-contact",
       "evidence": {
         "source": "v2.1.105 auto-generated Egypt static trap resolution"
@@ -5016,6 +5117,64 @@
       "mapId": 23,
       "submap": 19,
       "traps": [
+        {
+          "authority": "classic-verified-egypt-ceiling-spike-restoration-v2",
+          "classicParentSourceKey": "terrain-hazard:classic-sm19-0",
+          "contact": {
+            "bounds": [
+              64,
+              48,
+              192,
+              8
+            ],
+            "lethal": true
+          },
+          "evidence": [
+            "Classic Egypt ceiling-spike tile 94 group terrain-hazard:classic-sm19-0 occupies [32, 32, 192, 8].",
+            "The reviewed SM13 room transform projects that strip to [64, 48, 192, 8] / Layer-C g8:8..31:6.",
+            "User visual-parity review supersedes the prior accepted absence; extend the established SM13 Plane-A tile-9179 ceiling-blade restoration to this complete top strip and restore matching lethal contact."
+          ],
+          "family": "egypt-static-map-trap",
+          "featureMatch": {
+            "basis": "classic-verified-missing-rdx-spike-reconstruction",
+            "family": "ceiling",
+            "gridBounds": [
+              8,
+              6,
+              24,
+              1
+            ],
+            "matchedGlobalTiles": [
+              9179
+            ],
+            "templateTiles": [
+              9179,
+              9153
+            ]
+          },
+          "id": "auto-md0023-classic-sm19-0",
+          "mounting": "embedded-map-art",
+          "position": [
+            64,
+            48
+          ],
+          "sourceId": 46976,
+          "sourceKey": "auto-hazard:terrain-hazard:classic-sm19-0",
+          "state": "static",
+          "visuals": {
+            "static": {
+              "position": [
+                64,
+                48
+              ],
+              "size": [
+                192,
+                8
+              ],
+              "visible": true
+            }
+          }
+        },
         {
           "authority": "classic-verified-egypt-ceiling-spike-restoration-v1",
           "classicParentSourceKey": "terrain-hazard:classic-sm19-1",
@@ -6442,6 +6601,6 @@
     }
   ],
   "schema": "rdx.trap_registry.v1",
-  "sourceSha256": "f83d7569c2a41d286a2fa91666e1d61b6cc9d96a701b11ea737e02ad8faeca57",
+  "sourceSha256": "38087d6da6985badf99f5f5d03f709b85e0b191f0403201ff79b51738d7146d1",
   "version": "2.1.104"
 }

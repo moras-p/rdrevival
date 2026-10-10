@@ -52,6 +52,15 @@ export class PreviewRenderer {
     this.noOverlapPresence = options.noOverlapPresence || { rooms: [] };
     this.placementAudit = options.placementAudit || { rooms: [] };
     this.productionOverrides = options.productionOverrides || { tables: { markActorOverrides: [] } };
+    this.productionMappings = options.productionMappings || {};
+    this.sourceLocalOcclusionOverrides = Array.isArray(this.productionMappings?.sourceLocalOcclusionOverrides)
+      ? this.productionMappings.sourceLocalOcclusionOverrides : [];
+    this.presentationOcclusionOverrides = Array.isArray(this.productionMappings?.presentationOcclusionOverrides)
+      ? this.productionMappings.presentationOcclusionOverrides : [];
+    this.presentationOcclusionTileRules = Array.isArray(this.productionMappings?.presentationOcclusionTileRules)
+      ? this.productionMappings.presentationOcclusionTileRules.map(row=>({ ...row, globalTiles:[row.globalTile] })) : [];
+    this.sourceClipWindows = Array.isArray(this.productionMappings?.sourceClipWindows)
+      ? this.productionMappings.sourceClipWindows : [];
     this.trapRegistry = options.trapRegistry || { classic: { excludedTiles: [] }, rooms: [] };
     this.authoredVisualAssets = options.authoredVisualAssets || null;
     this.reviewedMapVisualPatches = Array.isArray(options.reviewedMapVisualPatches?.patches) ? options.reviewedMapVisualPatches.patches : [];

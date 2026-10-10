@@ -29,6 +29,7 @@
           <label class="file-button">Load ROM<input id="rdx-rom" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream"></label>
           <button id="rdx-rom-folder" type="button" hidden title="Choose a folder once so supporting browsers can re-read Rick_Dangerous_DX_1.3.bin automatically when permission remains granted">Connect ROM folder</button>
           <button id="rdx-disable" class="asset-source-icon" type="button" disabled aria-label="Use classic assets" title="Use classic assets">◐</button>
+          <span id="rdx-switch-safety" class="switch-safety-dot" data-state="unknown" role="img" aria-label="Switch safety: unknown" title="Switch clearance is not available yet"></span>
           <label class="debug-overlay-icon" title="Debug overlay"><input id="rdx-debug-overlay-toggle" type="checkbox" aria-label="Debug overlay"><span aria-hidden="true">▦</span></label>
           <label class="collision-policy"><input id="rdx-invulnerable-toggle" type="checkbox"> Invulnerable</label>
           <button id="rdx-sound-toggle" class="asset-source-icon" type="button" aria-label="Mute sound" title="Sound on" aria-pressed="false">🔊</button>
@@ -47,6 +48,7 @@
                 <button id="rdx-ai-restart-run" class="primary ai-primary-action" type="button" disabled title="Canonical deterministic workflow: restart and prime the room, precompute the route, restore the identical start, then replay it. Invulnerable uses route-only planning and ignores lethal contacts.">↻ Restart + certified AI play</button>
                 <button id="rdx-ai-stop" type="button" disabled title="Stop AI and immediately return control to the player">■ Stop AI</button>
                 <label class="collision-policy"><input id="rdx-ai-continue" type="checkbox" checked> Continue into next rooms</label>
+                <label class="collision-policy" title="OFF by default. When enabled, canonical restart can replay a previously completed room from browser disk without running the current native GAI planner. Never enable for planner regression testing."><input id="rdx-ai-cache" type="checkbox" autocomplete="off"> Reuse replay (skips planner)</label>
               </div>
               <div class="ai-control-secondary">
                 <label class="collision-policy">Live-state objective

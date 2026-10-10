@@ -22,10 +22,11 @@
     "fingerprints": {
       "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
       "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
-      "presentationDepth": "5f558d78369e9d68b87a95a5592f179ec4322f6de78ef5ee1e74f1d570f40152",
-      "resolved": "e5131869904165525bc3f1babaefab6fef479b661b7733521ab89c68b6992b61",
-      "reviewed": "f0b3539001723864a400b8d63b695b0f0f20732591ef20ffe2b6d8413fdc38ec",
-      "semantic": "7a67706d41ec67dd50ceb95cfe872d09ef3d6a9c4f1fe4b4eb02b93c69ce8756",
+      "presentationDepth": "790f5710c9725aee0ad5d069961be0ca7263a1ddfdfe1c39728d0481b8860ed9",
+      "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
+      "resolved": "ecec13a5dcbfddd64a82d63cac9b7b4a29f407c8f245fd1efbf3b2a29d5d8aee",
+      "reviewed": "9b426b177f3aaccc1eb8e5c00104b476c8f1c0e21b2d67bbc7b8b9f7653949a5",
+      "semantic": "dcd1b7454c0a0a91e4d66e2823c003d2ca0b60e8538348886a8b2076e93ff4ae",
       "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
       "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
       "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
@@ -73,22 +74,6 @@
       "presentationDepth": {
         "classes": [
           {
-            "band": "backdrop",
-            "globalTiles": [
-              9046,
-              9049,
-              9066,
-              9068
-            ],
-            "id": "egypt.decorative-strips-plane-a",
-            "label": "Egypt backdrop ladder and decorative highlights",
-            "plane": "A",
-            "provenance": {
-              "authority": "visual-parity-audit-affected-traps-20260911",
-              "reason": "Only Egypt ladder and backdrop-authored decorative highlights stay behind embedded traps; architectural columns are separate foreground Plane-A art."
-            }
-          },
-          {
             "band": "foreground",
             "globalTiles": [
               8777,
@@ -99,14 +84,18 @@
               8798,
               8800,
               8801,
-              8834
+              8834,
+              9046,
+              9049,
+              9066,
+              9068
             ],
             "id": "egypt.columns-plane-a",
-            "label": "Egypt architectural column capitals, shafts, and base shoulders",
+            "label": "Egypt architectural column capitals, shafts, long-shaft variants, and base shoulders",
             "plane": "A",
             "provenance": {
               "authority": "user-reviewed-egypt-column-occlusion-20261010",
-              "reason": "The complete Egypt column, including the two Plane-A base shoulders 8800/8834 around center 8801, occludes Rick in every Egypt room; Plane B remains backdrop support and is not promoted."
+              "reason": "All Plane-A Egypt column artwork occludes Rick: include the long striped shaft/end variants 9046/9049/9066/9068 used by SM0A and other Egypt rooms, plus capitals and the two base shoulders 8800/8834 around center 8801. Plane B remains backdrop support and is not promoted."
             }
           },
           {
@@ -212,18 +201,18 @@
             "provenance": {
               "authority": "user-reviewed-classic-clearance-parity",
               "evidence": [
-                "user screenshot showing the corridor reopening too early",
-                "production-c-presentation-capture",
-                "user-requested far-right switch safety check"
+                "native no-switch full-gameplay crawl (25 ticks): old rest bounds [99,153,127,172], no lethal contacts; new rest bounds [99,161,127,180], 18 lethal-contact frames",
+                "native switch-assisted full-gameplay crawl (30 ticks): raised PN78 and zero lethal contacts",
+                "Classic entity 52 mvstep 0x6c: 32x(-1px), 36x(0px), 4x(+4px), 2x(+8px); SM1A mark 297 and SM21 mark 367 remain on their own reviewed placement"
               ],
-              "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
+              "reason": "Lower M335 one additional 8px gameplay cell (16px total against the Classic-origin placement). The previous sleeping PN79 bottom y=172 was 7px above the resting crawl hitbox top y=179 and Rick could pass without using the wall switch. At bottom y=180 it blocks the floor-height crawl, while Classic entity 52 retains its 32px rise, 36-tick hold, and two-stage fall."
             },
             "target": "SM1E.actor.mark-335",
             "type": "entity-position",
             "value": {
               "position": [
                 128,
-                171
+                179
               ]
             }
           },
@@ -925,7 +914,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 81,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -1121,11 +1110,11 @@
               "gameplayBounds": null,
               "position": [
                 128,
-                171
+                179
               ],
               "presentationOrigin": [
                 113,
-                174
+                182
               ],
               "supportBounds": null,
               "triggerBounds": [
@@ -1136,7 +1125,7 @@
               ],
               "visualAnchor": [
                 94,
-                148
+                156
               ],
               "visualBounds": null
             },
@@ -1155,7 +1144,7 @@
             "patchProvenance": null,
             "presentation": {
               "actorId": 80,
-              "layer": "behind-midground",
+              "layer": "normal",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
               "mirrorY": false,
@@ -1173,7 +1162,7 @@
             "reviewed": {
               "position": [
                 128,
-                171
+                179
               ]
             },
             "reviewedCorrectionsApplied": [
@@ -1182,11 +1171,11 @@
                 "provenance": {
                   "authority": "user-reviewed-classic-clearance-parity",
                   "evidence": [
-                    "user screenshot showing the corridor reopening too early",
-                    "production-c-presentation-capture",
-                    "user-requested far-right switch safety check"
+                    "native no-switch full-gameplay crawl (25 ticks): old rest bounds [99,153,127,172], no lethal contacts; new rest bounds [99,161,127,180], 18 lethal-contact frames",
+                    "native switch-assisted full-gameplay crawl (30 ticks): raised PN78 and zero lethal contacts",
+                    "Classic entity 52 mvstep 0x6c: 32x(-1px), 36x(0px), 4x(+4px), 2x(+8px); SM1A mark 297 and SM21 mark 367 remain on their own reviewed placement"
                   ],
-                  "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
+                  "reason": "Lower M335 one additional 8px gameplay cell (16px total against the Classic-origin placement). The previous sleeping PN79 bottom y=172 was 7px above the resting crawl hitbox top y=179 and Rick could pass without using the wall switch. At bottom y=180 it blocks the floor-height crawl, while Classic entity 52 retains its 32px rise, 36-tick hold, and two-stage fall."
                 },
                 "type": "entity-position"
               }
@@ -1234,11 +1223,11 @@
               "anchorAuthority": "rdx-pn-foot",
               "baseDraw": [
                 94,
-                148
+                156
               ],
               "baseOrigin": [
                 113,
-                174
+                182
               ],
               "originAuthority": "reviewed-castle-rdx-contact+classic-relative-motion",
               "terminalPolicy": "classic-ent-mvstep-loop",
@@ -1248,14 +1237,14 @@
               "simulated": {
                 "draw": [
                   94,
-                  147
+                  155
                 ],
                 "front": false,
                 "mirrorX": false,
                 "mirrorY": false,
                 "origin": [
                   113,
-                  173
+                  181
                 ],
                 "pn": 78,
                 "visible": true,
@@ -1264,14 +1253,14 @@
               "snapshot": {
                 "draw": [
                   94,
-                  148
+                  156
                 ],
                 "front": false,
                 "mirrorX": false,
                 "mirrorY": false,
                 "origin": [
                   113,
-                  174
+                  182
                 ],
                 "pn": 79,
                 "renderOrder": 4,
@@ -2201,7 +2190,7 @@
             "presentation": {
               "actionStateOwner": true,
               "actorId": 81,
-              "layer": "behind-midground",
+              "layer": "normal",
               "lifecycleAuthority": "production-c-rom-state-fixed-anchor",
               "mirrorPolicy": "explicit",
               "mirrorX": false,
@@ -3081,7 +3070,7 @@
         {
           "after": [
             128,
-            171
+            179
           ],
           "before": [
             128,
@@ -3091,11 +3080,11 @@
           "provenance": {
             "authority": "user-reviewed-classic-clearance-parity",
             "evidence": [
-              "user screenshot showing the corridor reopening too early",
-              "production-c-presentation-capture",
-              "user-requested far-right switch safety check"
+              "native no-switch full-gameplay crawl (25 ticks): old rest bounds [99,153,127,172], no lethal contacts; new rest bounds [99,161,127,180], 18 lethal-contact frames",
+              "native switch-assisted full-gameplay crawl (30 ticks): raised PN78 and zero lethal contacts",
+              "Classic entity 52 mvstep 0x6c: 32x(-1px), 36x(0px), 4x(+4px), 2x(+8px); SM1A mark 297 and SM21 mark 367 remain on their own reviewed placement"
             ],
-            "reason": "2026-10-02 follow-up: lower mark 335 by one 8px gameplay cell so the inactive trap blocks the corridor before lifting, restoring the reviewed Castle clearance/timing when the far-right switch wakes it. Classic entity 52 remains trajectory/timing authority; only the reviewed Revival placement changes."
+            "reason": "Lower M335 one additional 8px gameplay cell (16px total against the Classic-origin placement). The previous sleeping PN79 bottom y=172 was 7px above the resting crawl hitbox top y=179 and Rick could pass without using the wall switch. At bottom y=180 it blocks the floor-height crawl, while Classic entity 52 retains its 32px rise, 36-tick hold, and two-stage fall."
           },
           "semantic": "gameplay",
           "target": "SM1E.actor.mark-335",
