@@ -20,7 +20,8 @@ export function serializeGaiReplayBundle(storage, committed = []) {
   // One compact, stable row per room recording: Git reviews do not get
   // thousands of formatting-only changes for each 7-integer input frame.
   const bundle = gaiReplayBundle(storage, committed);
-  bundle.entries.sort((a, b) => a.signature.localeCompare(b.signature));
+  bundle.entries.sort((a, b) => (a.entryKind || 'canonical').localeCompare(b.entryKind || 'canonical') ||
+    a.signature.localeCompare(b.signature));
   const entries = bundle.entries.map(entry => `    ${JSON.stringify(entry)}`).join(',\n');
   const output = `{\n  "schema": ${JSON.stringify(GAI_REPLAY_BUNDLE_SCHEMA)},\n  "entries": [${entries ? `\n${entries}\n  ` : ''}]\n}\n`;
   if (output.length > MAX_REPO_BYTES) throw new Error('GAI repository cache exceeds 32 MB; curate older recordings before writing.');

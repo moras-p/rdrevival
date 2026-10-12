@@ -2029,7 +2029,14 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
         phases:runtime.bridge.aiPhaseCount(), elapsedMs:0, maxSliceMs:0 };
       if (result.outcome === 'cancelled') return;
       const planned = result.phases > 0;
-      if (result.outcome === 'complete') finishAiPlanning(before, fullRoom, planned, result.elapsedMs);
+      if (result.outcome === 'complete') {
+        const finished = finishAiPlanning(before, fullRoom, planned, result.elapsedMs);
+        if (finished && fullRoom && runtime.bridge.aiCompletePlan()) {
+          const signature = gaiReplaySignature({ snapshot:before, ...evidenceMetadata(), scenario,
+            collisionPolicy:runtime.bridge.collisionPolicy() });
+          if (signature) freshRoomRecording = { signature, frames:[], entryKind:'arrival' };
+        }
+      }
       else {
         aiAutoplay.active = false;
         aiAutoplay.planning = false;
@@ -2094,13 +2101,14 @@ function tickAiAutoplay(snapshot) {
     }
     const recording = freshRoomRecording;
     const saved = recording && saveGaiReplay(replayStorage(),
-      recording.signature, recording.frames, snapshot.submap);
-    if (recording && !saved) {
-      // LocalStorage may be unavailable or at quota; retain the tape in memory
-      // for a connected repository folder and manual JSON export.
+      recording.signature, recording.frames, snapshot.submap, recording.entryKind);
+    if (recording) {
+      // The 3 MB browser cache evicts older tapes and can be unavailable.
+      // Always retain every completed room in the session's export/write bundle.
       repoReplayEntries = gaiReplayBundle(null, [...repoReplayEntries, {
         schema:'rdr.gai.completed-room-replay.v1', signature:recording.signature,
-        frames:recording.frames, destinationSubmap:snapshot.submap
+        frames:recording.frames, destinationSubmap:snapshot.submap,
+        ...(recording.entryKind === 'arrival' ? {entryKind:'arrival'} : {})
       }]).entries;
     }
     if (recording) {
