@@ -67,6 +67,19 @@ export function loadGaiReplay(storage, signature, checkedIn = []) {
   return entry ? {frames:entry.frames, destinationSubmap:entry.destinationSubmap} : null;
 }
 
+// A destination arrives at a live entrance pose, whereas saved room tapes
+// begin at the canonical restart. This only selects a restart candidate;
+// loadGaiReplay must still require an exact signature after that restart.
+export function hasGaiReplayForRoom(storage, signature, checkedIn = [], rejected = new Set()) {
+  if (!signature) return false;
+  const { start, ...context } = JSON.parse(signature);
+  return gaiReplayBundle(storage, checkedIn).entries.some(entry => {
+    if (rejected.has(entry.signature)) return false;
+    const { start:recordedStart, ...recordedContext } = JSON.parse(entry.signature);
+    return JSON.stringify(context) === JSON.stringify(recordedContext);
+  });
+}
+
 export function removeGaiReplay(storage, signature) {
   if (!signature) return;
   try { storage?.setItem(GAI_REPLAY_CACHE_KEY, JSON.stringify(readEntries(storage).filter(item => item.signature !== signature))); }

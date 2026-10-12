@@ -3,7 +3,7 @@ import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentStat
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
 import { createPlanReadySound } from './plan-ready-sound.js';
-import { GAI_REPLAY_MAX_FRAMES, gaiReplayFrame, gaiReplaySignature, gaiReplayBundle, loadGaiReplay, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
+import { GAI_REPLAY_MAX_FRAMES, gaiReplayFrame, gaiReplaySignature, gaiReplayBundle, hasGaiReplayForRoom, loadGaiReplay, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
 import { GAI_REPLAY_PROJECT_PATH, fetchCommittedGaiReplays, connectGaiReplayFolder, writeGaiReplayFolder, downloadGaiReplayBundle } from './ai-plan-repository.js';
 import { WalkthroughEvidence, downloadWalkthroughEvidence } from './walkthrough-evidence.js';
 
@@ -1431,6 +1431,7 @@ function refreshGaiRouteInspectorProgress(snapshot = null) {
 function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntime = false, holdState = false } = {}) {
   cachedRoomReplay = null;
   freshRoomRecording = null;
+  aiAutoplay.replayFrameSerial = -1;
   terminalPlaybackHold = holdState;
   walkthroughEvidence.stopExecution(message);
   updateWalkthroughEvidenceUi();
@@ -1609,6 +1610,7 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
   cachedRoomReplay = null;
   freshRoomRecording = null;
   if (!playAfterPlanning) gaiRouteInspector?.clear();
+  aiAutoplay.replayFrameSerial = -1;
   clearAiControl();
   runtime.bridge.setFrontendPaused(true);
   runtime.bridge.setAiTransitionHold?.(true);
@@ -2001,6 +2003,19 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
       const scenario = configureAiPlanningMode({ fullRoom });
       if (!runtime.bridge.aiValidationBudget())
         runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
+      if (fullRoom && aiCacheToggle?.checked) {
+        await loadRepoReplays();
+        if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge) return;
+        const signature = gaiReplaySignature({ snapshot:before, ...evidenceMetadata(), scenario,
+          collisionPolicy:runtime.bridge.collisionPolicy() });
+        if (hasGaiReplayForRoom(replayStorage(), signature, repoReplayEntries, rejectedReplays)) {
+          // Room tapes own a canonical entrance, including private actor state.
+          // Restart before exact lookup; never apply them to a natural arrival.
+          await runVisibleAiPrecompute(`Loading saved replay for ${submapAssetName(before.submap)}…`,
+            { restart:true, playAfterPlanning:true });
+          return;
+        }
+      }
       const result = fullRoom ? await precomputeAiRoomCertificate({
         ...aiRoomPrecomputeEffort(runtime.bridge),
         firstSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
@@ -2108,6 +2123,15 @@ function tickAiAutoplay(snapshot) {
     return;
   }
 
+  // Frontend paints/status refreshes can observe one native frame repeatedly.
+  // Input tapes advance on gameplay frames, not on observer invocations.
+  if (cachedRoomReplay || freshRoomRecording) {
+    if (aiAutoplay.replayFrameSerial === snapshot.frameSerial) {
+      setAiControlMask(aiAutoplay.lastInputMask);
+      return;
+    }
+    aiAutoplay.replayFrameSerial = snapshot.frameSerial;
+  }
   if (cachedRoomReplay) {
     const { frames, index, signature } = cachedRoomReplay;
     if (index >= frames.length) {

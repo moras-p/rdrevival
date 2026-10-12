@@ -1486,6 +1486,7 @@ async function loadRomBytes(bytes, displayName = 'RDX ROM', { remember = true, d
   renderer = { rom, mapping, palettes, mapDecoder, spriteDecoder };
   previewWorkspace.close();
   previewWorkspace.setResources({
+    rom,
     mapDecoder,
     spriteDecoder,
     paletteRegistry: palettes,
