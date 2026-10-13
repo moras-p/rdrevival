@@ -7,9 +7,8 @@ export const GAI_REPLAY_MAX_FRAMES = 30000;
 export const GAI_REPLAY_BUNDLE_SCHEMA = 'rdr.gai.completed-room-replays.v1';
 const MAX_DISK_CHARS = 3_000_000;
 
-// Only canonical-start tapes may be loaded after an independent native room
-// restart. Carried-entry tapes are preserved for export/review, not replayed
-// from a potentially different hidden actor/terrain state.
+// Independent restarts load canonical tapes. Continuation may load an exact
+// arrival tape from the settled live entrance, with per-frame state checks.
 const replayKind = entry => entry?.entryKind === undefined ? 'canonical' : entry.entryKind;
 const replayKey = entry => `${replayKind(entry)}:${entry?.signature}`;
 
@@ -25,7 +24,8 @@ export function gaiReplaySignature({ snapshot, appVersion, romSha256, bridgeCont
   const start = gaiReplayFrame(snapshot);
   if (!start || !romSha256 || !Number.isInteger(scenario) || !snapshot?.collision?.native?.worldLoaded) return null;
   // This metadata identifies the observed entrance but does not prove hidden
-  // actor/terrain state. Only canonical-start records may be reused as tapes.
+  // actor/terrain state. Reuse also requires the right entry kind and checks
+  // every recorded frame during playback.
   return JSON.stringify({ schema:GAI_REPLAY_CACHE_SCHEMA, appVersion, romSha256, bridgeContract,
     scenario, submap:snapshot.submap, map:snapshot.map, md:snapshot.collision.native.mapId,
     collisionPolicy, start, speedMultiplier:snapshot.speedMultiplier,
@@ -67,9 +67,9 @@ export function gaiReplayBundle(storage, checkedIn = []) {
   return { schema:GAI_REPLAY_BUNDLE_SCHEMA, entries:[...entries.values()] };
 }
 
-export function loadGaiReplay(storage, signature, checkedIn = []) {
+export function loadGaiReplay(storage, signature, checkedIn = [], entryKind = 'canonical') {
   if (!signature) return null;
-  const entry = gaiReplayBundle(storage, checkedIn).entries.find(item => replayKind(item) === 'canonical' && item.signature === signature);
+  const entry = gaiReplayBundle(storage, checkedIn).entries.find(item => replayKind(item) === entryKind && item.signature === signature);
   return entry ? {frames:entry.frames, destinationSubmap:entry.destinationSubmap} : null;
 }
 
@@ -86,9 +86,9 @@ export function hasGaiReplayForRoom(storage, signature, checkedIn = [], rejected
   });
 }
 
-export function removeGaiReplay(storage, signature) {
+export function removeGaiReplay(storage, signature, entryKind = 'canonical') {
   if (!signature) return;
-  try { storage?.setItem(GAI_REPLAY_CACHE_KEY, JSON.stringify(readEntries(storage).filter(item => replayKind(item) !== 'canonical' || item.signature !== signature))); }
+  try { storage?.setItem(GAI_REPLAY_CACHE_KEY, JSON.stringify(readEntries(storage).filter(item => replayKind(item) !== entryKind || item.signature !== signature))); }
   catch { /* Storage blocked: fail closed to fresh planning next time. */ }
 }
 
