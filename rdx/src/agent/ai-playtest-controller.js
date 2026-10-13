@@ -3,7 +3,7 @@ import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentStat
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
 import { createPlanReadySound } from './plan-ready-sound.js';
-import { GAI_REPLAY_MAX_FRAMES, gaiReplayFrame, gaiReplaySignature, gaiReplayBundle, hasGaiReplayForRoom, loadGaiReplay, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
+import { GAI_REPLAY_MAX_FRAMES, gaiReplayFrame, gaiReplaySignature, gaiReplayBundle, gaiReplayEntryRoute, hasGaiReplayForRoom, loadGaiReplay, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
 import { GAI_REPLAY_PROJECT_PATH, fetchCommittedGaiReplays, connectGaiReplayFolder, writeGaiReplayFolder, downloadGaiReplayBundle } from './ai-plan-repository.js';
 import { WalkthroughEvidence, downloadWalkthroughEvidence } from './walkthrough-evidence.js';
 
@@ -102,6 +102,12 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   let repoReplayLoad = null;
   let repoReplayFolder = null;
   let repoReplayWrite = Promise.resolve();
+  let replayRestoreSoundMuted = null;
+  function restoreReplaySound() {
+    if (replayRestoreSoundMuted === null) return;
+    runtime.bridge?.setSoundMuted?.(replayRestoreSoundMuted);
+    replayRestoreSoundMuted = null;
+  }
   const rejectedReplays = new Set();
   const loadRepoReplays = () => (repoReplayLoad ||= fetchCommittedGaiReplays().then(entries => {
     repoReplayEntries = gaiReplayBundle(null, [...entries, ...repoReplayEntries]).entries;
@@ -128,7 +134,7 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   const AI_BROWSER_RESTART_VALIDATION_BUDGET = 64;
   const aiAutoplay = {
     active:false, planning:false, scenario:2, deterministicRestart:true, fullRoomPlanning:true, continueRooms:true,
-    planSubmap:-1, planMap:-1, pendingDestination:null,
+    planSubmap:-1, planMap:-1, pendingDestination:null, restoringEntry:false, cachedEntryPending:false,
     lastInputMask:0, completedAtSerial:-1, nextPlanToken:0, lastStatusSerial:-1, lastStop:null, coachControlled:false,
     autoReplans:0, planStartedAtSerial:0, partialReady:false, heldResult:false,
     planningSlices:0, maxPlanningSliceMs:0, certificateReady:false, cachedReady:false, paused:false
@@ -201,7 +207,8 @@ function updateAiPlayButtons() {
     disabled:!!(aiAutoplay.active || aiAutoplay.planning || aiAutoplay.heldResult),
     connected:!!repoReplayFolder });
   gaiRouteInspector?.updatePlayback({ available:!!(runtime.bridge && runtime.renderer),
-    planning:aiAutoplay.planning, ready:aiAutoplay.certificateReady, partial:aiAutoplay.partialReady,
+    planning:aiAutoplay.planning, restoringEntry:aiAutoplay.restoringEntry,
+    ready:aiAutoplay.certificateReady, partial:aiAutoplay.partialReady,
     playing:aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.paused,
     paused:aiAutoplay.paused, cached:aiAutoplay.cachedReady || !!cachedRoomReplay, immortal:aiInvulnerableRouteEnabled() });
 }
@@ -216,6 +223,10 @@ function activateCachedRoomReplay(signature, cached, before, { playAfterPlanning
   runtime.bridge.aiReset();
   cachedRoomReplay = { signature, ...cached, entryKind, index:0 };
   aiAutoplay.planning = false;
+  aiAutoplay.restoringEntry = false;
+  aiAutoplay.cachedEntryPending = false;
+  runtime.holdReplayEntryPreview?.(false);
+  restoreReplaySound();
   aiAutoplay.active = !!playAfterPlanning;
   aiAutoplay.heldResult = !playAfterPlanning;
   aiAutoplay.cachedReady = !playAfterPlanning;
@@ -223,6 +234,7 @@ function activateCachedRoomReplay(signature, cached, before, { playAfterPlanning
   aiAutoplay.planMap = Number(before?.map) >>> 0;
   aiAutoplay.planStartedAtSerial = Number(before.frameSerial) >>> 0;
   aiAcceptance.api = 'cached-disk-input-replay (native planner skipped)';
+  cacheMessage('Replay reuse ON · saved inputs loaded; native planner skipped.');
   gaiRouteInspector?.clear();
   gaiRouteInspector?.showCachedReplay(cached.frames.length);
   walkthroughEvidence.stopExecution('cached-disk-replay');
@@ -1470,6 +1482,10 @@ function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntim
   aiAutoplay.paused = false;
   aiAutoplay.planSubmap = -1;
   aiAutoplay.pendingDestination = null;
+  aiAutoplay.cachedEntryPending = false;
+  aiAutoplay.restoringEntry = false;
+  runtime.holdReplayEntryPreview?.(false);
+  restoreReplaySound();
   aiAutoplay.completedAtSerial = -1;
   aiAutoplay.lastStatusSerial = -1;
   runtime.bridge?.setAiAudioHold?.(holdState);
@@ -1670,6 +1686,98 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
     if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
     const cached = cacheSignature && aiCacheToggle?.checked && !rejectedReplays.has(cacheSignature)
       ? loadGaiReplay(replayStorage(), cacheSignature, repoReplayEntries) : null;
+    if (!cached && cacheSignature && aiCacheToggle?.checked) {
+      const route = gaiReplayEntryRoute(replayStorage(), cacheSignature, repoReplayEntries, rejectedReplays);
+      if (route) {
+        if (!playAfterPlanning) {
+          const entry = route.at(-1);
+          activateCachedRoomReplay(entry.signature, entry, before, { playAfterPlanning:false, entryKind:'arrival' });
+          aiAutoplay.cachedEntryPending = true;
+          cacheMessage('Replay reuse ON · saved replay ready; entry restoration starts on Play.');
+          return true;
+        }
+        runtime.holdReplayEntryPreview?.(true, before);
+        replayRestoreSoundMuted = !!runtime.bridge.soundMuted?.();
+        runtime.bridge.setSoundMuted?.(true);
+        aiAutoplay.restoringEntry = true;
+        updateAiPlayButtons();
+        cacheMessage('Replay reuse ON · restoring saved entry from recorded inputs; native planner skipped.');
+        setAiPlayStatus(`Restoring saved entry for ${submapAssetName(before.submap)}…`, 'running');
+        const cancelled = () => token !== aiAutoplay.nextPlanToken || !aiAutoplay.active;
+        const totalEntryFrames = route.slice(0, -1).reduce((sum, entry) => sum + entry.frames.length, 0);
+        let restoredEntryFrames = 0;
+        const signatureFor = snapshot => gaiReplaySignature({ snapshot, ...evidenceMetadata(), scenario,
+          collisionPolicy:runtime.bridge.collisionPolicy() });
+        const advanceSavedFrame = async mask => {
+          // Consume saved inputs through normal browser gameplay cadence.
+          // Debug stepping canonicalizes presentation and is not equivalent
+          // to the live cadence under which these tapes were recorded.
+          const serial = runtime.bridge.snapshot().frameSerial;
+          setAiControlMask(mask);
+          const deadline = performance.now() + 4000;
+          while (runtime.bridge.snapshot().frameSerial === serial) {
+            if (cancelled()) return;
+            if (performance.now() >= deadline) throw new Error('Saved predecessor simulation did not advance.');
+            await yieldForGameplayPaint();
+          }
+        };
+        if (!runtime.bridge.selectSubmap(JSON.parse(route[0].signature).submap) ||
+            !runtime.bridge.restartCurrentLevelForAi()) throw new Error('Saved predecessor reset failed.');
+        for (let room = 0; room < route.length; room++) {
+          if (cancelled()) return false;
+          const entry = route[room], start = ensureAiDescriptorCollision();
+          // Native room reset/unpause may reopen the device despite an existing
+          // AI hold. Reapply it before hidden predecessor playback begins.
+          runtime.bridge.setAiAudioHold?.(false);
+          runtime.bridge.setAiAudioHold?.(true);
+          if (signatureFor(start) !== entry.signature) throw new Error('Saved predecessor entry does not match.');
+          if (room === route.length - 1) {
+            activateCachedRoomReplay(entry.signature, entry, start, { playAfterPlanning, entryKind:'arrival' });
+            return true;
+          }
+          runtime.bridge.setAiTransitionHold(false);
+          runtime.bridge.setFrontendPaused(false);
+          for (let frame = 0; frame < entry.frames.length; frame++) {
+            if (cancelled()) return false;
+            if (frame % 64 === 0) setAiPlayStatus(`Restoring ${submapAssetName(before.submap)} entry · ` +
+              `saved ${submapAssetName(start.submap)} ${frame}/${entry.frames.length}`, 'running');
+            if (frame % 16 === 0) gaiRouteInspector?.showReplayRestoreProgress(restoredEntryFrames + frame, totalEntryFrames);
+            const snapshot = runtime.bridge.snapshot(), actual = gaiReplayFrame(snapshot);
+            if (snapshot.submap !== start.submap || !actual ||
+                actual.some((value, field) => value !== entry.frames[frame][field + 1]))
+              throw new Error(`Saved predecessor replay SM${snapshot.submap} diverged at frame ${frame}: ${actual} expected ${entry.frames[frame].slice(1)}.`);
+            await advanceSavedFrame(entry.frames[frame][0]);
+            if (cancelled()) return false;
+          }
+          restoredEntryFrames += entry.frames.length;
+          // A world boundary owns a native cinematic before INIT_MAP.
+          // Keep it live and confirm its ordinary Fire/release contract.
+          if (runtime.bridge.snapshot().presentationMode) {
+            const introDeadline = performance.now() + 30000;
+            let nextConfirmationAt = performance.now() + 500, confirmationMask = 0;
+            clearAiControl();
+            while (runtime.bridge.snapshot().presentationMode) {
+              if (cancelled()) return false;
+              if (performance.now() >= introDeadline) throw new Error('Saved map intro did not finish.');
+              if (performance.now() >= nextConfirmationAt) {
+                confirmationMask = confirmationMask ? 0 : 0x10;
+                setAiControlMask(confirmationMask);
+                nextConfirmationAt = performance.now() + 500;
+              }
+              await yieldForGameplayPaint();
+            }
+          }
+          runtime.bridge.setFrontendPaused(true);
+          runtime.bridge.setAiTransitionHold(true);
+          clearAiControl();
+          const settled = await settleAiDestinationEntry({ snapshot:() => runtime.bridge.snapshot(),
+            forceNeutralFrame:() => forceGameplayDebugFrame(runtime.bridge),
+            yieldForPaint:yieldForGameplayPaint, expectedSubmap:entry.destinationSubmap, cancelled });
+          if (settled.cancelled) return false;
+          if (!settled.ready) throw new Error(`Saved destination entry did not settle (${settled.reason}).`);
+        }
+      }
+    }
     if (cached) {
       activateCachedRoomReplay(cacheSignature, cached, before, { playAfterPlanning });
       return true;
@@ -1921,7 +2029,8 @@ function generateWalkthroughPlan() {
 }
 
 function toggleWalkthroughPlayback() {
-  if (!runtime.bridge || aiAutoplay.planning || (!aiAutoplay.certificateReady && !aiAutoplay.cachedReady)) return;
+  if (!runtime.bridge || aiAutoplay.planning || (!aiAutoplay.certificateReady && !aiAutoplay.cachedReady && !cachedRoomReplay)) return;
+  if (aiAutoplay.cachedEntryPending) return startAiRestartAutoplay({ playAfterPlanning:true });
   if (aiAutoplay.active && !aiAutoplay.paused) {
     aiAutoplay.paused = true;
     runtime.bridge.setFrontendPaused(true);
@@ -2300,6 +2409,6 @@ function tickAiAutoplay(snapshot) {
     generateInitialPlan:generateWalkthroughPlan, togglePlayback:toggleWalkthroughPlayback, toggleMortality:toggleWalkthroughMortality,
     toggleManualRecording:toggleManualWalkthrough, releaseManualRecordingHold, releaseGameplayHold, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
     exportFullWalkthroughEvidence:() => exportWalkthroughEvidence('full'),
-    tickFrame, busy, setCoachControlled, state
+    tickFrame, busy, restoringEntry:() => aiAutoplay.restoringEntry, setCoachControlled, state
   });
 }

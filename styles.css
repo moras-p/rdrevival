@@ -641,10 +641,10 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
 .gai-route-actions [data-route-record] { color:#ff8585; }
 .gai-route-actions [data-route-generate] { color:#6ee7ff; }
 .gai-route-actions [aria-busy="true"] { opacity:.5; }
-.gai-route-actions [data-route-generate][aria-busy="true"] svg { animation:gai-plan-spin 1s linear infinite; transform-origin:center; }
+.gai-route-actions [data-route-generate][aria-busy="true"][data-restoring-entry="false"] svg { animation:gai-plan-spin 1s linear infinite; transform-origin:center; }
 @keyframes gai-plan-spin { to { transform:rotate(360deg); } }
 @media (prefers-reduced-motion:reduce) {
-  .gai-route-actions [data-route-generate][aria-busy="true"] svg { animation:gai-plan-pulse 1.5s ease-in-out infinite; }
+  .gai-route-actions [data-route-generate][aria-busy="true"][data-restoring-entry="false"] svg { animation:gai-plan-pulse 1.5s ease-in-out infinite; }
 }
 @keyframes gai-plan-pulse { 50% { opacity:.35; } }
 .gai-route-actions [hidden] { display:none; }

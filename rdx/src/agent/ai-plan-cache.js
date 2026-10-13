@@ -41,7 +41,7 @@ function readEntries(storage) {
   } catch { return []; }
 }
 
-function validEntry(entry) {
+function validBaseEntry(entry) {
   if (!['canonical', 'arrival'].includes(replayKind(entry)) || entry?.schema !== GAI_REPLAY_CACHE_SCHEMA || typeof entry.signature !== 'string' ||
       !entry.signature.startsWith('{') || !Number.isInteger(entry.destinationSubmap) ||
       entry.destinationSubmap < 0 || entry.destinationSubmap > 0xffff ||
@@ -50,6 +50,16 @@ function validEntry(entry) {
         frame.every(Number.isInteger) && frame[0] >= 0 && frame[0] <= 0x1f)) return false;
   try { return JSON.parse(entry.signature)?.schema === GAI_REPLAY_CACHE_SCHEMA; }
   catch { return false; }
+}
+
+function validEntry(entry) {
+  if (!validBaseEntry(entry)) return false;
+  if (entry.entryRoute === undefined) return true;
+  if (replayKind(entry) !== 'arrival' || !Array.isArray(entry.entryRoute) ||
+      !entry.entryRoute.length || entry.entryRoute.length > 47) return false;
+  if (!entry.entryRoute.every(source => validBaseEntry(source) && source.entryRoute === undefined)) return false;
+  return entry.entryRoute.every((source, index, route) => replayKind(source) === (index ? 'arrival' : 'canonical') &&
+    source.destinationSubmap === JSON.parse((route[index + 1] || entry).signature).submap);
 }
 
 // A checked-in bundle is purely data: browsers on new devices fetch it through
@@ -64,13 +74,56 @@ export function gaiReplayBundle(storage, checkedIn = []) {
   const entries = new Map();
   for (const entry of [...checkedIn, ...readEntries(storage)])
     if (validEntry(entry)) entries.set(replayKey(entry), entry);
-  return { schema:GAI_REPLAY_BUNDLE_SCHEMA, entries:[...entries.values()] };
+  const all = [...entries.values()];
+  return { schema:GAI_REPLAY_BUNDLE_SCHEMA, entries:all.map(entry => {
+    if (replayKind(entry) !== 'arrival' || entry.entryRoute) return entry;
+    const route = findEntryRoute(all, entry.signature, new Set(), true);
+    if (!route) return entry;
+    return { ...entry, entryRoute:route.slice(0, -1).map(({entryRoute, ...source}) => source) };
+  }) };
 }
 
 export function loadGaiReplay(storage, signature, checkedIn = [], entryKind = 'canonical') {
   if (!signature) return null;
   const entry = gaiReplayBundle(storage, checkedIn).entries.find(item => replayKind(item) === entryKind && item.signature === signature);
   return entry ? {frames:entry.frames, destinationSubmap:entry.destinationSubmap} : null;
+}
+
+// Find a clean-start route to an arrival-only tape. These are candidates, not
+// permission to replay: the controller must check every exact entry and frame.
+export function gaiReplayEntryRoute(storage, signature, checkedIn = [], rejected = new Set()) {
+  return findEntryRoute(gaiReplayBundle(storage, checkedIn).entries, signature, rejected);
+}
+
+function findEntryRoute(all, signature, rejected = new Set(), exactTarget = false) {
+  if (!signature) return null;
+  const context = value => {
+    const { start, submap, map, md, ...rest } = JSON.parse(value);
+    return JSON.stringify(rest);
+  };
+  const wanted = JSON.parse(signature).submap;
+  const entries = all.filter(entry =>
+    !rejected.has(entry.signature) && context(entry.signature) === context(signature));
+  for (const entry of entries) {
+    if (JSON.parse(entry.signature).submap !== wanted || (exactTarget && entry.signature !== signature) || !entry.entryRoute) continue;
+    if (entry.entryRoute.every(source => !rejected.has(source.signature) &&
+        context(source.signature) === context(signature))) return [...entry.entryRoute, entry];
+  }
+  const queue = entries.filter(entry => replayKind(entry) === 'canonical').map(entry => [entry]);
+  const visited = new Set();
+  while (queue.length) {
+    const route = queue.shift(), last = route.at(-1);
+    if (visited.has(replayKey(last))) continue;
+    visited.add(replayKey(last));
+    if (JSON.parse(last.signature).submap === wanted && replayKind(last) === 'arrival' &&
+        (!exactTarget || last.signature === signature)) return route;
+    for (const next of entries) {
+      if (replayKind(next) !== 'arrival' || route.includes(next) ||
+          JSON.parse(next.signature).submap !== last.destinationSubmap) continue;
+      queue.push([...route, next]);
+    }
+  }
+  return null;
 }
 
 // A destination arrives at a live entrance pose, whereas saved room tapes

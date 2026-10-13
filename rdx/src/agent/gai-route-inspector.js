@@ -232,6 +232,10 @@ export class GaiRouteInspector {
     this.ui.empty.textContent = `${frames} saved input frames available. Native GAI planning was SKIPPED. Press Play to replay; disable Reuse for regression testing.`;
   }
 
+  showReplayRestoreProgress(frames, total) {
+    this.ui.badge.textContent = `Restoring saved entry · ${frames}/${total} inputs`;
+  }
+
   updateCache({ enabled = false, disabled = false, connected = false, message = '' } = {}) {
     this.ui.cacheToggle.checked = !!enabled;
     this.ui.cacheToggle.disabled = disabled;
@@ -260,12 +264,15 @@ export class GaiRouteInspector {
       : 'Record any partial manual run, then export here. No room completion required. Export before reloading this page.');
   }
 
-  updatePlayback({ available = false, planning = false, ready = false, partial = false, cached = false, playing = false, paused = false, immortal = false } = {}) {
+  updatePlayback({ available = false, planning = false, restoringEntry = false, ready = false, partial = false, cached = false, playing = false, paused = false, immortal = false } = {}) {
+    if (restoringEntry) this.ui.badge.textContent = 'Restoring saved replay entry…';
+    else if (this.ui.generate.dataset.restoringEntry === 'true' && !cached) this.renderEmpty();
     setIconButton(this.ui.mortality, immortal ? 'immortal' : 'mortal', immortal ? 'Immortal GAI run — switch to mortal' : 'Mortal GAI run — switch to immortal');
     this.ui.mortality.setAttribute('aria-pressed', String(immortal));
     this.ui.mortality.disabled = !available || planning || playing;
     this.ui.generate.disabled = !available || planning;
     this.ui.generate.setAttribute('aria-busy', String(planning));
+    this.ui.generate.dataset.restoringEntry = String(restoringEntry);
     this.ui.playback.hidden = !(ready || cached || playing || paused) || planning;
     this.ui.playback.disabled = !available;
     setIconButton(this.ui.playback, playing ? 'pause' : 'play', playing ? 'Pause GAI playback' : paused ? 'Resume GAI playback' : cached ? 'Play cached inputs (native planner SKIPPED)' : partial ? 'Play certified partial' : 'Play certified plan');

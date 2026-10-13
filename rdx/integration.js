@@ -188,6 +188,15 @@ previewWorkspace = createPreviewWorkspace({
   mapEditorSession
 });
 
+let replayEntryPreviewFrame = null;
+function holdReplayEntryPreview(held, snapshot) {
+  if (!held) { replayEntryPreviewFrame = null; return; }
+  // Capture the selected room's production pixels before native reconstruction
+  // changes rooms. Redraw this frame while restoring, including after resize.
+  renderCPresentation(snapshot);
+  replayEntryPreviewFrame = classicContext.getImageData(0, 0, classicCanvas.width, classicCanvas.height);
+}
+
 const aiPlaytestController = createAiPlaytestController({
   runtime: {
     get bridge() { return bridge; },
@@ -195,7 +204,8 @@ const aiPlaytestController = createAiPlaytestController({
     get collisionRuntime() { return collisionRuntime; },
     get previewWorkspaceMode() { return previewWorkspace.mode(); },
     get mapEditorPlaytestActive() { return mapEditorSession.playtestActive(); },
-    get gameplayDebugController() { return gameplayDebugController; }
+    get gameplayDebugController() { return gameplayDebugController; },
+    holdReplayEntryPreview
   },
   elements: {
     aiModeSelect, aiContinueToggle, aiCacheToggle, aiRestartRunButton, aiRunButton, aiStopButton, aiStatus, aiCopyDebugButton,
@@ -848,6 +858,7 @@ function updateSoundControl() {
 function requestSubmap(value) {
   const submap = Number(value) | 0;
   if (!bridge || !PLAYBACK_SUBMAPS.includes(submap)) return false;
+  if (aiPlaytestController.busy()) aiPlaytestController.stopAutoplay('AI stopped because the selected map changed.', 'neutral', { resetRuntime:true });
   if (!bridge.selectSubmap(submap)) return false;
   if (mapSelect) mapSelect.value = String(submap);
   bridge.unpause();
@@ -1353,6 +1364,19 @@ function updateSwitchSafety(snapshot) {
 
 function frame() {
   if (!running || !bridge) return;
+  // Entry reconstruction uses native playback in predecessor rooms. Keep the
+  // selected room's existing preview and controls until its entry is ready.
+  if (aiPlaytestController.restoringEntry()) {
+    // Hidden playback still needs the production compositor and descriptor
+    // activation: they publish native actor contact geometry for the next tick.
+    // Holding the selected preview must not skip those gameplay dependencies.
+    const snapshot = bridge.snapshot();
+    if (snapshot.enabled && bridge.presentationReady()) bridge.presentationFramebuffer();
+    updateCollisionRuntime(snapshot);
+    if (replayEntryPreviewFrame) classicContext.putImageData(replayEntryPreviewFrame, 0, 0);
+    requestAnimationFrame(frame);
+    return;
+  }
   try {
     const snapshot = bridge.snapshot();
     const now = performance.now();
