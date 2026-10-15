@@ -281,6 +281,7 @@ export class XrickWasmBridge {
       debugGetControl: wrap0('xrick_rdx_debug_get_control'),
       debugRestartCurrentLevelNow: wrap0('xrick_rdx_debug_restart_current_level_now'),
       debugRestartCurrentLevelForAi: wrap0('xrick_rdx_debug_restart_current_level_for_ai'),
+      debugSetAiReplayInventory: wrapN('xrick_rdx_debug_set_ai_replay_inventory', 3),
       aiSetPreferSafe: wrap1('xrick_gai_set_prefer_safe'),
       aiPreferSafe: wrap0('xrick_gai_prefer_safe'),
       aiSetValidationBudget: wrap1('xrick_gai_set_validation_budget'),
@@ -1073,6 +1074,10 @@ export class XrickWasmBridge {
 
   restartCurrentLevelForAi() {
     return !!this.api.debugRestartCurrentLevelForAi();
+  }
+
+  setAiReplayInventory({ lives, bullets, dynamite }) {
+    return !!this.api.debugSetAiReplayInventory(lives, bullets, dynamite);
   }
 
   unpause() {

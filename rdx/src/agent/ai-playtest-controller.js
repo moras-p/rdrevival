@@ -3,7 +3,7 @@ import { acquireGameplayControlLease, forceGameplayDebugFrame, gameplayAgentStat
 import { advanceAiAutoplayVisible, aiExecutorLabel, aiPlanWindow, aiPrimitiveLabel, aiRouteMetrics, decodeAiInputMask, readGaiRoutePlan, settleAiDestinationEntry, shouldAutoContinueAiHorizon, waitForAiTransitionReady } from './ai-coach.js';
 import { GaiRouteInspector } from './gai-route-inspector.js';
 import { createPlanReadySound } from './plan-ready-sound.js';
-import { GAI_REPLAY_MAX_FRAMES, gaiReplayFrame, gaiReplaySignature, gaiReplayBundle, gaiReplayEntryRoute, hasGaiReplayForRoom, loadGaiReplay, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
+import { GAI_REPLAY_MAX_FRAMES, GAI_REPLAY_CACHE_SCHEMA, GAI_REPLAY_BASELINE, gaiReplayFrame, gaiReplayInventory, gaiReplaySignature, gaiReplayBundle, findGaiReplayForRoom, removeGaiReplay, saveGaiReplay } from './ai-plan-cache.js';
 import { GAI_REPLAY_PROJECT_PATH, fetchCommittedGaiReplays, connectGaiReplayFolder, writeGaiReplayFolder, downloadGaiReplayBundle } from './ai-plan-repository.js';
 import { WalkthroughEvidence, downloadWalkthroughEvidence } from './walkthrough-evidence.js';
 
@@ -102,12 +102,6 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   let repoReplayLoad = null;
   let repoReplayFolder = null;
   let repoReplayWrite = Promise.resolve();
-  let replayRestoreSoundMuted = null;
-  function restoreReplaySound() {
-    if (replayRestoreSoundMuted === null) return;
-    runtime.bridge?.setSoundMuted?.(replayRestoreSoundMuted);
-    replayRestoreSoundMuted = null;
-  }
   const rejectedReplays = new Set();
   const loadRepoReplays = () => (repoReplayLoad ||= fetchCommittedGaiReplays().then(entries => {
     repoReplayEntries = gaiReplayBundle(null, [...entries, ...repoReplayEntries]).entries;
@@ -134,7 +128,7 @@ export function createAiPlaytestController({ runtime, elements = {}, resourcesPr
   const AI_BROWSER_RESTART_VALIDATION_BUDGET = 64;
   const aiAutoplay = {
     active:false, planning:false, scenario:2, deterministicRestart:true, fullRoomPlanning:true, continueRooms:true,
-    planSubmap:-1, planMap:-1, pendingDestination:null, restoringEntry:false, cachedEntryPending:false,
+    planSubmap:-1, planMap:-1, pendingDestination:null,
     lastInputMask:0, completedAtSerial:-1, nextPlanToken:0, lastStatusSerial:-1, lastStop:null, coachControlled:false,
     autoReplans:0, planStartedAtSerial:0, partialReady:false, heldResult:false,
     planningSlices:0, maxPlanningSliceMs:0, certificateReady:false, cachedReady:false, paused:false
@@ -207,7 +201,7 @@ function updateAiPlayButtons() {
     disabled:!!(aiAutoplay.active || aiAutoplay.planning || aiAutoplay.heldResult),
     connected:!!repoReplayFolder });
   gaiRouteInspector?.updatePlayback({ available:!!(runtime.bridge && runtime.renderer),
-    planning:aiAutoplay.planning, restoringEntry:aiAutoplay.restoringEntry,
+    planning:aiAutoplay.planning,
     ready:aiAutoplay.certificateReady, partial:aiAutoplay.partialReady,
     playing:aiAutoplay.active && !aiAutoplay.planning && !aiAutoplay.paused,
     paused:aiAutoplay.paused, cached:aiAutoplay.cachedReady || !!cachedRoomReplay, immortal:aiInvulnerableRouteEnabled() });
@@ -219,14 +213,10 @@ function cacheMessage(message) {
     connected:!!repoReplayFolder, message });
 }
 
-function activateCachedRoomReplay(signature, cached, before, { playAfterPlanning = true, entryKind = 'canonical' } = {}) {
+function activateCachedRoomReplay(signature, cached, before, { playAfterPlanning = true } = {}) {
   runtime.bridge.aiReset();
-  cachedRoomReplay = { signature, ...cached, entryKind, index:0 };
+  cachedRoomReplay = { signature, ...cached, index:0 };
   aiAutoplay.planning = false;
-  aiAutoplay.restoringEntry = false;
-  aiAutoplay.cachedEntryPending = false;
-  runtime.holdReplayEntryPreview?.(false);
-  restoreReplaySound();
   aiAutoplay.active = !!playAfterPlanning;
   aiAutoplay.heldResult = !playAfterPlanning;
   aiAutoplay.cachedReady = !playAfterPlanning;
@@ -1482,10 +1472,6 @@ function stopAiAutoplay(message = 'AI stopped.', kind = 'neutral', { resetRuntim
   aiAutoplay.paused = false;
   aiAutoplay.planSubmap = -1;
   aiAutoplay.pendingDestination = null;
-  aiAutoplay.cachedEntryPending = false;
-  aiAutoplay.restoringEntry = false;
-  runtime.holdReplayEntryPreview?.(false);
-  restoreReplaySound();
   aiAutoplay.completedAtSerial = -1;
   aiAutoplay.lastStatusSerial = -1;
   runtime.bridge?.setAiAudioHold?.(holdState);
@@ -1558,6 +1544,22 @@ function ensureAiDescriptorCollision() {
   return snapshot;
 }
 
+function resetAiRoomBaseline(inventory) {
+  if (!gaiReplayInventory({inventory})) throw new Error('Independent room replay requires valid initial inventory.');
+  runtime.bridge.aiReset();
+  if (!runtime.bridge.restartCurrentLevelForAi()) throw new Error('Deterministic native room reset failed.');
+  runtime.bridge.setFrontendPaused(true);
+  // Collision descriptor activation may re-install the authored world; do it
+  // before restoring the only permitted carried values, in native memory.
+  ensureAiDescriptorCollision();
+  if (!runtime.bridge.setAiReplayInventory(inventory)) throw new Error('Native inventory seed failed.');
+  const before = runtime.bridge.snapshot();
+  if (!before.collision?.native?.worldLoaded ||
+      JSON.stringify(gaiReplayInventory(before)) !== JSON.stringify(gaiReplayInventory({inventory})))
+    throw new Error('Native initial inventory did not survive room initialization.');
+  return before;
+}
+
 function finishAiPlanning(before, fullRoom, planned, elapsed) {
   aiAutoplay.planning = false;
   aiAutoplay.partialReady = false;
@@ -1627,7 +1629,7 @@ function aiCooperativeTerminalOutcome() {
   return '';
 }
 
-async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanning = true } = {}) {
+async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanning = true, seedInventory = null } = {}) {
   if (!runtime.bridge) return false;
   if (aiAutoplay.heldResult) runtime.bridge.aiReset();
   Object.assign(aiAcceptance, {
@@ -1660,128 +1662,45 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
   setAiPlayStatus(reason, 'running');
   try {
     runtime.bridge.setAiAudioHold?.(true);
-    // Regenerate owns the canonical entrance before yielding for status paint.
-    // Later planning slices retain and restore this state; they do not restart.
-    if (restart) {
-      configureAiPlanningMode({ fullRoom:true });
-      runtime.bridge.aiReset();
-      if (!runtime.bridge.restartCurrentLevelForAi()) throw new Error('Native initial-state reset failed.');
-      runtime.bridge.setFrontendPaused(true);
-    }
+    // Do not permit a browser gameplay frame between native reset, descriptor
+    // world installation and the inventory setter. All replay paths share this.
+    const inheritedInventory = seedInventory || gaiReplayInventory(runtime.bridge.snapshot());
+    if (restart) configureAiPlanningMode({fullRoom:true});
+    let before = restart ? resetAiRoomBaseline(inheritedInventory) : ensureAiDescriptorCollision();
     await new Promise(resolve => setTimeout(resolve, AI_TRANSITION_AUDIO_QUIESCE_MS));
     if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
-    const before = ensureAiDescriptorCollision();
     if (!runtime.bridge.aiBackendAvailable())
       throw new Error('WASM rollback backend is unavailable. Rebuild xrick.js/.wasm with GAI enabled.');
     const scenario = configureAiPlanningMode({ fullRoom:true });
     if (!runtime.bridge.aiValidationBudget())
       runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
-    // Independent starts need canonical tapes. Destination continuation has
-    // its own exact arrival-tape lookup after the natural entrance settles.
-    const cacheSignature = restart
-      ? gaiReplaySignature({ snapshot:before, ...evidenceMetadata(), scenario,
-        collisionPolicy:runtime.bridge.collisionPolicy() }) : null;
-    // Fetch the shipped, Git-committed artifact only when replay is opted in.
+    const signatureFor = snapshot => gaiReplaySignature({ snapshot, ...evidenceMetadata(), scenario,
+      collisionPolicy:runtime.bridge.collisionPolicy() });
+    let cacheSignature = restart ? signatureFor(before) : null;
     if (cacheSignature && aiCacheToggle?.checked) await loadRepoReplays();
     if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active) return false;
-    const cached = cacheSignature && aiCacheToggle?.checked && !rejectedReplays.has(cacheSignature)
-      ? loadGaiReplay(replayStorage(), cacheSignature, repoReplayEntries) : null;
-    if (!cached && cacheSignature && aiCacheToggle?.checked) {
-      const route = gaiReplayEntryRoute(replayStorage(), cacheSignature, repoReplayEntries, rejectedReplays);
-      if (route) {
-        if (!playAfterPlanning) {
-          const entry = route.at(-1);
-          activateCachedRoomReplay(entry.signature, entry, before, { playAfterPlanning:false, entryKind:'arrival' });
-          aiAutoplay.cachedEntryPending = true;
-          cacheMessage('Replay reuse ON · saved replay ready; entry restoration starts on Play.');
-          return true;
-        }
-        runtime.holdReplayEntryPreview?.(true, before);
-        replayRestoreSoundMuted = !!runtime.bridge.soundMuted?.();
-        runtime.bridge.setSoundMuted?.(true);
-        aiAutoplay.restoringEntry = true;
-        updateAiPlayButtons();
-        cacheMessage('Replay reuse ON · restoring saved entry from recorded inputs; native planner skipped.');
-        setAiPlayStatus(`Restoring saved entry for ${submapAssetName(before.submap)}…`, 'running');
-        const cancelled = () => token !== aiAutoplay.nextPlanToken || !aiAutoplay.active;
-        const totalEntryFrames = route.slice(0, -1).reduce((sum, entry) => sum + entry.frames.length, 0);
-        let restoredEntryFrames = 0;
-        const signatureFor = snapshot => gaiReplaySignature({ snapshot, ...evidenceMetadata(), scenario,
-          collisionPolicy:runtime.bridge.collisionPolicy() });
-        const advanceSavedFrame = async mask => {
-          // Consume saved inputs through normal browser gameplay cadence.
-          // Debug stepping canonicalizes presentation and is not equivalent
-          // to the live cadence under which these tapes were recorded.
-          const serial = runtime.bridge.snapshot().frameSerial;
-          setAiControlMask(mask);
-          const deadline = performance.now() + 4000;
-          while (runtime.bridge.snapshot().frameSerial === serial) {
-            if (cancelled()) return;
-            if (performance.now() >= deadline) throw new Error('Saved predecessor simulation did not advance.');
-            await yieldForGameplayPaint();
-          }
-        };
-        if (!runtime.bridge.selectSubmap(JSON.parse(route[0].signature).submap) ||
-            !runtime.bridge.restartCurrentLevelForAi()) throw new Error('Saved predecessor reset failed.');
-        for (let room = 0; room < route.length; room++) {
-          if (cancelled()) return false;
-          const entry = route[room], start = ensureAiDescriptorCollision();
-          // Native room reset/unpause may reopen the device despite an existing
-          // AI hold. Reapply it before hidden predecessor playback begins.
-          runtime.bridge.setAiAudioHold?.(false);
-          runtime.bridge.setAiAudioHold?.(true);
-          if (signatureFor(start) !== entry.signature) throw new Error('Saved predecessor entry does not match.');
-          if (room === route.length - 1) {
-            activateCachedRoomReplay(entry.signature, entry, start, { playAfterPlanning, entryKind:'arrival' });
-            return true;
-          }
-          runtime.bridge.setAiTransitionHold(false);
-          runtime.bridge.setFrontendPaused(false);
-          for (let frame = 0; frame < entry.frames.length; frame++) {
-            if (cancelled()) return false;
-            if (frame % 64 === 0) setAiPlayStatus(`Restoring ${submapAssetName(before.submap)} entry · ` +
-              `saved ${submapAssetName(start.submap)} ${frame}/${entry.frames.length}`, 'running');
-            if (frame % 16 === 0) gaiRouteInspector?.showReplayRestoreProgress(restoredEntryFrames + frame, totalEntryFrames);
-            const snapshot = runtime.bridge.snapshot(), actual = gaiReplayFrame(snapshot);
-            if (snapshot.submap !== start.submap || !actual ||
-                actual.some((value, field) => value !== entry.frames[frame][field + 1]))
-              throw new Error(`Saved predecessor replay SM${snapshot.submap} diverged at frame ${frame}: ${actual} expected ${entry.frames[frame].slice(1)}.`);
-            await advanceSavedFrame(entry.frames[frame][0]);
-            if (cancelled()) return false;
-          }
-          restoredEntryFrames += entry.frames.length;
-          // A world boundary owns a native cinematic before INIT_MAP.
-          // Keep it live and confirm its ordinary Fire/release contract.
-          if (runtime.bridge.snapshot().presentationMode) {
-            const introDeadline = performance.now() + 30000;
-            let nextConfirmationAt = performance.now() + 500, confirmationMask = 0;
-            clearAiControl();
-            while (runtime.bridge.snapshot().presentationMode) {
-              if (cancelled()) return false;
-              if (performance.now() >= introDeadline) throw new Error('Saved map intro did not finish.');
-              if (performance.now() >= nextConfirmationAt) {
-                confirmationMask = confirmationMask ? 0 : 0x10;
-                setAiControlMask(confirmationMask);
-                nextConfirmationAt = performance.now() + 500;
-              }
-              await yieldForGameplayPaint();
-            }
-          }
-          runtime.bridge.setFrontendPaused(true);
-          runtime.bridge.setAiTransitionHold(true);
-          clearAiControl();
-          const settled = await settleAiDestinationEntry({ snapshot:() => runtime.bridge.snapshot(),
-            forceNeutralFrame:() => forceGameplayDebugFrame(runtime.bridge),
-            yieldForPaint:yieldForGameplayPaint, expectedSubmap:entry.destinationSubmap, cancelled });
-          if (settled.cancelled) return false;
-          if (!settled.ready) throw new Error(`Saved destination entry did not settle (${settled.reason}).`);
-        }
+    const candidate = cacheSignature && aiCacheToggle?.checked
+      ? findGaiReplayForRoom(replayStorage(), cacheSignature, repoReplayEntries, rejectedReplays) : null;
+    if (candidate) {
+      // Saved initial inventory wins over an arbitrary current session's
+      // resources, but never over the deterministic native actor baseline.
+      if (!runtime.bridge.setAiReplayInventory(candidate.initialInventory))
+        throw new Error('Native replay inventory restoration failed.');
+      before = runtime.bridge.snapshot();
+      cacheSignature = signatureFor(before);
+      if (cacheSignature === candidate.signature) {
+        activateCachedRoomReplay(cacheSignature, candidate, before, {playAfterPlanning});
+        return true;
       }
+      // A stale tape must not contaminate fresh planning's inventory or pose.
+      // Reset back to the independent seed rather than replaying predecessors.
+      rejectedReplays.add(candidate.signature);
+      before = resetAiRoomBaseline(inheritedInventory);
+      cacheSignature = signatureFor(before);
+      cacheMessage('Saved replay baseline is incompatible; starting fresh native planning.');
     }
-    if (cached) {
-      activateCachedRoomReplay(cacheSignature, cached, before, { playAfterPlanning });
-      return true;
-    }
+    // Incompatible/missing tapes are never patched with predecessor entry state.
+    // Only fresh plans from the seed established above can generate new tapes.
     const result = await precomputeAiRoomCertificate({
       ...aiRoomPrecomputeEffort(runtime.bridge),
       firstSlice:() => {
@@ -1816,7 +1735,7 @@ async function runVisibleAiPrecompute(reason, { restart = false, playAfterPlanni
       }
       const finished = finishAiPlanning(before, true, planned, result.elapsedMs);
       if (finished && restart && cacheSignature && runtime.bridge.aiCompletePlan())
-        freshRoomRecording = { signature:cacheSignature, frames:[] };
+        freshRoomRecording = { signature:cacheSignature, initialInventory:gaiReplayInventory(before), frames:[] };
       if (finished)
         setAiPlayStatus(`${aiExecutionSummary(before)} · full room precomputed in ${result.slices} slices · max ${result.maxSliceMs.toFixed(1)}ms` +
           (playAfterPlanning ? '' : ' · ready; press Play'), playAfterPlanning ? 'running' : 'ok');
@@ -2030,7 +1949,6 @@ function generateWalkthroughPlan() {
 
 function toggleWalkthroughPlayback() {
   if (!runtime.bridge || aiAutoplay.planning || (!aiAutoplay.certificateReady && !aiAutoplay.cachedReady && !cachedRoomReplay)) return;
-  if (aiAutoplay.cachedEntryPending) return startAiRestartAutoplay({ playAfterPlanning:true });
   if (aiAutoplay.active && !aiAutoplay.paused) {
     aiAutoplay.paused = true;
     runtime.bridge.setFrontendPaused(true);
@@ -2073,6 +1991,9 @@ const AI_TRANSITION_AUDIO_QUIESCE_MS = 120;
  * deadlock when Chromium has suspended or starved the callback. */
 function planRenderedDestinationRoom(previous, renderedSnapshot) {
   if (!runtime.bridge || !renderedSnapshot) return false;
+  // Snapshot resources at the actual handoff, before neutral entrance settling
+  // could consume/collect anything. Native reset will discard all other state.
+  const arrivingInventory = gaiReplayInventory(renderedSnapshot);
   const token = ++aiAutoplay.nextPlanToken;
   aiAutoplay.active = true;
   aiAutoplay.planning = true;
@@ -2083,7 +2004,6 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
   runtime.bridge.setAiTransitionHold(true);
   clearAiControl();
   updateAiPlayButtons();
-  const fullRoom = !!aiAutoplay.fullRoomPlanning;
   const reason = `Completed ${submapAssetName(previous)} → ${submapAssetName(renderedSnapshot.submap)}. ` +
     'Establishing the painted entry and clean audio boundary…';
   setAiPlayStatus(reason, 'running');
@@ -2110,80 +2030,15 @@ function planRenderedDestinationRoom(previous, renderedSnapshot) {
       if (settled.frames) await yieldForGameplayPaint();
       if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge) return;
 
-      const planningReason = `Completed ${submapAssetName(previous)} → ${submapAssetName(renderedSnapshot.submap)}. ` +
-        (fullRoom ? 'Planning full route from settled entry state…' : 'Planning from settled entry state…');
-      setAiPlayStatus(planningReason, 'running');
-      const before = ensureAiDescriptorCollision();
-      if ((Number(before?.submap) >>> 0) !== (Number(renderedSnapshot.submap) >>> 0))
-        throw new Error('destination room changed before AI continuation planning');
-      // Completed-room checkpoints cannot serve this destination and consume
-      // its finite label store. Begin a fresh native search at the settled entry.
-      runtime.bridge.aiReset();
-      const scenario = configureAiPlanningMode({ fullRoom });
-      if (!runtime.bridge.aiValidationBudget())
-        runtime.bridge.aiSetValidationBudget(AI_BROWSER_RESTART_VALIDATION_BUDGET);
-      if (fullRoom && aiCacheToggle?.checked) {
-        await loadRepoReplays();
-        if (token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge) return;
-        const signature = gaiReplaySignature({ snapshot:before, ...evidenceMetadata(), scenario,
-          collisionPolicy:runtime.bridge.collisionPolicy() });
-        const arrival = signature && !rejectedReplays.has(signature)
-          ? loadGaiReplay(replayStorage(), signature, repoReplayEntries, 'arrival') : null;
-        if (arrival) {
-          activateCachedRoomReplay(signature, arrival, before, { entryKind:'arrival' });
-          // Prime the first saved input while held, before releasing the loop.
-          tickAiAutoplay(before);
-          if (aiAutoplay.active) {
-            runtime.bridge.setFrontendPaused(false);
-            setAiControlMask(aiAutoplay.lastInputMask);
-          }
-          return;
-        }
-        if (hasGaiReplayForRoom(replayStorage(), signature, repoReplayEntries, rejectedReplays)) {
-          // Room tapes own a canonical entrance, including private actor state.
-          // Restart before exact lookup; never apply them to a natural arrival.
-          await runVisibleAiPrecompute(`Loading saved replay for ${submapAssetName(before.submap)}…`,
-            { restart:true, playAfterPlanning:true });
-          return;
-        }
-      }
-      const result = fullRoom ? await precomputeAiRoomCertificate({
-        ...aiRoomPrecomputeEffort(runtime.bridge),
-        firstSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
-        continueSlice:() => runtime.bridge.aiPlanFullContinue(scenario),
-        complete:() => runtime.bridge.aiCompletePlan(),
-        phaseCount:() => runtime.bridge.aiPhaseCount(),
-        terminalOutcome:aiCooperativeTerminalOutcome,
-        yieldBetweenSlices:yieldForGameplayPaint,
-        cancelled:() => token !== aiAutoplay.nextPlanToken || !aiAutoplay.active || !runtime.bridge
-      }) : { outcome:'complete', planned:runtime.bridge.aiPlan(scenario), slices:1,
-        phases:runtime.bridge.aiPhaseCount(), elapsedMs:0, maxSliceMs:0 };
-      if (result.outcome === 'cancelled') return;
-      const planned = result.phases > 0;
-      if (result.outcome === 'complete') {
-        const finished = finishAiPlanning(before, fullRoom, planned, result.elapsedMs);
-        if (finished && fullRoom && runtime.bridge.aiCompletePlan()) {
-          const signature = gaiReplaySignature({ snapshot:before, ...evidenceMetadata(), scenario,
-            collisionPolicy:runtime.bridge.collisionPolicy() });
-          if (signature) freshRoomRecording = { signature, frames:[], entryKind:'arrival' };
-        }
-      }
-      else {
-        aiAutoplay.active = false;
-        aiAutoplay.planning = false;
-        aiAutoplay.partialReady = planned && runtime.bridge.aiPartialPlan();
-        aiAutoplay.certificateReady = aiAutoplay.partialReady;
-        aiAutoplay.heldResult = true;
-        runtime.bridge.setFrontendPaused(true);
-        aiAutoplay.planSubmap = Number(before.submap) >>> 0;
-        aiAutoplay.planMap = Number(before?.map) >>> 0;
-        aiAutoplay.planStartedAtSerial = Number(before.frameSerial) >>> 0;
-        updateAiPlayButtons();
-        setAiPlayStatus(`AI destination precompute ${result.outcome} after ${result.slices} held slices` +
-          (aiAutoplay.partialReady ? ' · choose “Play certified partial”' : ' · no playable certificate'), 'warn');
-        refreshGaiRouteInspectorPlan();
-      }
-      recordAiCoachPlan({ reason:planningReason, fullRoom, restart:false, planned, elapsedMs:result.elapsedMs });
+      const arrival = runtime.bridge.snapshot();
+      if ((Number(arrival?.submap) >>> 0) !== (Number(renderedSnapshot.submap) >>> 0))
+        throw new Error('Destination room changed before independent GAI reset.');
+      if (!arrivingInventory) throw new Error('Destination did not have valid incoming inventory.');
+      await runVisibleAiPrecompute(
+        `Completed ${submapAssetName(previous)} → ${submapAssetName(arrival.submap)}. ` +
+        'Resetting destination and establishing independent room replay…',
+        {restart:true, playAfterPlanning:true, seedInventory:arrivingInventory});
+
     } catch (error) {
       console.error('[rdx/ai] destination-entry planning failed', error?.message || String(error));
       stopAiAutoplay(`AI destination planning failed: ${error?.message || error} · use “Copy AI debug”`, 'error');
@@ -2249,20 +2104,19 @@ function tickAiAutoplay(snapshot) {
     const cached = cachedRoomReplay;
     if (cached && (cached.index !== cached.frames.length || snapshot.submap !== cached.destinationSubmap)) {
       rejectedReplays.add(cached.signature);
-      removeGaiReplay(replayStorage(), cached.signature, cached.entryKind);
+      removeGaiReplay(replayStorage(), cached.signature);
       stopAiAutoplay('CACHED DISK REPLAY ended at an unexpected frame/destination; invalidated. Fresh planning required.', 'error');
       return;
     }
     const recording = freshRoomRecording;
     const saved = recording && saveGaiReplay(replayStorage(),
-      recording.signature, recording.frames, snapshot.submap, recording.entryKind);
+      recording.signature, recording.frames, snapshot.submap, recording.initialInventory);
     if (recording) {
       // The 3 MB browser cache evicts older tapes and can be unavailable.
       // Always retain every completed room in the session's export/write bundle.
       repoReplayEntries = gaiReplayBundle(null, [...repoReplayEntries, {
-        schema:'rdr.gai.completed-room-replay.v1', signature:recording.signature,
-        frames:recording.frames, destinationSubmap:snapshot.submap,
-        ...(recording.entryKind === 'arrival' ? {entryKind:'arrival'} : {})
+        schema:GAI_REPLAY_CACHE_SCHEMA, baseline:GAI_REPLAY_BASELINE, signature:recording.signature,
+        initialInventory:recording.initialInventory, frames:recording.frames, destinationSubmap:snapshot.submap
       }]).entries;
     }
     if (recording) {
@@ -2309,14 +2163,14 @@ function tickAiAutoplay(snapshot) {
     const { frames, index, signature } = cachedRoomReplay;
     if (index >= frames.length) {
       rejectedReplays.add(signature);
-      removeGaiReplay(replayStorage(), signature, cachedRoomReplay.entryKind);
+      removeGaiReplay(replayStorage(), signature);
       stopAiAutoplay('CACHED DISK REPLAY exhausted without the expected room transition; disk entry invalidated. Fresh planning required.', 'warn');
       return;
     }
     const frame = gaiReplayFrame(snapshot);
     if (!frame || frame.some((value, field) => value !== frames[index][field + 1])) {
       rejectedReplays.add(signature);
-      removeGaiReplay(replayStorage(), signature, cachedRoomReplay.entryKind);
+      removeGaiReplay(replayStorage(), signature);
       stopAiAutoplay(`CACHED DISK REPLAY diverged at frame ${index}; invalidated disk entry. Rerun with fresh GAI planning.`, 'error');
       return;
     }
@@ -2409,6 +2263,6 @@ function tickAiAutoplay(snapshot) {
     generateInitialPlan:generateWalkthroughPlan, togglePlayback:toggleWalkthroughPlayback, toggleMortality:toggleWalkthroughMortality,
     toggleManualRecording:toggleManualWalkthrough, releaseManualRecordingHold, releaseGameplayHold, walkthroughEvidence:() => walkthroughEvidence.export(evidenceMetadata()),
     exportFullWalkthroughEvidence:() => exportWalkthroughEvidence('full'),
-    tickFrame, busy, restoringEntry:() => aiAutoplay.restoringEntry, setCoachControlled, state
+    tickFrame, busy, setCoachControlled, state
   });
 }

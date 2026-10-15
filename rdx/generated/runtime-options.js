@@ -774,6 +774,51 @@ export const RUNTIME_OPTIONS = Object.freeze([
         "label": "On (buffered ladder intent + hero interpolation)"
       }
     ]
+  },
+  {
+    "id": 26,
+    "key": "ladder_sound_cadence",
+    "type": "enum",
+    "default": 0,
+    "label": "Ladder sound cadence",
+    "surfaces": [
+      "libretro",
+      "browser"
+    ],
+    "browserControlId": "rdx-ladder-sound-cadence",
+    "libretroKey": "rdrevival_ladder_sound_cadence",
+    "values": [
+      {
+        "value": 0,
+        "key": "classic",
+        "label": "Classic - 160 ms",
+        "libretroValue": "classic"
+      },
+      {
+        "value": 1,
+        "key": "brisk",
+        "label": "Brisk - 240 ms",
+        "libretroValue": "brisk"
+      },
+      {
+        "value": 2,
+        "key": "measured",
+        "label": "Measured - 320 ms",
+        "libretroValue": "measured"
+      },
+      {
+        "value": 3,
+        "key": "hand_over_hand",
+        "label": "Hand-over-hand - 320/400 ms",
+        "libretroValue": "hand-over-hand"
+      },
+      {
+        "value": 4,
+        "key": "grip_release",
+        "label": "Grip and release - start/end only",
+        "libretroValue": "grip-release"
+      }
+    ]
   }
 ]);
 export const RUNTIME_OPTION_BY_KEY = Object.freeze(Object.fromEntries(RUNTIME_OPTIONS.map(option => [option.key, option])));

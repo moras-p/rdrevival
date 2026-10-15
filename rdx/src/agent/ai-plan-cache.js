@@ -1,16 +1,19 @@
-/* Explicitly opt-in browser-disk replay of a previously *executed* GAI room
- * certificate. This is an input tape, not a serialized native proof. Never use
- * it for a fresh GAI correctness/regression run. */
-export const GAI_REPLAY_CACHE_KEY = 'rdr.gai.completed-room-replays.v1';
-export const GAI_REPLAY_CACHE_SCHEMA = 'rdr.gai.completed-room-replay.v1';
+/* Opt-in input tapes for independently seeded native room baselines. No
+ * carried-entry state or predecessor route is ever serialized/restored. */
+export const GAI_REPLAY_CACHE_KEY = 'rdr.gai.completed-room-replays.v2';
+export const GAI_REPLAY_CACHE_SCHEMA = 'rdr.gai.completed-room-replay.v2';
+export const GAI_REPLAY_BUNDLE_SCHEMA = 'rdr.gai.completed-room-replays.v2';
+export const GAI_REPLAY_BASELINE = 'native-independent-map-v1';
 export const GAI_REPLAY_MAX_FRAMES = 30000;
-export const GAI_REPLAY_BUNDLE_SCHEMA = 'rdr.gai.completed-room-replays.v1';
 const MAX_DISK_CHARS = 3_000_000;
 
-// Independent restarts load canonical tapes. Continuation may load an exact
-// arrival tape from the settled live entrance, with per-frame state checks.
-const replayKind = entry => entry?.entryKind === undefined ? 'canonical' : entry.entryKind;
-const replayKey = entry => `${replayKind(entry)}:${entry?.signature}`;
+export function gaiReplayInventory(snapshot) {
+  const {lives, bullets, dynamite} = snapshot?.inventory || {};
+  return Number.isInteger(lives) && lives >= 1 && lives <= 255 &&
+    Number.isInteger(bullets) && bullets >= 0 && bullets <= 255 &&
+    Number.isInteger(dynamite) && dynamite >= 0 && dynamite <= 255
+    ? {lives, bullets, dynamite} : null;
+}
 
 export function gaiReplayFrame(snapshot) {
   const native = snapshot?.collision?.native;
@@ -22,13 +25,10 @@ export function gaiReplayFrame(snapshot) {
 export function gaiReplaySignature({ snapshot, appVersion, romSha256, bridgeContract, scenario,
   collisionPolicy, walkSpeed, coyoteFrames, jumpBufferFrames } = {}) {
   const start = gaiReplayFrame(snapshot);
-  if (!start || !romSha256 || !Number.isInteger(scenario) || !snapshot?.collision?.native?.worldLoaded) return null;
-  // This metadata identifies the observed entrance but does not prove hidden
-  // actor/terrain state. Reuse also requires the right entry kind and checks
-  // every recorded frame during playback.
-  return JSON.stringify({ schema:GAI_REPLAY_CACHE_SCHEMA, appVersion, romSha256, bridgeContract,
-    scenario, submap:snapshot.submap, map:snapshot.map, md:snapshot.collision.native.mapId,
-    collisionPolicy, start, speedMultiplier:snapshot.speedMultiplier,
+  if (!start || !gaiReplayInventory(snapshot) || !romSha256 || !Number.isInteger(scenario) || !snapshot?.collision?.native?.worldLoaded) return null;
+  return JSON.stringify({ schema:GAI_REPLAY_CACHE_SCHEMA, baseline:GAI_REPLAY_BASELINE,
+    appVersion, romSha256, bridgeContract, scenario, submap:snapshot.submap, map:snapshot.map,
+    md:snapshot.collision.native.mapId, collisionPolicy, start, speedMultiplier:snapshot.speedMultiplier,
     debugInvincible:snapshot.debug?.invincible, infiniteResources:snapshot.debug?.infiniteResources,
     ignoreExplodableCollision:snapshot.debug?.ignoreExplodableCollision,
     walkSpeed, coyoteFrames, jumpBufferFrames, runtimeOptions:snapshot.runtimeOptions });
@@ -41,118 +41,70 @@ function readEntries(storage) {
   } catch { return []; }
 }
 
-function validBaseEntry(entry) {
-  if (!['canonical', 'arrival'].includes(replayKind(entry)) || entry?.schema !== GAI_REPLAY_CACHE_SCHEMA || typeof entry.signature !== 'string' ||
-      !entry.signature.startsWith('{') || !Number.isInteger(entry.destinationSubmap) ||
-      entry.destinationSubmap < 0 || entry.destinationSubmap > 0xffff ||
+function validEntry(entry) {
+  if (!entry || entry.schema !== GAI_REPLAY_CACHE_SCHEMA ||
+      entry.baseline !== GAI_REPLAY_BASELINE || entry.entryRoute !== undefined ||
+      entry.entryKind !== undefined || typeof entry.signature !== 'string' ||
+      !Number.isInteger(entry.destinationSubmap) || entry.destinationSubmap < 0 || entry.destinationSubmap > 0xffff ||
       !Array.isArray(entry.frames) || !entry.frames.length || entry.frames.length > GAI_REPLAY_MAX_FRAMES ||
       !entry.frames.every(frame => Array.isArray(frame) && frame.length === 7 &&
         frame.every(Number.isInteger) && frame[0] >= 0 && frame[0] <= 0x1f)) return false;
-  try { return JSON.parse(entry.signature)?.schema === GAI_REPLAY_CACHE_SCHEMA; }
-  catch { return false; }
+  try {
+    const signature = JSON.parse(entry.signature);
+    const inventory = gaiReplayInventory({inventory:entry.initialInventory});
+    return signature.schema === GAI_REPLAY_CACHE_SCHEMA && signature.baseline === GAI_REPLAY_BASELINE &&
+      Number.isInteger(signature.submap) && Array.isArray(signature.start) && signature.start.length === 6 &&
+      inventory !== null && signature.start[3] === inventory.bullets &&
+      signature.start[4] === inventory.dynamite && signature.start[5] === inventory.lives &&
+      entry.frames[0].slice(1).every((v,i) => v === signature.start[i]);
+  } catch { return false; }
 }
 
-function validEntry(entry) {
-  if (!validBaseEntry(entry)) return false;
-  if (entry.entryRoute === undefined) return true;
-  if (replayKind(entry) !== 'arrival' || !Array.isArray(entry.entryRoute) ||
-      !entry.entryRoute.length || entry.entryRoute.length > 47) return false;
-  if (!entry.entryRoute.every(source => validBaseEntry(source) && source.entryRoute === undefined)) return false;
-  return entry.entryRoute.every((source, index, route) => replayKind(source) === (index ? 'arrival' : 'canonical') &&
-    source.destinationSubmap === JSON.parse((route[index + 1] || entry).signature).submap);
-}
-
-// A checked-in bundle is purely data: browsers on new devices fetch it through
-// the normal static web assets path. Reject incompatible/malformed files.
 export function parseGaiReplayBundle(data) {
   if (!data || data.schema !== GAI_REPLAY_BUNDLE_SCHEMA || !Array.isArray(data.entries)) return [];
   return data.entries.filter(validEntry);
 }
 
-// Local, newly recorded runs override earlier committed versions of the same key.
 export function gaiReplayBundle(storage, checkedIn = []) {
   const entries = new Map();
   for (const entry of [...checkedIn, ...readEntries(storage)])
-    if (validEntry(entry)) entries.set(replayKey(entry), entry);
-  const all = [...entries.values()];
-  return { schema:GAI_REPLAY_BUNDLE_SCHEMA, entries:all.map(entry => {
-    if (replayKind(entry) !== 'arrival' || entry.entryRoute) return entry;
-    const route = findEntryRoute(all, entry.signature, new Set(), true);
-    if (!route) return entry;
-    return { ...entry, entryRoute:route.slice(0, -1).map(({entryRoute, ...source}) => source) };
-  }) };
+    if (validEntry(entry)) entries.set(entry.signature, entry);
+  return {schema:GAI_REPLAY_BUNDLE_SCHEMA, entries:[...entries.values()]};
 }
 
-export function loadGaiReplay(storage, signature, checkedIn = [], entryKind = 'canonical') {
+export function loadGaiReplay(storage, signature, checkedIn = []) {
   if (!signature) return null;
-  const entry = gaiReplayBundle(storage, checkedIn).entries.find(item => replayKind(item) === entryKind && item.signature === signature);
-  return entry ? {frames:entry.frames, destinationSubmap:entry.destinationSubmap} : null;
+  return gaiReplayBundle(storage, checkedIn).entries.find(item => item.signature === signature) || null;
 }
 
-// Find a clean-start route to an arrival-only tape. These are candidates, not
-// permission to replay: the controller must check every exact entry and frame.
-export function gaiReplayEntryRoute(storage, signature, checkedIn = [], rejected = new Set()) {
-  return findEntryRoute(gaiReplayBundle(storage, checkedIn).entries, signature, rejected);
-}
-
-function findEntryRoute(all, signature, rejected = new Set(), exactTarget = false) {
+// Candidate selection compares the *map and runtime provenance*, but deliberately
+// not its mutable inventory. Controller applies the saved inventory using the
+// native setter, then requires an exact signature match before playing a tape.
+export function findGaiReplayForRoom(storage, signature, checkedIn = [], rejected = new Set()) {
   if (!signature) return null;
-  const context = value => {
-    const { start, submap, map, md, ...rest } = JSON.parse(value);
-    return JSON.stringify(rest);
+  let wanted;
+  try { wanted = JSON.parse(signature); } catch { return null; }
+  if (wanted.schema !== GAI_REPLAY_CACHE_SCHEMA || wanted.baseline !== GAI_REPLAY_BASELINE) return null;
+  const equivalent = value => {
+    const {start, ...metadata} = value;
+    return JSON.stringify({...metadata, startPose:start?.slice(0,3)});
   };
-  const wanted = JSON.parse(signature).submap;
-  const entries = all.filter(entry =>
-    !rejected.has(entry.signature) && context(entry.signature) === context(signature));
-  for (const entry of entries) {
-    if (JSON.parse(entry.signature).submap !== wanted || (exactTarget && entry.signature !== signature) || !entry.entryRoute) continue;
-    if (entry.entryRoute.every(source => !rejected.has(source.signature) &&
-        context(source.signature) === context(signature))) return [...entry.entryRoute, entry];
-  }
-  const queue = entries.filter(entry => replayKind(entry) === 'canonical').map(entry => [entry]);
-  const visited = new Set();
-  while (queue.length) {
-    const route = queue.shift(), last = route.at(-1);
-    if (visited.has(replayKey(last))) continue;
-    visited.add(replayKey(last));
-    if (JSON.parse(last.signature).submap === wanted && replayKind(last) === 'arrival' &&
-        (!exactTarget || last.signature === signature)) return route;
-    for (const next of entries) {
-      if (replayKind(next) !== 'arrival' || route.includes(next) ||
-          JSON.parse(next.signature).submap !== last.destinationSubmap) continue;
-      queue.push([...route, next]);
-    }
-  }
-  return null;
+  return gaiReplayBundle(storage, checkedIn).entries.find(entry =>
+    !rejected.has(entry.signature) && equivalent(JSON.parse(entry.signature)) === equivalent(wanted)) || null;
 }
 
-// A destination arrives at a live entrance pose, whereas saved room tapes
-// begin at the canonical restart. This only selects a restart candidate;
-// loadGaiReplay must still require an exact signature after that restart.
-export function hasGaiReplayForRoom(storage, signature, checkedIn = [], rejected = new Set()) {
-  if (!signature) return false;
-  const { start, ...context } = JSON.parse(signature);
-  return gaiReplayBundle(storage, checkedIn).entries.some(entry => {
-    if (replayKind(entry) !== 'canonical' || rejected.has(entry.signature)) return false;
-    const { start:recordedStart, ...recordedContext } = JSON.parse(entry.signature);
-    return JSON.stringify(context) === JSON.stringify(recordedContext);
-  });
-}
-
-export function removeGaiReplay(storage, signature, entryKind = 'canonical') {
+export function removeGaiReplay(storage, signature) {
   if (!signature) return;
-  try { storage?.setItem(GAI_REPLAY_CACHE_KEY, JSON.stringify(readEntries(storage).filter(item => replayKind(item) !== entryKind || item.signature !== signature))); }
-  catch { /* Storage blocked: fail closed to fresh planning next time. */ }
+  try { storage?.setItem(GAI_REPLAY_CACHE_KEY, JSON.stringify(readEntries(storage).filter(item => item.signature !== signature))); }
+  catch { /* Blocked storage: fail closed. */ }
 }
 
-export function saveGaiReplay(storage, signature, frames, destinationSubmap, entryKind = 'canonical') {
-  if (!['canonical', 'arrival'].includes(entryKind) || !signature || !Number.isInteger(destinationSubmap) || destinationSubmap < 0 || !Array.isArray(frames) || !frames.length || frames.length > GAI_REPLAY_MAX_FRAMES ||
-      !frames.every(frame => Array.isArray(frame) && frame.length === 7 &&
-        frame.every(Number.isInteger) && frame[0] >= 0 && frame[0] <= 0x1f)) return false;
+export function saveGaiReplay(storage, signature, frames, destinationSubmap, initialInventory) {
+  const entry = {schema:GAI_REPLAY_CACHE_SCHEMA, baseline:GAI_REPLAY_BASELINE,
+    signature, initialInventory, frames, destinationSubmap};
+  if (!validEntry(entry)) return false;
   try {
-    const entry = {schema:GAI_REPLAY_CACHE_SCHEMA, signature, frames, destinationSubmap,
-      ...(entryKind === 'arrival' ? {entryKind} : {})};
-    const entries = readEntries(storage).filter(item => replayKey(item) !== replayKey(entry));
+    const entries = readEntries(storage).filter(item => item.signature !== signature);
     entries.push(entry);
     while (entries.length && JSON.stringify(entries).length > MAX_DISK_CHARS) entries.shift();
     if (!entries.length) return false;
