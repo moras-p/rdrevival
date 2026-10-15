@@ -22,13 +22,13 @@
     "fingerprints": {
       "adjustments": "699cb53acb15578dd78ecd7c0d4a6eb84744f731d220fc176957c0d6e740061f",
       "alignment": "c8336b06084fc30e735f20d35f855a42ebb0045416d988072e1006214cd93df3",
-      "presentationDepth": "f050155fae47772d7a28ac8ef409384d1ffb82b5ff804b1370ab5ba098e200d2",
+      "presentationDepth": "e75032b1b51e6783aa02f2d2c65c5b04f6b4b665412f7bd722a6fec5abe81ede",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "b33f01e561773f9b4fd2880371506d260ffdc7799590c0717cfaad895e2d83ce",
+      "resolved": "d8417b6a126f1b5dee484e2b2fff3b68d0e1555bcfa3514e0ad010e8a718f31f",
       "semantic": "20196f847b3e003590ea71c3bda54b4ce5fae241802bebde6347ef25bd885e82",
       "sourceClassic": "18c52ed98a069ffc7f0c63710676dd770293cb4f2275baf1a045d6ff224f49ec",
       "sourceRdx": "2218e2e708110b6bf3f6f29255e87ab39aa020f6884393ae2066c2a4d6cd2da8",
-      "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+      "structural": "25809f7e2f5a4e42dd55920da82137fe1499ef9c00f5d8fb643654dd6dbcf6da",
       "transitions": "5a7590627bd0642eb157c81c86a832799885ca80cfd4eba8be3230255f794a4c"
     },
     "group": "south_america",
@@ -306,6 +306,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {
@@ -2443,7 +2459,83 @@
         }
       },
       "structuralCorrections": {
-        "operations": [],
+        "operations": [
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              27,
+              5,
+              2,
+              1
+            ],
+            "id": "sm05-canonical-backdrop-open-20261013-27-5-2",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM05 g8 x=27..28, y=5: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:27:5",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              7,
+              1,
+              1
+            ],
+            "id": "sm05-canonical-backdrop-open-20261013-7-7-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM05 g8 x=7..7, y=7: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:7",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              15,
+              7,
+              1,
+              1
+            ],
+            "id": "sm05-canonical-backdrop-open-20261013-15-7-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM05 g8 x=15..15, y=7: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:15:7",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              29,
+              2,
+              1
+            ],
+            "id": "sm05-canonical-backdrop-open-20261013-7-29-2",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM05 g8 x=7..8, y=29: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:29",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              27,
+              29,
+              2,
+              1
+            ],
+            "id": "sm05-canonical-backdrop-open-20261013-27-29-2",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM05 g8 x=27..28, y=29: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:27:29",
+            "type": "gameplay-cell-override"
+          }
+        ],
         "schema": "rdr.structural_corrections_resolved.v1"
       }
     },

@@ -22,14 +22,14 @@
     "fingerprints": {
       "adjustments": "2467f41f75eaccc898fe99b55f0df64c9b5fbd7217c0a198ecfbbfea3f53ea8a",
       "alignment": "246f54a4311032fecaf4f4252565f8762a9bb88cd361814919dbaa6d0bd6bc6e",
-      "presentationDepth": "e152245c60a5e58a9faad85089290ea7cc8b4a537e1dc4b25a9702bb5fa855aa",
+      "presentationDepth": "781e35e5e0aa084a9716fa7c01f777871e8fb939304287816a746988812b4396",
       "presentationOcclusion": "9b7c404baf07d07cca0f933aa3680ba8f823ed200eb518ec90d4003e9cf4a02a",
-      "resolved": "b36a855f29b0133342611a913181bf399da8e33c7b02a2013fbcddadfa783168",
+      "resolved": "72dc9cfc7c2175f1c52849a2da726c7bc3313b6df3ba700fc0eb65173084842e",
       "reviewed": "e843f6a7817cdceaeb47d5b981ec64c1150fe7858f66eb591d57ea38cc844165",
       "semantic": "8764ca8ed3d341d75c7ffe62472687facb471dc010d0e84390a95e40c0cd24e5",
       "sourceClassic": "906ff0fc55fc61498568fb85181183f8a2108ae572a0de711dd5c0d0e4c971c5",
       "sourceRdx": "50d34fa54bd13acca0330d7af673c3022075700b0d16fe296d1316073b8288a4",
-      "structural": "f41b8bcff8c85f6546c85bcc70936817d8d2e89048ca9f7698278796083bce84",
+      "structural": "be779d3b883948d6c4aa14af92290fae312a983e455d9f49c30d50f9cca00a10",
       "transitions": "7a0d1105b06f89047b28a2c47785270c84107c58a49bedec40c709ca1fc2b006"
     },
     "group": "egypt",
@@ -266,6 +266,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {
@@ -4710,6 +4726,531 @@
               }
             ],
             "type": "visual-plane-patch"
+          },
+          {
+            "action": "open",
+            "authority": "native-probed-production-art-edge-clearance",
+            "g8Bounds": [
+              7,
+              86,
+              1,
+              4
+            ],
+            "id": "md0020-open-torch-wall-void-7-86-89",
+            "provenance": "Production Layer-F comparison and 2026-10-11 native point probes established that these 8px cells project as solid from coarse 16px RDX MT33 descriptors, although the authored visible masonry stops before the targeted area. Paired controls at the adjoining painted half stay solid; see research/collision/edge-clearance-20261011.md. Keep the unpainted 8px strip beyond the stepped masonry open beside the torch; the adjacent brick half of the MT33 descriptors remains solid.",
+            "reason": "Keep the unpainted 8px strip beyond the stepped masonry open beside the torch; the adjacent brick half of the MT33 descriptors remains solid.",
+            "sourceKey": "geometry:rdx:g8:7:86",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-backdrop-clearance-20261011",
+            "g8Bounds": [
+              32,
+              56,
+              1,
+              1
+            ],
+            "id": "sm10-questionable-review-open-32-56",
+            "provenance": "User review collision-questionable-review.json, audited against 47-room production Layer-F atlas and static Classic correspondence; see research/collision/questionable-backdrop-review-20261011.json.",
+            "reason": "SM10:backdrop-solid:g8:32:55: top part solid, bottom two cells should be open Exact 1 cell(s) in 8x8 world space; preserve all other region cells.",
+            "sourceKey": "geometry:rdx:g8:32:56",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-backdrop-clearance-20261011",
+            "g8Bounds": [
+              32,
+              57,
+              1,
+              1
+            ],
+            "id": "sm10-questionable-review-open-32-57",
+            "provenance": "User review collision-questionable-review.json, audited against 47-room production Layer-F atlas and static Classic correspondence; see research/collision/questionable-backdrop-review-20261011.json.",
+            "reason": "SM10:backdrop-solid:g8:32:55: top part solid, bottom two cells should be open Exact 1 cell(s) in 8x8 world space; preserve all other region cells.",
+            "sourceKey": "geometry:rdx:g8:32:57",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              8,
+              58,
+              4,
+              1
+            ],
+            "id": "sm10-canonical-review-20261013-solid-8-58-4",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM10 g8 x=8..11, y=58; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:8:58",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              6,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-6-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=6: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:6",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              7,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-7-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=7: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:7",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              8,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-8-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=8: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:8",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              9,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-9-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=9: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:9",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              10,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-10-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=10: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:10",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              11,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-11-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=11: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:11",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              12,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-12-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=12: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:12",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              13,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-13-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=13: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:13",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              14,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-14-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=14: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:14",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              15,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-15-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=15: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:15",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              18,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-18-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=18: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:18",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              19,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-19-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=19: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:19",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              46,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-46-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=46: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:46",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              47,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-47-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=47: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:47",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              50,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-50-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=50: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:50",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              34,
+              50,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-34-50-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=34..34, y=50: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:34:50",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              51,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-51-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=51: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:51",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              34,
+              51,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-34-51-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=34..34, y=51: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:34:51",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              52,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-52-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=52: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:52",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              34,
+              52,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-34-52-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=34..34, y=52: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:34:52",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              5,
+              53,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-5-53-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=5..5, y=53: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:5:53",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              34,
+              53,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-34-53-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=34..34, y=53: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:34:53",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              60,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-60-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=60: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:60",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              61,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-61-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=61: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:61",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              68,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-68-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=68: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:68",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              69,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-69-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=69: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:69",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              79,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-79-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=79: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:79",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              80,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-80-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=80: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:80",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              81,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-81-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=81: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:81",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              84,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-84-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=84: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:84",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              7,
+              85,
+              1,
+              1
+            ],
+            "id": "sm10-canonical-backdrop-open-20261013-7-85-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM10 g8 x=7..7, y=85: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:7:85",
+            "type": "gameplay-cell-override"
           }
         ],
         "schema": "rdr.structural_corrections_resolved.v1"

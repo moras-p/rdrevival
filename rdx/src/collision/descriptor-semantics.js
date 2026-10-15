@@ -61,6 +61,7 @@ export function projectRuntimeCollisionPatch(actionValue, classicFlagsValue = 0)
   const action = String(actionValue || '');
   const classicFlags = Number(classicFlagsValue) & 0xff;
   let flags = classicFlags & (MAP_EFLG.FGND | MAP_EFLG.AUX01);
+  if (action === 'solid') return Object.freeze({ flags:flags | MAP_EFLG.SOLID, known:true, source:'reviewed-collision-patch' });
   if (action === 'open') return Object.freeze({ flags, known:true, source:'reviewed-collision-patch' });
   if (action === 'one-way') return Object.freeze({ flags:flags | MAP_EFLG.WAYUP, known:true, source:'reviewed-collision-patch' });
   if (action === 'climb-through') return Object.freeze({ flags:flags | MAP_EFLG.CLIMB, known:true, source:'reviewed-collision-patch' });

@@ -22,13 +22,13 @@
     "fingerprints": {
       "adjustments": "5bd4e49a58f12924b6cf8cb4c5cf307976ad6a789b247c05036ee439f30b5af3",
       "alignment": "9484b180e71a7939d274db213438986de884dd812df21f4ffeaf9f7280e32a69",
-      "presentationDepth": "cdf11a059651d954b49c5c92cfba6512b18c57a38585fadedaa5a5347b285b10",
+      "presentationDepth": "4b87bb370cdacfe1b6f4a24e80a112f0ff4b5fccc2b8feae44a63ed2f3020f1a",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "8d68ad3757e127a95dc44437a61b14ee897568b9849ead377e7909dea3ddbd21",
+      "resolved": "98a979856ae9be6d7d7830576dac3a42eb9bae54665df28600a1d792cbf17c6b",
       "semantic": "e07c05a5e959528eb38ce04cb91d7a57d5e38c057939b2243bd545f9732f5795",
       "sourceClassic": "ef499175036b1d8233e0f6c8c47454da1f9240dc76421162663fe6f2e7b80142",
       "sourceRdx": "1868f7bf7c8f790f71e8d6717044f45af0d418ac0ad6f10914f69d5444c2928d",
-      "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+      "structural": "7aaaa901575212ac5656cb6575f4f1ff30c8984eae54873582f9a2267404ff88",
       "transitions": "1e9658b9ece6ee5bc308e926d5cfc87fa5103c29cad7976ed02752353ad62ef4"
     },
     "group": "missile_base",
@@ -134,6 +134,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {
@@ -2640,7 +2656,38 @@
         }
       },
       "structuralCorrections": {
-        "operations": [],
+        "operations": [
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              4,
+              21,
+              1,
+              1
+            ],
+            "id": "sm26-canonical-review-20261013-solid-4-21-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM26 g8 x=4..4, y=21; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:4:21",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              4,
+              23,
+              1,
+              1
+            ],
+            "id": "sm26-canonical-review-20261013-solid-4-23-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM26 g8 x=4..4, y=23; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:4:23",
+            "type": "gameplay-cell-override"
+          }
+        ],
         "schema": "rdr.structural_corrections_resolved.v1"
       }
     },

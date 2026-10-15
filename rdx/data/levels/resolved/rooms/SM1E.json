@@ -22,9 +22,9 @@
     "fingerprints": {
       "adjustments": "752c0ffbb7306bea51d19045d51693b56c3ff53ec0e2ccd242e6a3a4bf505269",
       "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
-      "presentationDepth": "790f5710c9725aee0ad5d069961be0ca7263a1ddfdfe1c39728d0481b8860ed9",
+      "presentationDepth": "8229bd0054b54c9ec8f69a188d9996cc3812aff65398ca193c0038accb4c2ab9",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "ecec13a5dcbfddd64a82d63cac9b7b4a29f407c8f245fd1efbf3b2a29d5d8aee",
+      "resolved": "375084bf6d9890db752ef9380ad3bf55bb35da18def455668ecc59abc8ea9187",
       "reviewed": "9b426b177f3aaccc1eb8e5c00104b476c8f1c0e21b2d67bbc7b8b9f7653949a5",
       "semantic": "dcd1b7454c0a0a91e4d66e2823c003d2ca0b60e8538348886a8b2076e93ff4ae",
       "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
@@ -120,6 +120,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {

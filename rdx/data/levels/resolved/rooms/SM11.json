@@ -22,13 +22,13 @@
     "fingerprints": {
       "adjustments": "710bf7126bc007f07a4779b4037d3782fb4c718aba495e9a68a9f202c6265636",
       "alignment": "bb08ea597fd93294f31788a4a67866bb25319d31ba24c75daa0bdd6f5e7b1668",
-      "presentationDepth": "590050d1c92d3f4b1ff6e38323e937db50323d230fea4d157bbd642c3946f5b0",
+      "presentationDepth": "8536d50dc2aa1897133b6f771b168c5dffe3a8b6f12310f7026f3f8df95bee17",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "57d78216c233d9d6a9454337b8da492d23b74cc985b1864aafec9163c3f1adff",
+      "resolved": "8e9143346091f46666fb0c64a73c58efe54f576b04597bb75b90c2491c6dc538",
       "semantic": "03c0950e7b9aa9b93aeccfc9d6f22802807eed0a66125fd10cc5ca5983777123",
       "sourceClassic": "d8561ab555b7843be334922559bbed7bdab628d8d4e86f0f9eaee125cc883454",
       "sourceRdx": "beb5eca8ffdd4b476d48d5b62cb59d425059a54c416556b51827d1e603cc4583",
-      "structural": "bc994d81bfe6205857fe0d29065fbe04ef52bcd489b04411a94138fcf6b73324",
+      "structural": "74c629822f983adda20a9712a6200219dc51062f56146578d69059a3ff7023fc",
       "transitions": "58852846b940032c471386151fec1926e3d61db14e65a7c753e46479bb265c79"
     },
     "group": "egypt",
@@ -324,6 +324,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {
@@ -2593,6 +2609,66 @@
               }
             ],
             "type": "visual-plane-patch"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              3,
+              8,
+              1,
+              1
+            ],
+            "id": "sm11-canonical-backdrop-open-20261013-3-8-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM11 g8 x=3..3, y=8: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:3:8",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              3,
+              9,
+              1,
+              1
+            ],
+            "id": "sm11-canonical-backdrop-open-20261013-3-9-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM11 g8 x=3..3, y=9: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:3:9",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              3,
+              10,
+              1,
+              1
+            ],
+            "id": "sm11-canonical-backdrop-open-20261013-3-10-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM11 g8 x=3..3, y=10: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:3:10",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "reviewed-production-backdrop-clearance-20261013",
+            "g8Bounds": [
+              3,
+              11,
+              1,
+              1
+            ],
+            "id": "sm11-canonical-backdrop-open-20261013-3-11-1",
+            "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
+            "reason": "Clear SM11 g8 x=3..3, y=11: RDX native solid over verified exposed Layer-F backdrop.",
+            "sourceKey": "geometry:rdx:g8:3:11",
+            "type": "gameplay-cell-override"
           }
         ],
         "schema": "rdr.structural_corrections_resolved.v1"

@@ -22,13 +22,13 @@
     "fingerprints": {
       "adjustments": "5f9537cc840e9a02031071ffe95a0ce469de2a1d70ef811aa599733b078e1e09",
       "alignment": "d844c6cedd99c5751b0643b60436e807fbde2f0553543bba8cf144e7227f8067",
-      "presentationDepth": "d3ba19d70e4370fea77001e8581d26cf1c0fadfc3d8e893b96da999314fb12a1",
+      "presentationDepth": "17a40155be8cca255d5c85e1d57d07fc34785a3bfb5af003d5207e2b57f10c8a",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "6a5786f3417116397cf1e620794abe2ba9881b9efc4331ffe31eee2379ed7df3",
+      "resolved": "f0e10ecff8f1a2dde9d43d3e2c447e67df913c22534b92c786af136b272a1efa",
       "semantic": "89a63c88344f8ec279571a087f596d52ac342642725c8704e714bb1b408b86b8",
       "sourceClassic": "4ad29b498b2ed3371d02f50731267fb4896cdd214f2fad0b595d11ff9ebc6758",
       "sourceRdx": "b42e93388892b5f235d0ef52d9ee09349dfe16e0c6c21f397dca2ffa71cc4bdc",
-      "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+      "structural": "f5df1db7eb686c0b2f28426238664b7fc80947cf0351f46d8fff3fd3ab8581ee",
       "transitions": "abf3475024413b994941e8e95de7302daf5c9323db30cf789c840706bd3185a2"
     },
     "group": "missile_base",
@@ -159,6 +159,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {
@@ -4162,7 +4178,68 @@
         }
       },
       "structuralCorrections": {
-        "operations": [],
+        "operations": [
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              32,
+              33,
+              1,
+              1
+            ],
+            "id": "sm2d-canonical-review-20261013-solid-32-33-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM2D g8 x=32..32, y=33; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:32:33",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              32,
+              34,
+              1,
+              1
+            ],
+            "id": "sm2d-canonical-review-20261013-solid-32-34-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM2D g8 x=32..32, y=34; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:32:34",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              32,
+              35,
+              1,
+              1
+            ],
+            "id": "sm2d-canonical-review-20261013-solid-32-35-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM2D g8 x=32..32, y=35; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:32:35",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              32,
+              85,
+              1,
+              1
+            ],
+            "id": "sm2d-canonical-review-20261013-solid-32-85-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM2D g8 x=32..32, y=85; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:32:85",
+            "type": "gameplay-cell-override"
+          }
+        ],
         "schema": "rdr.structural_corrections_resolved.v1"
       }
     },

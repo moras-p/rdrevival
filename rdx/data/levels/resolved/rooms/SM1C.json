@@ -22,13 +22,13 @@
     "fingerprints": {
       "adjustments": "e3cc479a238b90117729e43d2a60ee6705490627f377733e07db2c835e4cfe74",
       "alignment": "7c09b7e873fe726002df6432796f4927178cd6ed5ca2522f47d1a07e7c1f4e6f",
-      "presentationDepth": "12527a2739aacea212f4604ee32d87b6c2d0d01d2c67f630cb9eb90973222f76",
+      "presentationDepth": "383681957edec0b6213a824481183452514b24c39920aac2973133e5013bb368",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "1555a52e4305faf10cbbb5d0f389952b21b00208f0f2107a55d7d5db9f474eec",
+      "resolved": "ea45c078b1684b149516c1ad7ad636c20083b0941a677cf9425328ae24391f3c",
       "semantic": "3ee7d2761aa7c495e5e6ae89a0c86dfe51ff809c17c41afa9720bf80bf78440d",
       "sourceClassic": "329ffce9010f33c1f5336632669d75822b8931c3a384f0c0257a3fbd2f6a47cf",
       "sourceRdx": "2eec69322d3a68c677adeac63018724764c041218bd6253960cc5dcd3522f862",
-      "structural": "662b74800daf7a3f59d464ba1548124e260409b5896dfcc3e881c38363d7acd7",
+      "structural": "dee8d7874e16138c00b8df0b1a6ec121f48fee9adc6e8664352f11e42c4c1a8d",
       "transitions": "7142202244c30d630e870b15453a820613d5d7cbe9889f580bf3f6c68326e72c"
     },
     "group": "castle",
@@ -190,6 +190,22 @@
             "provenance": {
               "authority": "visual-parity-audit-affected-traps-20260911",
               "reason": "Backdrop-authored Egypt ladder/strip support tiles must stay with the backdrop across affected trap rooms; reviewed repeating ladder tiles 8768/8769 are included explicitly so they cannot occlude behind-midground traps."
+            }
+          },
+          {
+            "band": "midground",
+            "globalTiles": [
+              11052,
+              11065,
+              11067,
+              11069
+            ],
+            "id": "castle.decorative-barrels-plane-a",
+            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "plane": "A",
+            "provenance": {
+              "authority": "castle-barrel-behind-rick-20261012",
+              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
             }
           },
           {
@@ -3324,6 +3340,126 @@
             "rowIn": 32,
             "sourceKey": "rdx:MD0035:logic:20:35",
             "targetSubmap": 29,
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              22,
+              34,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-22-34-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=22..22, y=34; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:22:34",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              22,
+              35,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-22-35-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=22..22, y=35; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:22:35",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              22,
+              36,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-22-36-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=22..22, y=36; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:22:36",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              22,
+              37,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-22-37-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=22..22, y=37; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:22:37",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              4,
+              50,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-4-50-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=4..4, y=50; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:4:50",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              4,
+              51,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-4-51-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=4..4, y=51; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:4:51",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              4,
+              52,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-4-52-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=4..4, y=52; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:4:52",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-canonical-collision-review-20261013",
+            "g8Bounds": [
+              4,
+              53,
+              1,
+              1
+            ],
+            "id": "sm1c-canonical-review-20261013-solid-4-53-1",
+            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
+            "reason": "Apply reviewed solid 8px gameplay contact to SM1C g8 x=4..4, y=53; preserve adjacent contacts.",
+            "sourceKey": "geometry:rdx:g8:4:53",
             "type": "gameplay-cell-override"
           }
         ],
