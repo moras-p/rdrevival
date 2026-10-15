@@ -22,9 +22,9 @@
     "fingerprints": {
       "adjustments": "cc914280b80b189bc582a572edc1952959a1dba61809cbc6d51ba1e5292881b6",
       "alignment": "2c21685cc622d5efe64dd30b8446ac169d69f0b50e3482301dc2195c85963bd1",
-      "presentationDepth": "4bf6324ec60db17c7e876550f5a86e47be30fe2aebe6a2af43f8c7a56d40880a",
+      "presentationDepth": "dbd4322d6e9d9d712130b563279ad418c602f2cc6c371364ef81c94c45444333",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "55a7b0a3077ae2d26f0d15380d377e555e35eb781ee5c855e9f5e429cf328cde",
+      "resolved": "fee41f38b7876e54ca2966b567496cf967fd6cdd02e82d8a8ec330148d7ce3d8",
       "semantic": "6fe78dc05c2302f5a2a40f29a2d2a5a8dad023deda5e24c6457bd652e80cd0fa",
       "sourceClassic": "4b9bf57581b6ff897e749318e9076e49365700114a26573c5993595b43fd04a5",
       "sourceRdx": "fdb25b67193a3a506f9530c5e11b7a9804741029b5bd8c489e224d0c8b5fc697",
@@ -170,17 +170,21 @@
           {
             "band": "midground",
             "globalTiles": [
+              11045,
+              11047,
+              11050,
               11052,
+              11054,
               11065,
               11067,
               11069
             ],
             "id": "castle.decorative-barrels-plane-a",
-            "label": "Castle static barrel decoration (all four 8x8 quarters)",
+            "label": "Castle static barrel decoration (all eight distinct 8x8 artwork variants)",
             "plane": "A",
             "provenance": {
-              "authority": "castle-barrel-behind-rick-20261012",
-              "reason": "Decorative castle barrels (e.g. SM17 MD0030 at [240,288,16,16]) are part of the world behind Rick. Demote only their four exact Plane-A barrel quarters so adjacent wall/foreground tiles keep their original occlusion."
+              "authority": "castle-barrel-variant-depth-completion-20261015",
+              "reason": "Decorative Castle barrels must sit behind Rick. SM15 barrel stacks also use 11045/11047/11050/11054 alongside the previously reviewed four identities; demote all eight exact Plane-A barrel art tiles while retaining adjacent stonework in the foreground."
             }
           },
           {
