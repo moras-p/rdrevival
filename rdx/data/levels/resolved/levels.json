@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "14af1850fe0d552750342aed80e91a528bc5d5597f0db072726fcb3365cc6347",
+  "authoredLayersFingerprint": "7f9db690e96d45665cda005e5800c88963492abc40e0d803f3c41d77987e0cfa",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -21529,6 +21529,22 @@
           "submap": 38
         },
         {
+          "action": "one-way",
+          "authority": "user-reviewed-sm2a-ladder-missile-stack-support",
+          "g8Bounds": [
+            24,
+            20,
+            1,
+            1
+          ],
+          "id": "sm2a-missile-stack-right-walkable-24-20",
+          "mapId": 50,
+          "provenance": "SM2A user correction 2026-10-17; the adjacent missile-stack top is solid at y=160, while g8 x=24,y=20 is empty in the native RDX provider; unlike SM2D this is a room-local missile-stack-to-ladder seam.",
+          "reason": "Extend the missile-stack top at RDX g8 x=22..23 by one 8px support cell to the right, permitting ladder enemies to step left onto the stack without adding a blocking wall or changing the ladder.",
+          "sourceKey": "geometry:rdx:g8:24:20",
+          "submap": 42
+        },
+        {
           "action": "solid",
           "authority": "user-canonical-collision-review-20261013",
           "g8Bounds": [
@@ -22029,15 +22045,15 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "14af1850fe0d552750342aed80e91a528bc5d5597f0db072726fcb3365cc6347",
+    "authoredLayers": "7f9db690e96d45665cda005e5800c88963492abc40e0d803f3c41d77987e0cfa",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "e056318c0d32d9e5ed8cfb556e515eb5c518d5bb7c2f76b2d19cdfe487a7565a",
     "presentationOcclusion": "3dddb01da04d2b2f32b74ff747a46e02c66a6bcc8ba3f575a1a809ad3e4d30aa",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "7e05b3a683acd60d41897134aaf9c0fa1c4cc120e6aca334064c0c668c7021bf",
-    "resolved32": 1391672077,
-    "runtimeSource": "705da01e6ccc60aaf0df073d990dcffb281105edf1592aebbe0669b26729431e",
-    "runtimeSource32": 193027996,
+    "resolved": "288c0d74405b6cecf5653bad6446197904b9e8caab75b8ae3d07b5bca9254370",
+    "resolved32": 4050959505,
+    "runtimeSource": "7650a2a198ccb4b88182e892d0512b9c2936ff816aff7cc1b00c966ac8a85069",
+    "runtimeSource32": 3498418693,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -191807,11 +191823,11 @@
         "alignment": "7eb68280734ec6f8ca5aab1b25bd81c61e845d59fd1816a55c55baa6f613deac",
         "presentationDepth": "29c2d992ae2f627ff245b91175b8f243ca1d470e16a5507ea2e3c1a9cac4d23b",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "ad9d18b778204217d88cc4ac65a315c5e9c8f4b389a80a00697ab9efcaa2e88c",
+        "resolved": "e6a625511dd67286e52dda2da2a3021c1f0329343e7aa709e37cecd9c3c31d6c",
         "semantic": "91f0828eef137e1b0dfc3d6be1b1a93216d1a625ca61bd9087cfa5aec3f2a084",
         "sourceClassic": "83870f8352dfa0b4bb30fe2f77089df3f8e5874d1524528f468dcfc5dc57c68c",
         "sourceRdx": "6adee69e9892d8c8b3dad75c19267713748be572d38e9a3283ba3867ed7b0bfa",
-        "structural": "27865cb37740c4a827cab5ce95f0a7b90bbd723a26d27a96b37a885e88691a48",
+        "structural": "1512687aa23d55fa06b5e4b24291ececb7ee6d30b9cade6a8eedde9ab5af2731",
         "transitions": "d1e11846ce69259aa251d35240daf8dd549b897664be1d92fe631b317f33c3b4"
       },
       "group": "missile_base",
@@ -193839,7 +193855,23 @@
           }
         },
         "structuralCorrections": {
-          "operations": [],
+          "operations": [
+            {
+              "action": "one-way",
+              "authority": "user-reviewed-sm2a-ladder-missile-stack-support",
+              "g8Bounds": [
+                24,
+                20,
+                1,
+                1
+              ],
+              "id": "sm2a-missile-stack-right-walkable-24-20",
+              "provenance": "SM2A user correction 2026-10-17; the adjacent missile-stack top is solid at y=160, while g8 x=24,y=20 is empty in the native RDX provider; unlike SM2D this is a room-local missile-stack-to-ladder seam.",
+              "reason": "Extend the missile-stack top at RDX g8 x=22..23 by one 8px support cell to the right, permitting ladder enemies to step left onto the stack without adding a blocking wall or changing the ladder.",
+              "sourceKey": "geometry:rdx:g8:24:20",
+              "type": "gameplay-cell-override"
+            }
+          ],
           "schema": "rdr.structural_corrections_resolved.v1"
         }
       },
@@ -205753,7 +205785,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "705da01e6ccc60aaf0df073d990dcffb281105edf1592aebbe0669b26729431e",
+  "runtimeSourceFingerprint": "7650a2a198ccb4b88182e892d0512b9c2936ff816aff7cc1b00c966ac8a85069",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {
