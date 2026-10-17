@@ -24,12 +24,12 @@
       "alignment": "dabe4b9a3780784bf4ee09f4dde0d7f5ca271cdc5b0cb5862d5defc0b412030e",
       "presentationDepth": "d7ea8b1913881ddfce43ba552901fa3b0ee815db6e125df075d85901cfbe614d",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "5bbf23cfc60887b8b4dcb74d717cc5f99722135e51993198081164105543c29c",
+      "resolved": "ca6efb5c07ea98b7360876081926daa2ff132a2a02f0ef138de6f3c03f00c67c",
       "reviewed": "f3806cfa450395af2adc7c50a1069a92d768c0ab8d351fc37d730d1e90769f6a",
       "semantic": "290d9ac1496487100493087df83c09aec21574babf0aeefc2dfe9ccdb045ee7d",
       "sourceClassic": "1ce5c8048ec95e979eb3cd8cdf789bc9330d3e2c592e27b862204dc9912da79c",
       "sourceRdx": "10541ab27aeb8ff183ff7b6ca8a9d98c0dc737959f3664709cfa1018a62cdca5",
-      "structural": "8a1acaaf3f4b4ba269b993373b5b3fbbec7bb6f3a1e55dac5787ab2ec2fc6751",
+      "structural": "404cafe4ae1b1cab5596e77f13c702fe1185dc9eeef8e74c5a5b15af8932ab96",
       "transitions": "b50a2cfc57d92632d1a29717560c9bd3a3d74f29b930b5f2ef987ee88cea084b"
     },
     "group": "castle",
@@ -2391,6 +2391,51 @@
             "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
             "reason": "Clear SM24 g8 x=34..34, y=47: RDX native solid over verified exposed Layer-F backdrop.",
             "sourceKey": "geometry:rdx:g8:34:47",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-castle-geometry-20261016",
+            "g8Bounds": [
+              18,
+              64,
+              1,
+              1
+            ],
+            "id": "sm24-user-geometry-20261016-open-18-64-1x1",
+            "provenance": "Explicit user-requested MD0041/MD0043/MD0044 Level Editor geometry cell corrections, 2026-10-16.",
+            "reason": "Remove terrain contact at SM24 g8 x=18, y=64; preserve neighboring cells and visible terrain.",
+            "sourceKey": "geometry:rdx:g8:18:64",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-castle-geometry-20261016",
+            "g8Bounds": [
+              21,
+              64,
+              1,
+              1
+            ],
+            "id": "sm24-user-geometry-20261016-open-21-64-1x1",
+            "provenance": "Explicit user-requested MD0041/MD0043/MD0044 Level Editor geometry cell corrections, 2026-10-16.",
+            "reason": "Remove terrain contact at SM24 g8 x=21, y=64; preserve neighboring cells and visible terrain.",
+            "sourceKey": "geometry:rdx:g8:21:64",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "one-way",
+            "authority": "user-reviewed-castle-geometry-20261016",
+            "g8Bounds": [
+              22,
+              30,
+              2,
+              1
+            ],
+            "id": "sm24-user-geometry-20261016-one-way-22-30-2x1",
+            "provenance": "Explicit user-requested MD0041/MD0043/MD0044 Level Editor geometry cell corrections, 2026-10-16.",
+            "reason": "Use xrick one-way landing support at SM24 g8 x=22..23, y=30; preserve neighboring cells and visible terrain.",
+            "sourceKey": "geometry:rdx:g8:22:30",
             "type": "gameplay-cell-override"
           },
           {

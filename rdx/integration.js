@@ -17,6 +17,8 @@ import { createResolvedEditorProjection, nativeLevelParity } from './src/levels/
 import { bindRuntimeOptions } from './src/runtime/options.js';
 import { canConnectRdxRomDirectory, connectRdxRomDirectory, loadRememberedRdxRom, rememberRdxRom } from './src/runtime/rom-store.js';
 import { XRICK_CONTROL } from './src/runtime/controls.js';
+import { GameInputRouter } from './src/runtime/input-router.js';
+import { GameSession } from './src/runtime/game-session.js';
 import { createAiPlaytestController } from './src/agent/ai-playtest-controller.js';
 import { createRealtimeModelWorkbench } from './src/agent/realtime-model-workbench.js';
 import { installGameplayWebMcp } from './src/agent/gameplay-webmcp.js';
@@ -1416,6 +1418,10 @@ function frame() {
       if (snapshot.presentationMode || simulationAdvanced) recordCollisionTrace(snapshot);
       redrawAnnotations(snapshot);
       renderMapEditorPlaytest(snapshot);
+      // Optional P0 input trace: capture only after actual 2D canvas submission.
+      // No extra frame, native tick, or copy is scheduled by the observer.
+      if (window.xrickInputRouter?.trace)
+        window.xrickInputRouter.noteFrameSubmission(snapshot.frameSerial);
     }
     updateCollisionRuntime(snapshot);
     const aiSnapshot = bridge.snapshot();
@@ -2063,6 +2069,17 @@ try {
     loadJson('./rdx/data/logic_puzzles.json').then(installLogicPuzzles)
   ]);
   bridge = new XrickWasmBridge(module);
+  const inputRouter = new GameInputRouter({
+    writeBit: (bit, pressed) => module._xrick_rdx_web_keyboard_event(bit, pressed ? 1 : 0),
+    clearNative: () => module._xrick_rdx_web_keyboard_clear(),
+    trace: new URLSearchParams(location.search).has('input-trace')
+  });
+  inputRouter.setOwner(window.xrickGameOwnsKeyboard?.() ? 'game' : 'page');
+  window.xrickInputRouter = module.xrickInputRouter = inputRouter;
+  // Passive 2D consumer of the same instance; no new clock or pixel pipeline.
+  const gameSession = new GameSession({ bridge, input: inputRouter, module });
+  gameSession.initialize();
+  window.xrickGameSession = gameSession;
   runtimeOptions.attachBridge(bridge);
   aiPlaytestController.updateButtons();
   aiPlaytestController.setPlayStatus(bridge.aiBackendAvailable() ? 'Load RDX ROM to enable AI play' : 'GAI backend missing from WASM', bridge.aiBackendAvailable() ? 'neutral' : 'error');

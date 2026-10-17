@@ -24,12 +24,12 @@
       "alignment": "0371d07db7eae2db850f88e14bc71b50e84ec59043cf292dc14cc8ab922b7573",
       "presentationDepth": "421091cd1dc9f93e4ffac1044a4ce1328b4e490aa17d12048683fd685c481b8f",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "72a25f2544379ef78792f0cb9e55e19b78552f63e0253c28900d792444832f60",
+      "resolved": "0057b42c5dd44d499bae4e927a58d1142c659a2a7204cac8da989f39beafecfb",
       "reviewed": "9b426b177f3aaccc1eb8e5c00104b476c8f1c0e21b2d67bbc7b8b9f7653949a5",
       "semantic": "dcd1b7454c0a0a91e4d66e2823c003d2ca0b60e8538348886a8b2076e93ff4ae",
       "sourceClassic": "a646cd9c7f555612ef11a6752ffa90ddf838e4495c00c8ba6638b23f4276fced",
       "sourceRdx": "909b960e7f91911f30f6d9dc99da971a8fe357e04f62622bdaf5368792b5df9d",
-      "structural": "532f5f8bbd92e1e70c7554dfdfa8ad870ea1dac57651f2228a34bda896d19e25",
+      "structural": "f850e01d1a95d2d276bf84f75a21b497ac646fdc4228daa1d057ca040d1682d7",
       "transitions": "8e33606ddf1fa5a8f09b7f16a998b72267a65a9a991829fb45de1d1f4d38b070"
     },
     "group": "castle",
@@ -3077,6 +3077,26 @@
             "sourceKey": "rdx:MD0037:logic:20:22",
             "targetSubmap": 31,
             "type": "gameplay-cell-override"
+          },
+          {
+            "action": "overlay-pn",
+            "authority": "classic-stick-trigger-visual-cue-transfer",
+            "front": false,
+            "id": "md0037-sm1e-castle-stick-slot-mark335",
+            "introducedInVersion": "2.1.104",
+            "mirrorX": false,
+            "mirrorY": false,
+            "origin": [
+              256,
+              176
+            ],
+            "pn": 118,
+            "provenance": "Use the same Castle PN118 stick-slot cue as reviewed SM1B; align the slot to the mark-335 far-right trigger wall above the y=192 upper walkway.",
+            "reason": "Expose mark 335 stick activation with the same Castle PN118 wall-slot artwork as SM1B.",
+            "role": "interaction-cue",
+            "sourceBounds": null,
+            "sourceKey": "castle-stick-slot:sm1e:mark-335:g8:32:22",
+            "type": "visual-plane-patch"
           }
         ],
         "schema": "rdr.structural_corrections_resolved.v1"

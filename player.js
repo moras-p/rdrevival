@@ -59,6 +59,7 @@
   }
   function clearGameKeyboard() {
     gameControlMask = 0;
+    if (window.xrickInputRouter) { window.xrickInputRouter.clear(); return; }
     var module = window.Module;
     if (module && typeof module._xrick_rdx_web_keyboard_clear === 'function') {
       module._xrick_rdx_web_keyboard_clear();
@@ -68,7 +69,11 @@
     var next = !!active;
     if (gameKeyboardActive === next) return;
     gameKeyboardActive = next;
-    if (!next) clearGameKeyboard();
+    if (window.xrickInputRouter) window.xrickInputRouter.setOwner(next ? 'game' : 'page');
+    if (!next) {
+      if (!window.xrickInputRouter) clearGameKeyboard();
+      gameControlMask = 0;
+    }
     if (gameStage) gameStage.classList.toggle('keyboard-active', next);
     window.dispatchEvent(new CustomEvent('xrick-keyboard-owner-changed', { detail: { owner: next ? 'game' : 'page' } }));
   }
@@ -97,6 +102,12 @@
       }
       return;
     }
+    // Track releases outside game ownership so a held key cannot leak back
+    // into gameplay after closing a modal or changing focus.
+    if (window.xrickInputRouter && (!gameKeyboardActive || editableTarget(event.target))) {
+      window.xrickInputRouter.keyboard(event.code, pressed, event.timeStamp);
+      return;
+    }
     if (!gameKeyboardActive || editableTarget(event.target)) return;
     /* V switches the live renderer between classic and RDX without taking
      * focus away from the game.  Tab is intentionally left native so the
@@ -115,7 +126,8 @@
      * this key so the input that starts a manual recording is preserved. */
     if (pressed && !event.repeat && (bit & 0x1f))
       window.dispatchEvent(new CustomEvent('xrick-gameplay-input', { detail:{mask:gameControlMask} }));
-    callKeyboardBridge(bit, pressed);
+    if (window.xrickInputRouter) window.xrickInputRouter.keyboard(event.code, pressed, event.timeStamp);
+    else callKeyboardBridge(bit, pressed);
   }
   if (gameStage) {
     var focusGame = function () {
@@ -134,7 +146,14 @@
   });
   window.addEventListener('keydown', function (event) { handleGameKey(event, true); }, true);
   window.addEventListener('keyup', function (event) { handleGameKey(event, false); }, true);
-  window.addEventListener('blur', function () { setGameKeyboardActive(false); });
+  function releaseLostFocusInput() {
+    setGameKeyboardActive(false);
+    if (window.xrickInputRouter) window.xrickInputRouter.setOwner('none');
+  }
+  window.addEventListener('blur', releaseLostFocusInput);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) releaseLostFocusInput();
+  });
   window.xrickGameOwnsKeyboard = gameOwnsKeyboard;
   window.xrickFocusPage = focusPageWorkbench;
   window.xrickFocusGame = function () {

@@ -100,6 +100,8 @@ export class XrickWasmBridge {
       setSpriteReplacementMask: wrap1('xrick_rdx_set_sprite_replacement_mask', null),
       getSpriteReplacementMask: wrap0('xrick_rdx_get_sprite_replacement_mask'),
       loadPresentationRom: wrap1('xrick_rdx_load_rom_from_module'),
+      preparePresentationRom: wrap1('xrick_rdx_prepare_rom_from_module'),
+      selectExperience: wrap1('xrick_rdx_select_experience', null),
       unloadPresentationRom: wrap0('xrick_rdx_unload_rom', null),
       presentationReady: wrap0('xrick_rdx_presentation_ready'),
       copyPresentationRgba: wrap0('xrick_rdx_copy_presentation_rgba'),
@@ -173,6 +175,23 @@ export class XrickWasmBridge {
       getLives: wrap0('xrick_rdx_get_lives'),
       getScore: wrap0('xrick_rdx_get_score'),
       getFrameSerial: wrap0('xrick_rdx_get_frame_serial'),
+      gameEventsVersion: wrap0('xrick_rdx_game_events_version'),
+      gameEventsGeneration: wrap0('xrick_rdx_game_events_generation'),
+      gameEventsOldest: wrap0('xrick_rdx_game_events_oldest'),
+      gameEventsLatest: wrap0('xrick_rdx_game_events_latest'),
+      gameEventsDropped: wrap0('xrick_rdx_game_events_dropped'),
+      gameEventKind: wrap1('xrick_rdx_game_event_kind'),
+      gameEventTick: wrap1('xrick_rdx_game_event_tick'),
+      gameEventExperience: wrap1('xrick_rdx_game_event_experience'),
+      gameEventSubmap: wrap1('xrick_rdx_game_event_submap'),
+      gameEventFlags: wrap1('xrick_rdx_game_event_flags'),
+      gameEventActor: wrap1('xrick_rdx_game_event_actor'),
+      gameEventMark: wrap1('xrick_rdx_game_event_mark'),
+      gameEventX: wrap1('xrick_rdx_game_event_x'),
+      gameEventY: wrap1('xrick_rdx_game_event_y'),
+      gameEventDx: wrap1('xrick_rdx_game_event_dx'),
+      gameEventDy: wrap1('xrick_rdx_game_event_dy'),
+      gameEventPreviousSubmap: wrap1('xrick_rdx_game_event_previous_submap'),
       agentObservationVersion: wrap0('xrick_rdx_agent_observation_version'),
       agentObservationSize: wrap0('xrick_rdx_agent_observation_size'),
       copyAgentObservation: wrap0('xrick_rdx_copy_agent_observation'),
@@ -1382,6 +1401,22 @@ export class XrickWasmBridge {
       paused: !!this.api.collisionShouldPause(),
       native: this.nativeCollisionSnapshot()
     };
+  }
+
+  preparePresentationRom(bytes) {
+    if (!(bytes instanceof Uint8Array) || !bytes.length) throw new TypeError('Validated ROM bytes required');
+    this.module.rdxRomBytes = new Uint8Array(bytes);
+    try {
+      const copied = this.api.preparePresentationRom(bytes.length) >>> 0;
+      if (copied !== bytes.length || !this.api.presentationReady())
+        throw new Error('Native ROM preparation failed');
+      return copied;
+    } finally { delete this.module.rdxRomBytes; }
+  }
+
+  selectExperience(mode) {
+    if (mode !== 'classic' && mode !== 'revival') throw new RangeError('Unknown true experience');
+    this.api.selectExperience(mode === 'revival' ? 1 : 0);
   }
 
   loadPresentationRom(bytes) {
