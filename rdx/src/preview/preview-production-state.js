@@ -823,6 +823,27 @@ export function _productionRoom() {
     : null;
 }
 
+/* The SM2A escape cart is a reviewed Revival native-controller exception:
+ * e_them_t3_action2() repeats the first +4px Classic step until the cart's
+ * left edge reaches the RDX room edge. Classic still executes the complete
+ * reversing 0x3A script. Only project this motion onto the RDX fallback leg;
+ * Layer B/C/D and other 0x3A carts retain their original Classic path. */
+export function revivalEscapeCartFallbackMotion(record, submap, tick, roomWidth, scriptedPaths) {
+  const source = record?.source || {};
+  if (Number(submap) !== 0x2a || String(record?.sourceKey) !== 'mark:468' ||
+      Number(source.mark) !== 468 || (Number(source.n) & 0x7f) !== 0x3a) return null;
+  const step = scriptedPaths?.entities?.['58']?.steps?.[0];
+  const draw = record?.draw;
+  if (!Array.isArray(draw) || !step || Number(step.dx) <= 0 || Number(step.dy) !== 0 ||
+      !Number.isFinite(Number(roomWidth))) return null;
+  const phase = Math.max(0, Math.floor(Number(tick) || 0));
+  const x = Number(draw[0]) + phase * Number(step.dx);
+  return Object.freeze({
+    x, y:Number(draw[1]), direction:'right', animated:true,
+    visible:x < Number(roomWidth), authority:'revival-native-sm2a-escape-cart'
+  });
+}
+
 export function _productionFallbacks(tick) {
   const room = this._productionRoom();
   if (!room) return null;
@@ -844,27 +865,30 @@ export function _productionFallbacks(tick) {
     const source = record.source || {};
     const n = Number(record.n ?? source.n ?? 0) & 0x7f;
     const classic = activeClassic?.get(String(record.sourceKey || '')) || null;
-    const useClassicAction = !!classic && n >= 0x18 && record.role !== 'shooter' && this.activateAllTraps;
+    const revivalCart = this.resolvedProjection && this.activateAllTraps
+      ? revivalEscapeCartFallbackMotion(record, this.selection?.submap, tick,
+        this.selection?.dimensions?.width, this.classicScriptedPaths) : null;
+    const useClassicAction = !revivalCart && !!classic && n >= 0x18 && record.role !== 'shooter' && this.activateAllTraps;
     return Object.freeze({
       kind: classicPreviewKind(record.role, n, false),
       entity: n,
       sprite: Number(useClassicAction ? classic.sprite : (sample.sprite ?? record.sprite ?? 0)),
-      x: Number(useClassicAction ? classic.x : (sample.draw?.[0] ?? record.draw?.[0] ?? 0)),
-      y: Number(useClassicAction ? classic.y : (sample.draw?.[1] ?? record.draw?.[1] ?? 0)),
-      direction: useClassicAction ? (classic.direction || 'right') : (sample.direction || 'right'),
-      animated: useClassicAction ? !!classic.animated : (Array.isArray(record.samples) && record.samples.length > 1),
+      x: Number(revivalCart ? revivalCart.x : (useClassicAction ? classic.x : (sample.draw?.[0] ?? record.draw?.[0] ?? 0))),
+      y: Number(revivalCart ? revivalCart.y : (useClassicAction ? classic.y : (sample.draw?.[1] ?? record.draw?.[1] ?? 0))),
+      direction: revivalCart?.direction || (useClassicAction ? (classic.direction || 'right') : (sample.direction || 'right')),
+      animated: revivalCart ? true : (useClassicAction ? !!classic.animated : (Array.isArray(record.samples) && record.samples.length > 1)),
       static: false,
       source,
       sourceKey: record.sourceKey,
       collision: record.collision || null,
       overlayForSourceKey: record.overlayForSourceKey || null,
       diagnosticPlaceholder: !!record.diagnosticPlaceholder,
-      auditAuthority: useClassicAction ? 'classic-action-fallback-parity' : (record.auditAuthority || null),
+      auditAuthority: revivalCart?.authority || (useClassicAction ? 'classic-action-fallback-parity' : (record.auditAuthority || null)),
       productionFallback: true,
       actorDepth: String(sample.actorDepth || record.actorDepth || ((sample.front === true || record.front === true) ? 'front' : 'normal')),
       front: String(sample.actorDepth || record.actorDepth || '') === 'front' || sample.front === true || record.front === true,
       scriptedPathReplay: !!classic?.scriptedPathReplay,
-      visible: useClassicAction ? classic.visible !== false : sample.visible !== false
+      visible: revivalCart ? revivalCart.visible : (useClassicAction ? classic.visible !== false : sample.visible !== false)
     });
   }).filter(state => (state.sprite > 0 || state.diagnosticPlaceholder) && state.visible);
 }

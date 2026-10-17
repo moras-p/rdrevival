@@ -24,11 +24,11 @@
       "alignment": "d844c6cedd99c5751b0643b60436e807fbde2f0553543bba8cf144e7227f8067",
       "presentationDepth": "a445cabb70ca24b716680cb7eadfd76456b7b29c1c90559c7c6105e99a7443c0",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "78568aa9309d66c446ab58d37bb6fb9b602b6f622424e3f5ac848f05139c0b8f",
+      "resolved": "69843a8ae264a5be348a9ac47c7c9be4700759601e03c8abc646ec740d7fe6d8",
       "semantic": "89a63c88344f8ec279571a087f596d52ac342642725c8704e714bb1b408b86b8",
       "sourceClassic": "4ad29b498b2ed3371d02f50731267fb4896cdd214f2fad0b595d11ff9ebc6758",
       "sourceRdx": "b42e93388892b5f235d0ef52d9ee09349dfe16e0c6c21f397dca2ffa71cc4bdc",
-      "structural": "f5df1db7eb686c0b2f28426238664b7fc80947cf0351f46d8fff3fd3ab8581ee",
+      "structural": "6b84768943526d456570ae487773e4fd39ff7884bc8bbb9001b9d19e2490e3dd",
       "transitions": "abf3475024413b994941e8e95de7302daf5c9323db30cf789c840706bd3185a2"
     },
     "group": "missile_base",
@@ -4241,6 +4241,62 @@
             "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
             "reason": "Apply reviewed solid 8px gameplay contact to SM2D g8 x=32..32, y=85; preserve adjacent contacts.",
             "sourceKey": "geometry:rdx:g8:32:85",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "one-way",
+            "authority": "user-reviewed-sm2d-collision-20261017",
+            "g8Bounds": [
+              10,
+              48,
+              2,
+              1
+            ],
+            "id": "sm2d-user-reviewed-20261017-one-way-10-48",
+            "reason": "Apply requested one-way support at SM2D 8px gameplay cells x=10..11, y=48.",
+            "sourceKey": "geometry:rdx:g8:10:48",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "one-way",
+            "authority": "user-reviewed-sm2d-collision-20261017",
+            "g8Bounds": [
+              19,
+              48,
+              1,
+              1
+            ],
+            "id": "sm2d-user-reviewed-20261017-one-way-19-48",
+            "reason": "Apply requested one-way support at SM2D 8px gameplay cell x=19, y=48.",
+            "sourceKey": "geometry:rdx:g8:19:48",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "one-way",
+            "authority": "user-reviewed-sm2d-collision-20261017",
+            "g8Bounds": [
+              28,
+              48,
+              1,
+              1
+            ],
+            "id": "sm2d-user-reviewed-20261017-one-way-28-48",
+            "reason": "Apply requested one-way support at SM2D 8px gameplay cell x=28, y=48.",
+            "sourceKey": "geometry:rdx:g8:28:48",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-sm2d-collision-20261017",
+            "g8Bounds": [
+              22,
+              52,
+              1,
+              1
+            ],
+            "id": "sm2d-user-reviewed-20261017-open-22-52",
+            "reason": "Apply requested open passage at SM2D 8px gameplay cell x=22, y=52.",
+            "sourceKey": "geometry:rdx:g8:22:52",
             "type": "gameplay-cell-override"
           }
         ],
