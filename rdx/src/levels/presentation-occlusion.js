@@ -1,6 +1,6 @@
 export const PRESENTATION_OCCLUSION_SCHEMA = 'rdr.presentation_occlusion.v1';
 export const PRESENTATION_OCCLUSION_RESOLVED_SCHEMA = 'rdr.presentation_occlusion_resolved.v1';
-export const PRESENTATION_OCCLUSION_CLASSES = Object.freeze(['none','embedded']);
+export const PRESENTATION_OCCLUSION_CLASSES = Object.freeze(['none','embedded','normal']);
 export const PRESENTATION_OCCLUSION_PLANES = Object.freeze(['A','B']);
 
 const clone = value => value == null ? value : JSON.parse(JSON.stringify(value));

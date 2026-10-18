@@ -34,7 +34,7 @@ import { PaletteRegistry } from './rdx/src/data/palettes.js';
 import { cd32AugmentedRdxFrame } from './rdx/src/runtime/cd32-augmentation.js';
 import { loadRememberedRdxRom, rememberRdxRom, RDX_ROM_FILENAME } from './rdx/src/runtime/rom-store.js';
 import { revivalBulletFrame } from './rdx/src/runtime/revival-bullet.js';
-import { revivalDynamiteFrame } from './rdx/src/runtime/revival-dynamite.js';
+import { revivalDynamiteFrame, revivalDynamiteFuseSparkPoint } from './rdx/src/runtime/revival-dynamite.js';
 import { REVIVAL_DYNAMITE_EXPLOSION_VARIANT_COUNT, REVIVAL_DYNAMITE_ROLLING_VARIANT_COUNT, revivalRollingExplosionFrame } from './rdx/src/runtime/revival-dynamite.js';
 import { EXPLOSION_PREVIEW_DEFAULT_PATH, EXPLOSION_PREVIEW_RENDER_PLANES, EXPLOSION_PREVIEW_SEQUENCE_FAMILIES, EXPLOSION_PREVIEW_SPAWN_MODES, EXPLOSION_PREVIEW_VARIANT_POLICIES, explosionPreviewDiagnostics, explosionPreviewTimeline, normalizeExplosionPreviewConfig } from './rdx/src/juice/explosion-path-preview.js';
 import { installWebMcpTools } from './rdx/src/agent/webmcp.js';
@@ -1637,6 +1637,16 @@ function actionPreviewScene(frameCanvas,direction=1,actionId=selectedAction,stor
     const rect=bomb?drawActionPreviewGroundedProp(bg,bomb.canvas,cx,anchorY,{scale:z}):null;
     if(bomb)drawActionPreviewGroundedProp(pc,bomb.canvas,cx,anchorY,{scale:z});
     propPositions.dynamite=rect?{x:(rect.left+rect.right)/2,y:(rect.top+rect.bottom)/2}:{x:cx,y:anchorY-18*z};
+    if(rect&&story.dynamite.phase==='fuse'){
+      const tip=revivalDynamiteFuseSparkPoint(actionPreviewBombTicker(story.dynamite));
+      const opaque=actionPreviewOpaqueBounds(bomb.canvas);
+      const sourceX=bomb.presentation==='revival'?tip.x:tip.x-12;
+      const sourceY=bomb.presentation==='revival'?tip.y:tip.y-8;
+      propPositions.dynamiteFuse={
+        x:rect.left+((sourceX-(opaque?.minX||0))*z),
+        y:rect.top+((sourceY-(opaque?.minY||0))*z)
+      };
+    }
     if(Number.isFinite(distance)){bg.fillStyle='#9cb0be';bg.font='10px ui-monospace,monospace';bg.fillText(`${Math.round(distance)} px`,Math.min(270,Math.max(8,(heroCenter+cx)/2-14)),baseBottom-4);}
   }
   if(story?.collectible?.visible){
@@ -1694,6 +1704,7 @@ function actionPreviewEvent(actionId,scene,direction,frameSerial=0){
   if(ACTION_PREVIEW_FOOT_ACTIONS.has(actionId)&&scene.heroVisibleBounds){x=(scene.heroVisibleBounds.left+scene.heroVisibleBounds.right)/2;y=scene.heroVisibleBounds.bottom-1;}
   if(scene.propPositions?.bullet&&(actionId==='weapon.fire'||actionId==='bullet.wall_hit'||actionId==='bullet.target_hit'||actionId==='player.projectile_hit'||actionId==='projectile.near_miss')){x=scene.propPositions.bullet.x;y=scene.propPositions.bullet.y;}
   if(scene.propPositions?.dynamite&&actionId.startsWith('dynamite.')){x=scene.propPositions.dynamite.x;y=scene.propPositions.dynamite.y;hudBounds=inventory.dynamite;}
+  if(actionId==='dynamite.fuse'&&scene.propPositions?.dynamiteFuse){x=scene.propPositions.dynamiteFuse.x;y=scene.propPositions.dynamiteFuse.y;}
   if(scene.propPositions?.dynamite&&['ammo.explode','player.explosion_hit','player.explosion_near_miss'].includes(actionId)){x=scene.propPositions.dynamite.x;y=scene.propPositions.dynamite.y;}
   if(scene.propPositions?.collectible&&actionId==='pickup.collect'){x=scene.propPositions.collectible.x;y=scene.propPositions.collectible.y;}
   if(scene.propPositions?.blockage&&actionId==='blockage.crumble'){x=scene.propPositions.blockage.x;y=scene.propPositions.blockage.y;}

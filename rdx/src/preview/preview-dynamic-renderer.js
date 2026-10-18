@@ -76,12 +76,14 @@ function localCoverModel(renderer) {
 // actually opaque Midground pixel must be present to hide an embedded actor.
 // The pixel's two source tile identities are resolved once per 8x8 cell rather
 // than searching the map for every actor pixel.
-export function previewLocalCoverAt(renderer, x, y, layers = null) {
+export function previewLocalCoverAt(renderer, x, y, layers = null, coverKind = 'embedded') {
   const model = localCoverModel(renderer);
   if (!(model.classes?.length || model.overrides?.length)) return false;
-  const midground = layers?.midground || renderer.staticLayers(renderer._localCoverPhase || 0).midground;
-  if (!midground || x < 0 || y < 0 || x >= midground.width || y >= midground.height ||
-      midground.data[(y * midground.width + x) * 4 + 3] === 0) return false;
+  if (coverKind === 'embedded') {
+    const midground = layers?.midground || renderer.staticLayers(renderer._localCoverPhase || 0).midground;
+    if (!midground || x < 0 || y < 0 || x >= midground.width || y >= midground.height ||
+        midground.data[(y * midground.width + x) * 4 + 3] === 0) return false;
+  }
   const gx=Math.floor(x/8), gy=Math.floor(y/8);
   const key=`${renderer.selection?.submap}:${renderer.selection?.mapId}:${renderer._localCoverPhase || 0}:${gx}:${gy}`;
   if (renderer._localCoverCellCache?.key !== key) {
@@ -97,10 +99,10 @@ export function previewLocalCoverAt(renderer, x, y, layers = null) {
   const ids=renderer._localCoverCellCache.ids;
   return ['B','A'].some(plane=>presentationOcclusionAt(model,{
     plane,globalTile:ids[plane],x,y
-  }).cover==='embedded');
+  }).cover===coverKind);
 }
 
-function blitOpacityWithLocalCover(renderer, target, source, dx, dy, alpha = 1, clip = null, blackKey = false) {
+function blitOpacityWithLocalCover(renderer, target, source, dx, dy, alpha = 1, clip = null, blackKey = false, embedded = false) {
   const opacity = Math.max(0, Math.min(1, Number(alpha)));
   const top = Math.max(0, Math.min(source.height, Number(clip?.top || 0)));
   const bottom = Math.max(0, Math.min(source.height - top, Number(clip?.bottom || 0)));
@@ -110,11 +112,12 @@ function blitOpacityWithLocalCover(renderer, target, source, dx, dy, alpha = 1, 
   const yEnd = source.height - bottom, xEnd = source.width - right;
   for (let y = top; y < yEnd; y += 1) for (let x = left; x < xEnd; x += 1) {
     const tx = baseX + x, ty = baseY + y;
-    if (previewLocalCoverAt(renderer, tx, ty)) continue;
     const index = (y * source.width + x) * 4;
     const a = Math.round(source.data[index + 3] * opacity);
     if (!a) continue;
     if (blackKey && source.data[index] === 0 && source.data[index + 1] === 0 && source.data[index + 2] === 0) continue;
+    if (previewLocalCoverAt(renderer, tx, ty, null, 'normal') ||
+        (embedded && previewLocalCoverAt(renderer, tx, ty))) continue;
     target.blendPixel(tx, ty, [source.data[index], source.data[index + 1], source.data[index + 2], a]);
   }
 }
@@ -718,8 +721,13 @@ export function dynamicFrame(tick) {
     const occlusionClip=clipActorToWorldWindow(frame.pixels, drawX, drawY,
       { top:state.clipTop, bottom:state.clipBottom, left:state.clipLeft, right:state.clipRight },visibilityWindow);
     if (!inspectionHidden && !runtimeSuppressed) {
-      if (localOcclusionClass === 'embedded' && !visibilityWindow && !Object.prototype.hasOwnProperty.call(override || {}, 'clipWindow'))
-        blitOpacityWithLocalCover(this, target, frame.pixels, drawX, drawY, transform.alpha, occlusionClip, blackKey);
+      const normalCover = actorDepth === 'normal' &&
+        localCoverModel(this).overrides?.some(row => row.cover === 'normal');
+      const embeddedCover = localOcclusionClass === 'embedded' && !visibilityWindow &&
+        !Object.prototype.hasOwnProperty.call(override || {}, 'clipWindow');
+      if ((normalCover || embeddedCover) && actorDepth === 'normal')
+        blitOpacityWithLocalCover(this, target, frame.pixels, drawX, drawY,
+          transform.alpha, occlusionClip, blackKey, embeddedCover);
       else
         blitOpacity(target, frame.pixels, drawX, drawY, transform.alpha, occlusionClip, blackKey);
     }

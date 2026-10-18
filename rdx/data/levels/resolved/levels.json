@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "f3fe7e7bba9a7472ab50371ef4b5abf0863c47f4bfd87439094db7f8d15d9571",
+  "authoredLayersFingerprint": "8e9846bd21739df8502431c71db571bca3250fabfa3c629f165d1632f4ed7a98",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -1592,6 +1592,80 @@
           "mark": 231,
           "provenance": "Mark 231 must release right after the explosion; keep direction as an explicit controller parameter and leave presentation mirroring unchanged.",
           "submap": 19
+        }
+      ],
+      "presentationOcclusionOverrides": [
+        {
+          "bounds": [
+            91,
+            154,
+            26,
+            16
+          ],
+          "cover": "normal",
+          "id": "sm04-floating-idol-stone-front-cover-1",
+          "mapId": 7,
+          "plane": "A",
+          "provenance": {
+            "authority": "user-reviewed-sm04-idol-hero-stone-occlusion-20261018",
+            "reason": "Keep normal actor pixels behind the opaque-looking stone front and feather roots without painting over the existing scenery; only the head remains exposed above this silhouette. Applies to the fixed pedestal face, not unrelated map art."
+          },
+          "source": "reviewed-room",
+          "submap": 4
+        },
+        {
+          "bounds": [
+            203,
+            154,
+            26,
+            16
+          ],
+          "cover": "normal",
+          "id": "sm04-floating-idol-stone-front-cover-2",
+          "mapId": 7,
+          "plane": "A",
+          "provenance": {
+            "authority": "user-reviewed-sm04-idol-hero-stone-occlusion-20261018",
+            "reason": "Keep normal actor pixels behind the opaque-looking stone front and feather roots without painting over the existing scenery; only the head remains exposed above this silhouette. Applies to the fixed pedestal face, not unrelated map art."
+          },
+          "source": "reviewed-room",
+          "submap": 4
+        },
+        {
+          "bounds": [
+            123,
+            202,
+            26,
+            16
+          ],
+          "cover": "normal",
+          "id": "sm04-floating-idol-stone-front-cover-3",
+          "mapId": 7,
+          "plane": "A",
+          "provenance": {
+            "authority": "user-reviewed-sm04-idol-hero-stone-occlusion-20261018",
+            "reason": "Keep normal actor pixels behind the opaque-looking stone front and feather roots without painting over the existing scenery; only the head remains exposed above this silhouette. Applies to the fixed pedestal face, not unrelated map art."
+          },
+          "source": "reviewed-room",
+          "submap": 4
+        },
+        {
+          "bounds": [
+            171,
+            202,
+            26,
+            16
+          ],
+          "cover": "normal",
+          "id": "sm04-floating-idol-stone-front-cover-4",
+          "mapId": 7,
+          "plane": "A",
+          "provenance": {
+            "authority": "user-reviewed-sm04-idol-hero-stone-occlusion-20261018",
+            "reason": "Keep normal actor pixels behind the opaque-looking stone front and feather roots without painting over the existing scenery; only the head remains exposed above this silhouette. Applies to the fixed pedestal face, not unrelated map art."
+          },
+          "source": "reviewed-room",
+          "submap": 4
         }
       ],
       "projectileEmitterLinks": [
@@ -4651,6 +4725,226 @@
           "sourceBounds": null,
           "sourceKey": "rdx-hazard:md0006-wall-blades-176",
           "submap": 3
+        },
+        {
+          "action": "overlay-tiles",
+          "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+          "bounds": [
+            96,
+            144,
+            16,
+            16
+          ],
+          "clearLayer": "A",
+          "id": "sm04-floating-idol-feather-infill-1",
+          "mapId": 7,
+          "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "sourceKey": "room:SM04",
+          "submap": 4,
+          "tiles": [
+            {
+              "globalTile": 5705,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5706,
+              "offset": [
+                8,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5707,
+              "offset": [
+                0,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5708,
+              "offset": [
+                8,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            }
+          ]
+        },
+        {
+          "action": "overlay-tiles",
+          "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+          "bounds": [
+            208,
+            144,
+            16,
+            16
+          ],
+          "clearLayer": "A",
+          "id": "sm04-floating-idol-feather-infill-2",
+          "mapId": 7,
+          "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "sourceKey": "room:SM04",
+          "submap": 4,
+          "tiles": [
+            {
+              "globalTile": 5705,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5706,
+              "offset": [
+                8,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5707,
+              "offset": [
+                0,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5708,
+              "offset": [
+                8,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            }
+          ]
+        },
+        {
+          "action": "overlay-tiles",
+          "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+          "bounds": [
+            128,
+            192,
+            16,
+            16
+          ],
+          "clearLayer": "A",
+          "id": "sm04-floating-idol-feather-infill-3",
+          "mapId": 7,
+          "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "sourceKey": "room:SM04",
+          "submap": 4,
+          "tiles": [
+            {
+              "globalTile": 5705,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5706,
+              "offset": [
+                8,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5707,
+              "offset": [
+                0,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5708,
+              "offset": [
+                8,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            }
+          ]
+        },
+        {
+          "action": "overlay-tiles",
+          "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+          "bounds": [
+            176,
+            192,
+            16,
+            16
+          ],
+          "clearLayer": "A",
+          "id": "sm04-floating-idol-feather-infill-4",
+          "mapId": 7,
+          "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+          "sourceKey": "room:SM04",
+          "submap": 4,
+          "tiles": [
+            {
+              "globalTile": 5705,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5706,
+              "offset": [
+                8,
+                0
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5707,
+              "offset": [
+                0,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            },
+            {
+              "globalTile": 5708,
+              "offset": [
+                8,
+                8
+              ],
+              "paletteLine": 0,
+              "plane": "A"
+            }
+          ]
         },
         {
           "action": "suppress",
@@ -22311,15 +22605,15 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "f3fe7e7bba9a7472ab50371ef4b5abf0863c47f4bfd87439094db7f8d15d9571",
+    "authoredLayers": "8e9846bd21739df8502431c71db571bca3250fabfa3c629f165d1632f4ed7a98",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "e056318c0d32d9e5ed8cfb556e515eb5c518d5bb7c2f76b2d19cdfe487a7565a",
-    "presentationOcclusion": "92c6f9c78295746a6709560f4ccc4ded360c1579bb1172d79e1ea10a2d4e8ed2",
+    "presentationOcclusion": "2e6fc26af15d5cf8e765820ec1295272505875c17a259b9dbdb49c3c66a74cf7",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "a0a046eda0f352aa56d07ab3fa4d3dee8cafe70c1c6d22f054336ad7984d10b7",
-    "resolved32": 2920620858,
-    "runtimeSource": "4a8081bbcc75e51db7719645966c1958e35e1a46288d10288c64101f0b5544ba",
-    "runtimeSource32": 3850789599,
+    "resolved": "4927e11e22748e1297fffe201a1b013a8276cba114ae31d22097db0c4f7c05be",
+    "resolved32": 2720171713,
+    "runtimeSource": "ba888720536b84f59098573d2d122734395f4adff122f87c74f5bd87ec221e06",
+    "runtimeSource32": 963252034,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -37197,13 +37491,13 @@
         "adjustments": "72bf451bc99797fe2dcaa2caccd7e4d72e6e594dd0e6686d879accc799a74929",
         "alignment": "136228a2b9ac914b6a4b0e1319cf3ce1b15c85407abf835ab5bb2478562dbf8e",
         "presentationDepth": "307449cbe4e235fa41eb1d8977f61ab5f9b80792b39aad44b81f1f2f7838aa9e",
-        "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "48be37655bfff05afb4f1ae98b49d8d0c1f0b0e39d97a1341ca0ab01e0f60fdd",
-        "reviewed": "f5ac4db0c47eaa3acab20df76692ca73285f047ab8cabce1f50b1245f336d305",
+        "presentationOcclusion": "1f891af9ee6af0ad2df8ac31f9459cfe6db04229d3d54bbbfbd888d03c5c1fc8",
+        "resolved": "0015f1e8960e3d214b054091a09e2b35c9e524a5bee507fa8c3dc7763cb5baac",
+        "reviewed": "d4dbc5cacc7faa7679a19c1406f03a3eb657e59daf3047874a39b06b86786ee3",
         "semantic": "cd9807a29d8d50b07320880cd96b4846e74c19ccc6cc44bea978b8f64e1d9ab0",
         "sourceClassic": "1e68546a33277f7a26b7b1ffd78db02af3cc9d19735a123091d08af5bd8f86e0",
         "sourceRdx": "86b137cd3532c8c57092c60f8138c907e4bbe4296c3f3293ffebdfd01dceac8f",
-        "structural": "f04748bc2c8a94e67c0c70887df58cc7e31766c62aedf884e646ae866baabb50",
+        "structural": "407e45c0bc038f3a8adb849a56230f59616d719ca3e9af6c04c5edd383a2607c",
         "transitions": "0c081d7287efd9191247b4a886148394a2444a695709b55beddb898cb11cbdfa"
       },
       "group": "south_america",
@@ -37639,6 +37933,234 @@
                   8
                 ],
                 "plane": "A"
+              }
+            },
+            {
+              "id": "sm04-floating-idol-feather-infill-1",
+              "provenance": {
+                "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+                "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+              },
+              "target": "room:SM04",
+              "type": "visual-plane",
+              "value": {
+                "action": "overlay-tiles",
+                "bounds": [
+                  96,
+                  144,
+                  16,
+                  16
+                ],
+                "clearLayer": "A",
+                "tiles": [
+                  {
+                    "globalTile": 5705,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5706,
+                    "offset": [
+                      8,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5707,
+                    "offset": [
+                      0,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5708,
+                    "offset": [
+                      8,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "sm04-floating-idol-feather-infill-2",
+              "provenance": {
+                "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+                "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+              },
+              "target": "room:SM04",
+              "type": "visual-plane",
+              "value": {
+                "action": "overlay-tiles",
+                "bounds": [
+                  208,
+                  144,
+                  16,
+                  16
+                ],
+                "clearLayer": "A",
+                "tiles": [
+                  {
+                    "globalTile": 5705,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5706,
+                    "offset": [
+                      8,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5707,
+                    "offset": [
+                      0,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5708,
+                    "offset": [
+                      8,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "sm04-floating-idol-feather-infill-3",
+              "provenance": {
+                "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+                "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+              },
+              "target": "room:SM04",
+              "type": "visual-plane",
+              "value": {
+                "action": "overlay-tiles",
+                "bounds": [
+                  128,
+                  192,
+                  16,
+                  16
+                ],
+                "clearLayer": "A",
+                "tiles": [
+                  {
+                    "globalTile": 5705,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5706,
+                    "offset": [
+                      8,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5707,
+                    "offset": [
+                      0,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5708,
+                    "offset": [
+                      8,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "sm04-floating-idol-feather-infill-4",
+              "provenance": {
+                "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+                "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+              },
+              "target": "room:SM04",
+              "type": "visual-plane",
+              "value": {
+                "action": "overlay-tiles",
+                "bounds": [
+                  176,
+                  192,
+                  16,
+                  16
+                ],
+                "clearLayer": "A",
+                "tiles": [
+                  {
+                    "globalTile": 5705,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5706,
+                    "offset": [
+                      8,
+                      0
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5707,
+                    "offset": [
+                      0,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  },
+                  {
+                    "globalTile": 5708,
+                    "offset": [
+                      8,
+                      8
+                    ],
+                    "paletteLine": 0,
+                    "plane": "A"
+                  }
+                ]
               }
             }
           ],
@@ -40720,6 +41242,218 @@
               "reason": "Clear SM04 g8 x=16..16, y=51: RDX native solid over verified exposed Layer-F backdrop.",
               "sourceKey": "geometry:rdx:g8:16:51",
               "type": "gameplay-cell-override"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "bounds": [
+                96,
+                144,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "id": "sm04-floating-idol-feather-infill-1",
+              "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+              "sourceKey": "room:SM04",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ],
+              "type": "visual-plane-patch"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "bounds": [
+                208,
+                144,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "id": "sm04-floating-idol-feather-infill-2",
+              "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+              "sourceKey": "room:SM04",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ],
+              "type": "visual-plane-patch"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "bounds": [
+                128,
+                192,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "id": "sm04-floating-idol-feather-infill-3",
+              "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+              "sourceKey": "room:SM04",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ],
+              "type": "visual-plane-patch"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "bounds": [
+                176,
+                192,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "id": "sm04-floating-idol-feather-infill-4",
+              "provenance": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency.",
+              "sourceKey": "room:SM04",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ],
+              "type": "visual-plane-patch"
             }
           ],
           "schema": "rdr.structural_corrections_resolved.v1"
@@ -40779,6 +41513,242 @@
             "semantic": "visual",
             "target": "room:SM04:presentation-depth:jungle-ladder-top-apron-v9-16-right",
             "type": "presentation-depth"
+          },
+          {
+            "after": {
+              "action": "overlay-tiles",
+              "bounds": [
+                96,
+                144,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            },
+            "before": null,
+            "id": "sm04-floating-idol-feather-infill-1",
+            "provenance": {
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+            },
+            "semantic": "visual",
+            "target": "room:SM04",
+            "type": "visual-plane"
+          },
+          {
+            "after": {
+              "action": "overlay-tiles",
+              "bounds": [
+                208,
+                144,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            },
+            "before": null,
+            "id": "sm04-floating-idol-feather-infill-2",
+            "provenance": {
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+            },
+            "semantic": "visual",
+            "target": "room:SM04",
+            "type": "visual-plane"
+          },
+          {
+            "after": {
+              "action": "overlay-tiles",
+              "bounds": [
+                128,
+                192,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            },
+            "before": null,
+            "id": "sm04-floating-idol-feather-infill-3",
+            "provenance": {
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+            },
+            "semantic": "visual",
+            "target": "room:SM04",
+            "type": "visual-plane"
+          },
+          {
+            "after": {
+              "action": "overlay-tiles",
+              "bounds": [
+                176,
+                192,
+                16,
+                16
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "globalTile": 5705,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5706,
+                  "offset": [
+                    8,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5707,
+                  "offset": [
+                    0,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                },
+                {
+                  "globalTile": 5708,
+                  "offset": [
+                    8,
+                    8
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            },
+            "before": null,
+            "id": "sm04-floating-idol-feather-infill-4",
+            "provenance": {
+              "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
+              "reason": "Restore both missing central rows of the SM04 floating idol to foreground, matching SM06/SM07: feather pixels and the opaque stone-mask beneath them must cover Rick’s body and legs while leaving his head visible. Preserve source Plane B and pixel transparency."
+            },
+            "semantic": "visual",
+            "target": "room:SM04",
+            "type": "visual-plane"
           }
         ]
       },
@@ -206187,13 +207157,13 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "4a8081bbcc75e51db7719645966c1958e35e1a46288d10288c64101f0b5544ba",
+  "runtimeSourceFingerprint": "ba888720536b84f59098573d2d122734395f4adff122f87c74f5bd87ec221e06",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {
     "classic": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "e056318c0d32d9e5ed8cfb556e515eb5c518d5bb7c2f76b2d19cdfe487a7565a",
-    "presentationOcclusion": "92c6f9c78295746a6709560f4ccc4ded360c1579bb1172d79e1ea10a2d4e8ed2",
+    "presentationOcclusion": "2e6fc26af15d5cf8e765820ec1295272505875c17a259b9dbdb49c3c66a74cf7",
     "rdx": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },

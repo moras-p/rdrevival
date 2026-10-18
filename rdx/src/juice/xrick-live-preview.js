@@ -1,3 +1,4 @@
+import { revivalDynamiteFuseSparkPoint } from '../runtime/revival-dynamite.js';
 import { XrickWasmBridge, XRICK_WIDTH, XRICK_HEIGHT, renderClassicFramebuffer } from '../../xrick-bridge.js';
 import { PRESENTATION_LAYER_BITS } from './presentation-layer-mask.js';
 
@@ -86,6 +87,19 @@ export function nativeHeroContactBounds(snapshot) {
   return {
     left: x - 7, top: y - (native.playerCrawling ? 12 : 20),
     right: x + 8, bottom: y + 1, slot: 1
+  };
+}
+
+/* Position Game Juice at the lit fuse pixel, not the sprite canvas top or
+ * an invariant bomb-body centre. Native RDX diagnostics report full-frame
+ * draw bounds, while Classic uses the original unpadded 32x21 GFXST cel. */
+export function dynamiteFuseSparkEventPoint(bounds, ticker, presentation = 'rdx') {
+  if (!bounds) return null;
+  const point = revivalDynamiteFuseSparkPoint(ticker);
+  const classic = presentation !== 'rdx';
+  return {
+    x: bounds.left + point.x - (classic ? 12 : 0),
+    y: bounds.top + point.y - (classic ? 8 : 0)
   };
 }
 
@@ -1099,7 +1113,7 @@ export class XrickLivePreview {
     /* Mirror e_bomb.c's native fuse-pulse cadence exactly. */
     if (bombActive && now.bomb.ticker !== before.bomb.ticker && now.bomb.ticker >= 0x0a && (now.bomb.ticker & 0x03) === 0x02) {
       const visualBomb = this.entityBounds(now, 3, this.presentation);
-      const p = visualBomb ? { x: (visualBomb.left + visualBomb.right) * 0.5, y: visualBomb.top + 3 } : center(visualBomb);
+      const p = dynamiteFuseSparkEventPoint(visualBomb, now.bomb.ticker, this.presentation) || center(visualBomb);
       this.#emit('dynamite.fuse', now, 3, clamp(1 - now.bomb.ticker / 45, .25, 1), { bounds: visualBomb, x: p.x, y: p.y });
     }
     if (now.bomb.lethal && !before.bomb.lethal) {
