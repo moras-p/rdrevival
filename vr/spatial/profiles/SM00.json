@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "coordinateSpace": "rdx-world-px",
+  "submap": 0,
+  "mapId": 3,
+  "plane": "B",
+  "anchors": { "upperLeft": [160, 224], "lowerLeft": [160, 296] },
+  "upstairsTop": { "xMin": 160, "xMaxExclusive": 256, "y": 224, "tolerancePx": 2 },
+  "profiles": {
+    "inside": {
+      "label": "Inside the map",
+      "originPx": [160, 296], "originMetres": [-1.5, 0, -1.1],
+      "metresPerPixel": [0.03125, -0.03333333333333333],
+      "transmission": "ceiling", "lowpassHz": 1250, "gain": 0.16,
+      "lampImpact": 2.7
+    },
+    "behind-wall": {
+      "label": "Behind TV wall",
+      "originPx": [160, 296], "originMetres": [-1.7, 0.05, -3.2],
+      "metresPerPixel": [0.023, -0.022],
+      "transmission": "wall", "lowpassHz": 650, "gain": 0.10,
+      "lampImpact": 1.0
+    }
+  }
+}

@@ -27,18 +27,33 @@ export class DampedLamp {
 }
 
 export class LampEventBridge {
-  constructor(lamp) { this.lamp = lamp; this.seen = new Set(); this.generation = null; }
+  constructor(lamp, {projector = null, preserveMotion = false} = {}) {
+    this.lamp = lamp; this.projector = projector; this.preserveMotion = preserveMotion;
+    this.seen = new Set(); this.generation = null;
+  }
+  setProjector(projector) { this.projector = projector; }
   receive(message) {
     if (message.type === 'reset' || message.type === 'gap') { this.reset(); return; }
     const event = message.event;
     if (!event) return;
     if (this.generation !== event.generation) { this.reset(); this.generation = event.generation; }
-    if (event.kind !== 'item.dynamite.exploded') return;
+    const boulder = event.kind === 'world.boulder.impact' &&
+      event.supportedContact && event.coordinateSpace === 'rdx-world' &&
+      event.submap === 0 && this.projector?.selected?.calibration;
+    if (event.kind !== 'item.dynamite.exploded' && !boulder) return;
     const key = `${event.generation}:${event.serial}`;
     if (this.seen.has(key)) return;
     this.seen.add(key);
     if (this.seen.size > 256) this.seen.delete(this.seen.values().next().value);
-    this.lamp.impulse();
+    if (boulder) {
+      const point=this.projector.project(event.world);
+      if (!point) return;
+      const side = point.x < 0.7 ? -1 : 1;
+      this.lamp.impulse(side*this.projector.selected.calibration.lampImpact);
+    } else this.lamp.impulse();
   }
-  reset() { this.seen.clear(); this.generation = null; this.lamp.reset(); }
+  reset() {
+    this.seen.clear(); this.generation = null;
+    if (!this.preserveMotion) this.lamp.reset();
+  }
 }

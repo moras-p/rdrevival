@@ -2,13 +2,13 @@
 export const GAME_EVENT_KIND = Object.freeze({
   1: 'world.boulder.impact', 2: 'world.boulder.roll',
   3: 'item.dynamite.placed', 4: 'item.dynamite.exploded',
-  5: 'player.died', 6: 'level.transitioned', 7: 'world.mechanism.activated'
+  5: 'player.died', 6: 'level.transitioned', 7: 'world.mechanism.activated', 8: 'enemy.died', 9: 'player.footstep'
 });
 
 export function readGameEvents(bridge, cursor = null, maximum = 64) {
   const api = bridge.api || bridge;
   const version = api.gameEventsVersion();
-  if (version !== 1) throw new Error(`Unsupported native gameplay-event ABI: ${version}`);
+  if (version !== 2) throw new Error(`Unsupported native gameplay-event ABI: ${version}`);
   const generation = api.gameEventsGeneration() >>> 0;
   const oldestSerial = api.gameEventsOldest() >>> 0;
   const latestSerial = api.gameEventsLatest() >>> 0;
@@ -36,6 +36,8 @@ export function readGameEvents(bridge, cursor = null, maximum = 64) {
         mark: flags & 8 ? api.gameEventMark(serial) : null
       } : null,
       world: flags & 1 ? { x: api.gameEventX(serial), y: api.gameEventY(serial) } : null,
+      coordinateSpace: flags & 32 ? 'rdx-world' : 'xrick-local',
+      supportedContact: !!(flags & 64),
       velocity: flags & 2 ? { dx: api.gameEventDx(serial), dy: api.gameEventDy(serial) } : null,
       previousSubmap: flags & 16 ? api.gameEventPreviousSubmap(serial) : null
     });
