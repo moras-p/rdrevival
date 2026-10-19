@@ -3,21 +3,23 @@ export function installVrEntry(root = document) {
   const enterClassic = root.getElementById('rdr-vr-classic');
   const enterRevival = root.getElementById('rdr-vr-revival');
   const exit = root.getElementById('rdr-vr-exit');
+  const preview = root.getElementById('rdr-vr-preview');
   const rom = root.getElementById('rdr-vr-rom');
   const status = root.getElementById('rdr-vr-status');
-  if (!enterClassic || !enterRevival || !exit || !rom || !status) return;
+  if (!enterClassic || !enterRevival || !exit || !preview || !rom || !status) return;
   const say = message => { status.textContent = message; };
   let active = null;
+  let opening = false;
   const buttons = enabled => { enterClassic.disabled = !enabled; enterRevival.disabled = !enabled; };
   buttons(false);
   const probe = async () => {
     if (!globalThis.isSecureContext || !navigator.xr?.isSessionSupported) {
-      say('WebXR immersive VR requires a secure headset browser (HTTPS). Normal 2D play is available.');
+      say('Headset VR requires HTTPS and WebXR. Desktop room preview is available below.');
       return;
     }
     try {
       if (!(await navigator.xr.isSessionSupported('immersive-vr'))) {
-        say('Immersive VR is not supported in this browser. Normal 2D play is available.');
+        say('No headset detected. Desktop room preview remains available.');
         return;
       }
       buttons(true);
@@ -31,20 +33,22 @@ export function installVrEntry(root = document) {
     return { gameSession, presentation };
   };
   const enter = async mode => {
-    if (active) return;
+    if (active || opening) return;
+    opening = true;
     let gameSession, presentation;
     try {
       ({ gameSession, presentation } = getRuntime());
       gameSession.syncExperience();
       if (mode === 'revival' && !gameSession.rom && !gameSession.bridge.presentationReady())
         throw new Error('Load and validate your Sega ROM before entering Revival VR.');
-    } catch (error) { say(error.message); return; }
+    } catch (error) { opening = false; say(error.message); return; }
     // User activation MUST reach requestSession synchronously, before imports,
     // file pickers or any unrelated await.
     let xrSession;
-    try { xrSession = await navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor'] }); }
-    catch (error) { say(`Could not enter VR: ${error.message}`); return; }
+    try { xrSession = await navigator.xr.requestSession('immersive-vr', { requiredFeatures: ['local-floor'], optionalFeatures: ['bounded-floor'] }); }
+    catch (error) { opening = false; say(`Could not enter VR: ${error.message}`); return; }
     buttons(false);
+    preview.disabled = true;
     try {
       if (gameSession.mode !== mode) gameSession.selectExperience(mode);
       if (gameSession.state !== 'playing') gameSession.start();
@@ -53,6 +57,7 @@ export function installVrEntry(root = document) {
         active = null;
         exit.hidden = true;
         buttons(true);
+        preview.disabled = false;
         say('Returned to 2D. VR is available for re-entry.');
       } });
       exit.hidden = false;
@@ -60,9 +65,25 @@ export function installVrEntry(root = document) {
       try { await xrSession.end(); } catch {}
       active = null;
       buttons(true);
+      preview.disabled = false;
       say(`VR setup failed: ${error.message}`);
-    }
+    } finally { opening = false; }
   };
+  preview.addEventListener('click', async () => {
+    if (active || opening) return;
+    opening = true;
+    try {
+      const {gameSession,presentation} = getRuntime();
+      gameSession.syncExperience();
+      if (gameSession.state !== 'playing') gameSession.start();
+      const {openTestRoom} = await import('./room.js');
+      active = await openTestRoom({gameSession,presentation,onStatus:say,onEnd:() => {
+        active=null;exit.hidden=true;preview.disabled=false;say('Returned to ordinary 2D play.');
+      }});
+      preview.disabled=true;exit.hidden=false;
+    } catch(error) {say(`Preview failed: ${error.message}`);}
+    finally { opening = false; }
+  });
   enterClassic.addEventListener('click', () => { void enter('classic'); });
   enterRevival.addEventListener('click', () => { void enter('revival'); });
   exit.addEventListener('click', () => { void active?.end(); });
@@ -86,4 +107,4 @@ export function installVrEntry(root = document) {
   if (window.xrickGameSession) void remember();
   void probe();
 }
-installVrEntry();
+if (typeof document !== 'undefined') installVrEntry();

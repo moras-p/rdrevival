@@ -124,8 +124,8 @@ export class GameInputRouter {
     if (pressed) this.keyboardCodes.add(code);
     else { this.keyboardCodes.delete(code); this.rearm.delete(code); }
     if (this.owner !== 'game') return true;
-    // An immersive session exclusively owns gameplay controls. Do not let
-    // browser keyboard events steal the XR controller's device slot.
+    // Immersive XR has exclusive native gameplay authority; retain key state
+    // for rearming after exit but never write keyboard bits while XR is active.
     if (this.xrSampler) return true;
     if (this.rearm.has(code)) return true;
     if (this.device !== null && this.device !== 'keyboard') return true;
@@ -168,8 +168,8 @@ export class GameInputRouter {
     // The existing native pre-actor boundary samples XR before standard pads;
     // XR never introduces a scheduler, worker or frame-queued input buffer.
     this.xrSampler?.sample();
-    // WebXR inputs can also appear in the ordinary Gamepad API. Sampling
-    // them again would race the exclusive XR device, particularly at neutral.
+    // Some browsers expose XR controllers through navigator.getGamepads too.
+    // They must not reclaim a neutral XR input or compete at the native tick.
     if (this.xrSampler) return;
     const known = new Set();
     for (const pad of gamepads || []) {

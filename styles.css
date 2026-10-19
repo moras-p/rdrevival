@@ -728,3 +728,16 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
 .rdr-vr-entry button { font:inherit; }
 .rdr-vr-entry small { flex-basis:100%; opacity:0.85; }
 .rdr-vr-entry [hidden] { display:none; }
+
+/* Shared immersive/desktop CRT room. The 2D source canvas stays authoritative. */
+.rdr-room-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh;
+  z-index: 1500; cursor: grab; touch-action: none; display: block; }
+.rdr-room-canvas:active { cursor: grabbing; }
+.rdr-room-toolbar { position: fixed; z-index: 1501; top: 1rem; left: 50%;
+  transform: translateX(-50%); max-width: min(95vw, 750px); display: flex;
+  flex-wrap: wrap; gap: .5rem; align-items: center; padding: .65rem .85rem;
+  color: #efe6cf; background: #211b1bf2; border: 1px solid #887967;
+  border-radius: .75rem; box-shadow: 0 4px 24px #0008; font: 14px system-ui; }
+.rdr-room-toolbar button { border: 1px solid #ad967a; border-radius: .4rem;
+  padding: .4rem .65rem; color: inherit; background: #493a30; cursor: pointer; }
+.rdr-room-toolbar small { flex-basis: 100%; opacity: .85; }
