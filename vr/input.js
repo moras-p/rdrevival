@@ -38,11 +38,15 @@ export class XRControllerInput {
   id(source) { return source ? `xr:${source.handedness || 'none'}` : 'xr:controller'; }
   refresh() {
     this.sources = [...(this.session?.inputSources || [])].filter(s => s.gamepad || s.targetRayMode === 'tracked-pointer');
-    if (this.source && !this.sources.includes(this.source)) {
-      this.router.clear();
+    const preferred = this.sources.find(s => s.handedness === 'right') || this.sources[0] || null;
+    if (this.source && this.source !== preferred) {
+      // A better-preferred controller arriving is an ownership change just as
+      // much as a disconnected controller. Release its held inputs first.
       this.pressed.clear();
+      if (preferred && this.router.owner === 'game') this.router.handoff(this.id(preferred));
+      else this.router.clear();
     }
-    this.source = this.sources.find(s => s.handedness === 'right') || this.sources[0] || null;
+    this.source = preferred;
   }
   select(event, pressed) {
     if (!this.session || (event.inputSource !== this.source && this.source)) return;
