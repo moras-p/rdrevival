@@ -1,6 +1,0 @@
-../out/html5/obj/shared/gai/src/gai_executor.o: \
-  shared/gai/src/gai_executor.c shared/gai/include/gai_executor.h \
-  shared/gai/include/gai_world.h shared/gai/include/gai_types.h
-shared/gai/include/gai_executor.h:
-shared/gai/include/gai_world.h:
-shared/gai/include/gai_types.h:

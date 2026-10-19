@@ -13,7 +13,19 @@ const box = (parent, color, size, position) => {
   return mesh;
 };
 
-export function describeRoomControls({ mode = 'game', left = false, right = false, mask = 0 } = {}) {
+export function describeRoomControls({ mode = 'game', left = false, right = false, mask = 0, desktop = false } = {}) {
+  if (desktop) return [
+    `CONTROL: ${mode.toUpperCase()}`,
+    'ARROWS OR O/K/Z/X: MOVE',
+    'SPACE: FIRE',
+    'MOUSE DRAG: LOOK AROUND',
+    'MOUSE WHEEL: ZOOM',
+    'RECENTER: RESET VIEW',
+    'GAME: KEYBOARD/GAMEPAD PLAYS RICK',
+    'ROOM: GAMEPLAY PAUSED',
+    'SWITCH MODE / EXIT: TOP TOOLBAR',
+    `INPUT: ${mask ? 'RECEIVED' : 'IDLE'}`
+  ];
   return [
     `CONTROL: ${mode.toUpperCase()}`,
     `LEFT ${left ? 'CONNECTED' : 'NOT DETECTED'}  /  RIGHT ${right ? 'CONNECTED' : 'NOT DETECTED'}`,
@@ -29,7 +41,7 @@ export function describeRoomControls({ mode = 'game', left = false, right = fals
   ].filter(Boolean);
 }
 
-function makeRoom(sourceCanvas) {
+function makeRoom(sourceCanvas, {desktop = false} = {}) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x211b1b);
   scene.add(new THREE.AmbientLight(0x9b8d79, 2));
@@ -70,20 +82,20 @@ function makeRoom(sourceCanvas) {
   instructions.height = 512;
   const ctx = instructions.getContext('2d');
   const infoTexture = new THREE.CanvasTexture(instructions);
-  const infoMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.15, 0.575),
+  const infoMesh = new THREE.Mesh(new THREE.PlaneGeometry(1.45, 0.725),
     new THREE.MeshBasicMaterial({map:infoTexture,side:THREE.DoubleSide,toneMapped:false}));
-  infoMesh.position.set(1.22, 1.39, -1.49);
+  infoMesh.position.set(1.5, 1.39, -1.49);
   infoMesh.rotation.y = -0.18;
   world.add(infoMesh);
   let lastText = '';
   const updatePanel = (status, expanded = true) => {
-    const lines = expanded ? describeRoomControls(status) : [`${(status?.mode || 'game').toUpperCase()}  /  SQUEEZE TO SWITCH`];
+    const lines = expanded ? describeRoomControls({...status,desktop}) : [`${(status?.mode || 'game').toUpperCase()}  /  ${desktop ? 'TOOLBAR TO SWITCH' : 'SQUEEZE TO SWITCH'}`];
     const string = lines.join('\n');
     if (lastText === string) return;
     lastText = string;
     ctx.fillStyle = '#181a21'; ctx.fillRect(0, 0, 1024, 512);
     ctx.fillStyle = '#f3d795'; ctx.font = 'bold 33px monospace';
-    lines.forEach((line,i) => ctx.fillText(line, 23, 52 + i * 48, 980));
+    lines.forEach((line,i) => ctx.fillText(line, 23, 46 + i * 42, 980));
     infoTexture.needsUpdate = true;
   };
   updatePanel({});
@@ -142,9 +154,11 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.xr.enabled = immersive;
     const {scene,world,crt,pivot,texture,infoTexture,updatePanel} =
-      makeRoom(document.getElementById('xrick-layer'));
+      makeRoom(document.getElementById('xrick-layer'),{desktop:!immersive});
     const camera = new THREE.PerspectiveCamera(72, 1, 0.05, 40);
-    const center = new THREE.Vector3(0, 1.4, -1.6);
+    const desktopEyeHeight = 1.4;
+    if (!immersive) crt.position.y = desktopEyeHeight; // XR uses tracked eye height on first pose.
+    const center = new THREE.Vector3(0, desktopEyeHeight, -1.6);
     const updateDesktopCamera = () => {
       const radial = 1.4 + distance;
       camera.position.set(Math.sin(yaw) * radial * Math.cos(pitch),
