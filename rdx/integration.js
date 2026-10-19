@@ -1298,7 +1298,7 @@ function renderRdxSprites(snapshot) {
   putPixelBuffer(frontSpriteContext, frontSpriteLayer, 0, 0);
 }
 
-function renderCPresentation(snapshot) {
+function renderCPresentation(snapshot, inRoom = false) {
   const pixels = bridge.presentationFramebuffer();
   const image = new ImageData(pixels, 320, 200);
   classicContext.putImageData(image, 0, 0);
@@ -1306,6 +1306,9 @@ function renderCPresentation(snapshot) {
   spriteContext.clearRect(0, 0, spriteCanvas.width, spriteCanvas.height);
   foregroundContext.clearRect(0, 0, foregroundCanvas.width, foregroundCanvas.height);
   frontSpriteContext.clearRect(0, 0, frontSpriteCanvas.width, frontSpriteCanvas.height);
+  // The headset needs only the authoritative 320x200 pixels, not the HTML
+  // workbench's stats, status, room-mapping diagnostics or text layout.
+  if (inRoom) return;
   const stats = bridge.presentationStats();
   lastSpriteStats = { ...stats, rick: 0, entities: stats.mapped, mappingVersion: renderer?.mapping?.data?.version || 'C embedded v27' };
 
@@ -1370,6 +1373,7 @@ function presentFrame() {
   if (!running || !bridge) return presentationRevision;
   try {
     const snapshot = bridge.snapshot();
+    const inRoom = presentationOwner.xr;
     const now = performance.now();
     const frontendPaused = !!bridge.frontendPaused?.();
     if (frontendPaused) {
@@ -1383,13 +1387,15 @@ function presentFrame() {
     } else if (!document.hidden && now - lastGameProgressAt > 1200 && now - lastResumeRequestAt > 1000) {
       resumeBrowserLoop('stalled-frame-watchdog');
     }
-    lastSnapshot = snapshot;
-    updateSwitchSafety(snapshot);
-    applyPendingPuzzleStart(snapshot);
-    applyPendingMapEditorStart(snapshot);
-    recordPlaythroughFrame(snapshot);
-    recordPuzzleFrame(snapshot);
-    updateDebugControls(snapshot);
+    if (!inRoom) {
+      lastSnapshot = snapshot;
+      updateSwitchSafety(snapshot);
+      applyPendingPuzzleStart(snapshot);
+      applyPendingMapEditorStart(snapshot);
+      recordPlaythroughFrame(snapshot);
+      recordPuzzleFrame(snapshot);
+      updateDebugControls(snapshot);
+    }
     const simulationAdvanced = snapshot.frameSerial !== lastFrameSerial;
     /* WebMCP coaching deliberately freezes native simulation between tool calls.
      * Keep repainting the already-composited production frame on every browser
@@ -1404,8 +1410,8 @@ function presentFrame() {
     const redraw = frontendPaused || snapshot.presentationMode || liveRevivalPresentation || simulationAdvanced;
     if (redraw) {
       lastFrameSerial = snapshot.frameSerial;
-      updateSoundControl();
-      if (assetToggleButton) {
+      if (!inRoom) updateSoundControl();
+      if (!inRoom && assetToggleButton) {
         assetToggleButton.disabled = !renderer;
         const assetLabel = snapshot.classicAssets ? 'Use RDX assets' : 'Use classic assets';
         assetToggleButton.setAttribute('aria-label', assetLabel); assetToggleButton.title = assetLabel; assetToggleButton.dataset.classic = snapshot.classicAssets ? 'true' : 'false';
@@ -1414,7 +1420,7 @@ function presentFrame() {
       if (snapshot.enabled && bridge.presentationReady()) {
         /* The copied C surface is the actual Revival presentation for both
          * RDX and Classic-assets modes and now includes native Game Juice. */
-        renderCPresentation(snapshot);
+        renderCPresentation(snapshot, inRoom);
       } else {
         renderClassicFramebuffer(bridge, classicContext, {
           transparentZero: false,
@@ -1426,10 +1432,12 @@ function presentFrame() {
         foregroundContext.clearRect(0, 0, foregroundCanvas.width, foregroundCanvas.height);
         frontSpriteContext.clearRect(0, 0, frontSpriteCanvas.width, frontSpriteCanvas.height);
       }
-      renderCollisionOverlay(snapshot);
-      if (snapshot.presentationMode || simulationAdvanced) recordCollisionTrace(snapshot);
-      redrawAnnotations(snapshot);
-      renderMapEditorPlaytest(snapshot);
+      if (!inRoom) {
+        renderCollisionOverlay(snapshot);
+        if (snapshot.presentationMode || simulationAdvanced) recordCollisionTrace(snapshot);
+        redrawAnnotations(snapshot);
+        renderMapEditorPlaytest(snapshot);
+      }
       // Optional P0 input trace: capture only after actual 2D canvas submission.
       // No extra frame, native tick, or copy is scheduled by the observer.
       if (window.xrickInputRouter?.trace)
@@ -1438,10 +1446,12 @@ function presentFrame() {
       // The native gameplay frame serial is a different clock.
       presentationRevision += 1;
     }
-    updateCollisionRuntime(snapshot);
-    const aiSnapshot = bridge.snapshot();
-    aiPlaytestController.tickFrame(aiSnapshot);
-    realtimeModelWorkbench.tickFrame(aiSnapshot);
+    if (!inRoom) {
+      updateCollisionRuntime(snapshot);
+      const aiSnapshot = bridge.snapshot();
+      aiPlaytestController.tickFrame(aiSnapshot);
+      realtimeModelWorkbench.tickFrame(aiSnapshot);
+    }
   } catch (error) {
     console.error(error);
     bridge?.setSpriteReplacementMask(0);

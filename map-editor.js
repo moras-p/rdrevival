@@ -1531,7 +1531,7 @@ function renderValidation(issues=validateCurrent()){
   if(!issues.length){ui.validation_list.innerHTML='<div class="validation-empty">✓ No document issues found.</div>';return;}
   ui.validation_list.innerHTML=issues.map(i=>`<div class="validation-item ${i.severity}"><span class="severity-icon">${i.severity==='error'?'!':i.severity==='warning'?'△':'i'}</span><div><strong>${escapeHtml(i.code)}</strong><p>${escapeHtml(i.message)}</p></div></div>`).join('');
 }
-function validateCurrent(){const dim=hostDimensions();const issues=validateLevelDocument(store.document,{hostWidth:dim.width,hostHeight:dim.height});
+function validateCurrent(){const dim=store.document.base.blank?hostDimensions():productionDimensions();const issues=validateLevelDocument(store.document,{hostWidth:dim.width,hostHeight:dim.height});
   if(!resources.roomBySubmap.has(store.document.base.submap))issues.push({severity:'error',code:'HOST_ROOM',message:'Native host room is missing from the runtime manifest.'});
   if(store.document.entities.some(e=>Number(e.pn)<0))issues.push({severity:'warning',code:'UNASSIGNED_PN',message:'One or more custom entities use native behavior without an explicit RDX PN. Runtime behavior remains valid but presentation can fall back.'});
   for(const cell of store.document.terrain){const set=terrainSetById(resources.autotileCatalog,cell.terrainSet);if(!set)issues.push({severity:'error',code:'AUTOTILE_SET',message:`Terrain cell ${cell.cell.join(',')} references unknown set ${cell.terrainSet}.`});else if(set.group&&set.group!==room?.group)issues.push({severity:'warning',code:'AUTOTILE_THEME',message:`${set.label} belongs to ${set.group}, while this room belongs to ${room?.group||'unknown'}.`});}

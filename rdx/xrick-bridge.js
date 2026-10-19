@@ -2024,6 +2024,10 @@ export function renderClassicFramebuffer(bridge, targetContext, options = {}) {
   const playfieldShiftX = Number(options.playfieldShiftX || 0) | 0;
   const playfieldTop = Number(options.playfieldTop ?? XRICK_PLAYFIELD.y) | 0;
   const data = image.data;
+  // getPaletteRgba crosses JS -> WASM. A 320x200 frame can otherwise trigger
+  // 64,000 palette ABI calls, even when it uses only a few distinct indices.
+  // Cache only within this submission so palette flashes remain frame-accurate.
+  const framePalette = new Array(256);
   for (let i = 0; i < framebuffer.length; i += 1) {
     const colorIndex = framebuffer[i];
     const sourceX = i % XRICK_WIDTH;
@@ -2032,7 +2036,7 @@ export function renderClassicFramebuffer(bridge, targetContext, options = {}) {
     if (destinationX < 0 || destinationX >= XRICK_WIDTH) continue;
     const offset = (sourceY * XRICK_WIDTH + destinationX) * 4;
     if (transparentZero && colorIndex === 0) continue;
-    const color = bridge.palette(colorIndex);
+    const color = framePalette[colorIndex] || (framePalette[colorIndex] = bridge.palette(colorIndex));
     data[offset] = color[0];
     data[offset + 1] = color[1];
     data[offset + 2] = color[2];

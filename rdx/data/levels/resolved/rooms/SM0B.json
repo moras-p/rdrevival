@@ -24,12 +24,12 @@
       "alignment": "3c2773055cdf8af630f64490e7d8d4cc902813b3e9890fbbc7c674b0f4febac4",
       "presentationDepth": "37a203befb1104ee7420afaf11abf1b7285c111f9c44d1f174292829c119224e",
       "presentationOcclusion": "e7d3290770495841c89e87f98277b10d2d6016d0ad6cd6f4131e686679d9f4d7",
-      "resolved": "722d9b24eb202a28f00f51f6c200e9834a9f5d899c76aa33188555de17d76b01",
-      "reviewed": "f3fb8b209a97f8c488908c670cc2443489f71c10f37c57cbc5c350ba16418546",
+      "resolved": "5f5f57c95f7d93bda253ecc40abc64fea0a75853e24a4646e1297ae4996cc70f",
+      "reviewed": "7e7f62ebfb10c034e101c2c49b6714c13bb287204d01c955e5450ff72374ebd0",
       "semantic": "d5a5f9968dd179c0541c13e3e270effa9dff1d39c75ce3d1ef545c055040836b",
       "sourceClassic": "e7ea425006c715e0339be5af4595e2495ecbf7297ab62cbe17a1061e982233d0",
       "sourceRdx": "73d63d615bd911f83293774756c9090e49fd43ead8fe200280f5196c62d5bae1",
-      "structural": "b80ba64ffed6e8e8b7e1d31399fe54e27bee24d739082934d64f5f3e4302d62b",
+      "structural": "d83a2e7b0bdb0e2739de712aec630533f956c1b3dc5d33641d0ce0342352fa28",
       "transitions": "3a00b0a24a5ef7b35482e5eeefe28cce0b13b20f3f2e705a1758ea38474840b4"
     },
     "group": "egypt",
@@ -5747,6 +5747,70 @@
                 42,
                 2,
                 1
+              ]
+            }
+          },
+          {
+            "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+            "provenance": {
+              "authority": "user-reviewed-RDX-tile-copy-20261019",
+              "reason": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips."
+            },
+            "target": "room:SM0B:visual:B:13:31",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                104,
+                248,
+                8,
+                8
+              ],
+              "clearLayer": "B",
+              "tiles": [
+                {
+                  "globalTile": 8767,
+                  "hFlip": false,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B",
+                  "vFlip": false
+                }
+              ]
+            }
+          },
+          {
+            "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+            "provenance": {
+              "authority": "user-reviewed-RDX-tile-copy-20261019",
+              "reason": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips."
+            },
+            "target": "room:SM0B:visual:B:14:31",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                112,
+                248,
+                8,
+                8
+              ],
+              "clearLayer": "B",
+              "tiles": [
+                {
+                  "globalTile": 8747,
+                  "hFlip": false,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B",
+                  "vFlip": false
+                }
               ]
             }
           }
@@ -13695,6 +13759,62 @@
             "provenance": "The reviewed SM0B Cut+Move artwork places two ceiling-spike tiles at g8:24..25:42 / [192,336,16,8]. Restore matching lethal gameplay cells so the complete visible spike pair has hazard contact.",
             "sourceKey": "room:SM0B",
             "type": "gameplay-cell-override"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-reviewed-RDX-tile-copy-20261019",
+            "bounds": [
+              104,
+              248,
+              8,
+              8
+            ],
+            "clearLayer": "B",
+            "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+            "provenance": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips.",
+            "sourceKey": "room:SM0B:visual:B:13:31",
+            "tiles": [
+              {
+                "globalTile": 8767,
+                "hFlip": false,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B",
+                "vFlip": false
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-reviewed-RDX-tile-copy-20261019",
+            "bounds": [
+              112,
+              248,
+              8,
+              8
+            ],
+            "clearLayer": "B",
+            "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+            "provenance": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips.",
+            "sourceKey": "room:SM0B:visual:B:14:31",
+            "tiles": [
+              {
+                "globalTile": 8747,
+                "hFlip": false,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B",
+                "vFlip": false
+              }
+            ],
+            "type": "visual-plane-patch"
           }
         ],
         "schema": "rdr.structural_corrections_resolved.v1"
@@ -19415,6 +19535,74 @@
           "semantic": "gameplay",
           "target": "room:SM0B",
           "type": "terrain-cell"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              104,
+              248,
+              8,
+              8
+            ],
+            "clearLayer": "B",
+            "tiles": [
+              {
+                "globalTile": 8767,
+                "hFlip": false,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B",
+                "vFlip": false
+              }
+            ]
+          },
+          "before": null,
+          "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+          "provenance": {
+            "authority": "user-reviewed-RDX-tile-copy-20261019",
+            "reason": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips."
+          },
+          "semantic": "visual",
+          "target": "room:SM0B:visual:B:13:31",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              112,
+              248,
+              8,
+              8
+            ],
+            "clearLayer": "B",
+            "tiles": [
+              {
+                "globalTile": 8747,
+                "hFlip": false,
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 2,
+                "plane": "B",
+                "vFlip": false
+              }
+            ]
+          },
+          "before": null,
+          "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+          "provenance": {
+            "authority": "user-reviewed-RDX-tile-copy-20261019",
+            "reason": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips."
+          },
+          "semantic": "visual",
+          "target": "room:SM0B:visual:B:14:31",
+          "type": "visual-plane"
         }
       ]
     },

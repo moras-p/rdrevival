@@ -25,12 +25,12 @@
       "alignment": "a1c0bb22dd4bedc580494cf7315f385a00cd139f93c135de92c8884d2df00146",
       "presentationDepth": "c6ed4cff11560e30f1642576044866ef2fd3daf2d4111a92a7c1a3e762c98777",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "fdd393029dc680d055d592c6b02d565d83739b1a18528f4a4039fe611644042d",
+      "resolved": "24392876f213d69f1214d1b4f92994bcdd7f710bb916470e6862e5d21c4f4ecb",
       "reviewed": "698e08442d27e6770fea47f10be9ed86fbc84ec768d3e2badc92dbeaad3500b0",
       "semantic": "97cab05aa88df092412448cd11932bdaf4c70a4d617ade29599506f7ccee2725",
       "sourceClassic": "0e73fce60e46c562e82582e85228bb9c29eb49d99e53039751f34566776c631a",
       "sourceRdx": "f91956bc6c3d50f7aa9767025d16d66ed8f8defb7b6a840b85f6b63650ae314f",
-      "structural": "c366e8d9ba81c4aefcad95ade8c8211f49afca485ad32f924fadbccaf7ec325f",
+      "structural": "fc129fa2c0f813b3b7d9b0cda8e935ac9206260890500d69bf842d3f4bdaf82b",
       "transitions": "6472a0bef5798a7c2812bd8d8020b7a773be810014b0b7a5213a0fd951fd7fe1"
     },
     "group": "egypt",
@@ -3025,6 +3025,36 @@
             "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
             "reason": "Clear SM0C g8 x=6..7, y=33: RDX native solid over verified exposed Layer-F backdrop.",
             "sourceKey": "geometry:rdx:g8:6:33",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-cell-geometry-20261019",
+            "g8Bounds": [
+              17,
+              34,
+              2,
+              8
+            ],
+            "id": "md0016-open-17-18-34-41",
+            "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+            "reason": "Keep the reviewed MD0016 x=17..18, y=34..41 space traversable.",
+            "sourceKey": "geometry:rdx:g8:17-18:34-41",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-cell-geometry-20261019",
+            "g8Bounds": [
+              16,
+              41,
+              1,
+              1
+            ],
+            "id": "md0016-open-16-41",
+            "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+            "reason": "Extend the adjacent already-open x=16 channel through y=41.",
+            "sourceKey": "geometry:rdx:g8:16-16:41-41",
             "type": "gameplay-cell-override"
           }
         ],

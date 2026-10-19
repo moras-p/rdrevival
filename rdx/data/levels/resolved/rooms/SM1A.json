@@ -64,12 +64,12 @@
       "alignment": "2f578fe5c83a0b0189bf9a2e7abbe10bfe504c34d328ea18d065843e18dc77fa",
       "presentationDepth": "1985b147805a9a7f293d3f1dec1373c5638509dc3657baf6eba53e6033c87a8d",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "c2c978901e5528371561c4ce0accb2fd5eca3223155a617736f95546dbcff2e1",
+      "resolved": "5b672bead167d4fbc994b80bfd822b20fbc308a4d6d67543ad9fe3f1304f6311",
       "reviewed": "13f9ca2f0f1f68d8e77d0ddea5cf9b7244b7873313c67d2054cb8b95b6f4b95b",
       "semantic": "e8f6564ffb78e7995d6f747bf018e59e23a88c8400072651687edb1b7b147b55",
       "sourceClassic": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
       "sourceRdx": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
-      "structural": "0f470e286af675de68711e4193a0def6b4c0e35b37b9bcfee99539bfba22a0be",
+      "structural": "ae0db149e646fbf5eb780706e91f64fb21539ce8e24cccc381c036a49cdd7306",
       "transitions": "81f4c7122ecac43dc662a02945311771fbbb25d6b3b9615960501c404557cba0"
     },
     "group": "castle",
@@ -2590,6 +2590,21 @@
             "rowIn": 32,
             "sourceKey": "rdx:MD0033:logic:20:28",
             "targetSubmap": 27,
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-cell-geometry-20261019",
+            "g8Bounds": [
+              20,
+              14,
+              2,
+              2
+            ],
+            "id": "md0033-open-20-21-14-15",
+            "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+            "reason": "Open the four reviewed MD0033 gameplay cells at x=20..21, y=14..15; retain the room topology splice.",
+            "sourceKey": "geometry:rdx:g8:20-21:14-15",
             "type": "gameplay-cell-override"
           },
           {

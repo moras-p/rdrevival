@@ -24,11 +24,11 @@
       "alignment": "84678910ac571a66be3c16a7d5c9c69e76f02da3928522a921c3ceeb8e074f98",
       "presentationDepth": "79ae8882db1840133880f64cb436a403c800a7b08e708fa688f99e29d661eef8",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "cc6e1b652f1561acd90b7f1f1dc1ce8ebd2d1fa779531f4b433dc82c9e1f31a5",
+      "resolved": "d1c6d401c06844aafe079abe9c8bcbe2269cfe8cd1885cd496b43549fb294466",
       "semantic": "da9b44aa0945735553e0e0023a9f20d877d9b4689cd09ad5590aaecdbfda6ef1",
       "sourceClassic": "d0004d2473679a970794ad52ca2fb1b39b601c5fe2cc6f115f338ae51262b247",
       "sourceRdx": "dec13125f72bb08484cd5030d556549eea472057079558d173935b121cb278a6",
-      "structural": "4f7b69a7ff2c98615046db4255829d11fcd07bff8a1ae40dbaa391a07fa788a9",
+      "structural": "c7b0cc55ee0d04549979901b9e2365a8ae7792ff25c4282bd25ca027f944c0fa",
       "transitions": "f97bdf1cdcd6c62b1667f96321ea2422926bf7b3bad3489fdd46ba239ef215e8"
     },
     "group": "egypt",
@@ -3420,6 +3420,21 @@
             "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
             "reason": "Clear SM0A g8 x=34..34, y=87: RDX native solid over verified exposed Layer-F backdrop.",
             "sourceKey": "geometry:rdx:g8:34:87",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-reviewed-cell-geometry-20261019",
+            "g8Bounds": [
+              27,
+              60,
+              1,
+              2
+            ],
+            "id": "md0014-solid-27-60-61",
+            "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+            "reason": "Restore the two fully solid MD0014 gameplay cells at x=27, y=60..61.",
+            "sourceKey": "geometry:rdx:g8:27-27:60-61",
             "type": "gameplay-cell-override"
           }
         ],

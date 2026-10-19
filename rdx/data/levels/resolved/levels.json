@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "8e9846bd21739df8502431c71db571bca3250fabfa3c629f165d1632f4ed7a98",
+  "authoredLayersFingerprint": "ca5ee87b4a37e462b1bcf24c62d3556fab5e02549d373cf7e847db10437a5baf",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -11206,6 +11206,66 @@
         },
         {
           "action": "overlay-tiles",
+          "authority": "user-reviewed-RDX-tile-copy-20261019",
+          "bounds": [
+            104,
+            248,
+            8,
+            8
+          ],
+          "clearLayer": "B",
+          "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+          "mapId": 15,
+          "provenance": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips.",
+          "reason": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips.",
+          "sourceKey": "room:SM0B:visual:B:13:31",
+          "submap": 11,
+          "tiles": [
+            {
+              "globalTile": 8767,
+              "hFlip": false,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B",
+              "vFlip": false
+            }
+          ]
+        },
+        {
+          "action": "overlay-tiles",
+          "authority": "user-reviewed-RDX-tile-copy-20261019",
+          "bounds": [
+            112,
+            248,
+            8,
+            8
+          ],
+          "clearLayer": "B",
+          "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+          "mapId": 15,
+          "provenance": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips.",
+          "reason": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips.",
+          "sourceKey": "room:SM0B:visual:B:14:31",
+          "submap": 11,
+          "tiles": [
+            {
+              "globalTile": 8747,
+              "hFlip": false,
+              "offset": [
+                0,
+                0
+              ],
+              "paletteLine": 2,
+              "plane": "B",
+              "vFlip": false
+            }
+          ]
+        },
+        {
+          "action": "overlay-tiles",
           "authority": "classic-verified-egypt-floor-spike-restoration-v1",
           "bounds": [
             64,
@@ -17100,6 +17160,22 @@
           "submap": 10
         },
         {
+          "action": "solid",
+          "authority": "user-reviewed-cell-geometry-20261019",
+          "g8Bounds": [
+            27,
+            60,
+            1,
+            2
+          ],
+          "id": "md0014-solid-27-60-61",
+          "mapId": 14,
+          "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+          "reason": "Restore the two fully solid MD0014 gameplay cells at x=27, y=60..61.",
+          "sourceKey": "geometry:rdx:g8:27-27:60-61",
+          "submap": 10
+        },
+        {
           "action": "open",
           "authority": "user-reviewed-sm0b-foreground-to-backdrop-topology",
           "g8Bounds": [
@@ -17401,6 +17477,38 @@
           "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
           "reason": "Clear SM0C g8 x=6..7, y=33: RDX native solid over verified exposed Layer-F backdrop.",
           "sourceKey": "geometry:rdx:g8:6:33",
+          "submap": 12
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-cell-geometry-20261019",
+          "g8Bounds": [
+            17,
+            34,
+            2,
+            8
+          ],
+          "id": "md0016-open-17-18-34-41",
+          "mapId": 16,
+          "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+          "reason": "Keep the reviewed MD0016 x=17..18, y=34..41 space traversable.",
+          "sourceKey": "geometry:rdx:g8:17-18:34-41",
+          "submap": 12
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-cell-geometry-20261019",
+          "g8Bounds": [
+            16,
+            41,
+            1,
+            1
+          ],
+          "id": "md0016-open-16-41",
+          "mapId": 16,
+          "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+          "reason": "Extend the adjacent already-open x=16 channel through y=41.",
+          "sourceKey": "geometry:rdx:g8:16-16:41-41",
           "submap": 12
         },
         {
@@ -19935,6 +20043,22 @@
           "sourceKey": "rdx:MD0033:logic:20:28",
           "submap": 26,
           "targetSubmap": 27
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-cell-geometry-20261019",
+          "g8Bounds": [
+            20,
+            14,
+            2,
+            2
+          ],
+          "id": "md0033-open-20-21-14-15",
+          "mapId": 33,
+          "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+          "reason": "Open the four reviewed MD0033 gameplay cells at x=20..21, y=14..15; retain the room topology splice.",
+          "sourceKey": "geometry:rdx:g8:20-21:14-15",
+          "submap": 26
         },
         {
           "action": "open",
@@ -22605,13 +22729,13 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "8e9846bd21739df8502431c71db571bca3250fabfa3c629f165d1632f4ed7a98",
+    "authoredLayers": "ca5ee87b4a37e462b1bcf24c62d3556fab5e02549d373cf7e847db10437a5baf",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "e056318c0d32d9e5ed8cfb556e515eb5c518d5bb7c2f76b2d19cdfe487a7565a",
     "presentationOcclusion": "2e6fc26af15d5cf8e765820ec1295272505875c17a259b9dbdb49c3c66a74cf7",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "4927e11e22748e1297fffe201a1b013a8276cba114ae31d22097db0c4f7c05be",
-    "resolved32": 2720171713,
+    "resolved": "c09384d028f814424dee4ee2377d8df4cc45a8e98b905cf324603708a9c7185e",
+    "resolved32": 1937375959,
     "runtimeSource": "24cee553ff5875518422579afe5e460bd1885a5e98993dce304c7297647b9997",
     "runtimeSource32": 3725346838,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
@@ -71920,11 +72044,11 @@
         "alignment": "84678910ac571a66be3c16a7d5c9c69e76f02da3928522a921c3ceeb8e074f98",
         "presentationDepth": "79ae8882db1840133880f64cb436a403c800a7b08e708fa688f99e29d661eef8",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "cc6e1b652f1561acd90b7f1f1dc1ce8ebd2d1fa779531f4b433dc82c9e1f31a5",
+        "resolved": "d1c6d401c06844aafe079abe9c8bcbe2269cfe8cd1885cd496b43549fb294466",
         "semantic": "da9b44aa0945735553e0e0023a9f20d877d9b4689cd09ad5590aaecdbfda6ef1",
         "sourceClassic": "d0004d2473679a970794ad52ca2fb1b39b601c5fe2cc6f115f338ae51262b247",
         "sourceRdx": "dec13125f72bb08484cd5030d556549eea472057079558d173935b121cb278a6",
-        "structural": "4f7b69a7ff2c98615046db4255829d11fcd07bff8a1ae40dbaa391a07fa788a9",
+        "structural": "c7b0cc55ee0d04549979901b9e2365a8ae7792ff25c4282bd25ca027f944c0fa",
         "transitions": "f97bdf1cdcd6c62b1667f96321ea2422926bf7b3bad3489fdd46ba239ef215e8"
       },
       "group": "egypt",
@@ -75317,6 +75441,21 @@
               "reason": "Clear SM0A g8 x=34..34, y=87: RDX native solid over verified exposed Layer-F backdrop.",
               "sourceKey": "geometry:rdx:g8:34:87",
               "type": "gameplay-cell-override"
+            },
+            {
+              "action": "solid",
+              "authority": "user-reviewed-cell-geometry-20261019",
+              "g8Bounds": [
+                27,
+                60,
+                1,
+                2
+              ],
+              "id": "md0014-solid-27-60-61",
+              "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+              "reason": "Restore the two fully solid MD0014 gameplay cells at x=27, y=60..61.",
+              "sourceKey": "geometry:rdx:g8:27-27:60-61",
+              "type": "gameplay-cell-override"
             }
           ],
           "schema": "rdr.structural_corrections_resolved.v1"
@@ -75398,12 +75537,12 @@
         "alignment": "3c2773055cdf8af630f64490e7d8d4cc902813b3e9890fbbc7c674b0f4febac4",
         "presentationDepth": "37a203befb1104ee7420afaf11abf1b7285c111f9c44d1f174292829c119224e",
         "presentationOcclusion": "e7d3290770495841c89e87f98277b10d2d6016d0ad6cd6f4131e686679d9f4d7",
-        "resolved": "722d9b24eb202a28f00f51f6c200e9834a9f5d899c76aa33188555de17d76b01",
-        "reviewed": "f3fb8b209a97f8c488908c670cc2443489f71c10f37c57cbc5c350ba16418546",
+        "resolved": "5f5f57c95f7d93bda253ecc40abc64fea0a75853e24a4646e1297ae4996cc70f",
+        "reviewed": "7e7f62ebfb10c034e101c2c49b6714c13bb287204d01c955e5450ff72374ebd0",
         "semantic": "d5a5f9968dd179c0541c13e3e270effa9dff1d39c75ce3d1ef545c055040836b",
         "sourceClassic": "e7ea425006c715e0339be5af4595e2495ecbf7297ab62cbe17a1061e982233d0",
         "sourceRdx": "73d63d615bd911f83293774756c9090e49fd43ead8fe200280f5196c62d5bae1",
-        "structural": "b80ba64ffed6e8e8b7e1d31399fe54e27bee24d739082934d64f5f3e4302d62b",
+        "structural": "d83a2e7b0bdb0e2739de712aec630533f956c1b3dc5d33641d0ce0342352fa28",
         "transitions": "3a00b0a24a5ef7b35482e5eeefe28cce0b13b20f3f2e705a1758ea38474840b4"
       },
       "group": "egypt",
@@ -81121,6 +81260,70 @@
                   42,
                   2,
                   1
+                ]
+              }
+            },
+            {
+              "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+              "provenance": {
+                "authority": "user-reviewed-RDX-tile-copy-20261019",
+                "reason": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips."
+              },
+              "target": "room:SM0B:visual:B:13:31",
+              "type": "visual-plane",
+              "value": {
+                "action": "overlay-tiles",
+                "bounds": [
+                  104,
+                  248,
+                  8,
+                  8
+                ],
+                "clearLayer": "B",
+                "tiles": [
+                  {
+                    "globalTile": 8767,
+                    "hFlip": false,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 2,
+                    "plane": "B",
+                    "vFlip": false
+                  }
+                ]
+              }
+            },
+            {
+              "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+              "provenance": {
+                "authority": "user-reviewed-RDX-tile-copy-20261019",
+                "reason": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips."
+              },
+              "target": "room:SM0B:visual:B:14:31",
+              "type": "visual-plane",
+              "value": {
+                "action": "overlay-tiles",
+                "bounds": [
+                  112,
+                  248,
+                  8,
+                  8
+                ],
+                "clearLayer": "B",
+                "tiles": [
+                  {
+                    "globalTile": 8747,
+                    "hFlip": false,
+                    "offset": [
+                      0,
+                      0
+                    ],
+                    "paletteLine": 2,
+                    "plane": "B",
+                    "vFlip": false
+                  }
                 ]
               }
             }
@@ -89069,6 +89272,62 @@
               "provenance": "The reviewed SM0B Cut+Move artwork places two ceiling-spike tiles at g8:24..25:42 / [192,336,16,8]. Restore matching lethal gameplay cells so the complete visible spike pair has hazard contact.",
               "sourceKey": "room:SM0B",
               "type": "gameplay-cell-override"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-reviewed-RDX-tile-copy-20261019",
+              "bounds": [
+                104,
+                248,
+                8,
+                8
+              ],
+              "clearLayer": "B",
+              "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+              "provenance": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips.",
+              "sourceKey": "room:SM0B:visual:B:13:31",
+              "tiles": [
+                {
+                  "globalTile": 8767,
+                  "hFlip": false,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B",
+                  "vFlip": false
+                }
+              ],
+              "type": "visual-plane-patch"
+            },
+            {
+              "action": "overlay-tiles",
+              "authority": "user-reviewed-RDX-tile-copy-20261019",
+              "bounds": [
+                112,
+                248,
+                8,
+                8
+              ],
+              "clearLayer": "B",
+              "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+              "provenance": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips.",
+              "sourceKey": "room:SM0B:visual:B:14:31",
+              "tiles": [
+                {
+                  "globalTile": 8747,
+                  "hFlip": false,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B",
+                  "vFlip": false
+                }
+              ],
+              "type": "visual-plane-patch"
             }
           ],
           "schema": "rdr.structural_corrections_resolved.v1"
@@ -94789,6 +95048,74 @@
             "semantic": "gameplay",
             "target": "room:SM0B",
             "type": "terrain-cell"
+          },
+          {
+            "after": {
+              "action": "overlay-tiles",
+              "bounds": [
+                104,
+                248,
+                8,
+                8
+              ],
+              "clearLayer": "B",
+              "tiles": [
+                {
+                  "globalTile": 8767,
+                  "hFlip": false,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B",
+                  "vFlip": false
+                }
+              ]
+            },
+            "before": null,
+            "id": "SM0B.reviewed-copy-MD0015-B-25-27-to-13-31",
+            "provenance": {
+              "authority": "user-reviewed-RDX-tile-copy-20261019",
+              "reason": "Fill dark Plane-B cell (13,31) with the exact decoded MD0015 Plane-B tile (25,27), retaining its palette and flips."
+            },
+            "semantic": "visual",
+            "target": "room:SM0B:visual:B:13:31",
+            "type": "visual-plane"
+          },
+          {
+            "after": {
+              "action": "overlay-tiles",
+              "bounds": [
+                112,
+                248,
+                8,
+                8
+              ],
+              "clearLayer": "B",
+              "tiles": [
+                {
+                  "globalTile": 8747,
+                  "hFlip": false,
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 2,
+                  "plane": "B",
+                  "vFlip": false
+                }
+              ]
+            },
+            "before": null,
+            "id": "SM0B.reviewed-copy-MD0015-B-26-27-to-14-31",
+            "provenance": {
+              "authority": "user-reviewed-RDX-tile-copy-20261019",
+              "reason": "Fill dark Plane-B cell (14,31) with the exact decoded MD0015 Plane-B tile (26,27), retaining its palette and flips."
+            },
+            "semantic": "visual",
+            "target": "room:SM0B:visual:B:14:31",
+            "type": "visual-plane"
           }
         ]
       },
@@ -94864,12 +95191,12 @@
         "alignment": "a1c0bb22dd4bedc580494cf7315f385a00cd139f93c135de92c8884d2df00146",
         "presentationDepth": "c6ed4cff11560e30f1642576044866ef2fd3daf2d4111a92a7c1a3e762c98777",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "fdd393029dc680d055d592c6b02d565d83739b1a18528f4a4039fe611644042d",
+        "resolved": "24392876f213d69f1214d1b4f92994bcdd7f710bb916470e6862e5d21c4f4ecb",
         "reviewed": "698e08442d27e6770fea47f10be9ed86fbc84ec768d3e2badc92dbeaad3500b0",
         "semantic": "97cab05aa88df092412448cd11932bdaf4c70a4d617ade29599506f7ccee2725",
         "sourceClassic": "0e73fce60e46c562e82582e85228bb9c29eb49d99e53039751f34566776c631a",
         "sourceRdx": "f91956bc6c3d50f7aa9767025d16d66ed8f8defb7b6a840b85f6b63650ae314f",
-        "structural": "c366e8d9ba81c4aefcad95ade8c8211f49afca485ad32f924fadbccaf7ec325f",
+        "structural": "fc129fa2c0f813b3b7d9b0cda8e935ac9206260890500d69bf842d3f4bdaf82b",
         "transitions": "6472a0bef5798a7c2812bd8d8020b7a773be810014b0b7a5213a0fd951fd7fe1"
       },
       "group": "egypt",
@@ -97864,6 +98191,36 @@
               "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
               "reason": "Clear SM0C g8 x=6..7, y=33: RDX native solid over verified exposed Layer-F backdrop.",
               "sourceKey": "geometry:rdx:g8:6:33",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-cell-geometry-20261019",
+              "g8Bounds": [
+                17,
+                34,
+                2,
+                8
+              ],
+              "id": "md0016-open-17-18-34-41",
+              "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+              "reason": "Keep the reviewed MD0016 x=17..18, y=34..41 space traversable.",
+              "sourceKey": "geometry:rdx:g8:17-18:34-41",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-cell-geometry-20261019",
+              "g8Bounds": [
+                16,
+                41,
+                1,
+                1
+              ],
+              "id": "md0016-open-16-41",
+              "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+              "reason": "Extend the adjacent already-open x=16 channel through y=41.",
+              "sourceKey": "geometry:rdx:g8:16-16:41-41",
               "type": "gameplay-cell-override"
             }
           ],
@@ -145148,12 +145505,12 @@
         "alignment": "2f578fe5c83a0b0189bf9a2e7abbe10bfe504c34d328ea18d065843e18dc77fa",
         "presentationDepth": "1985b147805a9a7f293d3f1dec1373c5638509dc3657baf6eba53e6033c87a8d",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "c2c978901e5528371561c4ce0accb2fd5eca3223155a617736f95546dbcff2e1",
+        "resolved": "5b672bead167d4fbc994b80bfd822b20fbc308a4d6d67543ad9fe3f1304f6311",
         "reviewed": "13f9ca2f0f1f68d8e77d0ddea5cf9b7244b7873313c67d2054cb8b95b6f4b95b",
         "semantic": "e8f6564ffb78e7995d6f747bf018e59e23a88c8400072651687edb1b7b147b55",
         "sourceClassic": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
         "sourceRdx": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
-        "structural": "0f470e286af675de68711e4193a0def6b4c0e35b37b9bcfee99539bfba22a0be",
+        "structural": "ae0db149e646fbf5eb780706e91f64fb21539ce8e24cccc381c036a49cdd7306",
         "transitions": "81f4c7122ecac43dc662a02945311771fbbb25d6b3b9615960501c404557cba0"
       },
       "group": "castle",
@@ -147674,6 +148031,21 @@
               "rowIn": 32,
               "sourceKey": "rdx:MD0033:logic:20:28",
               "targetSubmap": 27,
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-cell-geometry-20261019",
+              "g8Bounds": [
+                20,
+                14,
+                2,
+                2
+              ],
+              "id": "md0033-open-20-21-14-15",
+              "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
+              "reason": "Open the four reviewed MD0033 gameplay cells at x=20..21, y=14..15; retain the room topology splice.",
+              "sourceKey": "geometry:rdx:g8:20-21:14-15",
               "type": "gameplay-cell-override"
             },
             {

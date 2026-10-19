@@ -9,6 +9,7 @@ import { SpatialRoomAudio } from './spatial/audio.js';
 import { RoomSpatialController } from './spatial/controller.js';
 import { SM00_SPATIAL_REPLAY, replaySpatialMessage } from './spatial/fixture.js';
 import { SOURCE_KINDS, projectReferenceSources, sideElevation, replaceObservedSource } from './spatial/preview.js';
+import { xrRenderSettings, VRFrameDiagnostics } from './performance.js';
 
 const box = (parent, color, size, position) => {
   const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size),
@@ -18,7 +19,7 @@ const box = (parent, color, size, position) => {
   return mesh;
 };
 
-export function describeRoomControls({ mode = 'game', left = false, right = false, mask = 0, desktop = false, spatial = 'CRT only' } = {}) {
+export function describeRoomControls({ mode = 'game', left = false, right = false, mask = 0, desktop = false, spatial = 'CRT only', performanceLabel = '' } = {}) {
   if (desktop) return [
     `CONTROL: ${mode.toUpperCase()}`,
     'ARROWS OR O/K/Z/X: MOVE',
@@ -34,6 +35,7 @@ export function describeRoomControls({ mode = 'game', left = false, right = fals
   ];
   return [
     `CONTROL: ${mode.toUpperCase()}`,
+    ...(performanceLabel ? [performanceLabel] : []),
     `LEFT ${left ? 'CONNECTED' : 'NOT DETECTED'}  /  RIGHT ${right ? 'CONNECTED' : 'NOT DETECTED'}`,
     'LEFT STICK: MOVE   RIGHT TRIGGER: FIRE',
     'CD32: A JUMP  B DYNAMITE  X STICK',
@@ -102,7 +104,8 @@ function makeRoom(sourceCanvas, {desktop = false} = {}) {
     lastText = string;
     ctx.fillStyle = '#181a21'; ctx.fillRect(0, 0, 1024, 512);
     ctx.fillStyle = '#f3d795'; ctx.font = 'bold 33px monospace';
-    lines.forEach((line,i) => ctx.fillText(line, 23, 46 + i * 42, 980));
+    const lineStep = Math.min(42, 460 / Math.max(1, lines.length - 1));
+    lines.forEach((line,i) => ctx.fillText(line, 23, 40 + i * lineStep, 980));
     infoTexture.needsUpdate = true;
   };
   updatePanel({});
@@ -165,6 +168,8 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
   };
   let renderer, adapter, unsubscribe, ending = false, ownsPresentation = false;
   let lastRevision = -1, frameCount = 0, uploadCount = 0, startAt = null;
+  const timing = new VRFrameDiagnostics();
+  const xrSettings = immersive ? xrRenderSettings(location.search) : null;
   let lastMeasuredUploadRevision = -1, wasPausedForVisibility = false;
   let floorInfo = null, anchored = false, initialCrtHeight = null;
   let panelExpanded = true, status = {mode:'game'};
@@ -202,7 +207,13 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
   };
   try {
     renderer = new THREE.WebGLRenderer({canvas,antialias:false,alpha:false,powerPreference:'high-performance'});
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    // The desktop mirror's DPR must not allocate a multi-megapixel backbuffer
+    // on Quest. Immersive resolution is independently controlled by WebXR.
+    renderer.setPixelRatio(immersive ? 1 : Math.min(devicePixelRatio || 1, 2));
+    if (immersive) {
+      renderer.xr.setFramebufferScaleFactor(xrSettings.scale);
+      renderer.xr.setFoveation(xrSettings.foveation);
+    }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.xr.enabled = immersive;
     const {scene,world,crt,pivot,texture,infoTexture,updatePanel} =
@@ -547,7 +558,9 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
         const pose = frame.getViewerPose(renderer.xr.getReferenceSpace());
         if (pose) recenter(pose);
       }
+      const presentationStart = performance.now();
       const revision = presentation.present();
+      const presentationMs = performance.now() - presentationStart;
       if (revision !== lastRevision) {texture.needsUpdate=true;lastRevision=revision;uploadCount++;}
       if (activeSubmap() !== spatial.submap) {
         cancelReplay();spatial.setLocation(activeSubmap());updateSpatialLabel();
@@ -570,7 +583,16 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
           group.scale.setScalar(age>=0 && age<550 ? 1+0.75*(1-age/550) : 1);
         }
       }
+      const renderStart = performance.now();
       renderer.render(scene,camera);
+      const renderCpuMs = performance.now() - renderStart;
+      const report = timing.record(performance.now(), presentationMs, renderCpuMs);
+      if (report && debug) {
+        const performanceLabel = `FPS ${report.fps.toFixed(1)} / C ${report.presentationMs.toFixed(1)}ms / GL CPU ${report.renderCpuMs.toFixed(1)}ms`;
+        status = {...status,performanceLabel};
+        updatePanel(status,panelExpanded);
+        onStatus(`${performanceLabel} · XR scale ${xrSettings?.scale ?? 'desktop'}`);
+      }
       if (gameSession.inputRouter?.trace) {
         if (revision !== lastMeasuredUploadRevision) {
           gameSession.inputRouter.noteTextureSubmission(revision,presentation.frameSerial);
@@ -580,11 +602,12 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       }
       frameCount++;
       if (startAt === null) startAt=performance.now();
-      if (debug && frameCount%120===0)
-        onStatus(`${immersive?'VR':'Preview'} frames ${frameCount} · canvas rev ${revision} · uploads ${uploadCount} · native frame ${presentation.frameSerial}`);
+      // FPS/CPU timings are reported by wall clock, including when only one XR
+      // frame is delivered each second; a 120-frame diagnostic can take minutes.
     });
     return {end:stop,getStats:() => ({mode:gameSession.mode,frames:frameCount,uploads:uploadCount,
       referenceSpace:floorInfo?.type || 'desktop',floorDiagnostics:floorInfo?.diagnostics || null,
-      spatial:spatial.diagnostics(),roomEffectsLevel:audio.level})};
+      spatial:spatial.diagnostics(),roomEffectsLevel:audio.level,
+      xrSettings,frameTimings:timing.latest})};
   } catch(error) { await stop(); throw error; }
 }
