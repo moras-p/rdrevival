@@ -720,3 +720,11 @@ body.rdx-map-editor .map-editor-panel { margin-top:0; }
 .switch-safety-dot { display:inline-block; width:10px; height:10px; flex:none; border-radius:50%; background:currentColor; color:#8a96a9; opacity:.65; }
 .switch-safety-dot[data-state="safe"] { color:#70e69b; opacity:1; box-shadow:0 0 5px #3dcc7280; }
 .switch-safety-dot[data-state="unsafe"] { color:#ff8279; opacity:1; }
+
+/* Optional WebXR test entry: no changes to the ordinary game stage. */
+.rdr-vr-entry { display:flex; flex-wrap:wrap; align-items:center; gap:0.45rem;
+  margin:0.45rem 0; padding:0.5rem 0.7rem; border:1px solid #675744; border-radius:0.45rem;
+  background:#252321; color:#eee0c8; font:inherit; }
+.rdr-vr-entry button { font:inherit; }
+.rdr-vr-entry small { flex-basis:100%; opacity:0.85; }
+.rdr-vr-entry [hidden] { display:none; }

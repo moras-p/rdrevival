@@ -15,6 +15,14 @@
       <a class="file-button" href="soundlab.html">SoundLab</a>
       <a class="file-button" href="pixel-art-editor.html">Pixel art editor</a>
     </nav>
+    <aside id="rdr-vr-entry" class="rdr-vr-entry" aria-label="Optional immersive VR test room">
+      <span>Game display: <strong>2D (default)</strong></span>
+      <button id="rdr-vr-classic" type="button" disabled>Enter VR (Classic)</button>
+      <button id="rdr-vr-revival" type="button" disabled>Enter VR (Revival)</button>
+      <label class="file-button">Validate Sega ROM <input id="rdr-vr-rom" type="file" accept=".bin,.md,.gen,.rom,application/octet-stream"></label>
+      <button id="rdr-vr-exit" type="button" hidden>Exit VR</button>
+      <small id="rdr-vr-status" role="status">Checking headset support…</small>
+    </aside>
     <header>
       <div class="control-deck" aria-label="Game preview controls">
         <nav class="control-group-tabs" aria-label="Control groups">
@@ -205,6 +213,7 @@
   <script src="player.js"></script>
   <script src="xrick.js"></script>
   <script type="module" src="rdx/integration.js"></script>
+  <script type="module" src="vr/entry.js"></script>
   <div id="rdx-preview-geometry-tooltip" class="preview-geometry-tooltip" hidden role="status"></div>
 </body>
 </html>

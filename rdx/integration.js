@@ -19,6 +19,7 @@ import { canConnectRdxRomDirectory, connectRdxRomDirectory, loadRememberedRdxRom
 import { XRICK_CONTROL } from './src/runtime/controls.js';
 import { GameInputRouter } from './src/runtime/input-router.js';
 import { GameSession } from './src/runtime/game-session.js';
+import { PresentationOwner } from '../vr/presentation-owner.js';
 import { createAiPlaytestController } from './src/agent/ai-playtest-controller.js';
 import { createRealtimeModelWorkbench } from './src/agent/realtime-model-workbench.js';
 import { installGameplayWebMcp } from './src/agent/gameplay-webmcp.js';
@@ -1354,8 +1355,19 @@ function updateSwitchSafety(snapshot) {
   switchSafetyLight.setAttribute('aria-label', label);
 }
 
-function frame() {
-  if (!running || !bridge) return;
+let presentationRevision = 0;
+const presentationOwner = new PresentationOwner({
+  present: () => presentFrame(),
+  request: callback => requestAnimationFrame(callback),
+  cancel: id => cancelAnimationFrame(id),
+  shouldRun: () => running && !!bridge
+});
+
+/* The ordinary RAF and immersive XR animation loop are mutually exclusive.
+ * Both invoke the same production canvas writer; Emscripten owns simulation. */
+function frame() { if (running && bridge) presentationOwner.pageFrame(); }
+function presentFrame() {
+  if (!running || !bridge) return presentationRevision;
   try {
     const snapshot = bridge.snapshot();
     const now = performance.now();
@@ -1422,6 +1434,9 @@ function frame() {
       // No extra frame, native tick, or copy is scheduled by the observer.
       if (window.xrickInputRouter?.trace)
         window.xrickInputRouter.noteFrameSubmission(snapshot.frameSerial);
+      // Counts actual canvas submissions, including presentation-only camera frames.
+      // The native gameplay frame serial is a different clock.
+      presentationRevision += 1;
     }
     updateCollisionRuntime(snapshot);
     const aiSnapshot = bridge.snapshot();
@@ -1432,7 +1447,7 @@ function frame() {
     bridge?.setSpriteReplacementMask(0);
     setStatus(error.message, 'error');
   }
-  requestAnimationFrame(frame);
+  return presentationRevision;
 }
 
 async function loadRomBytes(bytes, displayName = 'RDX ROM', { remember = true, directoryHandle = null } = {}) {
@@ -2080,6 +2095,16 @@ try {
   const gameSession = new GameSession({ bridge, input: inputRouter, module });
   gameSession.initialize();
   window.xrickGameSession = gameSession;
+  window.xrickVRPresentation = Object.freeze({
+    enter: () => presentationOwner.enter(),
+    leave: () => presentationOwner.leave(),
+    present: () => presentationOwner.presentXR() ?? presentationRevision,
+    get revision() { return presentationRevision; },
+    get frameSerial() { return bridge.snapshot().frameSerial; },
+    get tick() { return bridge.api.gameEventsTick?.() ?? null; },
+    get active() { return presentationOwner.xr; }
+  });
+  window.dispatchEvent(new CustomEvent('xrick-vr-ready'));
   runtimeOptions.attachBridge(bridge);
   aiPlaytestController.updateButtons();
   aiPlaytestController.setPlayStatus(bridge.aiBackendAvailable() ? 'Load RDX ROM to enable AI play' : 'GAI backend missing from WASM', bridge.aiBackendAvailable() ? 'neutral' : 'error');

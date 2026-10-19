@@ -57,6 +57,8 @@ export class GameInputRouter {
     this.diagnostics = [];
     this.pendingEdges = new Map();
     this.awaitingDisplay = new Set();
+    this.awaitingTexture = new Set();
+    this.awaitingXR = new Set();
   }
   #write(mask, physicalAt = null) {
     const previous = this.mask;
@@ -79,6 +81,8 @@ export class GameInputRouter {
           const evicted = this.diagnostics.shift();
           if (this.pendingEdges.get(evicted.bit) === evicted) this.pendingEdges.delete(evicted.bit);
           this.awaitingDisplay.delete(evicted);
+          this.awaitingTexture.delete(evicted);
+          this.awaitingXR.delete(evicted);
         }
       }
     }
@@ -92,6 +96,8 @@ export class GameInputRouter {
       // Mode/focus handoff is an identity boundary: never attribute later
       // presentation frames to controls from the previous owner.
       this.awaitingDisplay.clear();
+      this.awaitingTexture.clear();
+      this.awaitingXR.clear();
     }
     this.clearNative();
     this.mask = 0;
@@ -156,6 +162,9 @@ export class GameInputRouter {
   }
   /** Called at the native input-sampling boundary, not a separate RAF. */
   pollGamepads(gamepads = globalThis.navigator?.getGamepads?.() || [], facing = C.RIGHT) {
+    // The existing native pre-actor boundary samples XR before standard pads;
+    // XR never introduces a scheduler, worker or frame-queued input buffer.
+    this.xrSampler?.sample();
     const known = new Set();
     for (const pad of gamepads || []) {
       if (!pad || pad.connected === false) continue;
@@ -192,7 +201,41 @@ export class GameInputRouter {
       record.submittedAt = now;
       record.submittedFrameSerial = serial;
       this.awaitingDisplay.delete(record);
+      this.awaitingTexture.add(record);
     }
+  }
+  // Called *after* the WebGL draw that first consumes a new canvas revision;
+  // timestamps describe JS submissions, not GPU completion or photon output.
+  noteTextureSubmission(revision, frameSerial) {
+    if (!this.trace) return;
+    for (const record of this.awaitingTexture) {
+      if (((frameSerial - record.submittedFrameSerial) >>> 0) >= 0x80000000) continue;
+      record.textureAt = this.now();
+      record.textureRevision = revision;
+      this.awaitingTexture.delete(record);
+      this.awaitingXR.add(record);
+    }
+  }
+  noteXRSubmission(revision) {
+    if (!this.trace) return;
+    for (const record of this.awaitingXR) {
+      if (record.textureRevision > revision) continue;
+      record.xrSubmittedAt = this.now();
+      record.xrRevision = revision;
+      this.awaitingXR.delete(record);
+    }
+  }
+  diagnosticVR() {
+    const percentile = (values, q) => values.length ? values.sort((a,b)=>a-b)[Math.ceil(values.length*q)-1] : null;
+    const stats = key => {
+      const values = this.diagnostics.filter(r => r[key] !== undefined)
+        .map(r => r[key]-r.physicalAt).filter(v => Number.isFinite(v) && v >= 0);
+      return { samples: values.length, p50: percentile(values,0.5),
+        p95: percentile(values,0.95), p99: percentile(values,0.99) };
+    };
+    return { receiptToTextureSubmissionMs: stats('textureAt'),
+      receiptToXRSubmissionMs: stats('xrSubmittedAt'),
+      note: 'JS/WebGL submissions only; no hardware actuation, GPU completion or photon timestamps' };
   }
   diagnosticTrace() { return this.diagnostics.map(record => ({ ...record })); }
   diagnosticSummary() {

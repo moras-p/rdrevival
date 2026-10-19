@@ -1,4 +1,4 @@
-import { validateRdxRomBytes, loadRememberedRdxRom } from './rom-store.js';
+import { validateRdxRomBytes, loadRememberedRdxRom, rememberRdxRom } from './rom-store.js';
 import { readGameEvents, GameEventDispatcher } from './game-events.js';
 
 /** Player-facing logical facade over an existing, unique WASM instance.
@@ -53,7 +53,11 @@ export class GameSession {
   async loadRom(file) {
     if (this.disposed) throw new Error('Session is disposed');
     if (!file || typeof file.arrayBuffer !== 'function') throw new TypeError('File required');
-    return this.#validateRom(new Uint8Array(await file.arrayBuffer()));
+    const validated = await this.#validateRom(new Uint8Array(await file.arrayBuffer()));
+    // Reuse the existing origin-scoped, validated ROM store. Storage denial is
+    // nonfatal, and never affects the running Classic instance.
+    await rememberRdxRom(this.rom.bytes, { name: file.name || 'Rick_Dangerous_DX_1.3.bin' });
+    return validated;
   }
   async #validateRom(bytes) {
     const previous = this.state;
@@ -74,7 +78,20 @@ export class GameSession {
     if (!found) return null;
     return this.#validateRom(found.bytes);
   }
+  syncExperience() {
+    // The legacy 2D ROM auto-loader may select the native experience outside
+    // this facade. Reconcile before a VR transition; C remains authoritative.
+    const actual = this.bridge.api.getEnabled() ? 'revival' : 'classic';
+    if (this.mode !== actual && this.state !== 'uninitialized') {
+      this.inputRouter?.clear();
+      this.dispatcher.reset();
+      this.mode = actual;
+      this.#publish(this.state);
+    }
+    return actual;
+  }
   selectExperience(mode) {
+    this.syncExperience();
     if (this.disposed || this.state === 'uninitialized') throw new Error('Initialize session first');
     if (!['classic', 'revival'].includes(mode)) throw new RangeError('Experience must be classic or revival');
     if (mode === 'revival' && !this.rom && !this.bridge.presentationReady())
