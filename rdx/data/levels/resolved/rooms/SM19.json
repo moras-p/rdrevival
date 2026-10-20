@@ -24,11 +24,11 @@
       "alignment": "9c7321a66729665b05187c385fc8e09ae2269fb0cb2095116753138de131185a",
       "presentationDepth": "6448aeac722080ff21026391933555fa931713514df6fb245a8d514f7be22509",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "ab9507947942492e8be297499dd4e74aecd27b7969a94216c7ebb3e64452ba18",
+      "resolved": "e9a663b246fcbd15a936c6df10cacfd711bb37baaacfe2d26bc96774babb3936",
       "semantic": "8fa8ded731b84a46e50b152f5262d2119562a193d08c11ab4cba6e8c60822f58",
       "sourceClassic": "15d85a314aef05d95d96ee3acb41542607a36b0d5ee8c1d9fe952b00b430ca83",
       "sourceRdx": "e5fc86bbbf37496998277295f66005b30057115e0f93948b86ff9bc5dcbc36b9",
-      "structural": "1e8a7a8b84494266c1f7d2fdad3176454390546fcb87541a2fd674028131d35d",
+      "structural": "5fe87fdc3a4fc3d5d83f5442f96d7088b858a9c39c203413c9f063dcfbd8ad5e",
       "transitions": "7d4ef1aebef16cbac0ccb8c896950716d5d08ebf86d27c9caa602ae7de72d348"
     },
     "group": "castle",
@@ -1657,6 +1657,21 @@
             "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
             "reason": "Clear SM19 g8 x=7..7, y=22: RDX native solid over verified exposed Layer-F backdrop.",
             "sourceKey": "geometry:rdx:g8:7:22",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+            "g8Bounds": [
+              28,
+              22,
+              1,
+              1
+            ],
+            "id": "sm19-open-castle-stair-left-corner-28-22",
+            "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+            "reason": "Restore the open 8px top-left corner of the lower step of the MD0032 two-tile stone staircase; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+            "sourceKey": "geometry:rdx:g8:28:22",
             "type": "gameplay-cell-override"
           }
         ],

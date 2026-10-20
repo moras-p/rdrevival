@@ -24,12 +24,12 @@
       "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
       "presentationDepth": "9a201345a494516f9b3b0520d1de48c53df2a63432d6729e0b20748c59e8a849",
       "presentationOcclusion": "789184168caf8c879d8317c2cf0c7878090d06d176ff08421f72ffb5420e92f7",
-      "resolved": "94835fba9cf431bd54aa3b36e6e10a27e73cca1fe16717e49afc17c7c25ef6e4",
+      "resolved": "c092911c5d614e7a52053bf738d1bbc57c4a5d69218c4905a799af66ba65fb8a",
       "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
       "semantic": "2ca5e74c983f847d1e3f40a542c5436a2c5657169df2b71317e114548af195ea",
       "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
       "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
-      "structural": "b5868fd86122540cc300f275c5c5357343fe04c69cffccfa07ff9e18b536f746",
+      "structural": "406875bd71b5c7006521d23eee8964f7702a9c3531b3dcf269f9dc895c2385bf",
       "transitions": "fd2b37fad8e77c1f9589ecd26ac7bd5d31f2770e54763523b8e31acfe9fc45ef"
     },
     "group": "egypt",
@@ -4428,6 +4428,21 @@
             "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
             "reason": "Clear SM13 g8 x=19..19, y=81: RDX native solid over verified exposed Layer-F backdrop.",
             "sourceKey": "geometry:rdx:g8:19:81",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-sm13-projectile-corridor-20261020",
+            "g8Bounds": [
+              18,
+              63,
+              2,
+              1
+            ],
+            "id": "sm13-projectile-lane-open-18-19-63",
+            "provenance": "User-reviewed projectile-path inspection, SM13 mark 237, native core traverses y=507..512. Review confirmed only these two cells obstruct the flight.",
+            "reason": "The two solid RDX g8 cells at x=144..159, y=504..511 block mark 237 before it passes the third ladder. The lane is intentionally open to projectiles; preserve adjacent platform and ladder contact cells.",
+            "sourceKey": "geometry:rdx:g8:18-19:63",
             "type": "gameplay-cell-override"
           }
         ],

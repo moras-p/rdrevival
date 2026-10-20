@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "ca5ee87b4a37e462b1bcf24c62d3556fab5e02549d373cf7e847db10437a5baf",
+  "authoredLayersFingerprint": "4088f59037674994be5ef86649d1042c0e196be46ce41670b8275168ef1a8a67",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -19368,6 +19368,22 @@
           "submap": 19
         },
         {
+          "action": "open",
+          "authority": "user-reviewed-sm13-projectile-corridor-20261020",
+          "g8Bounds": [
+            18,
+            63,
+            2,
+            1
+          ],
+          "id": "sm13-projectile-lane-open-18-19-63",
+          "mapId": 23,
+          "provenance": "User-reviewed projectile-path inspection, SM13 mark 237, native core traverses y=507..512. Review confirmed only these two cells obstruct the flight.",
+          "reason": "The two solid RDX g8 cells at x=144..159, y=504..511 block mark 237 before it passes the third ladder. The lane is intentionally open to projectiles; preserve adjacent platform and ladder contact cells.",
+          "sourceKey": "geometry:rdx:g8:18-19:63",
+          "submap": 19
+        },
+        {
           "action": "exit",
           "authority": "xrick-connector+rdx-ml20-reviewed",
           "contactRow": 64,
@@ -19416,6 +19432,22 @@
           "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
           "reason": "Clear SM14 g8 x=32..32, y=40: RDX native solid over verified exposed Layer-F backdrop.",
           "sourceKey": "geometry:rdx:g8:32:40",
+          "submap": 20
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            30,
+            42,
+            1,
+            1
+          ],
+          "id": "sm14-open-castle-stair-left-corner-30-42",
+          "mapId": 25,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the lower step of the MD0025 two-tile stone staircase; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:30:42",
           "submap": 20
         },
         {
@@ -20026,6 +20058,22 @@
           "submap": 25
         },
         {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            28,
+            22,
+            1,
+            1
+          ],
+          "id": "sm19-open-castle-stair-left-corner-28-22",
+          "mapId": 32,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the lower step of the MD0032 two-tile stone staircase; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:28:22",
+          "submap": 25
+        },
+        {
           "action": "exit",
           "authority": "xrick-connector+rdx-ml20-reviewed",
           "contactRow": 72,
@@ -20058,6 +20106,198 @@
           "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
           "reason": "Open the four reviewed MD0033 gameplay cells at x=20..21, y=14..15; retain the room topology splice.",
           "sourceKey": "geometry:rdx:g8:20-21:14-15",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            34,
+            6,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-34-6",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the upper staircase first step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:34:6",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            32,
+            8,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-32-8",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the upper staircase second step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:32:8",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            30,
+            10,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-30-10",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the upper staircase third step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:30:10",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            28,
+            12,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-28-12",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the upper staircase fourth step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:28:12",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            26,
+            54,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-26-54",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the lower staircase first step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:26:54",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            24,
+            56,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-24-56",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the lower staircase second step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:24:56",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            22,
+            58,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-22-58",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the lower staircase third step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:22:58",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            20,
+            60,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-left-corner-20-60",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-left corner of the lower staircase fourth step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:20:60",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            13,
+            54,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-right-corner-13-54",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-right corner of the first right-descending stone staircase upper step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:13:54",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            15,
+            56,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-right-corner-15-56",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-right corner of the first right-descending stone staircase lower step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:15:56",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            13,
+            62,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-right-corner-13-62",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-right corner of the second right-descending stone staircase upper step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:13:62",
+          "submap": 26
+        },
+        {
+          "action": "open",
+          "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+          "g8Bounds": [
+            15,
+            64,
+            1,
+            1
+          ],
+          "id": "sm1a-open-castle-stair-right-corner-15-64",
+          "mapId": 33,
+          "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+          "reason": "Restore the open 8px top-right corner of the second right-descending stone staircase lower step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+          "sourceKey": "geometry:rdx:g8:15:64",
           "submap": 26
         },
         {
@@ -22729,15 +22969,15 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "ca5ee87b4a37e462b1bcf24c62d3556fab5e02549d373cf7e847db10437a5baf",
+    "authoredLayers": "4088f59037674994be5ef86649d1042c0e196be46ce41670b8275168ef1a8a67",
     "classicSourceLeg": "5a897ecba13684f6c87cd612bf2312b5ed13c2ab2ff2fb898f9c65ca5cb8e2ff",
     "presentationDepth": "e056318c0d32d9e5ed8cfb556e515eb5c518d5bb7c2f76b2d19cdfe487a7565a",
     "presentationOcclusion": "2e6fc26af15d5cf8e765820ec1295272505875c17a259b9dbdb49c3c66a74cf7",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "c09384d028f814424dee4ee2377d8df4cc45a8e98b905cf324603708a9c7185e",
-    "resolved32": 1937375959,
-    "runtimeSource": "24cee553ff5875518422579afe5e460bd1885a5e98993dce304c7297647b9997",
-    "runtimeSource32": 3725346838,
+    "resolved": "5bb07c93a9333b40a8f0f49c53818c22d5405e44da7601cdb7b7b0be52efcacf",
+    "resolved32": 3298750345,
+    "runtimeSource": "f6cf7fd8abc13281d2d1d42d5ba18c83554d0b37dfc2398ccbe02d3ca8c1f77c",
+    "runtimeSource32": 677602230,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -98413,10 +98653,10 @@
       "fingerprints": {
         "adjustments": "890fc038548e22d9f06f809183f27d779724aac8d67a736a2b5d16b77d431392",
         "alignment": "ee2b18d2997b2d18f046273946beb6a65def636f62254239119677ba3f4f2fb2",
-        "presentationDepth": "827e969ce7cee2bf2cc875cb5476ec490beb88458c3843ed79901008b4c737d2",
+        "presentationDepth": "37b02e48a4fb74437d35d45e980426e13d8eaae93d445e85ecb0c9974b0ae482",
         "presentationOcclusion": "2244a36d2d31157b11624d5834e25be7ef56c91690b523b73e320d4cdacd7f62",
-        "resolved": "29f9ef6ce701d1256564b9d9affb390b3eb2b37149b6d4aa2c3a1f6f0f56c641",
-        "reviewed": "896f20931a052b9392cee9aa15d85df1b541c705d0d1f1eaac18cc69d0b71e42",
+        "resolved": "8bdd76a32f479186e8a12eedcfa11658410a8e3efed8b3617bfaa65c92c68179",
+        "reviewed": "d03ab258da51d35b6f49674d14c3d5c104ef5ad2c85cd89efcf12bc1bdb9af77",
         "semantic": "6294353c0f8e05a5bc43458a041e89a5669fa2f745f41345f2ea0fe4a62c79ad",
         "sourceClassic": "f39fe4f8383c925df012c85c66af74d0464065fba872a89a258d0f5a731df664",
         "sourceRdx": "dd66940c53c9d7750b87f49492d81918c3495655bc032192d41fc3a01c495f6e",
@@ -98659,7 +98899,40 @@
               }
             }
           ],
-          "overrides": [],
+          "overrides": [
+            {
+              "band": "backdrop",
+              "bounds": [
+                120,
+                336,
+                8,
+                32
+              ],
+              "id": "projectile-passage-recessed-column",
+              "plane": "B",
+              "provenance": {
+                "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+                "reason": "Open alcove behind the enemy/projectile lane must remain Backdrop and must not mask actors."
+              },
+              "source": "reviewed-room"
+            },
+            {
+              "band": "midground",
+              "bounds": [
+                112,
+                336,
+                8,
+                32
+              ],
+              "id": "projectile-passage-brick-wall",
+              "plane": "A",
+              "provenance": {
+                "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+                "reason": "The adjacent solid brick wall is Midground instead of Foreground; it remains visible behind actors and forms the projectile corridor boundary."
+              },
+              "source": "reviewed-room"
+            }
+          ],
           "planeDefaults": {
             "A": "foreground",
             "B": "midground"
@@ -98715,6 +98988,44 @@
                   188,
                   309
                 ]
+              }
+            },
+            {
+              "id": "SM0D.editor.presentation-depth.projectile-passage-recessed-column.1",
+              "provenance": {
+                "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+                "reason": "Open alcove behind the enemy/projectile lane must remain Backdrop and must not mask actors."
+              },
+              "target": "room:SM0D:presentation-depth:projectile-passage-recessed-column",
+              "type": "presentation-depth",
+              "value": {
+                "band": "backdrop",
+                "bounds": [
+                  120,
+                  336,
+                  8,
+                  32
+                ],
+                "plane": "B"
+              }
+            },
+            {
+              "id": "SM0D.editor.presentation-depth.projectile-passage-brick-wall.1",
+              "provenance": {
+                "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+                "reason": "The adjacent solid brick wall is Midground instead of Foreground; it remains visible behind actors and forms the projectile corridor boundary."
+              },
+              "target": "room:SM0D:presentation-depth:projectile-passage-brick-wall",
+              "type": "presentation-depth",
+              "value": {
+                "band": "midground",
+                "bounds": [
+                  112,
+                  336,
+                  8,
+                  32
+                ],
+                "plane": "A"
               }
             }
           ],
@@ -101131,6 +101442,48 @@
             "semantic": "gameplay",
             "target": "SM0D.trap.mark-160",
             "type": "entity-position"
+          },
+          {
+            "after": {
+              "band": "backdrop",
+              "bounds": [
+                120,
+                336,
+                8,
+                32
+              ],
+              "plane": "B"
+            },
+            "before": null,
+            "id": "SM0D.editor.presentation-depth.projectile-passage-recessed-column.1",
+            "provenance": {
+              "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+              "reason": "Open alcove behind the enemy/projectile lane must remain Backdrop and must not mask actors."
+            },
+            "semantic": "visual",
+            "target": "room:SM0D:presentation-depth:projectile-passage-recessed-column",
+            "type": "presentation-depth"
+          },
+          {
+            "after": {
+              "band": "midground",
+              "bounds": [
+                112,
+                336,
+                8,
+                32
+              ],
+              "plane": "A"
+            },
+            "before": null,
+            "id": "SM0D.editor.presentation-depth.projectile-passage-brick-wall.1",
+            "provenance": {
+              "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+              "reason": "The adjacent solid brick wall is Midground instead of Foreground; it remains visible behind actors and forms the projectile corridor boundary."
+            },
+            "semantic": "visual",
+            "target": "room:SM0D:presentation-depth:projectile-passage-brick-wall",
+            "type": "presentation-depth"
           }
         ]
       },
@@ -126185,12 +126538,12 @@
         "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
         "presentationDepth": "9a201345a494516f9b3b0520d1de48c53df2a63432d6729e0b20748c59e8a849",
         "presentationOcclusion": "789184168caf8c879d8317c2cf0c7878090d06d176ff08421f72ffb5420e92f7",
-        "resolved": "94835fba9cf431bd54aa3b36e6e10a27e73cca1fe16717e49afc17c7c25ef6e4",
+        "resolved": "c092911c5d614e7a52053bf738d1bbc57c4a5d69218c4905a799af66ba65fb8a",
         "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
         "semantic": "2ca5e74c983f847d1e3f40a542c5436a2c5657169df2b71317e114548af195ea",
         "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
         "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
-        "structural": "b5868fd86122540cc300f275c5c5357343fe04c69cffccfa07ff9e18b536f746",
+        "structural": "406875bd71b5c7006521d23eee8964f7702a9c3531b3dcf269f9dc895c2385bf",
         "transitions": "fd2b37fad8e77c1f9589ecd26ac7bd5d31f2770e54763523b8e31acfe9fc45ef"
       },
       "group": "egypt",
@@ -130590,6 +130943,21 @@
               "reason": "Clear SM13 g8 x=19..19, y=81: RDX native solid over verified exposed Layer-F backdrop.",
               "sourceKey": "geometry:rdx:g8:19:81",
               "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-sm13-projectile-corridor-20261020",
+              "g8Bounds": [
+                18,
+                63,
+                2,
+                1
+              ],
+              "id": "sm13-projectile-lane-open-18-19-63",
+              "provenance": "User-reviewed projectile-path inspection, SM13 mark 237, native core traverses y=507..512. Review confirmed only these two cells obstruct the flight.",
+              "reason": "The two solid RDX g8 cells at x=144..159, y=504..511 block mark 237 before it passes the third ladder. The lane is intentionally open to projectiles; preserve adjacent platform and ladder contact cells.",
+              "sourceKey": "geometry:rdx:g8:18-19:63",
+              "type": "gameplay-cell-override"
             }
           ],
           "schema": "rdr.structural_corrections_resolved.v1"
@@ -130690,11 +131058,11 @@
         "alignment": "83fb1ffb3bab1a1c5302bd643cdad38e16a5234d7b1da2aec2cef3f289e55c8a",
         "presentationDepth": "13c44821f979b16f8e00338c553caa7b7fd77d82d8ffea7b9c3a3f49c4f47391",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "f7862be5a949ab6dec3b07c6529d147c9f57e60f0ea0b62289f3d56cea2830a3",
+        "resolved": "4d89726cdc2af17861d8014c325abc2bb66c11ca24d3f573c2af2393eaf34d84",
         "semantic": "c01b10d9f975634594c86c67d7684b2d67eac8a9dbe965087be82de2913aba39",
         "sourceClassic": "756c3602322778645b56bb319e570cdf565bdfff628caa2a29a0ddc3d19eb81a",
         "sourceRdx": "b3e2e93761d5ba054afe56d2b9f574ecaed3219a3b28757b5be1523446bff17f",
-        "structural": "e85fcb3282bf7eace6cffb37d57c6104d6c8c5f803e2cc14fc274ba03f2134c8",
+        "structural": "6120a34dd1401e84a8b13e1d98ac98f259ee7251cf672819ba7ae248bc481f70",
         "transitions": "291741be7122c190c2fce3b728f25d58a5eebba0e6c9e9814bd1e6ebc84996d7"
       },
       "group": "castle",
@@ -132964,6 +133332,21 @@
               "provenance": "Exact-case 2026-10-12 auto-review accepted as open; cell evidence and case fingerprints in research/collision/canonical-approved-backdrop-open-20261013.json.",
               "reason": "Clear SM14 g8 x=32..32, y=40: RDX native solid over verified exposed Layer-F backdrop.",
               "sourceKey": "geometry:rdx:g8:32:40",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                30,
+                42,
+                1,
+                1
+              ],
+              "id": "sm14-open-castle-stair-left-corner-30-42",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the lower step of the MD0025 two-tile stone staircase; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:30:42",
               "type": "gameplay-cell-override"
             }
           ],
@@ -143729,11 +144112,11 @@
         "alignment": "9c7321a66729665b05187c385fc8e09ae2269fb0cb2095116753138de131185a",
         "presentationDepth": "6448aeac722080ff21026391933555fa931713514df6fb245a8d514f7be22509",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "ab9507947942492e8be297499dd4e74aecd27b7969a94216c7ebb3e64452ba18",
+        "resolved": "e9a663b246fcbd15a936c6df10cacfd711bb37baaacfe2d26bc96774babb3936",
         "semantic": "8fa8ded731b84a46e50b152f5262d2119562a193d08c11ab4cba6e8c60822f58",
         "sourceClassic": "15d85a314aef05d95d96ee3acb41542607a36b0d5ee8c1d9fe952b00b430ca83",
         "sourceRdx": "e5fc86bbbf37496998277295f66005b30057115e0f93948b86ff9bc5dcbc36b9",
-        "structural": "1e8a7a8b84494266c1f7d2fdad3176454390546fcb87541a2fd674028131d35d",
+        "structural": "5fe87fdc3a4fc3d5d83f5442f96d7088b858a9c39c203413c9f063dcfbd8ad5e",
         "transitions": "7d4ef1aebef16cbac0ccb8c896950716d5d08ebf86d27c9caa602ae7de72d348"
       },
       "group": "castle",
@@ -145363,6 +145746,21 @@
               "reason": "Clear SM19 g8 x=7..7, y=22: RDX native solid over verified exposed Layer-F backdrop.",
               "sourceKey": "geometry:rdx:g8:7:22",
               "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                28,
+                22,
+                1,
+                1
+              ],
+              "id": "sm19-open-castle-stair-left-corner-28-22",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the lower step of the MD0032 two-tile stone staircase; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:28:22",
+              "type": "gameplay-cell-override"
             }
           ],
           "schema": "rdr.structural_corrections_resolved.v1"
@@ -145505,12 +145903,12 @@
         "alignment": "2f578fe5c83a0b0189bf9a2e7abbe10bfe504c34d328ea18d065843e18dc77fa",
         "presentationDepth": "1985b147805a9a7f293d3f1dec1373c5638509dc3657baf6eba53e6033c87a8d",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "5b672bead167d4fbc994b80bfd822b20fbc308a4d6d67543ad9fe3f1304f6311",
+        "resolved": "b38771c1317d05f2b6e7449bc7ba8efd69f7f20d7aa6eb7a5aa7bc0227d32c62",
         "reviewed": "13f9ca2f0f1f68d8e77d0ddea5cf9b7244b7873313c67d2054cb8b95b6f4b95b",
         "semantic": "e8f6564ffb78e7995d6f747bf018e59e23a88c8400072651687edb1b7b147b55",
         "sourceClassic": "c2808b79546dfd7b56e286353f3ef94e11a3bee1af06c6a71cfc1f1fc6886022",
         "sourceRdx": "c15856633baa69bb5bd9cad60d9579030a0c8edcd9675752e96c76d4368c1a01",
-        "structural": "ae0db149e646fbf5eb780706e91f64fb21539ce8e24cccc381c036a49cdd7306",
+        "structural": "6bd73f40edc3eaf9081de4bb56f30c2f2dc74c24e2525acef023b9988a3140a3",
         "transitions": "81f4c7122ecac43dc662a02945311771fbbb25d6b3b9615960501c404557cba0"
       },
       "group": "castle",
@@ -148046,6 +148444,186 @@
               "provenance": "Explicit user cell correction; author at the existing room-specific 8px geometry overlay rather than changing shared descriptor projection.",
               "reason": "Open the four reviewed MD0033 gameplay cells at x=20..21, y=14..15; retain the room topology splice.",
               "sourceKey": "geometry:rdx:g8:20-21:14-15",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                34,
+                6,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-34-6",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the upper staircase first step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:34:6",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                32,
+                8,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-32-8",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the upper staircase second step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:32:8",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                30,
+                10,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-30-10",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the upper staircase third step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:30:10",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                28,
+                12,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-28-12",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the upper staircase fourth step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:28:12",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                26,
+                54,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-26-54",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the lower staircase first step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:26:54",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                24,
+                56,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-24-56",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the lower staircase second step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:24:56",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                22,
+                58,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-22-58",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the lower staircase third step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:22:58",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                20,
+                60,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-left-corner-20-60",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-left corner of the lower staircase fourth step after the topology splice; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:20:60",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                13,
+                54,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-right-corner-13-54",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-right corner of the first right-descending stone staircase upper step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:13:54",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                15,
+                56,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-right-corner-15-56",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-right corner of the first right-descending stone staircase lower step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:15:56",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                13,
+                62,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-right-corner-13-62",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-right corner of the second right-descending stone staircase upper step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:13:62",
+              "type": "gameplay-cell-override"
+            },
+            {
+              "action": "open",
+              "authority": "user-reviewed-castle-stair-microgeometry-20261019",
+              "g8Bounds": [
+                15,
+                64,
+                1,
+                1
+              ],
+              "id": "sm1a-open-castle-stair-right-corner-15-64",
+              "provenance": "2026-10-19 user stair-step correction, traced to raw castle stair artwork and 8px descriptor projection. Same-family already-open controls in SM14/SM17/SM19/SM20/SM22/SM24. SM1A coordinates use the effective 560px vertical-slice topology, not raw MD0033 Y.",
+              "reason": "Restore the open 8px top-right corner of the second right-descending stone staircase lower step; ordinary MT1 projects the complete 16px masonry tile solid, hiding the jagged stair clearance. Keep the other three quadrants solid.",
+              "sourceKey": "geometry:rdx:g8:15:64",
               "type": "gameplay-cell-override"
             },
             {
@@ -207529,7 +208107,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "24cee553ff5875518422579afe5e460bd1885a5e98993dce304c7297647b9997",
+  "runtimeSourceFingerprint": "f6cf7fd8abc13281d2d1d42d5ba18c83554d0b37dfc2398ccbe02d3ca8c1f77c",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {

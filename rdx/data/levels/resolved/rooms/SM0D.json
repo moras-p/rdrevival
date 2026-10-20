@@ -22,10 +22,10 @@
     "fingerprints": {
       "adjustments": "890fc038548e22d9f06f809183f27d779724aac8d67a736a2b5d16b77d431392",
       "alignment": "ee2b18d2997b2d18f046273946beb6a65def636f62254239119677ba3f4f2fb2",
-      "presentationDepth": "827e969ce7cee2bf2cc875cb5476ec490beb88458c3843ed79901008b4c737d2",
+      "presentationDepth": "37b02e48a4fb74437d35d45e980426e13d8eaae93d445e85ecb0c9974b0ae482",
       "presentationOcclusion": "2244a36d2d31157b11624d5834e25be7ef56c91690b523b73e320d4cdacd7f62",
-      "resolved": "29f9ef6ce701d1256564b9d9affb390b3eb2b37149b6d4aa2c3a1f6f0f56c641",
-      "reviewed": "896f20931a052b9392cee9aa15d85df1b541c705d0d1f1eaac18cc69d0b71e42",
+      "resolved": "8bdd76a32f479186e8a12eedcfa11658410a8e3efed8b3617bfaa65c92c68179",
+      "reviewed": "d03ab258da51d35b6f49674d14c3d5c104ef5ad2c85cd89efcf12bc1bdb9af77",
       "semantic": "6294353c0f8e05a5bc43458a041e89a5669fa2f745f41345f2ea0fe4a62c79ad",
       "sourceClassic": "f39fe4f8383c925df012c85c66af74d0464065fba872a89a258d0f5a731df664",
       "sourceRdx": "dd66940c53c9d7750b87f49492d81918c3495655bc032192d41fc3a01c495f6e",
@@ -268,7 +268,40 @@
             }
           }
         ],
-        "overrides": [],
+        "overrides": [
+          {
+            "band": "backdrop",
+            "bounds": [
+              120,
+              336,
+              8,
+              32
+            ],
+            "id": "projectile-passage-recessed-column",
+            "plane": "B",
+            "provenance": {
+              "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+              "reason": "Open alcove behind the enemy/projectile lane must remain Backdrop and must not mask actors."
+            },
+            "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              112,
+              336,
+              8,
+              32
+            ],
+            "id": "projectile-passage-brick-wall",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+              "reason": "The adjacent solid brick wall is Midground instead of Foreground; it remains visible behind actors and forms the projectile corridor boundary."
+            },
+            "source": "reviewed-room"
+          }
+        ],
         "planeDefaults": {
           "A": "foreground",
           "B": "midground"
@@ -324,6 +357,44 @@
                 188,
                 309
               ]
+            }
+          },
+          {
+            "id": "SM0D.editor.presentation-depth.projectile-passage-recessed-column.1",
+            "provenance": {
+              "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+              "reason": "Open alcove behind the enemy/projectile lane must remain Backdrop and must not mask actors."
+            },
+            "target": "room:SM0D:presentation-depth:projectile-passage-recessed-column",
+            "type": "presentation-depth",
+            "value": {
+              "band": "backdrop",
+              "bounds": [
+                120,
+                336,
+                8,
+                32
+              ],
+              "plane": "B"
+            }
+          },
+          {
+            "id": "SM0D.editor.presentation-depth.projectile-passage-brick-wall.1",
+            "provenance": {
+              "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+              "reason": "The adjacent solid brick wall is Midground instead of Foreground; it remains visible behind actors and forms the projectile corridor boundary."
+            },
+            "target": "room:SM0D:presentation-depth:projectile-passage-brick-wall",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                112,
+                336,
+                8,
+                32
+              ],
+              "plane": "A"
             }
           }
         ],
@@ -2740,6 +2811,48 @@
           "semantic": "gameplay",
           "target": "SM0D.trap.mark-160",
           "type": "entity-position"
+        },
+        {
+          "after": {
+            "band": "backdrop",
+            "bounds": [
+              120,
+              336,
+              8,
+              32
+            ],
+            "plane": "B"
+          },
+          "before": null,
+          "id": "SM0D.editor.presentation-depth.projectile-passage-recessed-column.1",
+          "provenance": {
+            "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+            "reason": "Open alcove behind the enemy/projectile lane must remain Backdrop and must not mask actors."
+          },
+          "semantic": "visual",
+          "target": "room:SM0D:presentation-depth:projectile-passage-recessed-column",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              112,
+              336,
+              8,
+              32
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM0D.editor.presentation-depth.projectile-passage-brick-wall.1",
+          "provenance": {
+            "authority": "user-reviewed-md0017-wall-projectile-depth-20261019",
+            "reason": "The adjacent solid brick wall is Midground instead of Foreground; it remains visible behind actors and forms the projectile corridor boundary."
+          },
+          "semantic": "visual",
+          "target": "room:SM0D:presentation-depth:projectile-passage-brick-wall",
+          "type": "presentation-depth"
         }
       ]
     },
