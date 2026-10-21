@@ -22,14 +22,14 @@
     "fingerprints": {
       "adjustments": "97bd3ea529cca7add77579e7798cf674c5acd05cfd5b4446bb1e2092215c6ce8",
       "alignment": "51493cf34a40ead720c9c3105dacddb3cbc45686f8f235684e7ef55a30c15636",
-      "presentationDepth": "ce2f5adb550454756c45bf80570285c5267f90ae43f8c52002e645b4bef47219",
+      "presentationDepth": "70b5adee2816072b0875c7abc2601a8e6913a016e6b0a5e1d7ec8c3bc5669ccd",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "45d1434a94afe60b3f35228577c06f7c808319027092bda8c6508f2adb6721bd",
-      "reviewed": "8716670a5cde42f12cc4f895147a5a2afca886b76feae63f782fa260bf080752",
+      "resolved": "b5e398a877215199be87654f99447eccd6ed580665fac985ef7baf3baee73ed9",
+      "reviewed": "d0087cdf363d9f27c7d5d10e9fcf4a08cb22dc2905797d5ebc800685fc6872a2",
       "semantic": "84e3425ad88540e499323a22779c713d8b29ba8bac5b67dd92151d402d294e16",
       "sourceClassic": "e3157b864fa965fe9c7846fe84cd592039e21f6283bc21cf0eb200191b56519f",
       "sourceRdx": "963a4b8b7d5b8821f3ebcd25c348decc461461f6e7600437d7b7ac9707bf5387",
-      "structural": "4b7d577b32b6ec4852fe3241a3b8793574143cef39b0468bd3832ae5e6ee8557",
+      "structural": "afdc37a858e3a8199e13706532894197c7370684ab152d7e669f661ff1355489",
       "transitions": "bec2c1a651b2bc35e75d24545dfd84c5e83d0c89424774632b2af6d0227680c4"
     },
     "group": "south_america",
@@ -534,6 +534,54 @@
               "reason": "Keep only the one 8px Plane-A walkway tile immediately left of Jungle ladder-top cell (9,57) behind Rick during the top exit; preserve the ladder cell itself and all farther walkway tiles as authored foreground."
             },
             "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              96,
+              64,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-1-legs",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261020",
+              "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+            },
+            "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              224,
+              64,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-2-legs",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261020",
+              "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+            },
+            "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              128,
+              192,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-3-legs",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261020",
+              "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+            },
+            "source": "reviewed-room"
           }
         ],
         "planeDefaults": {
@@ -850,6 +898,63 @@
                 912,
                 8,
                 8
+              ],
+              "plane": "A"
+            }
+          },
+          {
+            "id": "SM07.editor.presentation-depth.blue-feather-statue-1-legs-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261020",
+              "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+            },
+            "target": "room:SM07:presentation-depth:blue-feather-statue-1-legs",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                96,
+                64,
+                16,
+                16
+              ],
+              "plane": "A"
+            }
+          },
+          {
+            "id": "SM07.editor.presentation-depth.blue-feather-statue-2-legs-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261020",
+              "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+            },
+            "target": "room:SM07:presentation-depth:blue-feather-statue-2-legs",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                224,
+                64,
+                16,
+                16
+              ],
+              "plane": "A"
+            }
+          },
+          {
+            "id": "SM07.editor.presentation-depth.blue-feather-statue-3-legs-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261020",
+              "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+            },
+            "target": "room:SM07:presentation-depth:blue-feather-statue-3-legs",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                128,
+                192,
+                16,
+                16
               ],
               "plane": "A"
             }
@@ -4870,36 +4975,6 @@
             "authority": "user-canonical-collision-review-20261013",
             "g8Bounds": [
               13,
-              7,
-              1,
-              1
-            ],
-            "id": "sm07-canonical-review-20261013-solid-13-7-1",
-            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
-            "reason": "Apply reviewed solid 8px gameplay contact to SM07 g8 x=13..13, y=7; preserve adjacent contacts.",
-            "sourceKey": "geometry:rdx:g8:13:7",
-            "type": "gameplay-cell-override"
-          },
-          {
-            "action": "solid",
-            "authority": "user-canonical-collision-review-20261013",
-            "g8Bounds": [
-              29,
-              7,
-              1,
-              1
-            ],
-            "id": "sm07-canonical-review-20261013-solid-29-7-1",
-            "provenance": "Fingerprint-bound user review in research/collision/canonical-reviewed-decisions-20261013.json; the 2026-10-12 production audit records aligned Classic, production art, and native flags.",
-            "reason": "Apply reviewed solid 8px gameplay contact to SM07 g8 x=29..29, y=7; preserve adjacent contacts.",
-            "sourceKey": "geometry:rdx:g8:29:7",
-            "type": "gameplay-cell-override"
-          },
-          {
-            "action": "solid",
-            "authority": "user-canonical-collision-review-20261013",
-            "g8Bounds": [
-              13,
               35,
               1,
               1
@@ -5239,6 +5314,96 @@
             "reason": "Clear SM07 g8 x=9..9, y=101: RDX native solid over verified exposed Layer-F backdrop.",
             "sourceKey": "geometry:rdx:g8:9:101",
             "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "g8Bounds": [
+              12,
+              6,
+              2,
+              1
+            ],
+            "id": "sm07-blue-feather-statue-1-head",
+            "provenance": "SM07 blue-feather statue source Plane-A silhouette starts at g8 (10,5); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
+            "reason": "Only the two central stone head cells are solid; retain the intended standing contact on the mask.",
+            "sourceKey": "geometry:rdx:g8:12:6",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "g8Bounds": [
+              12,
+              7,
+              2,
+              3
+            ],
+            "id": "sm07-blue-feather-statue-1-below-head",
+            "provenance": "SM07 blue-feather statue source Plane-A silhouette starts at g8 (10,5); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
+            "reason": "The face opening and 2x2 dangling legs below the head are traversable decorative scenery, not full-solid terrain.",
+            "sourceKey": "geometry:rdx:g8:12:7",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "g8Bounds": [
+              28,
+              6,
+              2,
+              1
+            ],
+            "id": "sm07-blue-feather-statue-2-head",
+            "provenance": "SM07 blue-feather statue source Plane-A silhouette starts at g8 (26,5); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
+            "reason": "Only the two central stone head cells are solid; retain the intended standing contact on the mask.",
+            "sourceKey": "geometry:rdx:g8:28:6",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "g8Bounds": [
+              28,
+              7,
+              2,
+              3
+            ],
+            "id": "sm07-blue-feather-statue-2-below-head",
+            "provenance": "SM07 blue-feather statue source Plane-A silhouette starts at g8 (26,5); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
+            "reason": "The face opening and 2x2 dangling legs below the head are traversable decorative scenery, not full-solid terrain.",
+            "sourceKey": "geometry:rdx:g8:28:7",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "solid",
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "g8Bounds": [
+              16,
+              22,
+              2,
+              1
+            ],
+            "id": "sm07-blue-feather-statue-3-head",
+            "provenance": "SM07 blue-feather statue source Plane-A silhouette starts at g8 (14,21); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
+            "reason": "Only the two central stone head cells are solid; retain the intended standing contact on the mask.",
+            "sourceKey": "geometry:rdx:g8:16:22",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "g8Bounds": [
+              16,
+              23,
+              2,
+              3
+            ],
+            "id": "sm07-blue-feather-statue-3-below-head",
+            "provenance": "SM07 blue-feather statue source Plane-A silhouette starts at g8 (14,21); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
+            "reason": "The face opening and 2x2 dangling legs below the head are traversable decorative scenery, not full-solid terrain.",
+            "sourceKey": "geometry:rdx:g8:16:23",
+            "type": "gameplay-cell-override"
           }
         ],
         "schema": "rdr.structural_corrections_resolved.v1"
@@ -5572,6 +5737,69 @@
           },
           "semantic": "visual",
           "target": "room:SM07:presentation-depth:jungle-ladder-top-apron-v9-57-left",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              96,
+              64,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM07.editor.presentation-depth.blue-feather-statue-1-legs-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM07:presentation-depth:blue-feather-statue-1-legs",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              224,
+              64,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM07.editor.presentation-depth.blue-feather-statue-2-legs-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM07:presentation-depth:blue-feather-statue-2-legs",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              128,
+              192,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM07.editor.presentation-depth.blue-feather-statue-3-legs-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "reason": "Demote only the 2x2 brown dangling leg cells to Midground so Rick stays in front. Preserve the full surrounding blue-feather Plane-A silhouette and 2-cell stone head in Foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM07:presentation-depth:blue-feather-statue-3-legs",
           "type": "presentation-depth"
         }
       ]

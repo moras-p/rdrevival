@@ -20,13 +20,13 @@
       "nativeControllerAuthority": "xrick-runtime"
     },
     "fingerprints": {
-      "adjustments": "2a518c6c059529583b97bafede6877c9998e37943507a5b74e920866fdd8c071",
+      "adjustments": "964268b93aba377a74f2a09ce1d5e9cf553ce14dcb3da881e9367b1f4b2ac676",
       "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
       "presentationDepth": "9a201345a494516f9b3b0520d1de48c53df2a63432d6729e0b20748c59e8a849",
       "presentationOcclusion": "789184168caf8c879d8317c2cf0c7878090d06d176ff08421f72ffb5420e92f7",
-      "resolved": "c092911c5d614e7a52053bf738d1bbc57c4a5d69218c4905a799af66ba65fb8a",
+      "resolved": "fd23892c2c9aebfe68dbe39b8d63005074d3ede475412698892981fc83b52106",
       "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
-      "semantic": "2ca5e74c983f847d1e3f40a542c5436a2c5657169df2b71317e114548af195ea",
+      "semantic": "d7d48c215cc7665c57ce8f60d03c98a4e5c9f4132a67fada7139fbe5fabb658d",
       "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
       "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
       "structural": "406875bd71b5c7006521d23eee8964f7702a9c3531b3dcf269f9dc895c2385bf",
@@ -93,6 +93,21 @@
             "property": "position",
             "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [256,96], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin.",
             "target": "classic:SM13:mark:229"
+          },
+          {
+            "id": "SM13.actor.mark-229.trigger-bounds",
+            "operation": {
+              "rect": [
+                203,
+                75,
+                40,
+                32
+              ],
+              "type": "set-rect"
+            },
+            "property": "triggerBounds",
+            "provenance": "User-reviewed SM13 upper explosive platform 2026-10-20: extend the existing dynamite activation rectangle one 8px gameplay cell left while retaining its right, top, and bottom edges; leave the Classic trigger, moving controller, and PN24 presentation unchanged.",
+            "target": "SM13.actor.mark-229"
           },
           {
             "evidence": {
@@ -417,6 +432,20 @@
                 },
                 "property": "position",
                 "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [256,96], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin."
+              },
+              {
+                "id": "SM13.actor.mark-229.trigger-bounds",
+                "operation": {
+                  "rect": [
+                    203,
+                    75,
+                    40,
+                    32
+                  ],
+                  "type": "set-rect"
+                },
+                "property": "triggerBounds",
+                "provenance": "User-reviewed SM13 upper explosive platform 2026-10-20: extend the existing dynamite activation rectangle one 8px gameplay cell left while retaining its right, top, and bottom edges; leave the Classic trigger, moving controller, and PN24 presentation unchanged."
               }
             ],
             "alignedBaseline": {
@@ -496,9 +525,9 @@
               ],
               "supportBounds": null,
               "triggerBounds": [
-                211,
+                203,
                 75,
-                32,
+                40,
                 32
               ],
               "visualAnchor": [
