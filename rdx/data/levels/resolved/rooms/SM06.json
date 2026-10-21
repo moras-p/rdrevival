@@ -24,12 +24,12 @@
       "alignment": "0f30372655e258392d853d75e1686fe75347001d8c28dd43dec3f82fe970064b",
       "presentationDepth": "444184f535e15f93eb198ab29c6b2b0894d07a53aa66bdb24fd7e251b60b5993",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "e158ba03749bf26aa2f75c4caac1e8d73d71b10391d7d6a6af8aa06caa897247",
+      "resolved": "75b48569b392e2329f76cfba7730fe46fa56456694b851b8e17b9b36b432d37c",
       "reviewed": "0df91143c5b68361755e741b6b53ad0131ad5cefcd143fcf078ab4d7a9f42244",
       "semantic": "319cbfa0f8be085570f20e3ab52a3469eeddb883cc83f710b0e046ef746ec0a7",
       "sourceClassic": "f8efa67423e025bfeb5751f71a39d47e237d00d40fb4b2a1d6b6421cd1e3f848",
       "sourceRdx": "a5c604fcad3b2ca497212aa6e242ffc27e9d7b9d8c96da2d10ea03a167e40f10",
-      "structural": "d4c3fef18cee5328113ec772b370b9236689fade8bdb7213bf75f02bb3bb1fd7",
+      "structural": "f522b896be9af99bcb6a5572e3ad5763f816cee9eca958f9a9d65e328adcf8ea",
       "transitions": "932064206f1713dbbc50fa9030b4812f0a62c81014268e80aab2f6dfa8e020e8"
     },
     "group": "south_america",
@@ -6161,8 +6161,8 @@
             "type": "gameplay-cell-override"
           },
           {
-            "action": "solid",
-            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
             "g8Bounds": [
               14,
               50,
@@ -6171,28 +6171,28 @@
             ],
             "id": "sm06-blue-feather-statue-1-head",
             "provenance": "SM06 blue-feather statue source Plane-A silhouette starts at g8 (12,49); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
-            "reason": "Only the two central stone head cells are solid; retain the intended standing contact on the mask.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
             "sourceKey": "geometry:rdx:g8:14:50",
             "type": "gameplay-cell-override"
           },
           {
-            "action": "open",
-            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "action": "solid",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
             "g8Bounds": [
               14,
               51,
               2,
-              3
+              1
             ],
             "id": "sm06-blue-feather-statue-1-below-head",
             "provenance": "SM06 blue-feather statue source Plane-A silhouette starts at g8 (12,49); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
-            "reason": "The face opening and 2x2 dangling legs below the head are traversable decorative scenery, not full-solid terrain.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
             "sourceKey": "geometry:rdx:g8:14:51",
             "type": "gameplay-cell-override"
           },
           {
-            "action": "solid",
-            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
             "g8Bounds": [
               18,
               90,
@@ -6201,23 +6201,53 @@
             ],
             "id": "sm06-blue-feather-statue-2-head",
             "provenance": "SM06 blue-feather statue source Plane-A silhouette starts at g8 (16,89); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
-            "reason": "Only the two central stone head cells are solid; retain the intended standing contact on the mask.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
             "sourceKey": "geometry:rdx:g8:18:90",
             "type": "gameplay-cell-override"
           },
           {
-            "action": "open",
-            "authority": "user-reviewed-blue-feather-statue-20261020",
+            "action": "solid",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
             "g8Bounds": [
               18,
               91,
               2,
-              3
+              1
             ],
             "id": "sm06-blue-feather-statue-2-below-head",
             "provenance": "SM06 blue-feather statue source Plane-A silhouette starts at g8 (16,89); inspect exact 5705/5706 head and 5707/5708+5709/5711+5713/5715 lower center. Apply the same semantic partition to all five SM06/SM07 instances.",
-            "reason": "The face opening and 2x2 dangling legs below the head are traversable decorative scenery, not full-solid terrain.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
             "sourceKey": "geometry:rdx:g8:18:91",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "g8Bounds": [
+              14,
+              52,
+              2,
+              2
+            ],
+            "id": "sm06-blue-feather-statue-1-legs-open",
+            "provenance": "The two 8px rows below the supported face of the SM06 blue-feather statue are decorative dangling arms/feet, not collision surfaces.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
+            "sourceKey": "geometry:rdx:g8:14:52",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "g8Bounds": [
+              18,
+              92,
+              2,
+              2
+            ],
+            "id": "sm06-blue-feather-statue-2-legs-open",
+            "provenance": "The two 8px rows below the supported face of the SM06 blue-feather statue are decorative dangling arms/feet, not collision surfaces.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
+            "sourceKey": "geometry:rdx:g8:18:92",
             "type": "gameplay-cell-override"
           }
         ],

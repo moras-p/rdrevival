@@ -59,6 +59,8 @@ export class XrickWasmBridge {
       setPresentationDiagnostics: wrap1('xrick_rdx_set_presentation_diagnostics'),
       getPresentationDiagnostics: wrap0('xrick_rdx_get_presentation_diagnostics'),
       resumeBrowserLoop: wrap0('xrick_rdx_resume_browser_loop', null),
+      setXrClockOwned: wrap1('xrick_rdx_web_set_xr_clock_owned', null),
+      xrFrame: wrap0('xrick_rdx_web_xr_frame', null),
       forceBrowserFrame: wrap0('xrick_rdx_force_browser_frame', null),
       debugForceBrowserFrame: wrap0('xrick_rdx_debug_force_browser_frame', null),
       setFrontendPaused: wrap1('xrick_rdx_web_set_frontend_paused', null),
@@ -704,6 +706,8 @@ export class XrickWasmBridge {
   setPresentationDiagnostics(enabled) { return !!this.api.setPresentationDiagnostics(enabled ? 1 : 0); }
   presentationDiagnostics() { return !!this.api.getPresentationDiagnostics(); }
   resumeBrowserLoop() { this.api.resumeBrowserLoop(); }
+  setXrClockOwned(owned) { this.api.setXrClockOwned(owned ? 1 : 0); }
+  xrFrame() { this.api.xrFrame(); }
   forceBrowserFrame() { this.api.forceBrowserFrame(); }
   debugForceBrowserFrame() { this.api.debugForceBrowserFrame(); }
   setFrontendPaused(paused) { this.api.setFrontendPaused(paused ? 1 : 0); }

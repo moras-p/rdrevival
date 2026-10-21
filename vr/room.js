@@ -184,6 +184,9 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     renderer?.setAnimationLoop(null);
     adapter?.detach();
     unsubscribe?.();
+    /* Relinquish the native XR clock before any asynchronous teardown; the
+     * ordinary browser clock must resume even when audio cleanup is slow. */
+    if (ownsPresentation) { presentation.leave(); ownsPresentation = false; }
     await audio.dispose();
     for (const group of previewBeacons.values()) group.traverse(object=>{
       object.geometry?.dispose();
@@ -192,7 +195,6 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
         object.material.dispose();
       }
     });
-    if (ownsPresentation) presentation.leave();
     if (gameSession.state === 'paused') gameSession.resume();
     gameSession.inputRouter?.clear();
     window.xrickFocusGame?.();
@@ -533,7 +535,7 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       });
     }
     window.addEventListener('pagehide',() => {void stop();},{signal:abort.signal});
-    if (!presentation.enter()) throw new Error('The game canvas is already owned by another room.');
+    if (!presentation.enter({ immersive })) throw new Error('The game canvas is already owned by another room.');
     ownsPresentation = true; // the page canvas RAF is now exclusively ours
     unsubscribe = gameSession.events.subscribe(message => spatial.receive(message));
     gameSession.events.poll(0);
@@ -586,9 +588,10 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       const renderStart = performance.now();
       renderer.render(scene,camera);
       const renderCpuMs = performance.now() - renderStart;
-      const report = timing.record(performance.now(), presentationMs, renderCpuMs);
+      const report = timing.record(performance.now(), presentationMs, renderCpuMs,
+        debug ? presentation.frameSerial : null, debug ? revision : null);
       if (report && debug) {
-        const performanceLabel = `FPS ${report.fps.toFixed(1)} / C ${report.presentationMs.toFixed(1)}ms / GL CPU ${report.renderCpuMs.toFixed(1)}ms`;
+        const performanceLabel = `XR ${report.fps.toFixed(1)} / GAME ${report.nativeFps.toFixed(1)} / TV ${report.canvasFps.toFixed(1)} FPS / C ${report.presentationMs.toFixed(1)}ms / GL CPU ${report.renderCpuMs.toFixed(1)}ms`;
         status = {...status,performanceLabel};
         updatePanel(status,panelExpanded);
         onStatus(`${performanceLabel} · XR scale ${xrSettings?.scale ?? 'desktop'}`);

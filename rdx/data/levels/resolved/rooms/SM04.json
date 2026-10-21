@@ -22,14 +22,14 @@
     "fingerprints": {
       "adjustments": "72bf451bc99797fe2dcaa2caccd7e4d72e6e594dd0e6686d879accc799a74929",
       "alignment": "136228a2b9ac914b6a4b0e1319cf3ce1b15c85407abf835ab5bb2478562dbf8e",
-      "presentationDepth": "307449cbe4e235fa41eb1d8977f61ab5f9b80792b39aad44b81f1f2f7838aa9e",
-      "presentationOcclusion": "1f891af9ee6af0ad2df8ac31f9459cfe6db04229d3d54bbbfbd888d03c5c1fc8",
-      "resolved": "0015f1e8960e3d214b054091a09e2b35c9e524a5bee507fa8c3dc7763cb5baac",
-      "reviewed": "d4dbc5cacc7faa7679a19c1406f03a3eb657e59daf3047874a39b06b86786ee3",
+      "presentationDepth": "6512172f0926990561c99e2ffae2ea9aa89d46efcd43d942b800faf912f25d99",
+      "presentationOcclusion": "10da45f00a88bb8f23647fc1d756c7d457de596b80e413226b5b9e9601b63d20",
+      "resolved": "d186db5aba51cf6e8112c097b02aa2277457702535624bce689fba0629040f63",
+      "reviewed": "951acc925eaa0a2f84691448fec58b05cbafc93471ead512e751d4ba7a57bdac",
       "semantic": "cd9807a29d8d50b07320880cd96b4846e74c19ccc6cc44bea978b8f64e1d9ab0",
       "sourceClassic": "1e68546a33277f7a26b7b1ffd78db02af3cc9d19735a123091d08af5bd8f86e0",
       "sourceRdx": "86b137cd3532c8c57092c60f8138c907e4bbe4296c3f3293ffebdfd01dceac8f",
-      "structural": "407e45c0bc038f3a8adb849a56230f59616d719ca3e9af6c04c5edd383a2607c",
+      "structural": "165994f9a274cde7ff7c1c954cc7c95eef251b7504a0bf25630346cf1d8c8d91",
       "transitions": "0c081d7287efd9191247b4a886148394a2444a695709b55beddb898cb11cbdfa"
     },
     "group": "south_america",
@@ -400,6 +400,70 @@
               "reason": "Keep only the one 8px Plane-A walkway tile immediately right of Jungle ladder-top cell (9,16) behind Rick during the top exit; preserve the ladder cell itself and all farther walkway tiles as authored foreground."
             },
             "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              96,
+              160,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-1-feet",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              208,
+              160,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-2-feet",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              128,
+              208,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-3-feet",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "source": "reviewed-room"
+          },
+          {
+            "band": "midground",
+            "bounds": [
+              176,
+              208,
+              16,
+              16
+            ],
+            "id": "blue-feather-statue-4-feet",
+            "plane": "A",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "source": "reviewed-room"
           }
         ],
         "planeDefaults": {
@@ -693,6 +757,82 @@
                   "plane": "A"
                 }
               ]
+            }
+          },
+          {
+            "id": "SM04.editor.presentation-depth.blue-feather-statue-1-feet-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "target": "room:SM04:presentation-depth:blue-feather-statue-1-feet",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                96,
+                160,
+                16,
+                16
+              ],
+              "plane": "A"
+            }
+          },
+          {
+            "id": "SM04.editor.presentation-depth.blue-feather-statue-2-feet-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "target": "room:SM04:presentation-depth:blue-feather-statue-2-feet",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                208,
+                160,
+                16,
+                16
+              ],
+              "plane": "A"
+            }
+          },
+          {
+            "id": "SM04.editor.presentation-depth.blue-feather-statue-3-feet-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "target": "room:SM04:presentation-depth:blue-feather-statue-3-feet",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                128,
+                208,
+                16,
+                16
+              ],
+              "plane": "A"
+            }
+          },
+          {
+            "id": "SM04.editor.presentation-depth.blue-feather-statue-4-feet-behind-actors",
+            "provenance": {
+              "authority": "user-reviewed-blue-feather-statue-20261021",
+              "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+            },
+            "target": "room:SM04:presentation-depth:blue-feather-statue-4-feet",
+            "type": "presentation-depth",
+            "value": {
+              "band": "midground",
+              "bounds": [
+                176,
+                208,
+                16,
+                16
+              ],
+              "plane": "A"
             }
           }
         ],
@@ -3776,6 +3916,66 @@
             "type": "gameplay-cell-override"
           },
           {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "g8Bounds": [
+              12,
+              20,
+              2,
+              2
+            ],
+            "id": "sm04-blue-feather-statue-1-feet-open",
+            "provenance": "User-reviewed exact MD0007 g8 stone-statue lower pair: x=12..13, y=20..21; adjoining feather silhouette remains foreground.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
+            "sourceKey": "geometry:rdx:g8:12:20",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "g8Bounds": [
+              26,
+              20,
+              2,
+              2
+            ],
+            "id": "sm04-blue-feather-statue-2-feet-open",
+            "provenance": "User-reviewed exact MD0007 g8 stone-statue lower pair: x=26..27, y=20..21; adjoining feather silhouette remains foreground.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
+            "sourceKey": "geometry:rdx:g8:26:20",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "g8Bounds": [
+              16,
+              26,
+              2,
+              2
+            ],
+            "id": "sm04-blue-feather-statue-3-feet-open",
+            "provenance": "User-reviewed exact MD0007 g8 stone-statue lower pair: x=16..17, y=26..27; adjoining feather silhouette remains foreground.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
+            "sourceKey": "geometry:rdx:g8:16:26",
+            "type": "gameplay-cell-override"
+          },
+          {
+            "action": "open",
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "g8Bounds": [
+              22,
+              26,
+              2,
+              2
+            ],
+            "id": "sm04-blue-feather-statue-4-feet-open",
+            "provenance": "User-reviewed exact MD0007 g8 stone-statue lower pair: x=22..23, y=26..27; adjoining feather silhouette remains foreground.",
+            "reason": "Blue-feather statue: the stone/face row is traversable, the next row is a two-cell solid step, and the dangling arms/feet below remain traversable scenery behind Rick and other actors. The blue feathers remain foreground and occlude actors. Keep collision independent of artwork depth.",
+            "sourceKey": "geometry:rdx:g8:22:26",
+            "type": "gameplay-cell-override"
+          },
+          {
             "action": "overlay-tiles",
             "authority": "user-requested-jungle-idol-feather-occlusion-20261018",
             "bounds": [
@@ -4281,6 +4481,90 @@
           "semantic": "visual",
           "target": "room:SM04",
           "type": "visual-plane"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              96,
+              160,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM04.editor.presentation-depth.blue-feather-statue-1-feet-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM04:presentation-depth:blue-feather-statue-1-feet",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              208,
+              160,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM04.editor.presentation-depth.blue-feather-statue-2-feet-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM04:presentation-depth:blue-feather-statue-2-feet",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              128,
+              208,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM04.editor.presentation-depth.blue-feather-statue-3-feet-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM04:presentation-depth:blue-feather-statue-3-feet",
+          "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "band": "midground",
+            "bounds": [
+              176,
+              208,
+              16,
+              16
+            ],
+            "plane": "A"
+          },
+          "before": null,
+          "id": "SM04.editor.presentation-depth.blue-feather-statue-4-feet-behind-actors",
+          "provenance": {
+            "authority": "user-reviewed-blue-feather-statue-20261021",
+            "reason": "Route only the two-by-two dangling arm/foot cells behind normal actors. The restored central blue-feather tiles above remain foreground."
+          },
+          "semantic": "visual",
+          "target": "room:SM04:presentation-depth:blue-feather-statue-4-feet",
+          "type": "presentation-depth"
         }
       ]
     },

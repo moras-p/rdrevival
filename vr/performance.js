@@ -21,19 +21,39 @@ export class VRFrameDiagnostics {
     this.frames = 0;
     this.presentationMs = 0;
     this.renderCpuMs = 0;
+    this.nativeSteps = 0;
+    this.canvasChanges = 0;
+    this.lastNativeSerial = null;
+    this.lastRevision = null;
     this.latest = null;
   }
-  record(now, presentationMs, renderCpuMs) {
+  record(now, presentationMs, renderCpuMs, nativeSerial = null, revision = null) {
     if (this.start === null) this.start = now;
     this.frames++;
     this.presentationMs += presentationMs;
     this.renderCpuMs += renderCpuMs;
+    if (nativeSerial !== null) {
+      if (this.lastNativeSerial !== null) {
+        const delta = (nativeSerial - this.lastNativeSerial) >>> 0;
+        // Ignore level/session counter resets instead of reporting billions
+        // of native frames per second in the headset debug overlay.
+        if (delta < 1000) this.nativeSteps += delta;
+      }
+      this.lastNativeSerial = nativeSerial;
+    }
+    if (revision !== null) {
+      if (this.lastRevision !== null && revision !== this.lastRevision)
+        this.canvasChanges++;
+      this.lastRevision = revision;
+    }
     const elapsed = now - this.start;
     if (elapsed < this.windowMs || this.frames < 2) return null;
     const report = {
       fps: 1000 * (this.frames - 1) / Math.max(1, elapsed),
       presentationMs: this.presentationMs / this.frames,
       renderCpuMs: this.renderCpuMs / this.frames,
+      nativeFps: 1000 * this.nativeSteps / Math.max(1, elapsed),
+      canvasFps: 1000 * this.canvasChanges / Math.max(1, elapsed),
       frames: this.frames,
       windowMs: elapsed
     };

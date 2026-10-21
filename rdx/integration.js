@@ -340,7 +340,7 @@ function roomForSubmap(submap) {
 
 
 function resumeBrowserLoop(reason = 'page-resume') {
-  if (!bridge || document.hidden) return;
+  if (!bridge || document.hidden || presentationOwner.immersive) return;
   const now = performance.now();
   if (now - lastResumeRequestAt < 500) return;
   lastResumeRequestAt = now;
@@ -723,7 +723,7 @@ document.addEventListener?.('visibilitychange', () => {
  * independent timer observes the C frame serial and drives one cooperative
  * frame only after a genuine stall. */
 const stallWatchdogTimer = window.setInterval?.(() => {
-  if (!bridge || !running || document.hidden || bridge.frontendPaused?.()) return;
+  if (!bridge || !running || document.hidden || presentationOwner.immersive || bridge.frontendPaused?.()) return;
   const snapshot = bridge.snapshot();
   const now = performance.now();
   if (snapshot.frameSerial !== lastGameProgressSerial) {
@@ -1363,7 +1363,10 @@ const presentationOwner = new PresentationOwner({
   present: () => presentFrame(),
   request: callback => requestAnimationFrame(callback),
   cancel: id => cancelAnimationFrame(id),
-  shouldRun: () => running && !!bridge
+  shouldRun: () => running && !!bridge,
+  enterImmersive: () => bridge.setXrClockOwned(true),
+  leaveImmersive: () => bridge.setXrClockOwned(false),
+  nativeXRFrame: () => bridge.xrFrame()
 });
 
 /* The ordinary RAF and immersive XR animation loop are mutually exclusive.
@@ -1384,7 +1387,7 @@ function presentFrame() {
     } else if (snapshot.frameSerial !== lastGameProgressSerial) {
       lastGameProgressSerial = snapshot.frameSerial;
       lastGameProgressAt = now;
-    } else if (!document.hidden && now - lastGameProgressAt > 1200 && now - lastResumeRequestAt > 1000) {
+    } else if (!inRoom && !document.hidden && now - lastGameProgressAt > 1200 && now - lastResumeRequestAt > 1000) {
       resumeBrowserLoop('stalled-frame-watchdog');
     }
     if (!inRoom) {
@@ -2106,7 +2109,7 @@ try {
   gameSession.initialize();
   window.xrickGameSession = gameSession;
   window.xrickVRPresentation = Object.freeze({
-    enter: () => presentationOwner.enter(),
+    enter: options => presentationOwner.enter(options),
     leave: () => presentationOwner.leave(),
     present: () => presentationOwner.presentXR() ?? presentationRevision,
     get revision() { return presentationRevision; },
