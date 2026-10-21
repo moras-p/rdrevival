@@ -370,7 +370,24 @@ function applyEntityCorrection(object, correction) {
       }
       break;
     }
-    case 'trigger-bounds': object.effective ||= {}; object.effective.triggerBounds = value.bounds.map(Number); break;
+    case 'trigger-bounds': {
+      const previous = object.effective?.triggerBounds;
+      const bounds = value.bounds.map(Number);
+      object.effective ||= {};
+      object.effective.triggerBounds = bounds;
+      // A source-mark controller may own several visual components sharing one
+      // activation lane (SM2E mark521 is one example). Keep its native rubble
+      // consumer in sync with this correction, without widening independent
+      // per-component trigger lanes belonging to other source marks.
+      const sourceMark = Number(object.sources?.classic?.mark);
+      if (Array.isArray(previous) && Number.isInteger(sourceMark)) {
+        for (const component of object.rubbleComponents || []) {
+          if (Number(component.componentMark) === sourceMark && equal(component.trigger, previous))
+            component.trigger = bounds.slice();
+        }
+      }
+      break;
+    }
     case 'gameplay-bounds': object.effective ||= {}; object.effective.gameplayBounds = value.bounds.map(Number); break;
     case 'visual-bounds': object.effective ||= {}; object.effective.visualBounds = value.bounds.map(Number); break;
     case 'visual-anchor': object.effective ||= {}; object.effective.visualAnchor = value.anchor.map(Number); object.reviewed.visualAnchor = value.anchor.map(Number); break;

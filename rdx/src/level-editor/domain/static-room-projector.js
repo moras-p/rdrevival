@@ -392,6 +392,7 @@ function semanticEntities(room, assets, paneOrigin, mode, classicPreview = null)
     const runtimeDraw=pointFrom((runtimeRevivalAmmo ? simulatedState?.origin : simulatedState?.draw) || draw);
     const gameplayRect=rectFromArray(object?.effective?.gameplayBounds);
     const runtimeBodyLocal=gameplayRect ? {x:gameplayRect.x,y:gameplayRect.y} : pointFrom(object?.effective?.position || object?.alignedBaseline?.origin);
+    const componentDepth = object?.rubbleComponents?.[0]?.depth || null;
     out.push(Object.freeze({
       id:String(object.semanticId), sourceKey:objectSourceKey(object), kind:'semantic-object', class:object.class, family:object.family,
       rect:{ ...rect, x:rect.x + paneOrigin.x, y:rect.y + paneOrigin.y },
@@ -406,8 +407,8 @@ function semanticEntities(room, assets, paneOrigin, mode, classicPreview = null)
       runtimeSpritePresentation:runtimeSpritePresentation ? Object.freeze({pn:runtimeSpritePresentation.pn,mirrorX:runtimeSpritePresentation.mirrorX,mirrorY:runtimeSpritePresentation.mirrorY,originX:number(runtimeSpriteFrame?.originX),originY:number(runtimeSpriteFrame?.originY)}):null,
       runtimeSpriteVariants,
       runtimeBodyPoint:runtimeBodyLocal ? Object.freeze({x:paneOrigin.x+runtimeBodyLocal.x,y:paneOrigin.y+runtimeBodyLocal.y}) : null,
-      runtimeVisible:simulatedState.visible !== false,runtimeActorDepth:semanticActorDepth(object, simulatedState),runtimeFront:semanticActorDepth(object, simulatedState) === 'front',
-      object, visible:snapshotState.visible !== false, actorDepth:semanticActorDepth(object, snapshotState), front:semanticActorDepth(object, snapshotState) === 'front', sourceMode:'effective'
+      runtimeVisible:simulatedState.visible !== false,runtimeActorDepth:componentDepth || semanticActorDepth(object, simulatedState),runtimeFront:(componentDepth || semanticActorDepth(object, simulatedState)) === 'front',
+      object, visible:snapshotState.visible !== false, actorDepth:componentDepth || semanticActorDepth(object, snapshotState), front:(componentDepth || semanticActorDepth(object, snapshotState)) === 'front', sourceMode:'effective'
     }));
   }
   return out;

@@ -343,7 +343,10 @@ function baselineActor(object, terrainHazard = null, { throughLayer = 'F' } = {}
   const repeat = Array.isArray(presentation.repeat) ? presentation.repeat.map(item => num(item)) : [];
   const visualKind = num(presentation.visualKind, (assetFlags & 0x08) !== 0 ? 1 : 0);
   const renderOrder = snapshot.renderOrder;
-  const actorDepth = presentationActorDepth(presentation, snapshot);
+  /* RDX-only mechanism components may sit behind the normal actor pass
+   * without demoting the distinct Classic fallback owned by the same mark. */
+  const componentDepth = sourceBackedMechanismComponent ? object.rubbleComponents[0]?.depth : null;
+  const actorDepth = componentDepth || presentationActorDepth(presentation, snapshot);
   const front = actorDepth === 'front';
   const mirrorX = snapshot.mirrorX ?? presentation.mirrorX;
   const mirrorY = snapshot.mirrorY ?? presentation.mirrorY;
@@ -391,8 +394,8 @@ function baselineActor(object, terrainHazard = null, { throughLayer = 'F' } = {}
       draw: Object.freeze(simulationDraw),
       anchor: Object.freeze(simulationAnchor),
       pn: simulated.pn ?? presentation?.pnByState?.simulated ?? pn,
-      actorDepth: presentationActorDepth(presentation, simulated),
-      front: presentationActorDepth(presentation, simulated) === 'front',
+      actorDepth: componentDepth || presentationActorDepth(presentation, simulated),
+      front: (componentDepth || presentationActorDepth(presentation, simulated)) === 'front',
       mirrorX: simulated.mirrorX ?? mirrorX,
       mirrorY: simulated.mirrorY ?? mirrorY,
       visible: syntheticClassicAlwaysVisible || simulated.visible !== false,

@@ -24,9 +24,9 @@
       "alignment": "710ed102bf2bc4fe344641438ef89d0dc7e73b1c560e8dd3e7c4586e713986fd",
       "presentationDepth": "258f0be521410d36dda8409b75cc2d1401f7650b80dbae3ff1bf9bef36dc86e1",
       "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-      "resolved": "7617184b4d01d57a6faee7a32b339b75e173062c6c3733f762956c46e72371c6",
-      "reviewed": "c8abdc1ad6a091c54271adc43d348f378b45094bb508b5fff31d8af713eec117",
-      "semantic": "90cea29c603e4ad2eafc0a65388069306a27b6585b66f997d411efe74c9ab48c",
+      "resolved": "0c36e837ff2900bdced449a527346757c58183336bac25bd4ae33fb06520f84d",
+      "reviewed": "1893c1f7d7a0b796f7bd901818db0576b95a7d60040bc35a273f7f66177982bd",
+      "semantic": "122c0bce4b10b026bbb6c0e7c52b9e36ca0d62c7bf49de11427e79882ccc2e31",
       "sourceClassic": "76c81c5cb99eee284bf6dbfbf7c65fe05bd1f8717f6e5b4c96e7d2725a2c5afe",
       "sourceRdx": "1a1bc1f8d4986c3a3f14ff2a59a95a00c2d696bd950284cde4dd9d6a23b0378c",
       "structural": "50dc6bce99ca529c6c5bb815b89e33c468031b6d5b8c7cf38c61650ffb0605b3",
@@ -191,6 +191,141 @@
       },
       "reviewedCorrections": {
         "corrections": [
+          {
+            "expected": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-516",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 516 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "target": "SM2E.actor.mark-516",
+            "type": "trigger-bounds",
+            "value": {
+              "bounds": [
+                160,
+                147,
+                48,
+                32
+              ]
+            }
+          },
+          {
+            "expected": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-517",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 517 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "target": "SM2E.actor.mark-517",
+            "type": "trigger-bounds",
+            "value": {
+              "bounds": [
+                160,
+                147,
+                48,
+                32
+              ]
+            }
+          },
+          {
+            "expected": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-518",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 518 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "target": "SM2E.actor.mark-518",
+            "type": "trigger-bounds",
+            "value": {
+              "bounds": [
+                160,
+                147,
+                48,
+                32
+              ]
+            }
+          },
+          {
+            "expected": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-519",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 519 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "target": "SM2E.actor.mark-519",
+            "type": "trigger-bounds",
+            "value": {
+              "bounds": [
+                160,
+                147,
+                48,
+                32
+              ]
+            }
+          },
+          {
+            "expected": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-520",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 520 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "target": "SM2E.actor.mark-520",
+            "type": "trigger-bounds",
+            "value": {
+              "bounds": [
+                160,
+                147,
+                48,
+                32
+              ]
+            }
+          },
           {
             "expected": [
               160,
@@ -704,7 +839,7 @@
               "triggerBounds": [
                 160,
                 147,
-                32,
+                48,
                 32
               ],
               "visualAnchor": [
@@ -742,6 +877,21 @@
             "projectileEmitterResolved": null,
             "projectileTopologyResolved": null,
             "relationships": [],
+            "reviewed": {},
+            "reviewedCorrectionsApplied": [
+              {
+                "id": "SM2E.shared-final-bomb.trigger-bounds.mark-516",
+                "provenance": {
+                  "authority": "user-reviewed-final-target-walkway",
+                  "evidence": [
+                    "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                    "Reviewed RDX mark 521 uses [160,147,48,32]"
+                  ],
+                  "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 516 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                },
+                "type": "trigger-bounds"
+              }
+            ],
             "semanticId": "SM2E.actor.mark-516",
             "sourceEvidence": {
               "classic": {
@@ -909,7 +1059,7 @@
               "triggerBounds": [
                 160,
                 147,
-                32,
+                48,
                 32
               ],
               "visualAnchor": [
@@ -947,6 +1097,21 @@
             "projectileEmitterResolved": null,
             "projectileTopologyResolved": null,
             "relationships": [],
+            "reviewed": {},
+            "reviewedCorrectionsApplied": [
+              {
+                "id": "SM2E.shared-final-bomb.trigger-bounds.mark-517",
+                "provenance": {
+                  "authority": "user-reviewed-final-target-walkway",
+                  "evidence": [
+                    "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                    "Reviewed RDX mark 521 uses [160,147,48,32]"
+                  ],
+                  "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 517 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                },
+                "type": "trigger-bounds"
+              }
+            ],
             "semanticId": "SM2E.actor.mark-517",
             "sourceEvidence": {
               "classic": {
@@ -1114,7 +1279,7 @@
               "triggerBounds": [
                 160,
                 147,
-                32,
+                48,
                 32
               ],
               "visualAnchor": [
@@ -1152,6 +1317,21 @@
             "projectileEmitterResolved": null,
             "projectileTopologyResolved": null,
             "relationships": [],
+            "reviewed": {},
+            "reviewedCorrectionsApplied": [
+              {
+                "id": "SM2E.shared-final-bomb.trigger-bounds.mark-518",
+                "provenance": {
+                  "authority": "user-reviewed-final-target-walkway",
+                  "evidence": [
+                    "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                    "Reviewed RDX mark 521 uses [160,147,48,32]"
+                  ],
+                  "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 518 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                },
+                "type": "trigger-bounds"
+              }
+            ],
             "semanticId": "SM2E.actor.mark-518",
             "sourceEvidence": {
               "classic": {
@@ -1319,7 +1499,7 @@
               "triggerBounds": [
                 160,
                 147,
-                32,
+                48,
                 32
               ],
               "visualAnchor": [
@@ -1357,6 +1537,21 @@
             "projectileEmitterResolved": null,
             "projectileTopologyResolved": null,
             "relationships": [],
+            "reviewed": {},
+            "reviewedCorrectionsApplied": [
+              {
+                "id": "SM2E.shared-final-bomb.trigger-bounds.mark-519",
+                "provenance": {
+                  "authority": "user-reviewed-final-target-walkway",
+                  "evidence": [
+                    "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                    "Reviewed RDX mark 521 uses [160,147,48,32]"
+                  ],
+                  "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 519 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                },
+                "type": "trigger-bounds"
+              }
+            ],
             "semanticId": "SM2E.actor.mark-519",
             "sourceEvidence": {
               "classic": {
@@ -1524,7 +1719,7 @@
               "triggerBounds": [
                 160,
                 147,
-                32,
+                48,
                 32
               ],
               "visualAnchor": [
@@ -1565,6 +1760,21 @@
             "projectileEmitterResolved": null,
             "projectileTopologyResolved": null,
             "relationships": [],
+            "reviewed": {},
+            "reviewedCorrectionsApplied": [
+              {
+                "id": "SM2E.shared-final-bomb.trigger-bounds.mark-520",
+                "provenance": {
+                  "authority": "user-reviewed-final-target-walkway",
+                  "evidence": [
+                    "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                    "Reviewed RDX mark 521 uses [160,147,48,32]"
+                  ],
+                  "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 520 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                },
+                "type": "trigger-bounds"
+              }
+            ],
             "semanticId": "SM2E.actor.mark-520",
             "sourceEvidence": {
               "classic": {
@@ -1808,6 +2018,7 @@
                 "actorId": 1,
                 "classification": "missile-source-owned-visual-component",
                 "componentMark": 521,
+                "depth": "behind-midground",
                 "hazard": [
                   0,
                   0,
@@ -1825,7 +2036,7 @@
                 "trigger": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visibleActive": false,
@@ -1836,6 +2047,7 @@
                 "actorId": 1,
                 "classification": "missile-source-owned-visual-component",
                 "componentMark": 521,
+                "depth": "behind-midground",
                 "hazard": [
                   0,
                   0,
@@ -1853,7 +2065,7 @@
                 "trigger": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visibleActive": false,
@@ -2294,6 +2506,136 @@
     "provenance": {
       "migrationStatus": "canonical-layered+reviewed-overlay",
       "reviewedCorrections": [
+        {
+          "after": [
+            160,
+            147,
+            48,
+            32
+          ],
+          "before": [
+            160,
+            147,
+            32,
+            32
+          ],
+          "id": "SM2E.shared-final-bomb.trigger-bounds.mark-516",
+          "provenance": {
+            "authority": "user-reviewed-final-target-walkway",
+            "evidence": [
+              "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+              "Reviewed RDX mark 521 uses [160,147,48,32]"
+            ],
+            "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 516 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+          },
+          "semantic": "gameplay",
+          "target": "SM2E.actor.mark-516",
+          "type": "trigger-bounds"
+        },
+        {
+          "after": [
+            160,
+            147,
+            48,
+            32
+          ],
+          "before": [
+            160,
+            147,
+            32,
+            32
+          ],
+          "id": "SM2E.shared-final-bomb.trigger-bounds.mark-517",
+          "provenance": {
+            "authority": "user-reviewed-final-target-walkway",
+            "evidence": [
+              "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+              "Reviewed RDX mark 521 uses [160,147,48,32]"
+            ],
+            "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 517 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+          },
+          "semantic": "gameplay",
+          "target": "SM2E.actor.mark-517",
+          "type": "trigger-bounds"
+        },
+        {
+          "after": [
+            160,
+            147,
+            48,
+            32
+          ],
+          "before": [
+            160,
+            147,
+            32,
+            32
+          ],
+          "id": "SM2E.shared-final-bomb.trigger-bounds.mark-518",
+          "provenance": {
+            "authority": "user-reviewed-final-target-walkway",
+            "evidence": [
+              "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+              "Reviewed RDX mark 521 uses [160,147,48,32]"
+            ],
+            "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 518 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+          },
+          "semantic": "gameplay",
+          "target": "SM2E.actor.mark-518",
+          "type": "trigger-bounds"
+        },
+        {
+          "after": [
+            160,
+            147,
+            48,
+            32
+          ],
+          "before": [
+            160,
+            147,
+            32,
+            32
+          ],
+          "id": "SM2E.shared-final-bomb.trigger-bounds.mark-519",
+          "provenance": {
+            "authority": "user-reviewed-final-target-walkway",
+            "evidence": [
+              "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+              "Reviewed RDX mark 521 uses [160,147,48,32]"
+            ],
+            "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 519 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+          },
+          "semantic": "gameplay",
+          "target": "SM2E.actor.mark-519",
+          "type": "trigger-bounds"
+        },
+        {
+          "after": [
+            160,
+            147,
+            48,
+            32
+          ],
+          "before": [
+            160,
+            147,
+            32,
+            32
+          ],
+          "id": "SM2E.shared-final-bomb.trigger-bounds.mark-520",
+          "provenance": {
+            "authority": "user-reviewed-final-target-walkway",
+            "evidence": [
+              "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+              "Reviewed RDX mark 521 uses [160,147,48,32]"
+            ],
+            "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 520 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+          },
+          "semantic": "gameplay",
+          "target": "SM2E.actor.mark-520",
+          "type": "trigger-bounds"
+        },
         {
           "after": [
             160,

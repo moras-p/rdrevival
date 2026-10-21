@@ -1,5 +1,5 @@
 {
-  "authoredLayersFingerprint": "352c9628ca66560d8fb5d021470d96160bc2ac4e15df01ff1e85493d62f79bc8",
+  "authoredLayersFingerprint": "c4f0eef4964ea1140d656e4358074552855d21fd622b0197d96e9f35262192ec",
   "derived": {
     "productionMappings": {
       "emitterMuzzles": [
@@ -2537,6 +2537,7 @@
           "actorId": 1,
           "classification": "missile-source-owned-visual-component",
           "componentMark": 521,
+          "depth": "behind-midground",
           "hazard": [
             0,
             0,
@@ -2557,7 +2558,7 @@
           "trigger": [
             160,
             147,
-            32,
+            48,
             32
           ],
           "visibleActive": false,
@@ -2568,6 +2569,7 @@
           "actorId": 1,
           "classification": "missile-source-owned-visual-component",
           "componentMark": 521,
+          "depth": "behind-midground",
           "hazard": [
             0,
             0,
@@ -2588,7 +2590,7 @@
           "trigger": [
             160,
             147,
-            32,
+            48,
             32
           ],
           "visibleActive": false,
@@ -23225,15 +23227,15 @@
     }
   },
   "fingerprints": {
-    "authoredLayers": "352c9628ca66560d8fb5d021470d96160bc2ac4e15df01ff1e85493d62f79bc8",
+    "authoredLayers": "c4f0eef4964ea1140d656e4358074552855d21fd622b0197d96e9f35262192ec",
     "classicSourceLeg": "7a496dfb083d5a4333ee2a9b20dcb0db6330b3096f4c0e30fe67447628e30a18",
     "presentationDepth": "e056318c0d32d9e5ed8cfb556e515eb5c518d5bb7c2f76b2d19cdfe487a7565a",
     "presentationOcclusion": "12d345231c9767ac48972958c6bc388b8de2787e481a3201de998c9bc7e64cff",
     "rdxSourceLeg": "903c8ebf522b16875e47a62f1ffea9ec1d99b96b40aa31b6c1e86c5b35f3a7df",
-    "resolved": "eda1ea43ef93ac362a41e4718e5ecf9b2b4ca0db4d00e1fd0ac7bc44cfc2e88d",
-    "resolved32": 3635759598,
-    "runtimeSource": "f23067bd75fa476d9b5ba5240292762c6bef1326d25a64cc72567b3158b48dd1",
-    "runtimeSource32": 2410657906,
+    "resolved": "07e1d18b9ed1e839b55e5f855df2e8effdd720d4ffb420ae9b4657c377220d95",
+    "resolved32": 149350195,
+    "runtimeSource": "0b5b0c19b1eeabe7dfa1c5d1e2ed517a99e983da52e83c55144b749ea079dc16",
+    "runtimeSource32": 1846138813,
     "sharedPresentation": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8"
   },
   "resolverVersion": 1,
@@ -127534,13 +127536,13 @@
         "nativeControllerAuthority": "xrick-runtime"
       },
       "fingerprints": {
-        "adjustments": "964268b93aba377a74f2a09ce1d5e9cf553ce14dcb3da881e9367b1f4b2ac676",
+        "adjustments": "9619c41fb0b3194cf93f0081174b350c92a18826b46ee8cc2c92028873f5ed11",
         "alignment": "19905a165a07db970ef13cf9a8f5e44ca4aa53a245bfe409c7cef83b0023142a",
         "presentationDepth": "9a201345a494516f9b3b0520d1de48c53df2a63432d6729e0b20748c59e8a849",
         "presentationOcclusion": "789184168caf8c879d8317c2cf0c7878090d06d176ff08421f72ffb5420e92f7",
-        "resolved": "fd23892c2c9aebfe68dbe39b8d63005074d3ede475412698892981fc83b52106",
+        "resolved": "40620591d55e2b907f44b213696f964cb24ab8723ff190d51f0e6935a0cc8528",
         "reviewed": "02f23976238b6171dd6d134f8dc0096626dd9c10a56cf54518c9225aad46f380",
-        "semantic": "d7d48c215cc7665c57ce8f60d03c98a4e5c9f4132a67fada7139fbe5fabb658d",
+        "semantic": "4819fd74177a9d5b99794c1f6c50b84556d42daade20f460de2c123b19eef596",
         "sourceClassic": "93af04cd2b36b2fca86ae435d66bff8c8c47eba5d48fb1f326f565288a4c88d0",
         "sourceRdx": "6cc85fecb5b198c4d0178a8daeaf6f6cad901178feec1f69e4ee5d3729b5c2e6",
         "structural": "406875bd71b5c7006521d23eee8964f7702a9c3531b3dcf269f9dc895c2385bf",
@@ -127609,21 +127611,6 @@
               "target": "classic:SM13:mark:229"
             },
             {
-              "id": "SM13.actor.mark-229.trigger-bounds",
-              "operation": {
-                "rect": [
-                  203,
-                  75,
-                  40,
-                  32
-                ],
-                "type": "set-rect"
-              },
-              "property": "triggerBounds",
-              "provenance": "User-reviewed SM13 upper explosive platform 2026-10-20: extend the existing dynamite activation rectangle one 8px gameplay cell left while retaining its right, top, and bottom edges; leave the Classic trigger, moving controller, and PN24 presentation unchanged.",
-              "target": "SM13.actor.mark-229"
-            },
-            {
               "evidence": {
                 "patchProvenance": "2026-09-14 user-reviewed SM13 PN24 collision-box alignment; preserve Classic controller/path and independent trigger geometry"
               },
@@ -127636,6 +127623,21 @@
               "property": "position",
               "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [127,160], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin.",
               "target": "classic:SM13:mark:231"
+            },
+            {
+              "id": "SM13.actor.mark-231.trigger-bounds",
+              "operation": {
+                "rect": [
+                  146,
+                  147,
+                  40,
+                  32
+                ],
+                "type": "set-rect"
+              },
+              "property": "triggerBounds",
+              "provenance": "User correction 2026-10-21: MD0023 mark 231 (not mark 229) expands its dynamite activation one 8px gameplay cell left; retain its existing right/top/bottom edges, Classic controller and PN24 visual registration.",
+              "target": "SM13.actor.mark-231"
             },
             {
               "id": "SM13.trap.auto-md0023-rdx-floor-spike-8-81-8.position",
@@ -127946,20 +127948,6 @@
                   },
                   "property": "position",
                   "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [256,96], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin."
-                },
-                {
-                  "id": "SM13.actor.mark-229.trigger-bounds",
-                  "operation": {
-                    "rect": [
-                      203,
-                      75,
-                      40,
-                      32
-                    ],
-                    "type": "set-rect"
-                  },
-                  "property": "triggerBounds",
-                  "provenance": "User-reviewed SM13 upper explosive platform 2026-10-20: extend the existing dynamite activation rectangle one 8px gameplay cell left while retaining its right, top, and bottom edges; leave the Classic trigger, moving controller, and PN24 presentation unchanged."
                 }
               ],
               "alignedBaseline": {
@@ -128039,9 +128027,9 @@
                 ],
                 "supportBounds": null,
                 "triggerBounds": [
-                  203,
+                  211,
                   75,
-                  40,
+                  32,
                   32
                 ],
                 "visualAnchor": [
@@ -128419,6 +128407,20 @@
                   },
                   "property": "position",
                   "provenance": "2026-09-14 user-reviewed moving-platform contact correction: move the Classic-owned controller body to [127,160], aligning it with the fixed PN24 opaque/support bounds while preserving the independently reviewed trigger and RDX presentation origin."
+                },
+                {
+                  "id": "SM13.actor.mark-231.trigger-bounds",
+                  "operation": {
+                    "rect": [
+                      146,
+                      147,
+                      40,
+                      32
+                    ],
+                    "type": "set-rect"
+                  },
+                  "property": "triggerBounds",
+                  "provenance": "User correction 2026-10-21: MD0023 mark 231 (not mark 229) expands its dynamite activation one 8px gameplay cell left; retain its existing right/top/bottom edges, Classic controller and PN24 visual registration."
                 }
               ],
               "alignedBaseline": {
@@ -128501,9 +128503,9 @@
                 ],
                 "supportBounds": null,
                 "triggerBounds": [
-                  154,
+                  146,
                   147,
-                  32,
+                  40,
                   32
                 ],
                 "visualAnchor": [
@@ -206787,9 +206789,9 @@
         "alignment": "710ed102bf2bc4fe344641438ef89d0dc7e73b1c560e8dd3e7c4586e713986fd",
         "presentationDepth": "258f0be521410d36dda8409b75cc2d1401f7650b80dbae3ff1bf9bef36dc86e1",
         "presentationOcclusion": "533b6dce729dde2711c62d929b17ab154f069431da46076a30e33a35ab47f4f8",
-        "resolved": "7617184b4d01d57a6faee7a32b339b75e173062c6c3733f762956c46e72371c6",
-        "reviewed": "c8abdc1ad6a091c54271adc43d348f378b45094bb508b5fff31d8af713eec117",
-        "semantic": "90cea29c603e4ad2eafc0a65388069306a27b6585b66f997d411efe74c9ab48c",
+        "resolved": "0c36e837ff2900bdced449a527346757c58183336bac25bd4ae33fb06520f84d",
+        "reviewed": "1893c1f7d7a0b796f7bd901818db0576b95a7d60040bc35a273f7f66177982bd",
+        "semantic": "122c0bce4b10b026bbb6c0e7c52b9e36ca0d62c7bf49de11427e79882ccc2e31",
         "sourceClassic": "76c81c5cb99eee284bf6dbfbf7c65fe05bd1f8717f6e5b4c96e7d2725a2c5afe",
         "sourceRdx": "1a1bc1f8d4986c3a3f14ff2a59a95a00c2d696bd950284cde4dd9d6a23b0378c",
         "structural": "50dc6bce99ca529c6c5bb815b89e33c468031b6d5b8c7cf38c61650ffb0605b3",
@@ -206954,6 +206956,141 @@
         },
         "reviewedCorrections": {
           "corrections": [
+            {
+              "expected": [
+                160,
+                147,
+                32,
+                32
+              ],
+              "id": "SM2E.shared-final-bomb.trigger-bounds.mark-516",
+              "provenance": {
+                "authority": "user-reviewed-final-target-walkway",
+                "evidence": [
+                  "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                  "Reviewed RDX mark 521 uses [160,147,48,32]"
+                ],
+                "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 516 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+              },
+              "target": "SM2E.actor.mark-516",
+              "type": "trigger-bounds",
+              "value": {
+                "bounds": [
+                  160,
+                  147,
+                  48,
+                  32
+                ]
+              }
+            },
+            {
+              "expected": [
+                160,
+                147,
+                32,
+                32
+              ],
+              "id": "SM2E.shared-final-bomb.trigger-bounds.mark-517",
+              "provenance": {
+                "authority": "user-reviewed-final-target-walkway",
+                "evidence": [
+                  "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                  "Reviewed RDX mark 521 uses [160,147,48,32]"
+                ],
+                "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 517 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+              },
+              "target": "SM2E.actor.mark-517",
+              "type": "trigger-bounds",
+              "value": {
+                "bounds": [
+                  160,
+                  147,
+                  48,
+                  32
+                ]
+              }
+            },
+            {
+              "expected": [
+                160,
+                147,
+                32,
+                32
+              ],
+              "id": "SM2E.shared-final-bomb.trigger-bounds.mark-518",
+              "provenance": {
+                "authority": "user-reviewed-final-target-walkway",
+                "evidence": [
+                  "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                  "Reviewed RDX mark 521 uses [160,147,48,32]"
+                ],
+                "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 518 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+              },
+              "target": "SM2E.actor.mark-518",
+              "type": "trigger-bounds",
+              "value": {
+                "bounds": [
+                  160,
+                  147,
+                  48,
+                  32
+                ]
+              }
+            },
+            {
+              "expected": [
+                160,
+                147,
+                32,
+                32
+              ],
+              "id": "SM2E.shared-final-bomb.trigger-bounds.mark-519",
+              "provenance": {
+                "authority": "user-reviewed-final-target-walkway",
+                "evidence": [
+                  "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                  "Reviewed RDX mark 521 uses [160,147,48,32]"
+                ],
+                "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 519 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+              },
+              "target": "SM2E.actor.mark-519",
+              "type": "trigger-bounds",
+              "value": {
+                "bounds": [
+                  160,
+                  147,
+                  48,
+                  32
+                ]
+              }
+            },
+            {
+              "expected": [
+                160,
+                147,
+                32,
+                32
+              ],
+              "id": "SM2E.shared-final-bomb.trigger-bounds.mark-520",
+              "provenance": {
+                "authority": "user-reviewed-final-target-walkway",
+                "evidence": [
+                  "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                  "Reviewed RDX mark 521 uses [160,147,48,32]"
+                ],
+                "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 520 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+              },
+              "target": "SM2E.actor.mark-520",
+              "type": "trigger-bounds",
+              "value": {
+                "bounds": [
+                  160,
+                  147,
+                  48,
+                  32
+                ]
+              }
+            },
             {
               "expected": [
                 160,
@@ -207467,7 +207604,7 @@
                 "triggerBounds": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visualAnchor": [
@@ -207505,6 +207642,21 @@
               "projectileEmitterResolved": null,
               "projectileTopologyResolved": null,
               "relationships": [],
+              "reviewed": {},
+              "reviewedCorrectionsApplied": [
+                {
+                  "id": "SM2E.shared-final-bomb.trigger-bounds.mark-516",
+                  "provenance": {
+                    "authority": "user-reviewed-final-target-walkway",
+                    "evidence": [
+                      "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                      "Reviewed RDX mark 521 uses [160,147,48,32]"
+                    ],
+                    "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 516 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                  },
+                  "type": "trigger-bounds"
+                }
+              ],
               "semanticId": "SM2E.actor.mark-516",
               "sourceEvidence": {
                 "classic": {
@@ -207672,7 +207824,7 @@
                 "triggerBounds": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visualAnchor": [
@@ -207710,6 +207862,21 @@
               "projectileEmitterResolved": null,
               "projectileTopologyResolved": null,
               "relationships": [],
+              "reviewed": {},
+              "reviewedCorrectionsApplied": [
+                {
+                  "id": "SM2E.shared-final-bomb.trigger-bounds.mark-517",
+                  "provenance": {
+                    "authority": "user-reviewed-final-target-walkway",
+                    "evidence": [
+                      "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                      "Reviewed RDX mark 521 uses [160,147,48,32]"
+                    ],
+                    "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 517 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                  },
+                  "type": "trigger-bounds"
+                }
+              ],
               "semanticId": "SM2E.actor.mark-517",
               "sourceEvidence": {
                 "classic": {
@@ -207877,7 +208044,7 @@
                 "triggerBounds": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visualAnchor": [
@@ -207915,6 +208082,21 @@
               "projectileEmitterResolved": null,
               "projectileTopologyResolved": null,
               "relationships": [],
+              "reviewed": {},
+              "reviewedCorrectionsApplied": [
+                {
+                  "id": "SM2E.shared-final-bomb.trigger-bounds.mark-518",
+                  "provenance": {
+                    "authority": "user-reviewed-final-target-walkway",
+                    "evidence": [
+                      "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                      "Reviewed RDX mark 521 uses [160,147,48,32]"
+                    ],
+                    "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 518 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                  },
+                  "type": "trigger-bounds"
+                }
+              ],
               "semanticId": "SM2E.actor.mark-518",
               "sourceEvidence": {
                 "classic": {
@@ -208082,7 +208264,7 @@
                 "triggerBounds": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visualAnchor": [
@@ -208120,6 +208302,21 @@
               "projectileEmitterResolved": null,
               "projectileTopologyResolved": null,
               "relationships": [],
+              "reviewed": {},
+              "reviewedCorrectionsApplied": [
+                {
+                  "id": "SM2E.shared-final-bomb.trigger-bounds.mark-519",
+                  "provenance": {
+                    "authority": "user-reviewed-final-target-walkway",
+                    "evidence": [
+                      "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                      "Reviewed RDX mark 521 uses [160,147,48,32]"
+                    ],
+                    "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 519 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                  },
+                  "type": "trigger-bounds"
+                }
+              ],
               "semanticId": "SM2E.actor.mark-519",
               "sourceEvidence": {
                 "classic": {
@@ -208287,7 +208484,7 @@
                 "triggerBounds": [
                   160,
                   147,
-                  32,
+                  48,
                   32
                 ],
                 "visualAnchor": [
@@ -208328,6 +208525,21 @@
               "projectileEmitterResolved": null,
               "projectileTopologyResolved": null,
               "relationships": [],
+              "reviewed": {},
+              "reviewedCorrectionsApplied": [
+                {
+                  "id": "SM2E.shared-final-bomb.trigger-bounds.mark-520",
+                  "provenance": {
+                    "authority": "user-reviewed-final-target-walkway",
+                    "evidence": [
+                      "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                      "Reviewed RDX mark 521 uses [160,147,48,32]"
+                    ],
+                    "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 520 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+                  },
+                  "type": "trigger-bounds"
+                }
+              ],
               "semanticId": "SM2E.actor.mark-520",
               "sourceEvidence": {
                 "classic": {
@@ -208571,6 +208783,7 @@
                   "actorId": 1,
                   "classification": "missile-source-owned-visual-component",
                   "componentMark": 521,
+                  "depth": "behind-midground",
                   "hazard": [
                     0,
                     0,
@@ -208588,7 +208801,7 @@
                   "trigger": [
                     160,
                     147,
-                    32,
+                    48,
                     32
                   ],
                   "visibleActive": false,
@@ -208599,6 +208812,7 @@
                   "actorId": 1,
                   "classification": "missile-source-owned-visual-component",
                   "componentMark": 521,
+                  "depth": "behind-midground",
                   "hazard": [
                     0,
                     0,
@@ -208616,7 +208830,7 @@
                   "trigger": [
                     160,
                     147,
-                    32,
+                    48,
                     32
                   ],
                   "visibleActive": false,
@@ -209070,6 +209284,136 @@
               32,
               32
             ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-516",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 516 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "semantic": "gameplay",
+            "target": "SM2E.actor.mark-516",
+            "type": "trigger-bounds"
+          },
+          {
+            "after": [
+              160,
+              147,
+              48,
+              32
+            ],
+            "before": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-517",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 517 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "semantic": "gameplay",
+            "target": "SM2E.actor.mark-517",
+            "type": "trigger-bounds"
+          },
+          {
+            "after": [
+              160,
+              147,
+              48,
+              32
+            ],
+            "before": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-518",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 518 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "semantic": "gameplay",
+            "target": "SM2E.actor.mark-518",
+            "type": "trigger-bounds"
+          },
+          {
+            "after": [
+              160,
+              147,
+              48,
+              32
+            ],
+            "before": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-519",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 519 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "semantic": "gameplay",
+            "target": "SM2E.actor.mark-519",
+            "type": "trigger-bounds"
+          },
+          {
+            "after": [
+              160,
+              147,
+              48,
+              32
+            ],
+            "before": [
+              160,
+              147,
+              32,
+              32
+            ],
+            "id": "SM2E.shared-final-bomb.trigger-bounds.mark-520",
+            "provenance": {
+              "authority": "user-reviewed-final-target-walkway",
+              "evidence": [
+                "Classic SM2E marks 516–521 all use trigger [128,67,32,32]",
+                "Reviewed RDX mark 521 uses [160,147,48,32]"
+              ],
+              "reason": "SM2E Classic marks 516–521 share one 32px bomb lane. Mark 521 already reaches 16px farther right so both PN2 consoles disappear there; mark 520 must consume the same corrected lane so the native scripted final explosions and exit blockage also activate from that position."
+            },
+            "semantic": "gameplay",
+            "target": "SM2E.actor.mark-520",
+            "type": "trigger-bounds"
+          },
+          {
+            "after": [
+              160,
+              147,
+              48,
+              32
+            ],
+            "before": [
+              160,
+              147,
+              32,
+              32
+            ],
             "id": "SM2E.editor.trigger-bounds.SM2E.actor.mark-521.1",
             "provenance": {
               "authority": "user-reviewed-final-target-walkway",
@@ -209136,7 +209480,7 @@
       }
     }
   ],
-  "runtimeSourceFingerprint": "f23067bd75fa476d9b5ba5240292762c6bef1326d25a64cc72567b3158b48dd1",
+  "runtimeSourceFingerprint": "0b5b0c19b1eeabe7dfa1c5d1e2ed517a99e983da52e83c55144b749ea079dc16",
   "schema": "rdr.resolved_levels.v1",
   "sharedPresentationFingerprint": "31143bc690e6ecbeebb3cfcad5dea138f16c0252419931fec433eba105cb8bd8",
   "sourceLegs": {
