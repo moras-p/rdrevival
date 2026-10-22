@@ -262,3 +262,28 @@ dialog .actions { display: flex; justify-content: flex-end; gap: 7px; margin-top
   .dock-drawer:not([hidden]) { left: 40px; right: 38px; width: auto; }
   .status-bar #selection-status { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 }
+
+/* Scene inspection is visually subordinate to the dominant pixel canvas. */
+.map-scene-inspector { position: sticky; bottom: 6px; margin: 6px; max-width: 420px; padding: 8px 11px; border: 1px solid var(--stroke, #637186); border-radius: 9px; background: #101922ee; color: #ebf0f6; font: 12px/1.5 ui-monospace, monospace; pointer-events: none; white-space: pre-line; }
+
+/* Source-safe scene editing controls sit above the canvas, not over pixels. */
+.map-scene-actions { display: flex; align-items: center; gap: 7px; padding: 5px 10px; flex-wrap: wrap; background: var(--panel, #192531); border-bottom: 1px solid var(--stroke, #637186); font: 12px ui-monospace, monospace; }
+.map-scene-actions[hidden] { display: none; }
+.map-scene-actions #scene-status { flex: 1; min-width: 160px; }
+.map-scene-actions label { display: flex; align-items: center; gap: 4px; }
+.map-scene-actions select { min-width: 48px; }
+@media (max-width:560px) { .map-scene-actions { gap: 4px; } .map-scene-actions #scene-status { flex-basis: 100%; } }
+
+/* Only proven source cells can change; ordinary document export remains disabled. */
+.map-scene-mode .tool-rail button[disabled] { opacity: .35; cursor: not-allowed; }
+.map-scene-mode .canvas-stage { cursor: crosshair; }
+.map-scene-mode .map-scene-inspector { max-width: min(420px,calc(100% - 12px)); }
+/* Source scene inserts a second fixed-height tool row; keep the canvas as
+   the flexible middle track instead of squeezing controls to zero height. */
+.map-scene-mode .workspace { grid-template-rows: auto auto minmax(0,1fr) auto; }
+
+/* Audit probe controls never force the bounded map canvas to shrink to a strip. */
+.map-scene-actions #scene-probe-status { flex: 1 1 190px; min-width: 150px; color: #a9b9c8; }
+.map-scene-actions #scene-probe { max-width: 260px; }
+.map-scene-actions #scene-drag-probe { accent-color: #f3d06c; }
+@media (max-width:560px) { .map-scene-actions #scene-probe { max-width: 250px; } }

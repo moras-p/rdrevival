@@ -61,14 +61,23 @@ export function clipActorToWorldWindow(frame, drawX, drawY, clip, window) {
   };
 }
 
-function localCoverModel(renderer) {
+export function previewLocalCoverModel(renderer) {
   const room = renderer._productionRoom?.();
   // The resolved Layer-F model includes shared tile classes and room overrides.
   // Do not use only the flattened override rows: that loses shared classes and
   // explicit smaller `none` exceptions when another region covers a pixel.
-  return room?.presentationOcclusion || {
+  // Current generated presentation rows are authoritative for sparse masks.
+  // A retained native trace may have a room model with pre-edit rows; never
+  // allow it to hide newly promoted masks from the canonical editor.
+  const localMasks=(renderer.presentationOcclusionPixelMasks||[]).filter(row=>
+    Number(row.submap)===Number(renderer.selection?.submap) &&
+    Number(row.mapId)===Number(renderer.selection?.mapId));
+  if(room?.presentationOcclusion){
+    return localMasks.length ? {...room.presentationOcclusion,pixelMasks:localMasks} : room.presentationOcclusion;
+  }
+  return {
     classes:renderer.presentationOcclusionTileRules || [],
-    overrides:renderer.presentationOcclusionOverrides || []
+    overrides:renderer.presentationOcclusionOverrides || [],pixelMasks:localMasks
   };
 }
 
@@ -77,8 +86,8 @@ function localCoverModel(renderer) {
 // The pixel's two source tile identities are resolved once per 8x8 cell rather
 // than searching the map for every actor pixel.
 export function previewLocalCoverAt(renderer, x, y, layers = null, coverKind = 'embedded') {
-  const model = localCoverModel(renderer);
-  if (!(model.classes?.length || model.overrides?.length)) return false;
+  const model = previewLocalCoverModel(renderer);
+  if (!(model.classes?.length || model.overrides?.length || model.pixelMasks?.length)) return false;
   if (coverKind === 'embedded') {
     const midground = layers?.midground || renderer.staticLayers(renderer._localCoverPhase || 0).midground;
     if (!midground || x < 0 || y < 0 || x >= midground.width || y >= midground.height ||
@@ -97,9 +106,10 @@ export function previewLocalCoverAt(renderer, x, y, layers = null, coverKind = '
     }};
   }
   const ids=renderer._localCoverCellCache.ids;
-  return ['B','A'].some(plane=>presentationOcclusionAt(model,{
-    plane,globalTile:ids[plane],x,y
-  }).cover===coverKind);
+  return ['B','A'].some(plane=>{
+    const result=presentationOcclusionAt(model,{plane,globalTile:ids[plane],x,y});
+    return result.cover===coverKind || (coverKind==='embedded' && result.alsoEmbedded===true);
+  });
 }
 
 function blitOpacityWithLocalCover(renderer, target, source, dx, dy, alpha = 1, clip = null, blackKey = false, embedded = false) {
@@ -211,6 +221,25 @@ export function _placeholder(x, y, actorId, policy, diagnostic = false, target =
   const color = policy === 'red' || diagnostic ? [255, 20, 35, 255] : [180, 180, 180, 255];
   drawRect(target, Math.round(x - 6), Math.round(y - 16), 13, 17, color, false);
   return { x: x - 8, y: y - 18, width: 17, height: 21, placeholder: true, actorId };
+}
+
+/** Preserve the decoded per-actor sprite *before* sparse native-style local
+ * cover is applied. Disabled during ordinary Level Editor rendering. */
+export function captureSourceSpriteForScene(buffer, drawX, drawY, clip = null, blackKey = false, opacity = 1) {
+  if (!buffer || buffer.width > 64 || buffer.height > 64 || buffer.width < 1 || buffer.height < 1) return null;
+  const [w,h]=[buffer.width,buffer.height];
+  const left=Math.max(0, Math.min(w, Number(clip?.left || 0)));
+  const top=Math.max(0, Math.min(h, Number(clip?.top || 0)));
+  const right=Math.max(0, Math.min(w, Number(clip?.right || 0)));
+  const bottom=Math.max(0, Math.min(h, Number(clip?.bottom || 0)));
+  const rgba=Array.from(buffer.data);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=(y*w+x)*4;
+    if(x<left || x>=w-right || y<top || y>=h-bottom ||
+      (blackKey && rgba[i]===0 && rgba[i+1]===0 && rgba[i+2]===0)) rgba[i+3]=0;
+    else rgba[i+3]=Math.round(rgba[i+3]*Math.max(0,Math.min(1,opacity)));
+  }
+  return {worldRect:[drawX,drawY,w,h],rgba};
 }
 
 export function dynamicFrame(tick) {
@@ -722,7 +751,7 @@ export function dynamicFrame(tick) {
       { top:state.clipTop, bottom:state.clipBottom, left:state.clipLeft, right:state.clipRight },visibilityWindow);
     if (!inspectionHidden && !runtimeSuppressed) {
       const normalCover = actorDepth === 'normal' &&
-        localCoverModel(this).overrides?.some(row => row.cover === 'normal');
+        previewLocalCoverModel(this).overrides?.some(row => row.cover === 'normal');
       const embeddedCover = localOcclusionClass === 'embedded' && !visibilityWindow &&
         !Object.prototype.hasOwnProperty.call(override || {}, 'clipWindow');
       if ((normalCover || embeddedCover) && actorDepth === 'normal')
@@ -801,6 +830,14 @@ export function dynamicFrame(tick) {
       quarterTurns,
       actorDepth,
       front,
+      ...(this.captureMapSceneActorSources && !inspectionHidden && !runtimeSuppressed ? {
+        sceneSourceSprite:captureSourceSpriteForScene(frame.pixels,drawX,drawY,occlusionClip,blackKey,transform.alpha),
+        sceneCoverModes:actorDepth==='normal' &&
+          (previewLocalCoverModel(this).overrides?.some(row=>row.cover==='normal') ||
+            (localOcclusionClass==='embedded' && !visibilityWindow && !Object.prototype.hasOwnProperty.call(override||{},'clipWindow')))
+          ? ['normal',...(localOcclusionClass==='embedded' && !visibilityWindow &&
+            !Object.prototype.hasOwnProperty.call(override||{},'clipWindow')?['embedded']:[])] : []
+      } : {}),
       ...(!syntheticClassicReplacement ? {
         assetFlags: Number(state.assetFlags || 0),
         visualKind: Number(state.visualKind || 0),

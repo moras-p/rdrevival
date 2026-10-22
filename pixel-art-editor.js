@@ -19,6 +19,9 @@ import { indicesToRuns, resolveSelector } from "./rdx/src/pixel-art/selectors.js
 import { RevivalPixelArtMapPreview } from "./rdx/src/pixel-art/revival-preview.js";
 import { mountPixelArtEditorShell } from "./rdx/src/pixel-art/ui/shell.js";
 import { PixelArtEditorUI } from "./rdx/src/pixel-art/ui/editor-ui.js";
+import { validateMapScene, inspectScenePixel } from "./rdx/src/pixel-art/map-scene.js";
+import { createSceneDraft, sceneDraftPixel, applyScenePixels, sceneDraftHistory, sceneDraftPreview, sceneDraftPlan, applySceneCoverPixels } from "./rdx/src/pixel-art/map-scene-edit.js";
+import { newSceneProbe, moveSceneProbe, renderSceneProbe } from "./rdx/src/pixel-art/map-scene-probe.js";
 
 const editorRoot = document.getElementById("pixel-art-editor-root");
 mountPixelArtEditorShell(editorRoot);
@@ -41,6 +44,70 @@ let tool = "pencil",
   autosaveTimer = null,
   saveSerial = 0;
 let productionPreviewBusy = false;
+let inspectedScene = null;
+let sceneDraft = null;
+let scenePreviewCache = null;
+let sceneProbe = null;
+let loadingScene = false;
+function configureSceneProbes() {
+  const select=$("scene-probe"); select.replaceChildren();
+  for(const probe of [...(inspectedScene?.actorProbes || []),...(inspectedScene?.testProbes || [])]) {
+    const option=document.createElement("option"); option.value=probe.id;
+    option.textContent=`${probe.id} · ${probe.category} (${probe.kind==='test-pn'?'audit-only test':probe.band})`;select.append(option);
+  }
+  if(!select.options.length){const option=document.createElement("option");option.value="";option.textContent="No isolated actor";select.append(option);}
+  const intended=inspectedScene?.target?.stableEntityId;
+  const preferred=(inspectedScene?.actorProbes || []).find(p=>p.id===intended);
+  select.value=preferred?.id || inspectedScene?.actorProbes?.[0]?.id || inspectedScene?.testProbes?.[0]?.id || "";
+  sceneProbe=select.value ? newSceneProbe(inspectedScene,select.value) : null;
+  $("scene-drag-probe").checked=false;
+  $("scene-drag-probe").disabled=!sceneProbe;
+  $("scene-reset-probe").disabled=!sceneProbe;
+  $("scene-diagnostic").value="none";
+  $("scene-edit-mode").value="tile";
+  $("scene-cover-label").hidden=true;
+  $("scene-plane-label").hidden=false;
+  $("scene-index-label").hidden=false;
+}
+function probePreview() {
+  const diagnostic=$("scene-diagnostic").value;
+  const key=`${sceneDraft?.revision ?? -1}:${sceneProbe?.source.id ?? '-'}:${sceneProbe?.dx ?? 0}:${sceneProbe?.dy ?? 0}:${diagnostic}`;
+  if (!scenePreviewCache || scenePreviewCache.key!==key) {
+    const {pixels,stats}=renderSceneProbe(inspectedScene,{draft:sceneDraft,probe:sceneProbe,diagnostic});
+    scenePreviewCache={key,data:pixels,stats};
+  }
+  return scenePreviewCache;
+}
+function sceneImage() {
+  return probePreview().data;
+}
+function sceneRepairStatus() {
+  if (!sceneDraft) {
+    $("scene-status").textContent='Legacy capture · inspection only';
+    $("scene-plan").disabled=true;$("scene-paint").disabled=true;
+    $("scene-undo").disabled=true;$("scene-redo").disabled=true;
+  } else {
+    const coverMode=$("scene-edit-mode").value==='cover';
+    $("scene-paint").disabled=coverMode ? !sceneDraft.coverCells?.size : sceneDraft.cells.size===0;
+    const plan=sceneDraftPlan(sceneDraft);
+    $("scene-status").textContent=`${sceneDraft.cells.size} proven tiles · ${sceneDraft.coverCells?.size||0} cover cells · ${plan.changedPixels} tile px, ${plan.changedCoverPixels} cover bits · draft r${sceneDraft.revision}`;
+    $("scene-undo").disabled=!sceneDraft.history.length;
+    $("scene-redo").disabled=!sceneDraft.future.length;
+    $("scene-plan").disabled=!plan.assets.length&&!plan.covers.length;
+  }
+  const stats=probePreview().stats;
+  if($("scene-diagnostic").value==='cover') {
+    $("scene-probe-status").textContent='Sparse actor cover · pink normal · blue embedded · purple both · canonical source projection, not live native contact';
+    return;
+  }
+  if($("scene-diagnostic").value==='terrain') {
+    $("scene-probe-status").textContent='G8 terrain · red solid · amber one-way · cyan ladder · magenta lethal · green exit · teal reviewed-open · editor projection only';
+    return;
+  }
+  $("scene-probe-status").textContent=sceneProbe
+    ? `${sceneProbe.source.id} · ${stats.testOnly?'independent PN test (not native gameplay)':stats.sourcePixels?'decoded sprite':'visible-only silhouette'} · offset ${sceneProbe.dx>=0?'+':''}${sceneProbe.dx},${sceneProbe.dy>=0?'+':''}${sceneProbe.dy} · visible ${stats.visible}, covered ${stats.covered} (${stats.localCover} mask), clipped ${stats.clipped}${stats.testOnly ? `, ${stats.actorOverlap} same-band overlaps` : ''} · audit only`
+    : 'No safely isolated actor · terrain: Level Editor source projection';
+}
 const productionPreviewProvider = new RevivalPixelArtMapPreview({ onStatus: () => updateProductionPreviewStatus() });
 const controller = new ArtController({
   plugins: createAssetPlugins(),
@@ -191,7 +258,11 @@ function drawCanvas(previewFrame = null) {
   if ($("onion").checked) for(let n=onionRange;n>=1;n--){const at=frameIndex-n;if(at<0)continue;ctx.globalAlpha=onionAlpha*(1-(n-1)/(onionRange+1));ctx.drawImage(onionCanvas(d,d.frames[at].id,$("onion-prev-color").value),0,0,canvas.width,canvas.height);}
   if ($("onion-next").checked) for(let n=onionRange;n>=1;n--){const at=frameIndex+n;if(at>=d.frames.length)continue;ctx.globalAlpha=onionAlpha*(1-(n-1)/(onionRange+1));ctx.drawImage(onionCanvas(d,d.frames[at].id,$("onion-next-color").value),0,0,canvas.width,canvas.height);}
   ctx.globalAlpha=1;
-  ctx.drawImage(
+  if (inspectedScene) {
+    const data = sceneImage();
+    ctx.drawImage(imageCanvas(d.width, d.height, Uint8ClampedArray.from(data)), 0, 0, canvas.width, canvas.height);
+  }
+  if (!inspectedScene) ctx.drawImage(
     imageCanvas(d.width, d.height, rgbaPixels(d, f.id)),
     0,
     0,
@@ -233,25 +304,44 @@ function drawCanvas(previewFrame = null) {
   if (pendingTransform?.preview?.delta?.bounds) {
     const [px,py,pw,ph]=pendingTransform.preview.delta.bounds;ctx.strokeStyle="#f5c575";ctx.lineWidth=2;ctx.setLineDash([2,2]);ctx.strokeRect(px*z,py*z,pw*z,ph*z);ctx.setLineDash([]);
   }
-  ctx.strokeStyle = "#f5c575";
-  ctx.beginPath();
-  const ax = f.anchor[0] * z + z / 2,
-    ay = f.anchor[1] * z + z / 2;
-  ctx.moveTo(ax - 5, ay);
-  ctx.lineTo(ax + 5, ay);
-  ctx.moveTo(ax, ay - 5);
-  ctx.lineTo(ax, ay + 5);
-  ctx.stroke();
+  if (inspectedScene && sceneProbe) {
+    const [wx,wy,w,h]=sceneProbe.source.worldRect, [ox,oy]=inspectedScene.cropWorld;
+    const px=(wx+sceneProbe.dx-ox)*z,py=(wy+sceneProbe.dy-oy)*z;
+    ctx.save();ctx.lineWidth=1.5;ctx.strokeStyle="#ffe27a";ctx.setLineDash([4,3]);
+    ctx.strokeRect(px,py,w*z,h*z);ctx.setLineDash([]);
+    const ax=(sceneProbe.source.draw[0]+sceneProbe.dx-ox)*z;
+    const ay=(sceneProbe.source.draw[1]+sceneProbe.dy-oy)*z;
+    ctx.beginPath();ctx.moveTo(ax-5,ay);ctx.lineTo(ax+5,ay);ctx.moveTo(ax,ay-5);ctx.lineTo(ax,ay+5);ctx.stroke();ctx.restore();
+  }
+  if (!inspectedScene) {
+    ctx.strokeStyle = "#f5c575";
+    ctx.beginPath();
+    const ax = f.anchor[0] * z + z / 2,
+      ay = f.anchor[1] * z + z / 2;
+    ctx.moveTo(ax - 5, ay);
+    ctx.lineTo(ax + 5, ay);
+    ctx.moveTo(ax, ay - 5);
+    ctx.lineTo(ax, ay + 5);
+    ctx.stroke();
+  }
   const native = $("native-preview");
   native.width = d.width;
   native.height = d.height;
-  native
-    .getContext("2d")
-    .drawImage(imageCanvas(d.width, d.height, rgbaPixels(d, f.id)), 0, 0);
+  native.getContext("2d").drawImage(imageCanvas(d.width, d.height, inspectedScene ? Uint8ClampedArray.from(sceneImage()) : rgbaPixels(d, f.id)), 0, 0);
   $("zoom-value").textContent = `${z}×`;
 }
 function render() {
   const d = controller.store.document;
+  $("map-scene-inspector").hidden = !inspectedScene;
+  $("map-scene-actions").hidden = !inspectedScene;
+  if(inspectedScene) sceneRepairStatus();
+  document.body.classList.toggle("map-scene-mode", !!inspectedScene);
+  $("save").disabled = !!inspectedScene;
+  $("export").textContent = inspectedScene ? "Export scene" : "Export";
+  for (const b of document.querySelectorAll(".tool-rail button")) {
+    const name=b.dataset.tool || b.dataset.toolChoice;
+    b.disabled=!!inspectedScene && !['hand','pencil','eraser','eyedropper'].includes(name);
+  }
   if (!d.frames.some((f) => f.id === controller.selectedFrame))
     controller.selectedFrame = d.frames[0].id;
   if (!d.layers.some((l) => l.id === controller.selectedLayer))
@@ -260,7 +350,7 @@ function render() {
   if (d.palettePolicy && !d.palettePolicy.allowedIndices.includes(color)) color = d.palettePolicy.allowedIndices.find(i => i > 0) ?? 0;
   const usedPalette = new Set(composite(d, controller.selectedFrame).filter(i => i !== 0));
   const activeRamp = (d.styleProfile?.ramps ?? []).find(r => r.name === $("ramp-select").value);
-  $("doc-title").textContent = d.id;
+  $("doc-title").textContent = inspectedScene ? `${inspectedScene.room.id} · canonical map scene` : d.id;
   $("dimensions").textContent =
     `${d.width} × ${d.height} px · ${d.frames.length} ${d.frames.length === 1 ? "frame" : "frames"}`;
   $("revision").textContent = `Revision ${d.revision}`;
@@ -579,6 +669,40 @@ canvas.addEventListener(
   "pointerdown",
   run((e) => {
     if (e.button !== 0) return;
+    if (inspectedScene) {
+      const p=point(e), worldX=p[0]+inspectedScene.cropWorld[0],worldY=p[1]+inspectedScene.cropWorld[1], plane=$("scene-plane").value;
+      if(sceneProbe && $("scene-drag-probe").checked) {
+        const [x,y,w,h]=sceneProbe.source.worldRect;
+        const sx=worldX-x-sceneProbe.dx,sy=worldY-y-sceneProbe.dy;
+        if(sx>=0&&sy>=0&&sx<w&&sy<h) {
+          canvas.setPointerCapture(e.pointerId);
+          gesture={actorProbe:true,start:p,offset:[sceneProbe.dx,sceneProbe.dy]};
+          canvas.style.cursor='grabbing';return;
+        }
+        return;
+      }
+      if (!['hand','pencil','eraser','eyedropper'].includes(tool)) return;
+      const coverMode=$("scene-edit-mode").value==='cover';
+      if(tool==='eyedropper' && coverMode) {
+        const cell=sceneDraft?.coverCells?.get(`A:${Math.floor(worldX/8)}:${Math.floor(worldY/8)}`);
+        requireArt(cell,'UNRESOLVED_OWNER','No reviewed actor-cover ownership at this pixel');
+        $("scene-cover-value").value=String((cell.rows[worldY&7]>>>(worldX&7))&1);return;
+      }
+      if(tool==='eyedropper') {
+        const {entry,x,y}=sceneDraftPixel(sceneDraft,{plane,worldX,worldY});
+        $("scene-palette-index").value=Number.parseInt(entry.rows[y][x],16);return;
+      }
+      if(tool!=='hand') {
+        requireArt(sceneDraft,'SCENE_READ_ONLY','This scene has no editable source provenance');
+        if(coverMode)requireArt(sceneDraft.coverCells.has(`A:${Math.floor(worldX/8)}:${Math.floor(worldY/8)}`),
+          'UNRESOLVED_OWNER','No reviewed normal-actor cover source at this pixel');
+        else sceneDraftPixel(sceneDraft,{plane,worldX,worldY});
+      } // fail before pointer capture
+      canvas.setPointerCapture(e.pointerId);
+      gesture={scroll:[$("canvas-stage").scrollLeft,$("canvas-stage").scrollTop],client:[e.clientX,e.clientY],last:p,path:[p],plane,coverMode};
+      canvas.style.cursor=tool==='hand'?'grabbing':'crosshair';
+      return;
+    }
     stop();
     const p = point(e);
     canvas.setPointerCapture(e.pointerId);
@@ -592,7 +716,24 @@ canvas.addEventListener(
   }),
 );
 canvas.addEventListener("pointermove", (e) => {
-  const p = point(e); $("coordinates").textContent = `X ${p[0]} · Y ${p[1]}`; if (!gesture) return;
+  const p = point(e);
+  if (inspectedScene) {
+    const [worldX,worldY] = [p[0]+inspectedScene.cropWorld[0],p[1]+inspectedScene.cropWorld[1]];
+    const info = inspectScenePixel(inspectedScene, worldX, worldY);
+    if(gesture?.actorProbe && sceneProbe) {
+      moveSceneProbe(sceneProbe,gesture.offset[0]+p[0]-gesture.start[0],gesture.offset[1]+p[1]-gesture.start[1]);
+      drawCanvas();sceneRepairStatus();
+    } else if (tool==="hand" && gesture) {
+      const stage=$("canvas-stage");
+      stage.scrollLeft=gesture.scroll[0]-(e.clientX-gesture.client[0]);
+      stage.scrollTop=gesture.scroll[1]-(e.clientY-gesture.client[1]);
+    } else if (gesture && ['pencil','eraser'].includes(tool)) { appendLinePath(gesture.last,p,gesture.path); gesture.last=p; }
+    const lines = info.cells.map(cell=>`Plane ${cell.plane}: ${cell.globalTile ?? 'unknown'} · ${cell.exportStatus}`);
+    $("coordinates").textContent = `World ${worldX}, ${worldY}`;
+    $("map-scene-inspector").textContent = `${inspectedScene.room.id} · MD${String(inspectedScene.room.mapId).padStart(4,'0')} · world ${worldX},${worldY} · ${info.owner}\n${lines.join('\n')}\nTerrain G8: ${info.collision?.effectiveKind ?? 'unresolved'} (raw ${info.collision?.rawKind ?? 'unknown'}${info.collision?.overrideId ? `, reviewed ${info.collision.overrideId}` : ''})\nMT ${info.collision?.mt ?? '?'} / ML ${info.collision?.ml ?? '?'} · source semantics, not native actor-contact proof\nSparse actor cover: ${info.actorCover ? `normal ${info.actorCover.normal?'yes':'no'}, embedded ${info.actorCover.embedded?'yes':'no'}` : 'not captured'} · not collision\nSource-bound draft · tile colors and reviewed normal-actor cover are independently editable`;
+    return;
+  }
+  $("coordinates").textContent = `X ${p[0]} · Y ${p[1]}`; if (!gesture) return;
   if (tool === "hand") { const stage=$("canvas-stage"); stage.scrollLeft=gesture.scroll[0]-(e.clientX-gesture.client[0]); stage.scrollTop=gesture.scroll[1]-(e.clientY-gesture.client[1]); return; }
   if (tool === "pencil" || tool === "eraser") {
     spanStroke(gesture.last, p, gesture.rows);
@@ -606,7 +747,20 @@ canvas.addEventListener(
   "pointerup",
   run((e) => {
     if (!gesture) return;
-    const g=gesture; gesture=null; canvas.style.cursor=tool === "hand" ? "grab" : "crosshair"; if(tool==="hand") return;
+    const g=gesture; gesture=null; canvas.style.cursor=tool === "hand" ? "grab" : "crosshair";
+    if(g.actorProbe){drawCanvas();sceneRepairStatus();return;}
+    if(tool==="hand") return;
+    if(inspectedScene) {
+      if(['pencil','eraser'].includes(tool)) {
+        const p=point(e);appendLinePath(g.last,p,g.path);
+        const index=tool==='eraser'?0:Number($("scene-palette-index").value), [ox,oy]=inspectedScene.cropWorld;
+        if(g.coverMode)applySceneCoverPixels(sceneDraft,{expectedRevision:sceneDraft.revision,
+          points:g.path.map(([x,y])=>({worldX:ox+x,worldY:oy+y,cover:tool==='eraser'?0:Number($("scene-cover-value").value)}))});
+        else applyScenePixels(sceneDraft,{plane:g.plane,expectedRevision:sceneDraft.revision,points:g.path.map(([x,y])=>({worldX:ox+x,worldY:oy+y,index}))});
+        drawCanvas();sceneRepairStatus();
+      }
+      return;
+    }
     const p=point(e), r=[Math.min(p[0],g.start[0]),Math.min(p[1],g.start[1]),Math.abs(p[0]-g.start[0])+1,Math.abs(p[1]-g.start[1])+1];
     let op;
     if(tool==="pencil"||tool==="eraser") {
@@ -994,6 +1148,7 @@ $("new-form").onsubmit = run(async (e) => {
   if (o.ratioW || o.ratioH) o.ratio = [Number(o.ratioW), Number(o.ratioH)];
   delete o.ratioW;
   delete o.ratioH;
+  inspectedScene = null;sceneDraft=null;scenePreviewCache=null;sceneProbe=null;
   await controller.documentCommand({
     ...controller.guard(),
     action: "create",
@@ -1019,6 +1174,7 @@ $("file").onchange = run(async () => {
       : `${file.name} · ${value.width}×${value.height} · ${value.hash.slice(0, 12)}`;
   if (value instanceof Uint8Array) $("import-role").value = "asset-import";
   if (file.name.endsWith(".rdr-art.json")) $("import-role").value = "open";
+  if (file.name.endsWith(".rdr-map-scene.json")) $("import-role").value = "map-scene";
   const plugin = controller.plugins.list().find(p => p.fileSuffixes?.some(suffix => file.name.endsWith(suffix)));
   if (plugin) { $("import-role").value = "asset-import"; $("asset-plugin").value = plugin.id; renderPluginOptions(); }
 });
@@ -1068,6 +1224,26 @@ $("slice-preview").onclick = run(() => {
 });
 $("do-import").onclick = run(async () => {
   const action = $("import-role").value;
+  if (action === "map-scene") {
+    const scene = validateMapScene(JSON.parse(controller.handles.get(fileHandle)));
+    loadingScene = true;
+    inspectedScene = null;
+    try {
+      await controller.documentCommand({...controller.guard(),action:'create',options:{id:`${scene.room.id}-scene`,width:scene.size[0],height:scene.size[1]}});
+    } finally { loadingScene = false; }
+    inspectedScene = scene;
+    $("saved-status").textContent = 'Scene inspection · export plan manually';
+    sceneDraft = scene.palette ? createSceneDraft(scene) : null;
+    scenePreviewCache = null;
+    configureSceneProbes();
+    ui.activateTool("hand");
+    // Prefer an unobstructed native-pixel preview on a confined screen.
+    $("grid").checked = false;
+    $("fit-view").click();
+    $("map-scene-inspector").textContent = `${scene.room.id} · ${scene.cropWorld.join(',')} · ${sceneDraft?.cells.size ?? 0} verified editable tiles, ${sceneDraft?.coverCells.size ?? 0} reviewed actor-cover cells\nAmbiguous source cells remain read-only. Export plan needs local validation.`;
+    clearSelectionState();render();$("import-dialog").close();return;
+  }
+  inspectedScene = null; sceneDraft=null;scenePreviewCache=null;sceneProbe=null;
   if (!fileHandle && action === "reference-asset") {
     const remembered = await loadRememberedRdxRom();
     requireArt(remembered?.bytes, "RDX_ROM_REQUIRED", "Load the RDX ROM in Workbench, Level Editor or SoundLab, or select a ROM file");
@@ -1115,6 +1291,7 @@ $("do-import").onclick = run(async () => {
   $("import-dialog").close();
 });
 async function exportAction(action, format) {
+  requireArt(!inspectedScene, 'SCENE_READ_ONLY', 'A map scene is an immutable source capture, not a production asset');
   const result = await controller.documentCommand({
     ...controller.guard(),
     action,
@@ -1125,13 +1302,44 @@ async function exportAction(action, format) {
   );
   render();
 }
+function sceneDownload(filename, data) {
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+}
+$("scene-probe").onchange=()=>{
+  sceneProbe=$("scene-probe").value?newSceneProbe(inspectedScene,$("scene-probe").value):null;
+  $("scene-drag-probe").disabled=!sceneProbe;$("scene-reset-probe").disabled=!sceneProbe;
+  scenePreviewCache=null;drawCanvas();sceneRepairStatus();
+};
+$("scene-drag-probe").onchange=()=>{canvas.style.cursor=$("scene-drag-probe").checked?'grab':tool==='hand'?'grab':'crosshair';};
+$("scene-reset-probe").onclick=()=>{if(sceneProbe){moveSceneProbe(sceneProbe,0,0);drawCanvas();sceneRepairStatus();}};
+$("scene-diagnostic").onchange=()=>{scenePreviewCache=null;drawCanvas();sceneRepairStatus();};
+$("scene-edit-mode").onchange=()=>{
+  const cover=$("scene-edit-mode").value==='cover';
+  $("scene-cover-label").hidden=!cover;$("scene-plane-label").hidden=cover;$("scene-index-label").hidden=cover;
+  sceneRepairStatus();
+};
+$("scene-paint").onclick=()=>{if(sceneDraft?.cells.size||sceneDraft?.coverCells?.size)ui.activateTool('pencil');};
+$("scene-undo").onclick=run(()=>{requireArt(sceneDraft,'SCENE_DRAFT','Source-bound editing is unavailable');sceneDraftHistory(sceneDraft);drawCanvas();sceneRepairStatus();});
+$("scene-redo").onclick=run(()=>{requireArt(sceneDraft,'SCENE_DRAFT','Source-bound editing is unavailable');sceneDraftHistory(sceneDraft,'redo');drawCanvas();sceneRepairStatus();});
+$("scene-plan").onclick=run(()=>{
+  requireArt(sceneDraft,'SCENE_DRAFT','This capture has no exact source palette');
+  const plan=sceneDraftPlan(sceneDraft);
+  requireArt(plan.changedCells>0||plan.changedCoverCells>0,'SCENE_EMPTY','No source-owned pixels or cover bits changed');
+  sceneDownload(`${inspectedScene.room.id.toLowerCase()}-repair.rdr-map-scene-plan.json`,plan);
+  message(`Dry-run plan: ${plan.changedCells} tile variants, ${plan.changedCoverCells} cover cells; no game files modified.`);
+});
 $("save").onclick = run(() => exportAction("save", "project"));
-$("export").onclick = run(() =>
-  exportAction(
+$("export").onclick = run(() => {
+  if (inspectedScene) {
+    sceneDownload(`${inspectedScene.room.id.toLowerCase()}-map-scene.rdr-map-scene.json`,inspectedScene);
+    return;
+  }
+  return exportAction(
     "export",
     controller.store.document.frames.length > 1 ? "sheet" : "png",
-  ),
-);
+  );
+});
 $("production-export").onclick = run(() => exportAction("production-export"));
 $("animation-candidate-export").onclick = run(async () => {
   const result = await controller.documentCommand({ ...controller.guard(), action: "animation-candidate-export",
@@ -1144,6 +1352,7 @@ document.addEventListener(
   "keydown",
   run((e) => {
     if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName) || document.querySelector("dialog[open]")) return;
+    if (inspectedScene) return; // Keyboard mutations must not suggest the scene is editable.
     const mod=e.metaKey||e.ctrlKey,keyName=e.key.toLowerCase();
     if(mod && keyName==="z"){e.preventDefault();controller.history({...controller.guard(),action:e.shiftKey?"redo":"undo"});clearSelectionState();render();return;}
     if(mod && keyName==="c"){e.preventDefault();copySelectionPixels();return;}
@@ -1179,6 +1388,14 @@ async function persist(text) {
   }
 }
 function scheduleSave() {
+  // A map scene is an immutable source capture with an in-memory indexed
+  // candidate, not the empty generic document underneath. Never overwrite a
+  // normal art-session autosave with that placeholder document.
+  if (inspectedScene || loadingScene) {
+    saveSerial++;clearTimeout(autosaveTimer);
+    $("saved-status").textContent = 'Map scene · use Export plan';
+    return;
+  }
   const serial = ++saveSerial;
   $("saved-status").textContent = "Unsaved changes";
   clearTimeout(autosaveTimer);

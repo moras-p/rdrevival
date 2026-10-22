@@ -1,4 +1,5 @@
 import { PreviewRenderer } from '../../preview/preview-renderer.js';
+import { previewLocalCoverAt, previewLocalCoverModel } from '../../preview/preview-dynamic-renderer.js';
 import { EDITOR_PROJECTION_SCHEMA } from '../../levels/resolved-level.js';
 
 /**
@@ -49,7 +50,7 @@ export class CanonicalLevelEditorRoomRenderer {
     return { resources, renderer:this.renderer };
   }
 
-  frameForSubmap(submap, { tick = 0, mapId = null, activateAllTraps = false } = {}) {
+  frameForSubmap(submap, { tick = 0, mapId = null, activateAllTraps = false, captureActorSources = false } = {}) {
     const { resources, renderer } = this.#currentRenderer();
     const room = (resources.productionScene.rooms || []).find(row => Number(row.submap) === Number(submap));
     if (!room) throw new Error(`No canonical Level Editor production room for submap ${submap}`);
@@ -58,12 +59,18 @@ export class CanonicalLevelEditorRoomRenderer {
     renderer.setActivateAllTraps(activateAllTraps === true);
     const phase = Math.max(0, Number(tick) || 0);
     const staticLayers = renderer.staticLayers(renderer.staticPhaseAtTick(phase));
-    const dynamic = renderer.dynamicFrame(phase);
+    // Opt in only for bounded map-scene inspections. These source pixels are
+    // captured at the actor's real blit point, before local cover is applied.
+    renderer.captureMapSceneActorSources = captureActorSources === true;
+    let dynamic;
+    try { dynamic = renderer.dynamicFrame(phase); }
+    finally { renderer.captureMapSceneActorSources = false; }
     return Object.freeze({
       submap:Number(submap),
       mapId:effectiveMapId,
       tick:phase,
       dimensions:Object.freeze({ ...renderer.selection.dimensions }),
+      topology:renderer.selection.topology || null,
       backdrop:staticLayers.backdrop || staticLayers.background,
       midground:staticLayers.midground || staticLayers.foregroundBehindActors,
       background:staticLayers.backdrop || staticLayers.background,
@@ -73,6 +80,12 @@ export class CanonicalLevelEditorRoomRenderer {
       foreground:staticLayers.foreground,
       frontActors:dynamic.frontPixels,
       selectables:dynamic.selectables,
+      ...(captureActorSources ? {
+        localCoverAt:(x,y,kind)=>previewLocalCoverAt(renderer,x,y,null,kind),
+        // Reuse the exact model sampled by previewLocalCoverAt; never let
+        // source-provenance inspection diverge from the canonical pixels.
+        localCoverModel:previewLocalCoverModel(renderer)
+      } : {}),
       productionRoom:room,
       authority:'ResolvedLevel + PreviewRenderer canonical Level Editor presentation'
     });

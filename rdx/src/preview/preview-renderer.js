@@ -57,6 +57,8 @@ export class PreviewRenderer {
       ? this.productionMappings.sourceLocalOcclusionOverrides : [];
     this.presentationOcclusionOverrides = Array.isArray(this.productionMappings?.presentationOcclusionOverrides)
       ? this.productionMappings.presentationOcclusionOverrides : [];
+    this.presentationOcclusionPixelMasks = Array.isArray(this.productionMappings?.presentationOcclusionPixelMasks)
+      ? this.productionMappings.presentationOcclusionPixelMasks : [];
     this.presentationOcclusionTileRules = Array.isArray(this.productionMappings?.presentationOcclusionTileRules)
       ? this.productionMappings.presentationOcclusionTileRules.map(row=>({ ...row, globalTiles:[row.globalTile] })) : [];
     this.sourceClipWindows = Array.isArray(this.productionMappings?.sourceClipWindows)

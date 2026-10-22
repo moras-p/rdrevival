@@ -49,6 +49,70 @@ export function normalizePresentationOcclusionConfig(input) {
     assert(nativeWorldRect(bounds),`${id} bounds must be integral [x,y,width,height] in native world-coordinate range`);
     return Object.freeze({id,submap,mapId,plane,cover,bounds:Object.freeze(bounds),source:String(row?.source||'reviewed-room'),provenance:row?.provenance?Object.freeze(clone(row.provenance)):null});
   });
+  // Authoring permission only: this bounded source-actor location permits
+  // proposing new normal-cover pixels without activating them in the game.
+  // The trusted promoter checks this record again against the current room.
+  const coverAuthoringScopes=(Array.isArray(source.coverAuthoringScopes)?source.coverAuthoringScopes:[]).map(row=>{
+    const id=String(row?.id||'').trim(),submap=Number(row?.submap),mapId=Number(row?.mapId);
+    const bounds=Array.isArray(row?.bounds)?row.bounds.slice():[];
+    const visualAnchor=Array.isArray(row?.visualAnchor)?row.visualAnchor.slice():[];
+    const probeDraw=Array.isArray(row?.probeDraw)?row.probeDraw.slice():[];
+    assert(id&&!seenIds.has(id),`duplicate or missing cover authoring scope id ${id}`);seenIds.add(id);
+    assert(integer(submap)&&submap>=0&&submap<=255&&integer(mapId)&&mapId>=0&&mapId<=65535,`${id} invalid room`);
+    assert(row?.plane==='A'&&/^mark:[1-9]\d*$/.test(row?.sourceKey||''),`${id} must identify a Plane-A native source mark`);
+    assert(nativeWorldRect(bounds)&&bounds[2]<=64&&bounds[3]<=64,`${id} requires a bounded <=64px source actor rectangle`);
+    assert(visualAnchor.length===2&&visualAnchor.every(Number.isInteger),`${id} requires exact source visual anchor`);
+    assert(probeDraw.length===2&&probeDraw.every(Number.isInteger),`${id} requires canonical source sprite draw registration`);
+    return Object.freeze({id,submap,mapId,plane:'A',sourceKey:row.sourceKey,
+      bounds:Object.freeze(bounds),visualAnchor:Object.freeze(visualAnchor),probeDraw:Object.freeze(probeDraw)});
+  });
+  // Sparse binary replacement for the normal-actor bitplane in one world G8
+  // cell. A zero bit deliberately clears any older rectangular normal cover;
+  // embedded cover and source tile pixels are unaffected.
+  const occupiedMaskCells = new Set();
+  const pixelMasks = (Array.isArray(source.pixelMasks) ? source.pixelMasks : []).map(row => {
+    const id=String(row?.id||'').trim(),plane=String(row?.plane||'').toUpperCase();
+    const submap=Number(row?.submap),mapId=Number(row?.mapId);
+    const cell=Array.isArray(row?.cell)?row.cell.slice():[];
+    const rows=Array.isArray(row?.rows)?row.rows.slice():[];
+    assert(id && !seenIds.has(id),`duplicate or missing pixel mask id ${id}`);seenIds.add(id);
+    assert(integer(submap)&&submap>=0&&submap<=255,`${id} has invalid submap`);
+    assert(integer(mapId)&&mapId>=0&&mapId<=65535,`${id} has invalid mapId`);
+    assert(PRESENTATION_OCCLUSION_PLANES.includes(plane),`${id} has invalid plane`);
+    assert(row?.cover==='normal',`${id} only binary normal-actor cover is supported`);
+    assert(cell.length===2 && cell.every(Number.isInteger) && cell.every(n=>n>=-4096&&n<=4095),
+      `${id} cell must be world G8 coordinates in native bounds`);
+    assert(rows.length===8 && rows.every(value=>typeof value==='string' && /^[0-9a-fA-F]{2}$/.test(value)),
+      `${id} requires exactly eight 2-digit hex bit rows`);
+    const key=`${submap}:${mapId}:${plane}:${cell.join(':')}`;
+    assert(!occupiedMaskCells.has(key),`${id} duplicates pixel mask cell ${key}`);
+    occupiedMaskCells.add(key);
+    const authoringScopeId=row.authoringScopeId??null;
+    if(authoringScopeId!==null)assert(coverAuthoringScopes.some(scope=>scope.id===authoringScopeId&&
+      scope.submap===submap&&scope.mapId===mapId&&scope.plane===plane),
+      `${id} refers to a missing reviewed authoring scope`);
+    return Object.freeze({id,submap,mapId,plane,cover:'normal',cell:Object.freeze(cell),
+      ...(authoringScopeId?{authoringScopeId}:{}),
+      rows:Object.freeze(rows.map(value=>value.toLowerCase())),source:String(row?.source||'reviewed-room'),
+      provenance:row?.provenance?Object.freeze(clone(row.provenance)):null});
+  });
+  // Fail while authoring rather than overflowing the native 255-cell sparse
+  // index at room preparation. Count the union, not duplicate region pixels.
+  const roomCells=new Map();
+  const addCell=(submap,mapId,plane,x,y)=>{
+    const key=`${submap}:${mapId}:${plane}`;
+    if(!roomCells.has(key))roomCells.set(key,new Set());
+    const cells=roomCells.get(key);cells.add(`${x}:${y}`);
+    assert(cells.size<=255,`${key} exceeds native 255-cell sparse cover budget`);
+  };
+  if(pixelMasks.length)for(const row of overrides){
+    const[x,y,w,h]=row.bounds;
+    const gx0=Math.floor(x/8),gy0=Math.floor(y/8);
+    const gx1=Math.floor((x+w-1)/8),gy1=Math.floor((y+h-1)/8);
+    assert((gx1-gx0+1)*(gy1-gy0+1)<=255,`${row.id} exceeds native 255-cell sparse cover budget`);
+    for(let gy=gy0;gy<=gy1;gy++)for(let gx=gx0;gx<=gx1;gx++)addCell(row.submap,row.mapId,row.plane,gx,gy);
+  }
+  for(const row of pixelMasks)addCell(row.submap,row.mapId,row.plane,...row.cell);
   const claimedClips = new Set();
   const clipWindows = (Array.isArray(source.clipWindows) ? source.clipWindows : []).map(row => {
     const id=String(row?.id||'').trim(),submap=Number(row?.submap),mapId=Number(row?.mapId),mark=Number(row?.mark);
@@ -69,13 +133,13 @@ export function normalizePresentationOcclusionConfig(input) {
     const[ax,ay,aw,ah]=a.bounds,[bx,by,bw,bh]=b.bounds,overlap=ax<bx+bw&&bx<ax+aw&&ay<by+bh&&by<ay+ah;
     if(overlap&&aw*ah===bw*bh)throw new Error(`Presentation occlusion: ambiguous equal-specificity overrides ${a.id} and ${b.id}`);
   }
-  return Object.freeze({schema:PRESENTATION_OCCLUSION_SCHEMA,version:Number(source.version||1),classes:Object.freeze(classes),overrides:Object.freeze(overrides),clipWindows:Object.freeze(clipWindows)});
+  return Object.freeze({schema:PRESENTATION_OCCLUSION_SCHEMA,version:Number(source.version||1),classes:Object.freeze(classes),overrides:Object.freeze(overrides),...(pixelMasks.length?{pixelMasks:Object.freeze(pixelMasks)}:{}),...(coverAuthoringScopes.length?{coverAuthoringScopes:Object.freeze(coverAuthoringScopes)}:{}),clipWindows:Object.freeze(clipWindows)});
 }
 
 export function resolvePresentationOcclusionModel(config,{submap=null,mapId=null}={}){
   const shared=normalizePresentationOcclusionConfig(config);
   const local=shared.overrides.filter(row=>(submap==null||row.submap===Number(submap))&&(mapId==null||row.mapId===Number(mapId)));
-  return Object.freeze({schema:PRESENTATION_OCCLUSION_RESOLVED_SCHEMA,version:shared.version,classes:shared.classes,overrides:Object.freeze(local),clipWindows:Object.freeze(shared.clipWindows.filter(row=>(submap==null||row.submap===Number(submap))&&(mapId==null||row.mapId===Number(mapId))))});
+  return Object.freeze({schema:PRESENTATION_OCCLUSION_RESOLVED_SCHEMA,version:shared.version,classes:shared.classes,overrides:Object.freeze(local),...(shared.pixelMasks?.length?{pixelMasks:Object.freeze(shared.pixelMasks.filter(row=>(submap==null||row.submap===Number(submap))&&(mapId==null||row.mapId===Number(mapId))))}:{}),...(shared.coverAuthoringScopes?.length?{coverAuthoringScopes:Object.freeze(shared.coverAuthoringScopes.filter(row=>(submap==null||row.submap===Number(submap))&&(mapId==null||row.mapId===Number(mapId))))}:{}),clipWindows:Object.freeze(shared.clipWindows.filter(row=>(submap==null||row.submap===Number(submap))&&(mapId==null||row.mapId===Number(mapId))))});
 }
 
 export function presentationOcclusionTileRuleMap(model,plane='B'){
@@ -102,6 +166,15 @@ export function presentationOcclusionAt(model,{plane='B',globalTile=null,x=null,
       if(area===winnerArea&&winner&&winner.cover!==candidate.cover)throw new Error(`Presentation occlusion: ambiguous equal-specificity overrides ${winner.id} and ${candidate.id}`);
     }
     if(winner){cover=winner.cover;rule=Object.freeze({kind:'override',id:winner.id});}
+  }
+  if(finite(x)&&finite(y)){
+    const gx=Math.floor(Number(x)/8),gy=Math.floor(Number(y)/8);
+    const mask=model?.pixelMasks?.find(row=>row.plane===p&&row.cell[0]===gx&&row.cell[1]===gy);
+    if(mask){
+      const bit=(Number.parseInt(mask.rows[Number(y)&7],16) >>> (Number(x)&7))&1;
+      if(bit)return Object.freeze({cover:'normal',alsoEmbedded:cover==='embedded',rule:Object.freeze({kind:'pixel-mask',id:mask.id})});
+      if(cover==='normal')return Object.freeze({cover:'none',rule:Object.freeze({kind:'pixel-mask',id:mask.id})});
+    }
   }
   return Object.freeze({cover,rule});
 }

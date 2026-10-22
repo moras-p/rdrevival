@@ -3,10 +3,10 @@ import { composePresentationDepthPlanes, splitPlaneByPresentationDepth } from '.
 import { effectiveMapDimensions } from '../../core/map-topology.js';
 import { authoredVisualAssetById, resolveAuthoredVisualAsset } from '../../levels/authored-visual-assets.js';
 import { revivalAmmoBoxFrame } from '../../runtime/revival-ammo-box.js';
+import { collisionCells, COLLISION_KIND } from './effective-collision.js';
 
 const CELL = 8;
 const COMPARE_GAP = 32;
-const COLLISION_KIND = Object.freeze({ 0:'open', 1:'solid', 2:'one-way', 3:'ladder', 4:'lethal', 5:'exit' });
 
 const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 const rectFromArray = value => Array.isArray(value) && value.length >= 4 ? { x:number(value[0]), y:number(value[1]), width:number(value[2]), height:number(value[3]) } : null;
@@ -455,42 +455,6 @@ function correspondenceCells(submap, assets, pane, mode) {
   return out;
 }
 
-function collisionCells(room, assets, paneOrigin, topology = null) {
-  const rawDimensions = room?.layers?.source?.rdx?.dimensions || assets.mapDecoder.dimensions(room.mapId);
-  const dimensions = effectiveMapDimensions(rawDimensions, topology);
-  const mask = assets.mapDecoder.geometryMask(room.mapId, { x:0, y:0, width:dimensions.width, height:dimensions.height }, { topology });
-  const overrides = new Map();
-  for (const operation of room?.layers?.structuralCorrections?.operations || []) {
-    if (operation.type !== 'gameplay-cell-override' || !Array.isArray(operation.g8Bounds)) continue;
-    const [gx, gy, width, height] = operation.g8Bounds.map(Number);
-    for (let y = gy; y < gy + height; y += 1) for (let x = gx; x < gx + width; x += 1) overrides.set(`${x}:${y}`, operation);
-  }
-  const rows = [];
-  for (let y = 0; y < mask.height; y += 1) for (let x = 0; x < mask.width; x += 1) {
-    const rawKind = mask.data[y * mask.width + x] || 0;
-    const override = overrides.get(`${x}:${y}`) || null;
-    let effectiveKind = rawKind;
-    if (override?.action === 'open') effectiveKind = 0;
-    else if (override?.action === 'one-way') effectiveKind = 2;
-    else if (override?.action === 'climb-through') effectiveKind = 3;
-    else if (override?.action === 'lethal') effectiveKind = 4;
-    else if (override?.action === 'exit') effectiveKind = 5;
-    if (!rawKind && !override) continue;
-    rows.push(Object.freeze({
-      id:`collision:${x}:${y}`, kind:'collision-cell', gx:x, gy:y,
-      rect:{ x:paneOrigin.x + x*CELL, y:paneOrigin.y + y*CELL, width:CELL, height:CELL },
-      rawKind:COLLISION_KIND[rawKind] || `kind-${rawKind}`, effectiveKind:COLLISION_KIND[effectiveKind] || `kind-${effectiveKind}`,
-      override,
-      exitAnchor:override?.action === 'exit' && Number(override?.g8Bounds?.[0]) === x && Number(override?.g8Bounds?.[1]) === y,
-      exitBounds:override?.action === 'exit' && Array.isArray(override?.g8Bounds)
-        ? { x:paneOrigin.x + Number(override.g8Bounds[0])*CELL, y:paneOrigin.y + Number(override.g8Bounds[1])*CELL,
-            width:Number(override.g8Bounds[2])*CELL, height:Number(override.g8Bounds[3])*CELL }
-        : null,
-      sourceProven:mask.proven
-    }));
-  }
-  return rows;
-}
 
 function provenanceRegions(room, paneOrigin) {
   const rows = [];
