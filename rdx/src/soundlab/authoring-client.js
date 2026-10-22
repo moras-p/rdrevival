@@ -13,5 +13,9 @@ export class SoundLabAuthoringClient {
   render(job){return this.request('render',{method:'POST',body:job});}
   batch(job){return this.request('batch',{method:'POST',body:job});}
   promote(job){return this.request('promote',{method:'POST',body:job});}
+  boulderFamilyRound(request){return this.request('boulder-family/round',{method:'POST',body:request});}
+  acceptBoulderFamily(request){return this.request('boulder-family/accept',{method:'POST',body:request});}
+  earshotRound(request){return this.request('earshot/round',{method:'POST',body:request});}
+  acceptEarshot(request){return this.request('earshot/accept',{method:'POST',body:request});}
   importSource(source){return this.request('import-source',{method:'POST',body:source});}
 }

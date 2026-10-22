@@ -6,7 +6,7 @@ import { adjacentPlaybackRange, applySoundScoreToBinding, applySoundScoreLayerTo
 const $=id=>document.getElementById(id);
 const spectrogramCache=new WeakMap();
 const numeric=id=>Number($(id).value);
-const state={manifest:null,manifestUrl:null,binding:null,preview:null,audio:null,decoded:new Map(),sourceDecoded:new Map(),sourceLoads:new Map(),displayProfile:'preview',events:[],selectedEvent:-1,scene:null,sceneWindow:null,score:null,scoreBaseline:null,scoreIntent:null,selectedSegmentId:null,selectedLayerId:null,selectedGestureId:null,gestureTool:'draw',scoreHistory:{undo:[],redo:[]},gestureDraw:null,penPressure:{min:0,max:1,lastRaw:.5,last:.5,pointerType:'mouse'},audioVersion:'draft',playbackScope:'selected',segmentLoopMode:'context',customLoopRanges:{},analysisSource:'segment',analysisToken:0,timelineLanes:{segments:{collapsed:false,pinned:false,userSet:false},motion:{collapsed:false,pinned:false,userSet:false},score:{collapsed:false,pinned:false,userSet:false},spectrum:{collapsed:true,pinned:false,userSet:false},waveform:{collapsed:true,pinned:false,userSet:false}},playheadFrame:null,runtime:null,sceneReplayMode:'draft',sceneDraftSource:null,auditionSource:null,client:null,capabilities:null,currentRender:null,batch:null,useCapturedTelemetry:false,controlDefaults:{},snapshots:{A:null,B:null},referenceAxisX:'depth',referenceAxisY:'hardness',referenceSelected:null,referencePoints:[],previewFingerprint:null,workspace:{context:'scene-browse',panels:{navigator:{state:'visible',pinned:false},inspector:{state:'visible',pinned:false},layers:{state:'visible',pinned:false},references:{state:'visible',pinned:false},diagnostics:{state:'visible',pinned:false}},restore:null}};
+const state={manifest:null,manifestUrl:null,binding:null,preview:null,audio:null,decoded:new Map(),sourceDecoded:new Map(),sourceLoads:new Map(),displayProfile:'preview',events:[],selectedEvent:-1,scene:null,sceneWindow:null,score:null,scoreBaseline:null,scoreIntent:null,selectedSegmentId:null,selectedLayerId:null,selectedGestureId:null,gestureTool:'draw',scoreHistory:{undo:[],redo:[]},gestureDraw:null,penPressure:{min:0,max:1,lastRaw:.5,last:.5,pointerType:'mouse'},audioVersion:'draft',playbackScope:'selected',segmentLoopMode:'context',customLoopRanges:{},analysisSource:'segment',analysisToken:0,timelineLanes:{segments:{collapsed:false,pinned:false,userSet:false},motion:{collapsed:false,pinned:false,userSet:false},score:{collapsed:false,pinned:false,userSet:false},spectrum:{collapsed:true,pinned:false,userSet:false},waveform:{collapsed:true,pinned:false,userSet:false}},playheadFrame:null,runtime:null,sceneReplayMode:'draft',sceneDraftSource:null,auditionSource:null,client:null,capabilities:null,currentRender:null,batch:null,earshotRows:[],earshotChoice:null,earshotBusy:false,stoneChoice:null,stoneBusy:false,stoneRound:null,stoneAbx:null,stoneReview:null,stoneAbxPlayer:null,useCapturedTelemetry:false,controlDefaults:{},snapshots:{A:null,B:null},referenceAxisX:'depth',referenceAxisY:'hardness',referenceSelected:null,referencePoints:[],previewFingerprint:null,workspace:{context:'scene-browse',panels:{navigator:{state:'visible',pinned:false},inspector:{state:'visible',pinned:false},layers:{state:'visible',pinned:false},references:{state:'visible',pinned:false},diagnostics:{state:'visible',pinned:false}},restore:null}};
 const primaryRangeControls=['energy','depth','texture','attack','ring','boominess','brightness','warmth','space'];
 const rangeControls=['size','roughness','hardness','transient','body','residual','damping','style-amount','covariance'];
 const controlIds=['material',...primaryRangeControls,'object','size','roughness','hardness','transient','body','residual','damping','style','style-amount','variants','covariance','source'];
@@ -148,7 +148,7 @@ function sceneDraftPlaybackPlan({replayFrame,startFrame,endFrame,audioStartFrame
 }
 function playBuffer(buffer,{delaySeconds=0,offsetSeconds=0,durationSeconds=null}={}){const ctx=audioContext(),source=ctx.createBufferSource();source.buffer=buffer;source.connect(ctx.destination);const when=ctx.currentTime+Math.max(0,Number(delaySeconds)||0),offset=Math.max(0,Math.min(Number(offsetSeconds)||0,Math.max(0,buffer.duration-.000001)));if(durationSeconds==null)source.start(when,offset);else source.start(when,offset,Math.max(.001,Math.min(Number(durationSeconds)||0,buffer.duration-offset)));return source;}
 function stopAudition(){if(!state.auditionSource)return;try{state.auditionSource.stop();}catch{}state.auditionSource=null;}
-function playAudition(buffer){stopAudition();const source=playBuffer(buffer);state.auditionSource=source;source.onended=()=>{if(state.auditionSource===source)state.auditionSource=null;};return source;}
+function playAudition(buffer){stopAudition();document.querySelectorAll('#sl-earshot-round audio').forEach(audio=>audio.pause());const source=playBuffer(buffer);state.auditionSource=source;source.onended=()=>{if(state.auditionSource===source)state.auditionSource=null;};return source;}
 function stopSceneDraft(){if(!state.sceneDraftSource)return;try{state.sceneDraftSource.stop();}catch{}state.sceneDraftSource=null;}
 function sceneDraftPlayback(event){
   const selected=selectedSegment(),sequence=state.score?.sequence,render=state.playbackScope==='selected'?(state.preview||renderPreview()):(renderScoreSequencePreview()||state.preview||renderPreview());if(!render)return null;
@@ -274,7 +274,7 @@ function setBinding(id){
   $('sl-material').replaceChildren(...optionNodes(materialOptions(state.manifest),state.binding.surface));$('sl-object-profile').replaceChildren(...optionNodes(resourceOptions(state.manifest,'objects'),state.binding.object));$('sl-style-profile').replaceChildren(...optionNodes(resourceOptions(state.manifest,'styles'),state.binding.style));
   const base=profileResources(),master=outputsFor(state.manifest,state.binding.id,'master');$('sl-variant').replaceChildren(...master.map(row=>new Option(`variant ${row.variant+1} · seed ${row.seed}`,String(row.variant))));$('sl-seed').value=String(master[0]?.seed||1);$('sl-source').replaceChildren(...sourceNodes(base.material.residual?.source||''));
   const semantic=state.binding.perceptual||{};state.controlDefaults={material:state.binding.surface,energy:Number(semantic.energy??energyForStrength(Number(state.binding.strength??.7),perceptualMapping())),depth:Number(semantic.depth??.5),texture:Number(semantic.roughness??base.material.contact?.roughness??.5),attack:Number(semantic.hardness??base.material.transient?.hardness??.5),ring:Number(semantic.ring??.5),boominess:Number(semantic.boominess??base.recipe.perceptual?.boominess??.5),brightness:Number(semantic.brightness??base.recipe.perceptual?.brightness??.5),warmth:Number(semantic.warmth??base.recipe.perceptual?.warmth??.5),space:Number(semantic.reverberance??base.recipe.perceptual?.reverberance??0),object:state.binding.object,size:1,roughness:Number(base.material.contact?.roughness??.5),hardness:Number(base.material.transient?.hardness??.5),transient:Number(base.recipe.mix?.transient??.6),body:Number(base.recipe.mix?.body??.8),residual:Number(base.recipe.mix?.residual??.3),damping:1,style:state.binding.style,'style-amount':1,variants:Number(state.binding.variants||4),covariance:1,source:String(base.material.residual?.source||'')};
-  for(const id of primaryRangeControls)setRange(`sl-${id}`,state.controlDefaults[id]);setRange('sl-size',1);setRange('sl-roughness',state.controlDefaults.roughness);setRange('sl-hardness',state.controlDefaults.hardness);setRange('sl-transient',state.controlDefaults.transient);setRange('sl-body',state.controlDefaults.body);setRange('sl-residual',state.controlDefaults.residual);setRange('sl-damping',1);setRange('sl-style-amount',1);setRange('sl-covariance',1);$('sl-variant-count').value=String(state.controlDefaults.variants);updateSourceMeta();loadSnapshots();state.preview=null;renderPreview();renderTimeline();updateCurrentButtons();$('sl-batch-strip').replaceChildren();
+  for(const id of primaryRangeControls)setRange(`sl-${id}`,state.controlDefaults[id]);setRange('sl-size',1);setRange('sl-roughness',state.controlDefaults.roughness);setRange('sl-hardness',state.controlDefaults.hardness);setRange('sl-transient',state.controlDefaults.transient);setRange('sl-body',state.controlDefaults.body);setRange('sl-residual',state.controlDefaults.residual);setRange('sl-damping',1);setRange('sl-style-amount',1);setRange('sl-covariance',1);$('sl-variant-count').value=String(state.controlDefaults.variants);updateSourceMeta();loadSnapshots();state.preview=null;renderPreview();renderTimeline();updateCurrentButtons();$('sl-batch-strip').replaceChildren();state.earshotRows=[];state.earshotChoice=null;$('sl-earshot-round').replaceChildren();updateEarshotEnabled();
 }
 function populateCases(){const rows=state.manifest.bindings;$('sl-case-list').replaceChildren(...rows.map(binding=>{const b=document.createElement('button');b.className='case-button';b.dataset.id=binding.id;b.innerHTML=`<strong>${binding.event}</strong><small>${binding.match?.actorFamily||binding.id} · ${binding.surface}</small>`;b.addEventListener('click',()=>setBinding(binding.id));return b;}));$('sl-case-picker').replaceChildren(...rows.map(binding=>new Option(binding.event,binding.id)));$('sl-case-count').textContent=`${rows.length}`;}
 
@@ -516,9 +516,165 @@ function installSceneWindow(){
 function installPersistedDetails(){document.querySelectorAll('details[data-persist-key]').forEach(details=>{const key=`soundlab:open:${details.dataset.persistKey}`;try{const stored=localStorage.getItem(key);if(stored!==null)details.open=stored==='1';}catch{}details.addEventListener('toggle',()=>{try{localStorage.setItem(key,details.open?'1':'0');}catch{}});});}
 
 function updateCurrentButtons(){const enabled=!!state.currentRender;for(const profile of ['current-master','current-runtime'])document.querySelector(`[data-profile="${profile}"]`).disabled=!enabled;}
+function updateEarshotEnabled(){
+  updateStoneEnabled();
+  const enabled=!!state.client&&!!state.capabilities?.capabilities?.earshotImprovement&&state.binding?.id==='sm00-boulder-impact'&&!state.earshotBusy;
+  $('sl-earshot-start').disabled=!enabled;
+  $('sl-earshot-preset').disabled=!enabled;
+  $('sl-earshot-refine').disabled=!enabled||!state.earshotChoice;
+  $('sl-earshot-accept').disabled=!enabled||!state.earshotChoice;
+  if(!state.client)$('sl-earshot-status').textContent='Connect to SoundLab’s authoring service first.';
+  else if(!state.capabilities?.capabilities?.earshotImprovement)$('sl-earshot-status').textContent='Earshot unavailable: restart the authoring service with --earshot-root /path/to/earshot-main.';
+  else if(state.binding?.id!=='sm00-boulder-impact')$('sl-earshot-status').textContent='Pilot supports the SM00 boulder impact. Rolling sound still follows native motion telemetry.';
+}
+function updateStoneEnabled(){
+  const available=!!state.client&&!!state.capabilities?.capabilities?.stoneStructureAuthoring&&state.binding?.id==='sm00-boulder-impact'&&!state.stoneBusy;
+  $('sl-stone-generate').disabled=!available;
+  $('sl-stone-accept').disabled=!available||!state.stoneChoice||state.stoneChoice.structureId==='approved'||state.stoneChoice.perceptual.status!=='candidate'||state.stoneReview!=='clearly-different';
+  if(!state.client)$('sl-stone-status').textContent='Connect to local SoundLab to preview modeled rock contacts.';
+  else if(state.binding?.id!=='sm00-boulder-impact')$('sl-stone-status').textContent='These presets are for the SM00 boulder impact only.';
+  else if(!state.capabilities?.capabilities?.stoneStructureAuthoring)$('sl-stone-status').textContent='Verified Fit model/Earshot 0.3 unavailable. Start SoundLab with --earshot-root /path/to/earshot-main.';
+}
+function stoneControls(){return{bindingId:state.binding.id,seed:numeric('sl-stone-seed')};}
+function revealStoneNames(){
+  const reveal=$('sl-stone-reveal').checked;
+  $('sl-stone-round').querySelectorAll('.earshot-take').forEach(card=>{
+    card.querySelector('[data-stone-label]').textContent=reveal?card.dataset.fullLabel:card.dataset.blindLabel;
+    card.querySelector('[data-stone-facts]').hidden=!reveal;
+    card.querySelector('[data-stone-indicator]').hidden=!reveal;
+  });
+}
+function stoneABXStatus(text){$('sl-stone-abx-status').textContent=text;}
+function stoneResetABX(){
+  state.stoneReview=null;
+  if(state.stoneAbxPlayer)state.stoneAbxPlayer.pause();
+  if(!state.stoneChoice||state.stoneChoice.structureId==='approved'){
+    state.stoneAbx=null;$('sl-stone-abx').hidden=true;updateStoneEnabled();return;
+  }
+  state.stoneAbx={candidateId:state.stoneChoice.id,comparisonId:state.stoneChoice.perceptual.closestOther?.id,trial:0,score:0,xIsA:Math.random()<.5,heardX:false};
+  $('sl-stone-abx').hidden=false;
+  stoneABXStatus('Trial 1 of 8. Listen to A, B and X, then choose which sound X matches.');
+  updateStoneEnabled();
+}
+function stoneABXPlay(part){
+  const a=state.stoneAbx,row=state.stoneChoice;
+  if(!a||!row||row.id!==a.candidateId||!state.stoneRound)return;
+  const comparison=state.stoneRound.rows.find(other=>other.structureId===row.perceptual.closestOther?.id)||state.stoneRound.rows[0];
+  const selected=part==='a'||part==='x'&&a.xIsA?comparison:row;
+  if(part==='x')a.heardX=true;
+  if(!state.stoneAbxPlayer)state.stoneAbxPlayer=new Audio();
+  const audio=state.stoneAbxPlayer;
+  audio.pause();stopAudition();
+  document.querySelectorAll('#sl-stone-round audio').forEach(other=>other.pause());
+  audio.src=selected.runtimeUrl;audio.currentTime=0;audio.play().catch(()=>stoneABXStatus('Audio playback was blocked. Use the sound cards instead.'));
+}
+function stoneABXGuess(guessA){
+  const a=state.stoneAbx;if(!a||!a.heardX||a.trial>=8)return;
+  if(a.xIsA===guessA)a.score++;
+  a.trial++;
+  if(a.trial===8){
+    const passed=a.score>=7;
+    state.stoneReview=passed?'clearly-different':null;
+    stoneABXStatus(`${a.score}/8 identified correctly. ${passed?'Distinct at game quality; candidate eligible for acceptance.':'Not reliably distinct yet; do not accept as a separate variant. Restart or generate a different take.'}`);
+  }else{
+    a.heardX=false;a.xIsA=Math.random()<.5;
+    stoneABXStatus(`Trial ${a.trial+1} of 8. Choose which sound X matches.`);
+  }
+  updateStoneEnabled();
+}
+function showStoneRound(result){
+  state.stoneChoice=null;state.stoneRound=result;state.stoneReview=null;
+  $('sl-stone-abx').hidden=true;
+  const parent=$('sl-stone-round');parent.replaceChildren(...result.rows.map((row,index)=>{
+    const card=document.createElement('div');card.className='earshot-take';card.dataset.selected='false';card.dataset.fullLabel=row.label;card.dataset.blindLabel=`Take ${String.fromCharCode(65+index)}`;
+    const head=document.createElement('div');head.className='earshot-take-head';
+    const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='sl-stone-choice';radio.value=row.id;
+    const title=document.createElement('span');title.dataset.stoneLabel='';title.textContent=card.dataset.blindLabel;label.append(radio,title);
+    radio.addEventListener('change',()=>{state.stoneChoice=row;parent.querySelectorAll('.earshot-take').forEach(el=>el.dataset.selected=String(el===card));stoneResetABX();});
+    const indicator=document.createElement('small');indicator.textContent=row.structureId==='approved'?'PUBLISHED · unchanged':`${row.events.length-1} synthesized later contacts · ${row.perceptual.status}`;
+    indicator.dataset.stoneIndicator='';head.append(label,indicator);
+    const contacts=document.createElement('small');contacts.textContent=row.structureId==='approved'?'Accepted Stone chamber; exact original WAV.':`Physical plan: ${row.events.map(e=>`${e.kind} at ${e.timeMs} ms`).join(' · ')}. Game-format onset contrast: ${row.perceptual.onsets.map(e=>`${e.gameContrastDb} dB`).join(', ')||'none'}. Closest other tail-envelope distance: ${row.perceptual.closestOther?.tailEnvelopeDistance??'n/a'}. These are diagnostics, not proof of better sound.`;
+    contacts.dataset.stoneFacts='';const players=document.createElement('div');players.className='stone-players';
+    for(const [name,url] of [['Master 48 kHz',row.masterUrl],['Game PCM8',row.runtimeUrl],...(row.differenceUrl?[['Added contacts only',row.differenceUrl]]:[])]){
+      const column=document.createElement('label');column.textContent=name;
+      const audio=document.createElement('audio');audio.controls=true;audio.preload='none';audio.src=url;audio.setAttribute('aria-label',`${row.label} ${name}`);
+      audio.addEventListener('play',()=>{stopAudition();state.stoneAbxPlayer?.pause();document.querySelectorAll('#sl-stone-round audio, #sl-earshot-round audio').forEach(other=>{if(other!==audio)other.pause();});});
+      column.append(audio);players.append(column);
+    }
+    card.append(head,contacts,players);return card;
+  }));
+  revealStoneNames();
+  $('sl-stone-status').textContent='Generated independent fitted stone contacts. Listen at game quality. The A/B/X check is required before importing a take; production is unchanged.';
+  updateStoneEnabled();
+}
+async function stoneGenerate(){
+  if(!state.client||state.stoneBusy)return;
+  state.stoneBusy=true;updateStoneEnabled();$('sl-stone-status').textContent='Synthesizing independently modeled falling-rock contact events…';
+  const bindingId=state.binding.id;
+  try{const result=await state.client.boulderFamilyRound(stoneControls());if(state.binding.id===bindingId)showStoneRound(result);}
+  catch(error){$('sl-stone-status').textContent=error.message;}
+  finally{state.stoneBusy=false;updateStoneEnabled();}
+}
+async function stoneAccept(){
+  const row=state.stoneChoice;if(!state.client||!row||row.structureId==='approved'||state.stoneReview!=='clearly-different'||row.perceptual.status!=='candidate')return;
+  if(!window.confirm(`Import verified ${row.label} as a frozen source?\nThis does not replace the reviewed baseline or published sound slots.`))return;
+  state.stoneBusy=true;updateStoneEnabled();
+  try{const {source}=await state.client.acceptBoulderFamily({bindingId:state.binding.id,candidateId:row.id,audibilityReview:'clearly-different',abxCorrect:state.stoneAbx?.score,abxTrials:state.stoneAbx?.trial,comparisonId:state.stoneAbx?.comparisonId});
+    const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;
+    $('sl-source').replaceChildren(...sourceNodes(source.id));$('sl-source').value=source.id;updateSourceMeta();renderPreview();renderReferenceExplorer();
+    $('sl-stone-status').textContent=`Imported ${source.id} (${fmtHash(source.sha256)}). Available for Sound Score; published Stone chamber is unchanged.`;
+  }catch(error){$('sl-stone-status').textContent=error.message;}
+  finally{state.stoneBusy=false;updateStoneEnabled();}
+}
+function showEarshotRound(result){
+  state.earshotRows=result.rows;state.earshotChoice=null;
+  $('sl-earshot-round').replaceChildren(...result.rows.map((row,index)=>{
+    const card=document.createElement('div');card.className='earshot-take';card.dataset.selected='false';
+    const head=document.createElement('div');head.className='earshot-take-head';
+    const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='sl-earshot-choice';radio.value=row.id;
+    label.append(radio,document.createTextNode(row.label));
+    radio.addEventListener('change',()=>{state.earshotChoice=row;$('sl-earshot-round').querySelectorAll('.earshot-take').forEach(el=>el.dataset.selected=String(el===card));updateEarshotEnabled();});
+    const m=row.metrics;const diagnostic=document.createElement('small');diagnostic.textContent=m.integrityOk?'signal clean':`check: ${m.warnings.join(', ')}`;
+    head.append(label,diagnostic);
+    const audio=document.createElement('audio');audio.controls=true;audio.preload='none';audio.src=row.url;
+    audio.setAttribute('aria-label',`Audition ${row.label}`);
+    audio.addEventListener('play',()=>{stopAudition();document.querySelectorAll('#sl-earshot-round audio').forEach(other=>{if(other!==audio)other.pause();});});
+    const metrics=document.createElement('small');metrics.textContent=`Contact peak ${m.peakMs} ms · RMS ${m.rmsDb} dBFS · sub-bass ${(m.subBassShare*100).toFixed(0)}% · seed ${row.recipe.seed}`;
+    card.append(head,audio,metrics);return card;
+  }));
+  $('sl-earshot-status').textContent=`Round ready · ${result.rows.length} takes · select by listening, not by waveform similarity or signal-integrity flags.`;
+  updateEarshotEnabled();
+}
+async function earshotGenerate(refine=false,fromReviewedA=false){
+  if(!state.client||state.earshotBusy)return;
+  const bindingId=state.binding.id,parentId=refine?state.earshotChoice?.id:null;
+  if(refine&&!parentId)return;
+  state.earshotBusy=true;updateEarshotEnabled();
+  $('sl-earshot-status').textContent=fromReviewedA?'Refining reviewed stone take A…':refine?'Rendering improvements to selected sound…':'Generating new Earshot candidates…';
+  try{
+    const result=await state.client.earshotRound({bindingId,parentId,direction:fromReviewedA?'mineral':$('sl-earshot-direction').value,presetId:fromReviewedA?'boulder-stone-a':undefined,
+      seed:Number($('sl-earshot-seed').value),durationMs:Number($('sl-earshot-duration').value)});
+    if(state.binding?.id===bindingId)showEarshotRound(result);
+  }catch(error){$('sl-earshot-status').textContent=error.message;}
+  finally{state.earshotBusy=false;updateEarshotEnabled();}
+}
+async function earshotAccept(){
+  const row=state.earshotChoice;if(!state.client||!row)return;
+  if(!window.confirm(`Accept ${row.label} as a frozen SoundLab source?\nSignal audit: ${row.metrics.integrityOk?'clean':row.metrics.warnings.join(', ')}.\nThis does NOT promote or replace the published sound.`))return;
+  state.earshotBusy=true;updateEarshotEnabled();
+  try{
+    const {source}=await state.client.acceptEarshot({bindingId:state.binding.id,candidateId:row.id,role:'residual'});
+    const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;
+    $('sl-source').replaceChildren(...sourceNodes(source.id));$('sl-source').value=source.id;
+    updateSourceMeta();renderPreview();renderReferenceExplorer();
+    $('sl-earshot-status').textContent=`Accepted ${source.id} (${fmtHash(source.sha256)}). Selected as Draft residual; review in the native scene before promoting.`;
+  }catch(error){$('sl-earshot-status').textContent=error.message;}
+  finally{state.earshotBusy=false;updateEarshotEnabled();}
+}
+
 function serviceState(text,kind=''){$('sl-promotion-state').textContent=text;$('sl-promotion-state').className=`promotion-state ${kind}`.trim();}
-function setServiceEnabled(enabled){for(const id of ['sl-render-canonical','sl-render-variants','sl-render-materials','sl-render-sweep','sl-promote','sl-import-source'])$(id).disabled=!enabled;$('sl-canonical-panel').hidden=!enabled;}
-async function connectAuthoringService(base){if(!base){state.client=null;state.capabilities=null;setServiceEnabled(false);return;}state.client=new SoundLabAuthoringClient(base);try{state.capabilities=await state.client.connect();if(!state.capabilities?.connected)throw new Error('SoundLab authoring service unavailable');setServiceEnabled(true);$('sl-authoring-mode').textContent='connected authoring';$('sl-authoring-mode').className='sl-pill';$('sl-author-mode-caption').textContent='preview + canonical';$('sl-service-detail').textContent='Canonical renderer and promotion are connected to this development host.';if(state.capabilities.capabilities?.nativePreview===false){$('sl-native-status').textContent=state.capabilities.nativePreviewReason||'Native preview package is unavailable.';$('sl-start-native').disabled=true;}$('sl-canonical-state').textContent=state.capabilities.build.ok?'current':'stale';$('sl-build-state').textContent=state.capabilities.build.ok?`${state.capabilities.build.outputs} promoted outputs`:'promoted outputs stale';$('sl-build-state').classList.toggle('stale',!state.capabilities.build.ok);serviceState(state.capabilities.build.ok?'Canonical build is current.':state.capabilities.build.problems[0]||'Canonical build is stale.',state.capabilities.build.ok?'good':'bad');const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;const selected=$('sl-source').value;$('sl-source').replaceChildren(...sourceNodes(selected));updateSourceMeta();renderReferenceExplorer();}catch{state.client=null;state.capabilities=null;setServiceEnabled(false);}}
+function setServiceEnabled(enabled){for(const id of ['sl-render-canonical','sl-render-variants','sl-render-materials','sl-render-sweep','sl-promote','sl-import-source'])$(id).disabled=!enabled;$('sl-canonical-panel').hidden=!enabled;updateEarshotEnabled();}
+async function connectAuthoringService(base){if(!base){state.client=null;state.capabilities=null;setServiceEnabled(false);return;}state.client=new SoundLabAuthoringClient(base);try{state.capabilities=await state.client.connect();if(!state.capabilities?.connected)throw new Error('SoundLab authoring service unavailable');setServiceEnabled(true);updateEarshotEnabled();$('sl-authoring-mode').textContent='connected authoring';$('sl-authoring-mode').className='sl-pill';$('sl-author-mode-caption').textContent='preview + canonical';$('sl-service-detail').textContent='Canonical renderer and promotion are connected to this development host.';if(state.capabilities.capabilities?.nativePreview===false){$('sl-native-status').textContent=state.capabilities.nativePreviewReason||'Native preview package is unavailable.';$('sl-start-native').disabled=true;}$('sl-canonical-state').textContent=state.capabilities.build.ok?'current':'stale';$('sl-build-state').textContent=state.capabilities.build.ok?`${state.capabilities.build.outputs} promoted outputs`:'promoted outputs stale';$('sl-build-state').classList.toggle('stale',!state.capabilities.build.ok);serviceState(state.capabilities.build.ok?'Canonical build is current.':state.capabilities.build.problems[0]||'Canonical build is stale.',state.capabilities.build.ok?'good':'bad');const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;const selected=$('sl-source').value;$('sl-source').replaceChildren(...sourceNodes(selected));updateSourceMeta();renderReferenceExplorer();}catch{state.client=null;state.capabilities=null;setServiceEnabled(false);}}
 async function renderCanonical(){if(!state.client)return;serviceState('Rendering current canonical master + runtime…');const result=await state.client.render(currentJob());state.currentRender=result;state.decoded.clear();updateCurrentButtons();serviceState(`Current canonical ready · master ${fmtHash(result.profiles.master.sha256)} · runtime ${fmtHash(result.profiles.runtime.sha256)}`,'good');await showProfile('current-master');}
 function renderBatchStrip(result){state.batch=result;$('sl-batch-strip').replaceChildren(...result.rows.map(row=>{const b=document.createElement('button');b.textContent=row.label;b.title=`${row.label} · ${fmtHash(row.profiles.master.sha256)}`;b.addEventListener('click',async()=>{state.currentRender=row;updateCurrentButtons();await showProfile('current-master');});return b;}));}
 async function renderBatch(mode){if(!state.client)return;serviceState(`Rendering ${mode} batch…`);const result=await state.client.batch({...currentJob(),mode,count:numeric('sl-variant-count')});renderBatchStrip(result);serviceState(`${result.rows.length} canonical ${mode} renders ready for one-tap solo.`,'good');}
@@ -542,6 +698,9 @@ function installEvents(){
   document.querySelectorAll('[data-segment-loop]').forEach(button=>button.addEventListener('click',()=>setSegmentLoopMode(button.dataset.segmentLoop)));$('sl-sound-start').addEventListener('change',()=>setAuthoringRangeEdge('start',$('sl-sound-start').value));$('sl-sound-end').addEventListener('change',()=>setAuthoringRangeEdge('end',$('sl-sound-end').value));
   $('sl-scene-stage').addEventListener('click',event=>{if(event.target.closest?.('#sl-scene-contact'))return;selectSceneTrajectoryAt(event.clientX,event.clientY);});$('sl-start-native').addEventListener('click',()=>startNative().catch(handleNativeError));$('sl-native-input-file').addEventListener('change',async event=>{const file=event.target.files?.[0];if(!file)return;try{await loadNativeInput(file);}catch(error){handleNativeError(error);}finally{event.target.value='';}});$('sl-reset-native').addEventListener('click',()=>{stopSceneDraft();state.runtime?.reset();});$('sl-toggle-native').addEventListener('click',()=>setNativeCollapsed($('sl-native-panel').dataset.collapsed!=='true'));$('sl-play-isolated').addEventListener('click',()=>playProfile(state.currentRender?'current-master':'preview'));$('sl-play-score').addEventListener('click',()=>replaySelectedEvent());$('sl-play-transition').addEventListener('click',()=>replaySelectedTransition());document.querySelectorAll('[data-audio-version]').forEach(button=>button.addEventListener('click',()=>setAudioVersion(button.dataset.audioVersion).catch(error=>serviceState(error.message,'bad'))));document.querySelectorAll('[data-playback-scope]').forEach(button=>button.addEventListener('click',()=>setPlaybackScope(button.dataset.playbackScope)));$('sl-analysis-source').addEventListener('change',()=>setAnalysisSource($('sl-analysis-source').value));$('sl-scene-contact').addEventListener('click',selectSceneContact);
   $('sl-clear-capture').addEventListener('click',()=>{state.events=[];state.selectedEvent=-1;state.useCapturedTelemetry=false;$('sl-use-capture').setAttribute('aria-pressed','false');$('sl-telemetry').textContent='Capture cleared.';renderTimeline();});$('sl-use-capture').addEventListener('click',()=>{state.useCapturedTelemetry=!state.useCapturedTelemetry;$('sl-use-capture').setAttribute('aria-pressed',String(state.useCapturedTelemetry));});$('sl-export-capture').addEventListener('click',()=>downloadJson(`${state.manifest.project}-${state.binding.id}-trace.json`,currentTrace()||telemetryTrace(state.manifest.project,state.events,{binding:state.binding.id})));
+  $('sl-earshot-start').addEventListener('click',()=>earshotGenerate(false));$('sl-earshot-refine').addEventListener('click',()=>earshotGenerate(true));$('sl-earshot-accept').addEventListener('click',()=>earshotAccept());
+  $('sl-earshot-preset').addEventListener('click',()=>earshotGenerate(false,true));
+  $('sl-stone-generate').addEventListener('click',stoneGenerate);$('sl-stone-accept').addEventListener('click',stoneAccept);$('sl-stone-reveal').addEventListener('change',revealStoneNames);for(const key of ['a','b','x'])$('sl-stone-abx-play-'+key).addEventListener('click',()=>stoneABXPlay(key));for(const key of ['a','b'])$('sl-stone-abx-guess-'+key).addEventListener('click',()=>stoneABXGuess(key==='a'));$('sl-stone-abx-reset').addEventListener('click',stoneResetABX);
   $('sl-render-canonical').addEventListener('click',()=>renderCanonical().catch(error=>serviceState(error.message,'bad')));$('sl-render-variants').addEventListener('click',()=>renderBatch('variants').catch(error=>serviceState(error.message,'bad')));$('sl-render-materials').addEventListener('click',()=>renderBatch('materials').catch(error=>serviceState(error.message,'bad')));$('sl-render-sweep').addEventListener('click',()=>renderBatch('strength').catch(error=>serviceState(error.message,'bad')));$('sl-promote').addEventListener('click',()=>promoteCurrent().catch(error=>serviceState(error.message,'bad')));$('sl-import-source').addEventListener('click',()=>importSource().catch(error=>serviceState(error.message,'bad')));$('sl-source-file').addEventListener('change',()=>{$('sl-import-source').disabled=!state.client||!$('sl-source-file').files?.length;});
 }
 

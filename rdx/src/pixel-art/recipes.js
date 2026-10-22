@@ -8,6 +8,7 @@ export const PIXEL_ART_RECIPES = Object.freeze([
   { id: 'outline-selection', required: ['frameId','layerId','selector','color'] },
   { id: 'create-effect-variant', required: ['sourceFrameId','id'] },
   { id: 'candidate-region', required: ['sourceCandidate','selector'] },
+  { id: 'author-actor-animation-from-references-v1', required: ['target','poseReferenceId','identityReferenceId','expectedSourceHash','ops'] },
 ]);
 
 export function compileRecipe(doc, recipe) {
@@ -31,6 +32,38 @@ export function compileRecipe(doc, recipe) {
       return { ops: [{ type: 'duplicate_frames', frameIds: [recipe.sourceFrameId], ids: [recipe.id], afterFrameId: recipe.afterFrameId ?? recipe.sourceFrameId, addToClips: recipe.addToClips ?? true }] };
     case 'candidate-region':
       return { candidateTransfer: clone(recipe) };
+    case 'author-actor-animation-from-references-v1': {
+      requireArt(Array.isArray(recipe.ops) && recipe.ops.length > 0, 'RECIPE', 'Animation authoring requires explicit guarded editing operations');
+      requireArt(doc.frames.length === 2 && doc.width === 32 && doc.height === 21 &&
+        doc.frames[0].anchor.every((v, n) => v === doc.frames[1].anchor[n]),
+        'RECIPE', 'Animation authoring requires two consistently registered 32×21 cels');
+      const pose = doc.references.find(row => row.id === recipe.poseReferenceId);
+      const identity = doc.references.find(row => row.id === recipe.identityReferenceId);
+      requireArt(pose?.role === 'pose' && identity?.role === 'subject' && pose.sequence && identity.sequence,
+        'RECIPE', 'Animation authoring needs two named immutable pose and identity sequences');
+      requireArt(identity.provenance?.sourceKind === 'rom-pn' && identity.provenance?.sourceHash === recipe.expectedSourceHash,
+        'RECIPE', 'Identity ROM provenance must match the expected source hash');
+      const target = recipe.target;
+      requireArt(target && target.room === 'SM27' && target.submap === 39 && target.mapId === 47 &&
+        target.mark === 433 && JSON.stringify(target.pnFamily) === '[59,60]' &&
+        identity.provenance.mapId === target.mapId && target.pnFamily.includes(identity.provenance.pn),
+        'RECIPE', 'M433 authoring target must preserve its native actor and PN ownership');
+      return {
+        ops: clone(recipe.ops),
+        assertions: { paletteUnchanged: true, anchorsUnchanged: true, clipsUnchanged: true, ...(recipe.assertions ?? {}) },
+        workflow: {
+          schema: 'rdr.pixel_art.agent_animation_workflow.v1',
+          binding: clone(target), referenceIds: [pose.id, identity.id], frameIds: doc.frames.map(f => f.id),
+          exportOptions: { assetId: 'm433-mechanic-climb', owner: clone(target),
+            poseReferenceId: pose.id, identityReferenceId: identity.id,
+            expectedSourceHash: recipe.expectedSourceHash },
+          nativePreviewOptions: { submap: target.submap, mark: target.mark, ladderReview: true, maxFrames: 240 },
+          gates: ['observe-1x-and-8x', 'review-frame-a', 'review-frame-b', 'verify-native-phase-a-and-b',
+            'stage-with-expected-head-and-rom', 'recompile-and-verify-installed-native', 'produce-verified-git-am'],
+          productionVerified: false,
+        },
+      };
+    }
     default:
       requireArt(false, 'RECIPE', `Unknown recipe: ${recipe.id}`);
   }

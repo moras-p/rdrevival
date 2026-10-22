@@ -1,3 +1,4 @@
+import { loadRememberedRdxRom } from "./rdx/src/runtime/rom-store.js";
 import { createAssetPlugins } from "./rdx/src/pixel-art/revival-plugins.js";
 import { mapPalette } from "./rdx/src/pixel-art/game-assets.js";
 import { DIRECTION_FIELDS } from "./rdx/src/pixel-art/direction.js";
@@ -396,10 +397,40 @@ function render() {
     $("layout-json").value = JSON.stringify(d.layout, null, 2);
   $("constraints").textContent =
     `${d.constraints.protected.length} protected regions · ${d.constraints.frameIds ? "selected frames only" : "all frames editable"}`;
+  const sequences = d.references.filter(r => r.sequence);
+  for (const [selectId, role] of [["pose-reference", "pose"], ["identity-reference", "subject"]]) {
+    const select = $(selectId), prior = select.value;
+    select.replaceChildren(...sequences.map(r => new Option(`${r.name ?? r.id} · ${r.sequence.frames.length} frames`, r.id)));
+    const roleMatch = sequences.find(r => r.role === role)?.id;
+    select.value = select.dataset.userSelected === "true" && sequences.some(r => r.id === prior) ? prior : (roleMatch ?? prior ?? sequences[0]?.id ?? "");
+  }
+  for (const [refSelect, prefix] of [["pose-reference", "pose"], ["identity-reference", "identity"]]) {
+    const ref = sequences.find(r => r.id === $(refSelect).value);
+    for (const [i, phaseId] of ["a", "b"].entries()) {
+      const element = $(`${prefix}-frame-${phaseId}`), previous = element.value;
+      element.replaceChildren(...(ref?.sequence.frames ?? []).map(f => new Option(f.id, f.id)));
+      const paired = ref?.sequence.phasePair[i] ?? ref?.sequence.frames[i]?.id ?? ref?.sequence.frames[0]?.id;
+      element.value = element.dataset.userSelected === "true" && ref?.sequence.frames.some(f => f.id === previous) ? previous : (paired ?? "");
+    }
+  }
+  const selectedReview = d.animationReview?.[controller.selectedFrame];
+  if (document.activeElement !== $("frame-review-note")) $("frame-review-note").value = selectedReview?.note ?? "";
+  $("frame-review-status").textContent = `${controller.selectedFrame} · ${selectedReview?.status ?? 'draft'}${selectedReview ? ' · check review fingerprint in Review panel' : ''}`;
+  if (!document.querySelector('[data-dock-panel="review"]').hidden) {
+    const selectedId = controller.selectedFrame;
+    controller.frameReviewState({ frameId: selectedId }).then(result => {
+      if (controller.store.document.revision !== result.revision || controller.selectedFrame !== selectedId) return;
+      const entry = result.frames[0];
+      if (entry) $("frame-review-status").textContent = `${entry.frameId} · ${entry.status}${entry.stale ? ` · previous ${entry.recordedStatus} decision STALE` : ""} · ${entry.fingerprint.slice(0, 23)}…`;
+    }).catch(error => message(error.message, true));
+  }
+  $("pair-diagnostics").disabled = d.frames.length < 2;
+  $("motion-pair").disabled = sequences.length < 2;
+  $("save-reference-pair").disabled = sequences.length < 2;
   $("references").replaceChildren(
     ...d.references.map((r) => {
-      const b = button(`${r.name ?? r.id} · ${r.role} · ${r.policy}`, () =>
-        controller.view({ mode: "reference", referenceId: r.id, zoom: 1 }),
+      const b = button(`${r.name ?? r.id} · ${r.role} · ${r.sequence?.frames.length ?? 1} frame(s) · ${r.provenance?.sourceKind ?? "image"}`, () =>
+        controller.view({ mode: "reference", referenceId: r.id, zoom: 8 }),
       );
       b.title = r.notes || `${r.role}: ${r.policy}`;
       return b;
@@ -465,6 +496,9 @@ function showView(view) {
   } else if (view.production?.context) {
     const c = view.production.context;
     summary.textContent = `Native production frame · ${c.renderer} · SM${Number(c.submap).toString(16).toUpperCase().padStart(2, "0")} · slot ${c.actor?.slot ?? "?"}`;
+  } else if (view.animationPair) {
+    const p = view.animationPair;
+    summary.textContent = `A/B: ${p.changedPixels} indexed pixels, ${p.silhouetteChangedPixels} silhouette pixels · anchor Δ ${p.anchorDelta.join(",")} · ${p.warnings.join(", ") || "no geometry warnings"}. Diagnostics are not art approval.`;
   } else summary.textContent = "Each panel includes native pixels plus nearest-neighbour magnification.";
   const grid = document.createElement("div");
   grid.className = "observation-grid";
@@ -859,6 +893,28 @@ $("review").onclick = run(() => controller.view({ mode: "review", checkpoint: $(
 $("observe").onclick = run(() => controller.view({ mode: "asset", zoom: 8 }));
 $("critique").onclick = run(() => controller.view({ mode: "critique", checkpoint: $("checkpoints").value || undefined, zoom: 6 }));
 $("animation-review").onclick = run(() => controller.view({ mode: "animation-review", zoom: 5 }));
+for (const id of ["pose-reference", "identity-reference", "pose-frame-a", "pose-frame-b", "identity-frame-a", "identity-frame-b"]) {
+  $(id).onchange = () => { $(id).dataset.userSelected = "true"; render(); };
+}
+$("save-reference-pair").onclick = run(async () => {
+  for (const [referenceId, prefix] of [[$("pose-reference").value, "pose"], [$("identity-reference").value, "identity"]]) {
+    await controller.documentCommand({ ...controller.guard(), action: "reference-pair", options: {
+      referenceId, frameIds: [ $(`${prefix}-frame-a`).value, $(`${prefix}-frame-b`).value ],
+    }});
+  }
+  render();
+});
+for (const [buttonId, status] of [["frame-review-ready", "ready-for-review"], ["frame-review-accept", "accepted"], ["frame-review-reject", "rejected"], ["frame-review-reset", "draft"]]) {
+  $(buttonId).onclick = run(() => controller.recordFrameReview({ ...controller.guard(), frameId: controller.selectedFrame, status, note: $("frame-review-note").value }));
+}
+$("pair-diagnostics").onclick = run(() => {
+  const report = controller.animationPairState();
+  $("pair-diagnostics-status").textContent = `A/B: ${report.changedPixels} changed palette indices · ${report.silhouetteChangedPixels} silhouette pixels · anchor Δ ${report.anchorDelta.join(',')} · centroid Δ ${report.centroidDelta?.join(',') ?? 'n/a'} · ${report.warnings.join(', ') || 'no geometry warnings'}`;
+  return controller.view({ mode: "animation-review", zoom: 6 });
+});
+$("motion-pair").onclick = run(() => controller.view({ mode: "motion-pair", zoom: 6,
+  poseReferenceId: $("pose-reference").value, identityReferenceId: $("identity-reference").value,
+  phase: Number($("reference-phase").value) }));
 $("production-preview").onclick = run(async () => {
   if (productionPreviewBusy) return;
   productionPreviewBusy = true;
@@ -869,6 +925,12 @@ $("production-preview").onclick = run(async () => {
     productionPreviewBusy = false;
     updateProductionPreviewStatus();
   }
+});
+$("native-evidence-export").onclick = run(async () => {
+  const result = await controller.documentCommand({ ...controller.guard(), action: "native-ladder-evidence-export" });
+  render();
+  ui.openDock("output");
+  return result;
 });
 $("authoring-stage").onchange = run(() => command([{ type: "authoring_stage", stage: $("authoring-stage").value, lockCompleted: $("lock-authoring-stage").checked }]));
 $("apply-style-profile").onclick = run(() => command([{ type: "style_profile", profile: JSON.parse($("style-profile-json").value || "{}") }]));
@@ -1005,11 +1067,27 @@ $("slice-preview").onclick = run(() => {
   rects.forEach((r) => ctx.strokeRect(...r.rect));
 });
 $("do-import").onclick = run(async () => {
-  requireArt(fileHandle, "HANDLE", "Choose a file first");
   const action = $("import-role").value;
-  if (action === "asset-import") await loadPalettes();
+  if (!fileHandle && action === "reference-asset") {
+    const remembered = await loadRememberedRdxRom();
+    requireArt(remembered?.bytes, "RDX_ROM_REQUIRED", "Load the RDX ROM in Workbench, Level Editor or SoundLab, or select a ROM file");
+    fileHandle = controller.addHandle(remembered.bytes);
+  }
+  if (action !== "reference-native-climb") requireArt(fileHandle, "HANDLE", "Choose a file first");
+  if (action === "asset-import" || action === "reference-asset") await loadPalettes();
   const options =
     action === "reference" ? { role: $("reference-role").value, notes: `Imported as ${$("reference-role").value} reference` } :
+    action === "reference-native-climb" ? {
+      ...JSON.parse($("plugin-options").value), id: $("reference-id").value,
+      name: $("reference-name").value || $("reference-id").value,
+      role: $("reference-role").value,
+      notes: "Real native TYPE_2 ladder-state pixels, not original ROM climb frames; inspect-only",
+    } :
+    action === "reference-asset" ? { pluginId: $("asset-plugin").value,
+      ...JSON.parse($("plugin-options").value), id: $("reference-id").value,
+      name: $("reference-name").value || $("reference-id").value,
+      role: $("reference-role").value,
+      notes: "Immutable decoded ROM animation; production import does not grant exact-copy permission" } :
     action === "asset-import" ? { pluginId: $("asset-plugin").value, ...JSON.parse($("plugin-options").value) } : action === "import-sheet"
       ? {
           ...slicing(),
@@ -1055,6 +1133,12 @@ $("export").onclick = run(() =>
   ),
 );
 $("production-export").onclick = run(() => exportAction("production-export"));
+$("animation-candidate-export").onclick = run(async () => {
+  const result = await controller.documentCommand({ ...controller.guard(), action: "animation-candidate-export",
+    options: JSON.parse($("animation-candidate-options").value) });
+  render();
+  message(`Prepared ${result.artifacts.length} indexed candidate files. Review pending; nothing installed.`);
+});
 $("report-export").onclick = run(() => exportAction("export", "report"));
 document.addEventListener(
   "keydown",
@@ -1138,6 +1222,23 @@ function renderPluginOptions() {
   $("plugin-capabilities").textContent = `${plugin.label}: ${plugin.capabilities.productionExport ? "editable import + production candidate export" : "editable import only; gameplay export unavailable"}${preview}. Options: ${Object.entries(plugin.optionsSchema.properties).map(([k,p]) => `${k}${p.minimum !== undefined ? ` (${p.minimum}–${p.maximum})` : ""}`).join(", ") || "none"}`;
 }
 $("asset-plugin").replaceChildren(...controller.plugins.list().map(p => new Option(p.label, p.id)));
+$("import-role").addEventListener("change", () => {
+  const native = $("import-role").value === "reference-native-climb";
+  const hiddenForNative = ["file", "asset-plugin", "fixed-import", "fit", "quantize",
+    "import-new-image", "source-palette", "slice-preview"];
+  for (const id of hiddenForNative) {
+    const node = $(id), wrapper = node.closest("label") ?? node.closest("details") ?? node;
+    wrapper.style.display = native ? "none" : "";
+  }
+  $("file-info").textContent = native
+    ? "Native source: use the remembered RDX ROM. Both real climb phases must be observed; a static PN image is not sufficient."
+    : "Select an image/project/ROM, or use the remembered RDX ROM for a named reference.";
+  if (native) {
+    $("reference-role").value = "pose";
+    $("plugin-options").value = JSON.stringify({ submap: 39, mark: 433, maxFrames: 240, controls: [] }, null, 2);
+    $("plugin-capabilities").textContent = "Native TYPE_2 ladder actor capture · use real source submap + mark, not PN; M433 is a mechanic, not a soldier pose reference. Both live native climb phases must be reached. No file selection or edit authorization.";
+  } else renderPluginOptions();
+});
 $("asset-plugin").onchange = renderPluginOptions;
 renderPluginOptions();
 await restoreDraft();

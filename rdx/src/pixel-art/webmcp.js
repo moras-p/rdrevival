@@ -236,9 +236,23 @@ export function pixelArtTools(controller) {
       execute: safe((i) => controller.state(i)),
     },
     {
+      name: "get_reference_state",
+      readOnly: true,
+      description: "Inspect named immutable animation references: role, exact provenance/source hash, phase pair, frame palette-index histograms, source anchors and durations. Never returns raw RGBA or grants pixel-copy permission.",
+      inputSchema: object({}),
+      execute: safe(() => controller.referenceState()),
+    },
+    {
+      name: "get_animation_pair_state",
+      readOnly: true,
+      description: "Inspect exact A/B pixel and silhouette changes, registration, palette-bank violations, clipping contact and saved frame-review fingerprints. Facts are diagnostics, not an AI aesthetic approval.",
+      inputSchema: object({ frameIds: array(string) }),
+      execute: safe(async (i) => ({ ...controller.animationPairState(i), review: await controller.frameReviewState() })),
+    },
+    {
       name: "document",
       description:
-        "Create, open, import, attach an inspiration reference, save or export using selected-file/artifact handles. Generic reference attachment accepts only the inspiration roles exposed as capabilities.attachableReferenceRoles and never grants exact-copy authority; editable imports and locally registered game-asset plugins own copy-authoritative sources. Every action, including save/export, requires documentId, expectedRevision and requestId. Always use the returned revision. No filesystem or network access. Use import-sheet options.layout with explicit occupied cells; options.rectangles supports irregular atlas coordinates.",
+        "Create, open, import, attach an inspiration reference, save or export using selected-file/artifact handles. reference-asset imports an immutable named multi-frame game sprite through an opt-in trusted plugin without replacing the target. reference-native-climb captures both real native TYPE_2 ladder phases as a named, inspect-only runtime-resolved reference; it requires the remembered ROM, room/mark and optional bounded controls. reference-pair selects the two source frame IDs as phases A/B. Generic reference attachment accepts only the inspiration roles exposed as capabilities.attachableReferenceRoles and never grants exact-copy authority; editable imports and locally registered game-asset plugins own copy-authoritative sources. Every action, including save/export, requires documentId, expectedRevision and requestId. Always use the returned revision. No filesystem or network access. Use import-sheet options.layout with explicit occupied cells; options.rectangles supports irregular atlas coordinates.",
       inputSchema: object(
         {
           ...guard,
@@ -249,6 +263,11 @@ export function pixelArtTools(controller) {
               "import-image",
               "import-sheet",
               "reference",
+              "reference-asset",
+              "reference-native-climb",
+              "reference-pair",
+              "animation-candidate-export",
+              "native-ladder-evidence-export",
               "save",
               "export",
               "production-import",
@@ -263,7 +282,7 @@ export function pixelArtTools(controller) {
           options: {
             type: "object",
             description:
-              "Creation: width,height,ratio:[w,h],frameCount,columns,background,brief,palette. Import: fit preserve|contain|cover|stretch, quantize boolean, frameId,layerId, layout or rectangles, clips. For fixed imports: fixedPalette:true, paletteName, paletteSource, maxColors (opaque), allowedIndices. palettePolicy:source extracts colors only, not a full map palette. asset-import: pluginId plus plugin options from get_state capabilities.assetPlugins. asset-export resolves the bound plugin; sourceHandle optionally verifies the current owning source. Legacy import-rdx-sprite: mapId and pn. No implicit conversions.",
+              "Creation: width,height,ratio:[w,h],frameCount,columns,background,brief,palette. Import: fit preserve|contain|cover|stretch, quantize boolean, frameId,layerId, layout or rectangles, clips. For fixed imports: fixedPalette:true, paletteName, paletteSource, maxColors (opaque), allowedIndices. palettePolicy:source extracts colors only, not a full map palette. asset-import: pluginId plus plugin options from get_state capabilities.assetPlugins. asset-export resolves the bound plugin; sourceHandle optionally verifies the current owning source. Legacy import-rdx-sprite: mapId and pn. reference-asset: pluginId,id,name,role,mapId,pn; reference-native-climb: id,name,role,submap,mark,maxFrames,controls:[{from,to,mask}], no file handle required; reference-pair: referenceId,frameIds:[A,B]. native-ladder-evidence-export: export four fresh native ladder review PNGs plus a hashed replay/state manifest, no gameplay installation; animation-candidate-export: assetId,owner:{room,submap,mapId,mark,pnFamily},poseReferenceId,identityReferenceId,expectedSourceHash; exports review-pending indexed frames + guarded manifest, NOT a gameplay patch. No implicit conversions.",
           },
         },
         ["action", "documentId", "expectedRevision", "requestId"],
@@ -273,7 +292,7 @@ export function pixelArtTools(controller) {
     {
       name: "view",
       description:
-        "Prepare a revision-tagged canvas for host image capture. Returns a handle and selector, never image bytes. Host must capture #art-observation; this response alone does not deliver an image.",
+        "Prepare a revision-tagged canvas for host image capture. Returns a handle and selector, never image bytes. Host must capture #art-observation; this response alone does not deliver an image. motion-pair requires poseReferenceId,identityReferenceId and phase 0/1 and prepares three aligned panels.",
       inputSchema: object({
         expectedRevision: integer,
         mode: {
@@ -281,6 +300,7 @@ export function pixelArtTools(controller) {
             "asset",
             "crop",
             "reference",
+            "motion-pair",
             "strip",
             "onion",
             "diff",
@@ -298,6 +318,10 @@ export function pixelArtTools(controller) {
         },
         frameId: string,
         referenceId: string,
+        referenceFrameId: string,
+        poseReferenceId: string,
+        identityReferenceId: string,
+        phase: integer,
         region: rectangle,
         zoom: integer,
         checkpoint: string,

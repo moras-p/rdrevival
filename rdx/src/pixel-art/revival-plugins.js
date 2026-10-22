@@ -3,6 +3,7 @@ import { importProduction, exportProduction, BOILING_CROWN } from './production.
 import { importRdxSprite } from './game-assets.js';
 import { requireArt } from './document.js';
 import { sha256 } from './image-io.js';
+import { validateLadderReview } from './native-ladder-review.js';
 
 export const boilingCrownPlugin = {
   apiVersion: 1, id: 'boiling-crown-v1', label: 'Revival · Boiling Crown',
@@ -39,14 +40,24 @@ export const rdxSpritePlugin = {
     mark: { type: 'integer', minimum: 0, maximum: 65535 },
     frameId: { type: 'string' },
     warmupFrames: { type: 'integer', minimum: 2, maximum: 120 },
+    ladderReview: { type: 'boolean' },
+    maxFrames: { type: 'integer', minimum: 2, maximum: 480 },
+    controls: { type: 'array' },
   }, required: ['submap', 'mark'], additionalProperties: false },
   importAsset: (bytes, options, context) => importRdxSprite(bytes, { ...options, paletteEntries: context.paletteEntries }),
+  importReferenceAsset: (bytes, options, context) => importRdxSprite(bytes, { ...options, paletteEntries: context.paletteEntries }),
   validateAsset(doc) {
     requireArt(doc.provenance.asset?.kind === 'rdx-sprite' && doc.palettePolicy, 'ASSET', 'Missing source sprite provenance or fixed palette');
   },
   previewAsset(doc, options) {
     const frameId = options.frameId ?? doc.frames[0].id;
     requireArt(doc.frames.some(frame => frame.id === frameId), 'TARGET', 'Unknown RDX sprite preview frame');
+    if (options.ladderReview === true) {
+      const controls = options.controls ?? [];
+      return validateLadderReview({ kind: 'native-ladder-actor-review-v1', presentation: 'rdx',
+        submap: options.submap, mark: options.mark, frameId, frameIds: doc.frames.slice(0, 2).map(frame => frame.id),
+        maxFrames: options.maxFrames ?? 240, controls }, doc);
+    }
     return { kind: 'native-room-actor-replacement-v1', presentation: 'rdx', submap: options.submap, mark: options.mark, frameId, warmupFrames: options.warmupFrames ?? 12 };
   },
 };

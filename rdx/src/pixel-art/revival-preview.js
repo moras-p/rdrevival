@@ -1,5 +1,9 @@
 import { requireArt } from './document.js';
-import { rgbaPixels, imageCanvas } from './image-io.js';
+import { rgbaPixels, imageCanvas, sha256 } from './image-io.js';
+import { animationFrameFingerprint } from './animation-review.js';
+import { nativeLadderReferenceFromCaptures } from './reference-sequences.js';
+import { nativeType2LadderPhase, ladderReviewControlMask, validateLadderReview, validateLadderReviewDescriptor, findNativeLadderActor, ladderCaptureFacts } from './native-ladder-review.js';
+import { stepNativeFrame } from '../runtime/native-scene-runner.js';
 import { XrickLivePreview } from '../juice/xrick-live-preview.js';
 import { NativeActionPreviewSceneCatalog, NativeActionPreviewScenarioRunner } from '../juice/native-action-preview.js';
 import { PRESENTATION_LAYER_BITS } from '../juice/presentation-layer-mask.js';
@@ -60,6 +64,7 @@ export class RevivalPixelArtMapPreview {
     this.preview = null;
     this.runner = null;
     this.ready = null;
+    this.nativeRomHash = null;
     this.onStatus = typeof onStatus === 'function' ? onStatus : null;
     this.runtimeState = Object.freeze({ phase: 'not-loaded', message: 'Native Live-map preview available · runtime not loaded' });
   }
@@ -81,6 +86,7 @@ export class RevivalPixelArtMapPreview {
         error.code = 'RDX_ROM_REQUIRED';
         throw error;
       }
+      this.nativeRomHash = `sha256:${await sha256(remembered.bytes)}`;
       await ensurePixelArtNativeRuntime();
       this.catalog = await NativeActionPreviewSceneCatalog.create();
       this.preview = await XrickLivePreview.create(event => this.runner?.noteEvent(event));
@@ -96,6 +102,7 @@ export class RevivalPixelArtMapPreview {
       return await attempt;
     } catch (error) {
       this.ready = null;
+      this.nativeRomHash = null;
       this.catalog = null;
       this.preview = null;
       this.runner = null;
@@ -139,8 +146,102 @@ export class RevivalPixelArtMapPreview {
     return { captured, slot: Number(actor.slot), actor };
   }
 
+  async #captureLadderNativePhases(descriptor, onPhase) {
+    this.runner.deactivate();
+    this.preview.setPresentation('rdx', { forceFrame: false });
+    this.preview.bridge.setFrontendPaused?.(true);
+    requireArt(this.preview.selectSubmap(descriptor.submap), 'PREVIEW', 'Native room selection failed');
+    if (typeof this.preview.bridge.restartCurrentLevelNow === 'function') this.preview.bridge.restartCurrentLevelNow();
+    else this.preview.resetLevel();
+    const captures = new Map(), visited = new Set(), stepLog = [];
+    try {
+      for (let frame = 0; frame < descriptor.maxFrames && captures.size < 2; frame++) {
+        const mask = ladderReviewControlMask(descriptor.controls, frame);
+        const step = stepNativeFrame(this.preview.bridge, mask);
+        requireArt(step.advanced, 'PREVIEW', `Native replay did not advance at scripted frame ${frame}`);
+        const captured = this.preview.capture();
+        requireArt(Number(captured.snapshot?.submap) === descriptor.submap, 'PREVIEW',
+          `Native replay left SM${descriptor.submap.toString(16)} at scripted frame ${frame}`);
+        const actor = findNativeLadderActor(captured.snapshot, descriptor.mark);
+        if (!actor) continue;
+        requireArt(!(descriptor.mark === 433 && (Number(actor.n) & 0x7f) !== 0x0c), 'PREVIEW',
+          'M433 capture resolved a different native actor type');
+        const resolved = nativeType2LadderPhase(actor);
+        if (!resolved) continue;
+        visited.add(resolved.phase);
+        if (captures.has(resolved.phase)) continue;
+        const layer = this.preview.actorLayer(Number(actor.slot), captured.snapshot);
+        requireArt(layer?.backgroundCanvas && layer?.bounds && layer?.canvas, 'PREVIEW', 'Native actor pixels/registration unavailable');
+        captures.set(resolved.phase, await onPhase({ captured, actor, resolved, layer, frame, mask }));
+        stepLog.push({ frame, mask, phase: resolved.phase, frameSerial: Number(captured.snapshot.frameSerial) });
+      }
+    } finally {
+      this.preview.bridge.setDebugControl?.(0);
+    }
+    requireArt(captures.size === 2, 'PREVIEW',
+      `Native ${descriptor.mark} ladder capture found phases ${[...visited].sort().join(',') || 'none'}; both actual native phases are required (scripted ${descriptor.maxFrames} frames)`);
+    const pair = [captures.get(0), captures.get(1)];
+    requireArt(pair[0].facts.frameSerial !== pair[1].facts.frameSerial, 'PREVIEW', 'Ladder phases must come from different native frames');
+    return { pair, stepLog };
+  }
+
+  /** Capture *resolved native actor pixels*, independent of any imported ROM PN.
+   * No editable pixels are written: the caller attaches this as an inspect-only
+   * reference after the guarded document revision has been rechecked. */
+  async captureLadderReference(options = {}) {
+    const descriptor = validateLadderReviewDescriptor(options);
+    await this.#initialize();
+    const { pair } = await this.#captureLadderNativePhases(descriptor, ({ captured, actor, resolved, layer, frame }) => {
+      const b = layer.bounds;
+      requireArt([b.left, b.top, b.right, b.bottom].every(Number.isInteger), 'PREVIEW',
+        'Native sprite bounds must be exact integer production pixels');
+      const left = b.left, top = b.top, width = b.right - b.left, height = b.bottom - b.top;
+      requireArt(width > 0 && width <= 64 && height > 0 && height <= 64 &&
+        left >= 0 && top >= 8 && left + width <= LIVE_WIDTH && top + height <= LIVE_HEIGHT,
+      'PREVIEW', 'Native reference actor is partially offscreen; cannot capture production pixels');
+      const rgba = layer.canvas.getContext('2d').getImageData(left, top, width, height).data;
+      return { phase: resolved.phase, width, height, rgba: Array.from(rgba),
+        facts: ladderCaptureFacts(captured.snapshot, actor, resolved, b, frame) };
+    });
+    return nativeLadderReferenceFromCaptures(pair, descriptor, { ...options, romHash: this.nativeRomHash });
+  }
+
+  async #ladderReview(doc, descriptor) {
+    validateLadderReview(descriptor, doc);
+    const { pair, stepLog } = await this.#captureLadderNativePhases(descriptor, async ({ captured, actor, resolved, layer, frame, mask }) => {
+        const frameId = descriptor.frameIds[resolved.phase];
+        const original = cloneCanvas(captured.canvas);
+        const draft = imageCanvas(doc.width, doc.height, rgbaPixels(doc, frameId));
+        const candidate = compositeDraft({ preview: this.preview, captured, actorLayer: layer, draftCanvas: draft,
+          drawX: layer.bounds.left, drawY: layer.bounds.top });
+        const rawOriginal = original.getContext('2d').getImageData(0, 0, LIVE_WIDTH, LIVE_HEIGHT).data;
+        const rawCandidate = candidate.getContext('2d').getImageData(0, 0, LIVE_WIDTH, LIVE_HEIGHT).data;
+      return {
+          installed: original, candidate,
+          facts: { ...ladderCaptureFacts(captured.snapshot, actor, resolved, layer.bounds, frame),
+            controlMask: mask, installedHash: `sha256:${await sha256(rawOriginal)}`,
+            candidateHash: `sha256:${await sha256(rawCandidate)}`,
+            candidateFrameId: frameId, candidateFingerprint: await animationFrameFingerprint(doc, frameId) },
+      };
+    });
+    return {
+      canvas: pair[0].candidate,
+      panels: [
+        { label: 'Phase A · installed native', canvas: pair[0].installed },
+        { label: 'Phase A · candidate overlay', canvas: pair[0].candidate },
+        { label: 'Phase B · installed native', canvas: pair[1].installed },
+        { label: 'Phase B · candidate overlay', canvas: pair[1].candidate },
+      ],
+      context: { renderer: 'native-xrick-wasm/game-juice-live-preview', action: 'ladder-climb',
+        proof: 'two-real-native-phases', productionVerified: false, installed: false,
+        submap: descriptor.submap, mark: descriptor.mark, nativeRomHash: this.nativeRomHash, script: { controls: descriptor.controls, maxFrames: descriptor.maxFrames },
+        captures: pair.map(row => row.facts), captureTrace: stepLog },
+    };
+  }
+
   async render(doc, descriptor) {
     await this.#initialize();
+    if (descriptor.kind === 'native-ladder-actor-review-v1') return this.#ladderReview(doc, descriptor);
     this.preview.setPresentation('rdx', { forceFrame: false });
     const staged = descriptor.kind === 'native-action-actor-replacement-v1'
       ? await this.#actionCapture(descriptor)

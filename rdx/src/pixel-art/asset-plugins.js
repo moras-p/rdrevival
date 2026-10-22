@@ -10,6 +10,7 @@ function validateOptions(schema, options, label = 'plugin') {
     requireArt(field || schema.additionalProperties !== false, 'PLUGIN_OPTIONS', `Unknown ${label} option: ${key}`);
     if (field?.type === 'string') requireArt(typeof value === 'string', 'PLUGIN_OPTIONS', `Invalid text ${label} option: ${key}`);
     if (field?.type === 'boolean') requireArt(typeof value === 'boolean', 'PLUGIN_OPTIONS', `Invalid boolean ${label} option: ${key}`);
+    if (field?.type === 'array') requireArt(Array.isArray(value), 'PLUGIN_OPTIONS', `Invalid array ${label} option: ${key}`);
     if (field?.enum) requireArt(field.enum.includes(value), 'PLUGIN_OPTIONS', `Invalid ${label} option: ${key}`);
     if (field?.type === 'integer') requireArt(Number.isInteger(value) && (field.minimum === undefined || value >= field.minimum) && (field.maximum === undefined || value <= field.maximum), 'PLUGIN_OPTIONS', `Invalid integer ${label} option: ${key}`);
   }
@@ -28,6 +29,9 @@ export class AssetPluginRegistry {
       typeof plugin.label === 'string' && ['text', 'binary'].includes(plugin.input) && typeof plugin.importAsset === 'function' &&
       typeof plugin.validateAsset === 'function' && plugin.optionsSchema?.type === 'object' && plugin.optionsSchema.properties,
     'PLUGIN', 'Asset plugin requires API v1, id, label, option schema, importAsset and validateAsset');
+    if (plugin.importReferenceAsset !== undefined) {
+      requireArt(typeof plugin.importReferenceAsset === 'function', 'PLUGIN', 'Reference import must be implemented by a registered plugin');
+    }
     if (plugin.previewAsset !== undefined) {
       requireArt(typeof plugin.previewAsset === 'function' && plugin.previewOptionsSchema?.type === 'object' && plugin.previewOptionsSchema.properties,
         'PLUGIN', 'A preview-capable plugin requires previewAsset and previewOptionsSchema');
@@ -38,7 +42,7 @@ export class AssetPluginRegistry {
   list() {
     return [...this.plugins.values()].map(p => ({ id: p.id, apiVersion: p.apiVersion, label: p.label,
       input: p.input, fileSuffixes: p.fileSuffixes ?? [], optionsSchema: clone(p.optionsSchema), previewOptionsSchema: p.previewOptionsSchema ? clone(p.previewOptionsSchema) : null,
-      capabilities: { import: true, productionExport: typeof p.exportAsset === 'function', nativePreview: typeof p.previewAsset === 'function' } }));
+      capabilities: { import: true, productionExport: typeof p.exportAsset === 'function', referenceImport: typeof p.importReferenceAsset === 'function', nativePreview: typeof p.previewAsset === 'function' } }));
   }
   get(id) {
     const plugin = this.plugins.get(id);
@@ -61,6 +65,16 @@ export class AssetPluginRegistry {
     doc.provenance.plugin = { id: plugin.id, apiVersion: plugin.apiVersion };
     await plugin.validateAsset(doc);
     return doc;
+  }
+  async importReference(id, input, options, context = {}) {
+    const plugin = this.get(id);
+    requireArt(typeof plugin.importReferenceAsset === 'function', 'MISSING_ADAPTER', `${plugin.label} does not support reference imports`);
+    const clean = validateOptions(plugin.optionsSchema, options, 'reference plugin');
+    requireArt(plugin.input === 'binary' ? input instanceof Uint8Array : typeof input === 'string', 'HANDLE', `Plugin requires ${plugin.input} input`);
+    const ref = await plugin.importReferenceAsset(input, clean, context);
+    requireArt(ref?.frames?.length > 0, 'REFERENCE', 'Reference adapter returned no indexed frames');
+    validate(ref);
+    return ref;
   }
   async export(doc, context = {}) {
     const plugin = this.get(this.documentId(doc));

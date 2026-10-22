@@ -330,6 +330,41 @@
             <button id="sl-render-sweep" disabled>Strength sweep</button>
             <button id="sl-promote" class="primary" disabled>Promote…</button>
           </div>
+          <details id="sl-stone-family" class="earshot-loop" data-persist-key="stone-family">
+            <summary>Stone chamber · Contact sequences <small>reviewed Fit sound</small></summary>
+            <p>Approved Stone chamber stays unchanged. Earshot Fit generates independent modeled rock contacts (not excerpts of the mixed WAV). First listen blind at game quality, then reveal the physical event plans. The automatic onset check screens for weak contacts; an eight-trial blind A/B/X check is required before importing a new modeled take. Neither check guarantees natural stone timbre.</p>
+            <div class="earshot-toolbar stone-controls">
+              <label>Sound variation seed <input id="sl-stone-seed" type="number" min="0" max="2147483607" step="1" value="349"></label>
+              <button id="sl-stone-generate" disabled>Generate Fit event patterns</button>
+            </div>
+            <label class="stone-reveal"><input id="sl-stone-reveal" type="checkbox"> Reveal proposed designs, timing and measured onset contrast</label>
+            <div id="sl-stone-round" class="earshot-takes" aria-live="polite"></div>
+            <div id="sl-stone-abx" class="stone-abx" hidden>
+              <strong>Hear the difference? · Game-format blind A/B/X</strong>
+              <p>Sound A is the most acoustically similar *other* candidate; Sound B is your selected candidate. This tests the distinguishing feature rather than obvious level or timbre changes from the published original. Play both, then play X (randomly A or B) and identify which it was. You need 7 correct answers in 8 trials to confirm a clear distinction.</p>
+              <div class="earshot-toolbar"><button id="sl-stone-abx-play-a" type="button">▶ A</button><button id="sl-stone-abx-play-b" type="button">▶ B</button><button id="sl-stone-abx-play-x" type="button">▶ X</button></div>
+              <div class="earshot-toolbar"><button id="sl-stone-abx-guess-a" type="button">X was A</button><button id="sl-stone-abx-guess-b" type="button">X was B</button><button id="sl-stone-abx-reset" type="button">Restart</button></div>
+              <p id="sl-stone-abx-status" role="status">Select a candidate to begin.</p>
+            </div>
+            <div class="earshot-toolbar"><button id="sl-stone-accept" disabled>Accept verified take as frozen source…</button></div>
+            <p id="sl-stone-status" role="status">Connect SoundLab with Earshot 0.3 to synthesize fitted stone contacts.</p>
+          </details>
+          <details id="sl-earshot" class="earshot-loop" data-persist-key="earshot">
+            <summary>Earshot · Improve sound <small>optional offline synthesizer</small></summary>
+            <p>Make new sounds, not copies of the current reference. Compare with <strong>▶ Master</strong>, choose a take, refine it, and accept only what sounds better in gameplay.</p>
+            <div class="earshot-toolbar">
+              <label>Target length <select id="sl-earshot-duration"><option value="240">240 ms</option><option value="360" selected>360 ms</option><option value="480">480 ms</option></select></label>
+              <label>Seed <input id="sl-earshot-seed" type="number" value="13" min="0" max="2147483607" step="1"></label>
+              <button id="sl-earshot-start" disabled>Generate 4 takes</button><button id="sl-earshot-preset" disabled>Refine reviewed A (stone)</button>
+            </div>
+            <div id="sl-earshot-round" class="earshot-takes" aria-live="polite"></div>
+            <div class="earshot-toolbar">
+              <label>Change <select id="sl-earshot-direction"><option value="variation">Another take</option><option value="crisper">Sharper contact</option><option value="heavier">More body</option><option value="drier">Less tail</option><option value="rougher">More gritty detail</option><option value="stone">Stone thud · less metallic</option><option value="mineral">Denser stone · less metal and wood</option></select></label>
+              <button id="sl-earshot-refine" disabled>Refine selection</button>
+              <button id="sl-earshot-accept" disabled>Accept frozen source…</button>
+            </div>
+            <p id="sl-earshot-status" role="status">Connect a local Earshot 0.3 installation to explore sound improvements.</p>
+          </details>
           <div id="sl-batch-strip" class="batch-strip" aria-live="polite"></div>
           <div id="sl-publish-diff" class="publish-diff">Publish diff: no authored production changes.</div>
           <div id="sl-promotion-state" class="promotion-state">Standalone mode: canonical filesystem operations are unavailable.</div>

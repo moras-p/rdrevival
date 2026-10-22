@@ -108,6 +108,7 @@ export function createDocument(options = {}) {
     frames: [],
     clips: [],
     references: [],
+    animationReview: {},
     constraints: { protected: [], frameIds: null, allowedPalette: null },
     layout: {
       columns: options.columns ?? count,
@@ -364,6 +365,16 @@ export function validate(doc) {
     "REFERENCE",
     "Reference IDs must be unique",
   );
+  // Review data is serialized with the document; stale decisions are detected
+  // by comparing their stored image/source fingerprint at inspection/export.
+  if (doc.animationReview !== undefined) {
+    requireArt(doc.animationReview && typeof doc.animationReview === 'object' && !Array.isArray(doc.animationReview) &&
+      Object.keys(doc.animationReview).length <= 128, 'REVIEW', 'Invalid frame review map');
+    for (const [key, record] of Object.entries(doc.animationReview))
+      requireArt(frameIds.has(key) && ['draft', 'ready-for-review', 'accepted', 'rejected'].includes(record?.status) &&
+        /^sha256:[0-9a-f]{64}$/.test(record.fingerprint) && typeof record.note === 'string' && record.note.length <= 2000,
+      'REVIEW', 'Malformed frame review entry');
+  }
   const atlas = doc.provenance?.atlas;
   if (atlas) {
     requireArt(

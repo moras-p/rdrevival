@@ -73,3 +73,34 @@
 .layer-shaping{border-top:1px solid #20262e}.layer-shaping>summary{min-height:34px;display:flex;align-items:center;padding:4px 7px;color:var(--muted);font-size:9px;cursor:pointer}.layer-shaping-grid{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:6px;padding:6px}.layer-shaping-grid label{display:grid;gap:3px;color:var(--muted);font-size:9px}.layer-shaping-grid input{width:100%;min-width:0}.layer-shaping>small{display:block;padding:0 7px 7px;color:var(--muted);font-size:9px;line-height:1.35}@media(max-width:999px){.layer-properties input,.layer-shaping>summary,.layer-shaping-grid input{min-height:48px}}@media(max-width:699px){.layer-shaping-grid{grid-template-columns:1fr}}
 
 @media(max-width:899px){.scene-views{grid-template-columns:1fr}}
+
+/* Earshot is a candidate/review loop, not a second canonical renderer. */
+.earshot-loop{margin:9px 0;border:1px solid var(--line);border-radius:8px;padding:2px 8px 7px}
+.earshot-loop>summary{min-height:36px;display:flex;gap:7px;align-items:center;cursor:pointer;font-size:12px;font-weight:700}
+.earshot-loop>summary small{font-weight:400;margin-left:auto;color:var(--muted);font-size:10px}
+.earshot-loop p{margin:6px 1px;color:var(--muted);font-size:11px;line-height:1.4}
+.earshot-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+.earshot-toolbar label{display:grid;gap:3px;color:var(--muted);font-size:10px}
+.earshot-toolbar input,.earshot-toolbar select,.earshot-toolbar button{width:100%;min-width:0;min-height:34px;font-size:11px}
+.earshot-toolbar button:last-child:nth-child(3){grid-column:1/-1}
+.earshot-takes{display:grid;gap:6px;margin-top:8px}
+.earshot-take{border:1px solid var(--line);border-radius:6px;padding:7px;display:grid;gap:5px}
+.earshot-take[data-selected="true"]{border-color:var(--accent);background:rgba(120,150,180,.08)}
+.earshot-take-head{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.earshot-take-head label{font-size:11px;font-weight:650;display:flex;align-items:center;gap:5px}
+.earshot-take small{font-size:10px;color:var(--muted);line-height:1.3}
+.earshot-take audio{height:28px;width:100%}
+.stone-players{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.stone-players label{display:grid;gap:3px;min-width:0;font-size:10px;color:var(--muted)}
+.stone-players audio{width:100%;min-width:0}
+@media(max-width:590px){.stone-players{grid-template-columns:minmax(0,1fr)}}
+#sl-earshot-status{overflow-wrap:anywhere}
+
+@media(pointer:coarse),(max-width:899px){.earshot-toolbar button,.earshot-toolbar input,.earshot-toolbar select{min-height:48px}}
+
+.stone-reveal{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:11px;color:var(--muted)}
+.stone-reveal input{width:17px;height:17px}
+/* Reviewer-controlled blind audibility gate; diagnostics remain secondary. */
+.stone-abx{border:1px solid var(--line,#64748b);border-radius:10px;padding:12px;margin:8px 0}
+.stone-abx p{margin:7px 0;font-size:12px;line-height:1.4}
+.stone-abx .earshot-toolbar{margin-top:8px}

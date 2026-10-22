@@ -1,4 +1,8 @@
 import { AGENT_WORKFLOW } from "./direction.js";
+import { animationFrameFingerprint, animationReviewState, inspectAnimationPair } from './animation-review.js';
+import { exportAnimationCandidate } from "./animation-candidate.js";
+import { referenceSequenceFromDocument, referenceFrame, referenceState } from "./reference-sequences.js";
+import { prepareNativeLadderEvidence } from "./native-ladder-evidence.js";
 import { AssetPluginRegistry } from "./asset-plugins.js";
 import { encodeSession, decodeSession } from "./session.js";
 import { ArtStore } from "./commands.js";
@@ -184,7 +188,7 @@ export class ArtController {
     if (compiled.candidateTransfer) return this.candidateTransfer({ ...i, ...compiled.candidateTransfer }, { simulate: i.mode === "simulate" });
     const input = { documentId: this.store.document.id, expectedRevision: i.expectedRevision, requestId: i.requestId, label: i.label ?? `recipe:${i.recipe.id}`, ops: compiled.ops, assertions: { ...(compiled.assertions ?? {}), ...(i.assertions ?? {}) } };
     const result = i.mode === "simulate" ? this.simulate(input) : this.apply(input);
-    return { ...result, recipe: i.recipe.id, resolvedOps: compiled.ops };
+    return { ...result, recipe: i.recipe.id, resolvedOps: compiled.ops, ...(compiled.workflow ? { workflow: compiled.workflow } : {}) };
   }
   #createSelectionHandle(selection) {
     const handle = `selection-${crypto.randomUUID()}`;
@@ -271,6 +275,10 @@ export class ArtController {
         assetPlugins: this.plugins.list(),
         productionPreview: !!this.pluginContext.productionPreviewProvider,
         referenceRoles: [...REFERENCE_ROLES],
+        referenceSequences: true,
+        runtimeResolvedLadderReferences: typeof this.pluginContext.productionPreviewProvider?.captureLadderReference === "function",
+        animationPairDiagnostics: true,
+        fingerprintedFrameReview: true,
         attachableReferenceRoles: [...ATTACHABLE_REFERENCE_ROLES],
         referencePolicies: [...REFERENCE_POLICIES],
         benchmarkTasks: PIXEL_ART_BENCHMARK_TASKS.map(({ id, title }) => ({ id, title })),
@@ -304,7 +312,8 @@ export class ArtController {
             clips: d.clips,
             layout: d.layout,
             constraints: d.constraints,
-            references: d.references.map(publicReference),
+            references: referenceState(d),
+            animationReview: d.animationReview ?? {},
             styleProfile: d.styleProfile ?? null,
             authoring: d.authoring ?? null,
             handoff: d.handoff ?? null,
@@ -339,6 +348,31 @@ export class ArtController {
       handleResolver: (handle, scope) => this.#resolveSelectionHandle(handle, scope),
       createHandle: (selection) => this.#createSelectionHandle(selection),
     });
+  }
+  animationPairState({ frameIds } = {}) {
+    return { revision: this.store.document.revision, ...inspectAnimationPair(this.store.document, frameIds) };
+  }
+  async frameReviewState({ frameId } = {}) {
+    const d = this.store.document;
+    requireArt(!frameId || d.frames.some(f => f.id === frameId), 'REVIEW', 'Unknown review frame');
+    const subset = frameId ? { ...d, frames: d.frames.filter(f => f.id === frameId) } : d;
+    return { revision: d.revision, frames: await animationReviewState(subset) };
+  }
+  // Human-facing UI only. Not exposed as a WebMCP document action: an agent
+  // cannot silently turn its own visual candidate into an accepted frame.
+  async recordFrameReview(i) {
+    const d = this.store.document;
+    requireArt(['draft', 'ready-for-review', 'accepted', 'rejected'].includes(i.status), 'REVIEW', 'Invalid review decision');
+    requireArt(typeof i.note === 'string' && i.note.length <= 2000, 'REVIEW', 'Review note must be bounded text');
+    requireArt(d.frames.some(f => f.id === i.frameId), 'REVIEW', 'Unknown review frame');
+    const fingerprint = await animationFrameFingerprint(d, i.frameId);
+    return this.store.transact({ ...i, action: 'human-frame-review' }, draft => {
+      draft.animationReview ??= {};
+      draft.animationReview[i.frameId] = { status: i.status, note: i.note, fingerprint };
+    });
+  }
+  referenceState() {
+    return { revision: this.store.document.revision, references: referenceState(this.store.document) };
   }
   read(i) {
     return readRegion(this.store.document, i);
@@ -442,6 +476,32 @@ export class ArtController {
       this.onChange();
       return { revision: d.revision, artifacts };
     }
+    if (i.action === "native-ladder-evidence-export") {
+      requireArt(i.documentId === d.id && i.expectedRevision === d.revision, "STALE_REVISION",
+        "Native evidence export requires the exact document revision");
+      const capturedView = this.lastView;
+      const prepared = await prepareNativeLadderEvidence(capturedView, d, this.activeCandidate);
+      const artifacts = [];
+      for (const panel of prepared.panels) {
+        const pixels = panel.canvas.getContext("2d").getImageData(0, 0, 320, 200).data;
+        artifacts.push(await this.artifact(await pngBlob(320, 200, pixels), panel.name, d.revision));
+      }
+      const manifest = { ...prepared.manifest,
+        files: artifacts.map(({ name, hash, bytes }) => ({ name, pngHash: `sha256:${hash}`, bytes })) };
+      artifacts.push(await this.artifact(new Blob([JSON.stringify(manifest, null, 2)],
+        { type: "application/json" }), `sm${manifest.submap.toString(16)}-mark${manifest.mark}-native-ladder-evidence.json`, d.revision));
+      requireArt(this.store.document.id === d.id && this.store.document.revision === i.expectedRevision &&
+        this.activeCandidate === capturedView.activeCandidate && this.lastView === capturedView, "STALE_REVISION",
+        "Document changed while exporting native review evidence");
+      return { revision: d.revision, artifacts, manifest };
+    }
+    if (i.action === "animation-candidate-export") {
+      requireArt(i.documentId === d.id && i.expectedRevision === d.revision, "STALE_REVISION", "Candidate export requires the current revision");
+      const result = await exportAnimationCandidate(d, o);
+      const artifacts = [];
+      for (const file of result.files) artifacts.push(await this.artifact(new Blob([file.text], { type: "application/json" }), file.name, d.revision));
+      return { revision: d.revision, artifacts, manifest: result.manifest };
+    }
     if (i.action === "production-export" || i.action === "asset-export") {
       requireArt(
         i.documentId === d.id && i.expectedRevision === d.revision,
@@ -481,6 +541,42 @@ export class ArtController {
     } else if (i.action === "asset-import" || this.plugins.importId(i.action)) {
       requireArt(file !== undefined, "HANDLE", "Choose the plugin source file first");
       next = await this.plugins.import(this.plugins.importId(i.action, o.pluginId), file, o, this.pluginContext);
+    } else if (i.action === "reference-pair") {
+      const { referenceId, frameIds } = o;
+      return this.store.transact(i, draft => {
+        const reference = draft.references.find(r => r.id === referenceId);
+        requireArt(reference?.sequence, "REFERENCE", "Choose a named animation reference");
+        requireArt(Array.isArray(frameIds) && frameIds.length === 2 && frameIds.every(id => reference.sequence.frames.some(f => f.id === id)),
+          "REFERENCE", "Choose two existing source frame IDs for phases A and B");
+        reference.sequence.phasePair = [...frameIds];
+      });
+    } else if (i.action === "reference-native-climb") {
+      requireArt(i.documentId === d.id && i.expectedRevision === d.revision,
+        "STALE_REVISION", "Native reference capture requires the exact active document revision");
+      const provider = this.pluginContext.productionPreviewProvider;
+      requireArt(typeof provider?.captureLadderReference === "function", "PREVIEW",
+        "A native Pixel Art preview and remembered RDX ROM are required for runtime-resolved references");
+      const { id, name, role = "pose", notes = "", submap, mark, maxFrames = 240, controls = [] } = o;
+      const sourceStore = this.store;
+      const reference = await provider.captureLadderReference({ id, name, role, notes, submap, mark, maxFrames, controls });
+      // The asynchronous native replay does not reserve this document. The
+      // original guarded revision must still hold when its pixels are attached.
+      requireArt(this.store === sourceStore && this.store.document.id === d.id &&
+        this.store.document.revision === i.expectedRevision, "STALE_REVISION",
+        "Document changed while native actor reference was being captured");
+      return this.store.transact(i, draft => {
+        requireArt(!draft.references.some(r => r.id === id), "REFERENCE", "Reference ID already exists");
+        draft.references.push(reference);
+      });
+    } else if (i.action === "reference-asset") {
+      requireArt(file !== undefined, "HANDLE", "Choose the trusted plugin source first");
+      const { pluginId, id, name, role = "pose", notes = "", ...pluginOptions } = o;
+      const source = await this.plugins.importReference(pluginId, file, pluginOptions, this.pluginContext);
+      const reference = await referenceSequenceFromDocument(source, { id, name, role, notes });
+      return this.store.transact(i, draft => {
+        requireArt(!draft.references.some(r => r.id === id), "REFERENCE", "Reference ID already exists");
+        draft.references.push(reference);
+      });
     } else if (i.action === "import-sheet") {
       requireArt(file?.rgba, "HANDLE", "Choose an image file first");
       next = sliceSheet(file, {
@@ -601,6 +697,10 @@ export class ArtController {
     mode = "asset",
     frameId,
     referenceId,
+    referenceFrameId,
+    poseReferenceId,
+    identityReferenceId,
+    phase = 0,
     region,
     zoom = 8,
     checkpoint,
@@ -627,8 +727,8 @@ export class ArtController {
       requireArt(this.pluginContext.productionPreviewProvider?.render, "PREVIEW", "Production-context preview provider is unavailable");
       const descriptor = await this.plugins.preview(d, { ...previewOptions, frameId: selected }, this.pluginContext);
       const preview = await this.pluginContext.productionPreviewProvider.render(d, descriptor);
-      requireArt(preview?.canvas, "PREVIEW", "Production preview provider did not return a canvas");
-      panels = [
+      requireArt(preview?.canvas || (Array.isArray(preview?.panels) && preview.panels.length), "PREVIEW", "Production preview provider did not return a canvas");
+      panels = Array.isArray(preview.panels) ? preview.panels.map(item => panel(item.label, item.canvas, item.note ?? '')) : [
         panel("Draft · native asset", imageCanvas(d.width, d.height, rgbaPixels(d, selected))),
         panel("Real map · draft substituted", preview.canvas),
       ];
@@ -654,6 +754,7 @@ export class ArtController {
       d.frames.forEach((frame, n) => strip.getContext("2d").drawImage(imageCanvas(d.width, d.height, silhouetteRgba(d, frame.id)), n * d.width, 0));
       panels.push(panel("Silhouette strip", strip));
       metadata.analysis = this.analyze();
+      metadata.animationPair = d.frames.length >= 2 ? inspectAnimationPair(d) : null;
     } else if (mode === "silhouette") source = imageCanvas(d.width, d.height, silhouetteRgba(d, selected));
     else if (mode === "value") source = imageCanvas(d.width, d.height, valueRgba(d, selected));
     else if (mode === "palette-role") source = imageCanvas(d.width, d.height, paletteRoleRgba(d, selected));
@@ -673,7 +774,27 @@ export class ArtController {
     } else if (mode === "sheet") {
       const sheet = exportSheet(d); source = imageCanvas(sheet.width, sheet.height, sheet.rgba);
     } else if (mode === "reference") {
-      const r = d.references.find((r) => r.id === referenceId); requireArt(r, "REFERENCE", "Unknown reference"); source = imageCanvas(r.width, r.height, r.rgba); metadata.reference = publicReference(r);
+      const r = d.references.find((r) => r.id === referenceId); requireArt(r, "REFERENCE", "Unknown reference");
+      const { rect: sourceRect, frame } = referenceFrame(r, referenceFrameId);
+      const atlas = imageCanvas(r.width, r.height, r.rgba);
+      source = document.createElement("canvas"); source.width = sourceRect[2]; source.height = sourceRect[3];
+      source.getContext("2d").drawImage(atlas, ...sourceRect, 0, 0, source.width, source.height);
+      metadata.reference = publicReference(r); metadata.referenceFrame = frame;
+    } else if (mode === "motion-pair") {
+      requireArt(Number.isInteger(phase) && phase >= 0 && phase <= 1, "VIEW", "Phase must be A (0) or B (1)");
+      for (const [role, id] of [["Pose", poseReferenceId], ["Identity", identityReferenceId]]) {
+        const ref = d.references.find(r => r.id === id);
+        requireArt(ref && ref.sequence, "REFERENCE", `${role} must be a named animation reference`);
+        const pairedId = ref.sequence.phasePair[phase] ?? ref.sequence.phasePair[0];
+        const { rect: sourceRect } = referenceFrame(ref, pairedId);
+        const canvas = document.createElement("canvas"); canvas.width = sourceRect[2]; canvas.height = sourceRect[3];
+        canvas.getContext("2d").drawImage(imageCanvas(ref.width, ref.height, ref.rgba), ...sourceRect, 0, 0, canvas.width, canvas.height);
+        panels.push(panel(`${role} · ${ref.name ?? ref.id} · ${pairedId}`, canvas, `${ref.provenance?.sourceKind ?? 'reference'} · ${ref.policy}`));
+      }
+      const candidate = d.frames[phase] ?? d.frames[0];
+      panels.push(panel(`Candidate · ${candidate.id}`, imageCanvas(d.width, d.height, rgbaPixels(d, candidate.id))));
+      metadata.animationPair = d.frames.length >= 2 ? inspectAnimationPair(d) : null;
+      metadata.pairing = { phase, poseReferenceId, identityReferenceId, candidateFrameId: candidate.id, visualAcceptance: 'Not inferred from preview' };
     } else if (mode === "strip" || mode === "playback") {
       const frames = mode === "playback" ? d.clips[0].frameIds.map(id => d.frames.find(frame => frame.id === id)) : d.frames;
       source = document.createElement("canvas"); source.width = d.width * frames.length; source.height = d.height;
