@@ -6,7 +6,9 @@ const CHECKPOINT_SLOTS = Object.freeze([0, 1, 2, 3, 4, 5, 6]);
 const CHECKPOINT_INTERVAL_FRAMES = 6;
 const DEFAULT_PREROLL_FRAMES = 36;
 const DEFAULT_TAIL_FRAMES = 16;
-const HISTORY_FRAMES = 256;
+const HISTORY_FRAMES = 640;
+const MAX_CAPTURE_TAIL = 240;
+const NATIVE_SOUND_NAMES = Object.freeze(Object.fromEntries(Object.entries(NATIVE_SFX_IDS).map(([name,id]) => [id,name])));
 const GAME_FRAME_MS = 40;
 const NATIVE_SFX_LOGICAL_IDS = Object.freeze([...new Set(Object.values(NATIVE_SFX_IDS))]);
 const SOUNDLAB_GAME_JUICE_PRESET = 'amiga_palette_punch';
@@ -94,6 +96,7 @@ export class RdrSoundLabRuntime {
     onReplay,
     onStatus,
     onNativeInput,
+    onSounds,
     previewFactory = XrickLivePreview,
     fetcher = globalThis.fetch?.bind(globalThis),
     loadRememberedRom = loadRememberedRdxRom,
@@ -111,6 +114,14 @@ export class RdrSoundLabRuntime {
     this.onReplay = onReplay;
     this.onStatus = onStatus;
     this.onNativeInput = onNativeInput;
+    this.onSounds = onSounds;
+    this.capturePrerollFrames = DEFAULT_PREROLL_FRAMES;
+    this.captureTailFrames = null;
+    this.sceneSounds = new Map();
+    this.soundEnabled = new Map();
+    this.lastSfxSerial = 0;
+    this.playtest = false;
+    this.playtestLastStep = null;
     this.previewFactory = previewFactory;
     this.fetcher = fetcher;
     this.loadRememberedRom = loadRememberedRom;
@@ -144,7 +155,7 @@ export class RdrSoundLabRuntime {
     try {
       const proof = scene?.proof || {};
       this.target = { event:String(proof.event || event || ''), mark:Number(proof.mark ?? match?.mark), actorFamily:String(proof.actorFamily || match?.actorFamily || ''), action:String(action || 'impact'), playback:String(playback || ''), tailFrames:Math.max(DEFAULT_TAIL_FRAMES, Math.ceil(Math.max(0, finite(durationMs, 0)) / GAME_FRAME_MS)) };
-      this.sceneFixture = scene && typeof scene === 'object' ? scene : null;
+      this.sceneFixture = scene && typeof scene === 'object' ? { ...scene, postEventFrames:this.captureTailFrames ?? scene.postEventFrames } : null;
       this.onStatus?.('Starting native runtime…');
       if (!this.preview) this.preview = await this.previewFactory.create(() => {}, () => {});
       const rom = await this.#resolveRomSource();
@@ -156,6 +167,7 @@ export class RdrSoundLabRuntime {
       await this.preview.resetLevelForPlaytest();
       this.#applySoundLabPresentationDefaults();
       this.#resetSceneState();
+      this.lastSfxSerial = this.preview.bridge.soundSfxEventSerial?.() || 0;
       if (this.sceneFixture) {
         this.sceneRunner?.stop({ discard:true });
         this.sceneRunner = new NativeSceneRunner(this.preview);
@@ -220,10 +232,13 @@ export class RdrSoundLabRuntime {
   reset() {
     if (!this.preview) return;
     this.#releaseSceneHold();
+    this.playtest = false;
+    this.preview.clearKeys?.();
     this.#resetSceneState();
     this.#applySoundLabPresentationDefaults();
     if (this.sceneRunner?.baseline) {
       this.sceneRunner.setPaused(false);
+      this.sceneRunner.scene = this.sceneFixture;
       this.#beginSceneCapture();
       this.sceneRunner.restart();
       this.lastSerial = this.sceneRunner.baselineEventSerial;
@@ -238,6 +253,7 @@ export class RdrSoundLabRuntime {
 
   stop() {
     this.running = false;
+    this.playtest = false;
     if (this.raf) this.cancelFrame(this.raf);
     this.canvas?.removeEventListener('keydown', this.keyDown);
     this.canvas?.removeEventListener('keyup', this.keyUp);
@@ -250,6 +266,101 @@ export class RdrSoundLabRuntime {
     this.preview?.bridge?.setFrontendPaused?.(false);
   }
 
+  configureCaptureWindow({ preFrames = DEFAULT_PREROLL_FRAMES, postFrames = 96 } = {}) {
+    this.capturePrerollFrames = Math.max(0, Math.min(DEFAULT_PREROLL_FRAMES, Math.round(finite(preFrames, DEFAULT_PREROLL_FRAMES))));
+    this.captureTailFrames = Math.max(8, Math.min(MAX_CAPTURE_TAIL, Math.round(finite(postFrames, 96))));
+    if (this.sceneFixture) this.sceneFixture = { ...this.sceneFixture, postEventFrames:this.captureTailFrames };
+    this.target.tailFrames = Math.max(DEFAULT_TAIL_FRAMES, this.captureTailFrames);
+    this.reset();
+  }
+
+  setSceneSoundEnabled(key, enabled) {
+    if (!/^(sfx|semantic):\d+$/.test(key)) return false;
+    this.soundEnabled.set(key, !!enabled);
+    if (this.scenePlayback || this.playtest) this.#applySceneSoundMix(this.scenePlayback?.reviewEventId ?? null);
+    return true;
+  }
+
+  #recordSounds(snapshot, events = []) {
+    const frame = finite(snapshot?.frameSerial, -1);
+    const rows = [];
+    for (const item of this.preview?.bridge?.soundSfxEventsSince?.(this.lastSfxSerial, 32) || []) {
+      this.lastSfxSerial = item.serial;
+      rows.push({ key:`sfx:${item.logicalId}`, label:NATIVE_SOUND_NAMES[item.logicalId] || `Native SFX ${item.logicalId}`, frameSerial:frame, source:'Native SFX' });
+    }
+    for (const item of events) rows.push({ key:`semantic:${item.eventId}`, label:item.event || `SoundLab ${item.eventId}`, frameSerial:frame, source:'SoundLab' });
+    if (!rows.length) return;
+    for (const row of rows) {
+      const prior = this.sceneSounds.get(row.key);
+      if (prior) { prior.count++; prior.lastFrame=frame; }
+      else this.sceneSounds.set(row.key, { ...row, count:1, lastFrame:frame });
+    }
+    this.onSounds?.([...this.sceneSounds.values()], this.soundEnabled);
+  }
+
+  #applySceneSoundMix(reviewEventId = null) {
+    const bridge = this.preview?.bridge;
+    if (!bridge) return;
+    bridge.clearSoundSfxSuppressions?.();
+    for (const [key, enabled] of this.soundEnabled) if (key.startsWith('sfx:') && !enabled)
+      bridge.setSoundSfxSuppressed?.(Number(key.slice(4)), true);
+    const semantic = new Set([...this.sceneSounds.keys()].filter(key=>key.startsWith('semantic:')));
+    if (reviewEventId != null) semantic.add(`semantic:${reviewEventId}`);
+    for (const key of semantic) bridge.setSoundLabEventSuppressed?.(Number(key.slice(9)), this.soundEnabled.get(key)===false || key===`semantic:${reviewEventId}`);
+  }
+
+  startPlaytest() {
+    if (!this.preview || !this.scene) return false;
+    this.#releaseSceneHold();
+    this.sceneRunner?.setPaused(true);
+    this.playtest = true;
+    this.preview.bridge.debugCheckpointLoad?.(this.scene.checkpoint.slot);
+    this.lastSerial = this.scene.checkpoint.lastSerial;
+    this.lastSfxSerial = this.preview.bridge.soundSfxEventSerial?.() || 0;
+    if (this.scene.checkpoint.tracking) this.preview.restoreTrackingState?.(this.scene.checkpoint.tracking);
+    this.preview.clearKeys?.();
+    this.preview.bridge.setDebugInvincible?.(true);
+    this.preview.bridge.setAiTransitionHold?.(false);
+    this.preview.bridge.setFrontendPaused?.(true);
+    this.#applySceneSoundMix();
+    this.playtestLastStep = this.now() - GAME_FRAME_MS;
+    this.onStatus?.('Immortal playtest · arrows / WASD / Space · Reset playtest to restart');
+    return true;
+  }
+
+  resetPlaytest() {
+    if (!this.playtest) return false;
+    return this.startPlaytest();
+  }
+
+  stopPlaytest() {
+    if (!this.playtest) return;
+    this.playtest = false;
+    this.preview?.clearKeys?.();
+    this.#releaseSceneHold();
+    this.preview?.bridge?.setAiTransitionHold?.(true);
+    this.onStatus?.('Playtest stopped · captured scene retained');
+  }
+
+  #capturePlaytestFrame() {
+    const now = this.now();
+    if (now - this.playtestLastStep < GAME_FRAME_MS) return;
+    this.playtestLastStep += GAME_FRAME_MS;
+    if (now - this.playtestLastStep > GAME_FRAME_MS*2) this.playtestLastStep = now;
+    // The live preview owns the actual native input mask; no fixture control is injected.
+    this.preview.bridge.debugForceBrowserFrame?.();
+    const frame = this.preview.capture();
+    this.#drawFrame(frame);
+    const events = this.preview.bridge.soundLabEventsSince?.(this.lastSerial, 64) || [];
+    for (const event of events) {
+      this.lastSerial = event.serial;
+      if (event.event === this.target.event) this.onReplay?.({phase:'playtest-roll-start',frameSerial:finite(frame?.snapshot?.frameSerial,0)});
+      if (event.event === 'boulder.impact') this.onReplay?.({phase:'playtest-roll-end'});
+    }
+    this.#recordSounds(frame?.snapshot, events);
+    this.onFrame?.({ frame, scene:this.scene, replay:false, playtest:true });
+  }
+
   canReplayEvent(serial) {
     return !!this.scene && (Number(this.scene.serial) >>> 0) === (Number(serial) >>> 0);
   }
@@ -259,8 +370,10 @@ export class RdrSoundLabRuntime {
     return this.replayScene(serial, { startFrame:this.scene.startFrame, endFrame:this.scene.endFrame });
   }
 
-  replayScene(serial, { startFrame, endFrame } = {}, { suppressSoundLab = false, suppressNativeSfx = false, requireProof = true } = {}) {
+  replayScene(serial, { startFrame, endFrame } = {}, { suppressSoundLab = false, suppressNativeSfx = false, requireProof = true, speed = 1, reviewEventId = null, preserveSceneSounds = false } = {}) {
     if (!this.preview || !this.scene || (Number(this.scene.serial) >>> 0) !== (Number(serial) >>> 0)) return false;
+    if (![1, .75, .5, .25].includes(Number(speed))) return false;
+    this.stopPlaytest();
     const scene = this.scene;
     const requestedStart = Math.round(finite(startFrame, scene.startFrame));
     const requestedEnd = Math.round(finite(endFrame, scene.endFrame));
@@ -297,10 +410,16 @@ export class RdrSoundLabRuntime {
      * is authored audio, not a recording or a layer over incidental footsteps,
      * triggers, or earlier game voices. Published/Original may opt back into
      * native SFX explicitly through their replay route. */
-    this.#suppressNativeSfx(!!suppressNativeSfx);
-    this.#setSoundLabRuntimeSuppressed(!!suppressSoundLab);
+    if (preserveSceneSounds) {
+      this.#suppressNativeSfx(false);
+      this.#setSoundLabRuntimeSuppressed(false);
+      this.#applySceneSoundMix(reviewEventId);
+    } else {
+      this.#suppressNativeSfx(!!suppressNativeSfx);
+      this.#setSoundLabRuntimeSuppressed(!!suppressSoundLab);
+    }
     this.preview.bridge.setAiAudioHold?.(false);
-    this.scenePlayback = { serial:Number(serial) >>> 0, startFrame:start, endFrame:end, frameSerial, sceneFrame, lastStep:this.now() - GAME_FRAME_MS, suppressSoundLab:!!suppressSoundLab, suppressNativeSfx:!!suppressNativeSfx, proofNotified:false };
+    this.scenePlayback = { serial:Number(serial) >>> 0, startFrame:start, endFrame:end, frameSerial, sceneFrame, lastStep:this.now() - GAME_FRAME_MS / speed, speed:Number(speed), suppressSoundLab:!!suppressSoundLab, suppressNativeSfx:!!suppressNativeSfx, reviewEventId, proofNotified:false };
     this.onFrame?.({ frame, scene:{ ...scene, startFrame:start, endFrame:end }, replay:true });
     this.onReplay?.({ phase:'start', serial:Number(serial) >>> 0, startFrame:start, endFrame:end, proofFrame:scene.proofFrame, frameSerial, draft:!!suppressSoundLab });
     this.onStatus?.(`Playing scene window · ${start}–${end}f`);
@@ -319,6 +438,9 @@ export class RdrSoundLabRuntime {
     this.checkpointCursor = 0;
     this.lastCheckpointFrame = -1;
     this.history = [];
+    this.sceneSounds.clear();
+    this.lastSfxSerial = this.preview?.bridge?.soundSfxEventSerial?.() || 0;
+    this.onSounds?.([], this.soundEnabled);
     this.scene = null;
     this.pendingScene = null;
     this.scenePlayback = null;
@@ -334,6 +456,7 @@ export class RdrSoundLabRuntime {
     this.preview.bridge.setAiAudioHold?.(false);
     this.#suppressNativeSfx(false);
     this.#setSoundLabRuntimeSuppressed(false);
+    this.#applySceneSoundMix();
     this.preview.bridge.setAiTransitionHold?.(false);
     this.scenePlayback = null;
   }
@@ -398,7 +521,7 @@ export class RdrSoundLabRuntime {
 
   #checkpointForProof(proofFrame) {
     if (!this.checkpoints.length) return null;
-    const desired = proofFrame - DEFAULT_PREROLL_FRAMES;
+    const desired = proofFrame - this.capturePrerollFrames;
     const eligible = this.checkpoints.filter(row => row.frameSerial <= desired);
     return eligible.at(-1) || this.checkpoints[0];
   }
@@ -419,7 +542,7 @@ export class RdrSoundLabRuntime {
     if (!checkpoint) return null;
     const target = { ...this.target, slot:Number(event.actor?.slot), mark:Number(event.actor?.mark ?? this.target.mark) };
     this.#recordHistory(snapshot, target);
-    this.pendingScene = { event, target, checkpoint, proofFrame:frameSerial, maxFrame:frameSerial + target.tailFrames };
+    this.pendingScene = { event, target, checkpoint, proofFrame:frameSerial, maxFrame:frameSerial + Math.max(DEFAULT_TAIL_FRAMES, this.captureTailFrames ?? target.tailFrames) };
     return checkpoint;
   }
 
@@ -439,7 +562,8 @@ export class RdrSoundLabRuntime {
       proofFrame:pending.proofFrame,
       minFrame:pending.checkpoint.frameSerial,
       maxFrame:frameSerial,
-      startFrame:Math.max(pending.checkpoint.frameSerial, pending.proofFrame - DEFAULT_PREROLL_FRAMES),
+      startFrame:Math.max(pending.checkpoint.frameSerial, pending.proofFrame - this.capturePrerollFrames),
+      audioEvents:[...this.sceneSounds.values()].filter(row=>row.lastFrame>=pending.checkpoint.frameSerial),
       endFrame:frameSerial,
       path,
       contact:path.reduce((best, row) => !best || Math.abs(row.frameSerial - pending.proofFrame) < Math.abs(best.frameSerial - pending.proofFrame) ? row : best, null),
@@ -494,6 +618,7 @@ export class RdrSoundLabRuntime {
       this.onEvent?.(enriched, frame.snapshot);
     }
     if (frameSerial >= 0) this.#saveCheckpoint(frameSerial);
+    this.#recordSounds(frame?.snapshot, events);
     this.#finishScene(frame?.snapshot);
     this.onFrame?.({ frame, scene:this.scene, replay:false });
   }
@@ -502,8 +627,11 @@ export class RdrSoundLabRuntime {
     const playback = this.scenePlayback;
     if (!playback) return;
     const now = this.now();
-    if (now - playback.lastStep < GAME_FRAME_MS) return;
-    playback.lastStep = now;
+    if (now - playback.lastStep < GAME_FRAME_MS / playback.speed) return;
+    /* Keep a fixed wall-clock timeline instead of resetting on each RAF.
+     * Otherwise 25 Hz advances at ~20 Hz on a 60 Hz display and the review
+     * sound drifts ahead even at 1×. Never skip simulation frames. */
+    playback.lastStep += GAME_FRAME_MS / playback.speed;
     const previousFrame = playback.frameSerial;
     const mask = playback.sceneFrame == null ? 0 : nativeSceneControlMask(this.sceneFixture, playback.sceneFrame);
     stepNativeFrame(this.preview.bridge, mask);
@@ -515,6 +643,12 @@ export class RdrSoundLabRuntime {
       playback.proofNotified = true;
       this.onReplay?.({ phase:'proof', serial:playback.serial, startFrame:playback.startFrame, endFrame:playback.endFrame, proofFrame:this.scene.proofFrame, frameSerial:playback.frameSerial, draft:playback.suppressSoundLab });
     }
+    // The approved terrain impact remains a separate native sound. End the
+    // preview rolling bed before that event rather than layering through it.
+    for (const event of this.preview.bridge.soundLabEventsSince?.(this.lastSerial, 64) || []) {
+      this.lastSerial = event.serial;
+      if (event.event === 'boulder.impact') this.onReplay?.({ phase:'playtest-roll-end', frameSerial:playback.frameSerial });
+    }
     this.onFrame?.({ frame, scene:{ ...this.scene, startFrame:playback.startFrame, endFrame:playback.endFrame }, replay:true });
     if (playback.frameSerial >= playback.endFrame) {
       /* Stop any cue that would extend beyond the authored window, but keep the
@@ -524,6 +658,7 @@ export class RdrSoundLabRuntime {
       this.preview.bridge.setAiAudioHold?.(false);
       this.#suppressNativeSfx(false);
       this.#setSoundLabRuntimeSuppressed(false);
+      this.#applySceneSoundMix();
       this.scenePlayback = null;
       this.onReplay?.({ phase:'end', serial:playback.serial, startFrame:playback.startFrame, endFrame:playback.endFrame, proofFrame:this.scene.proofFrame, frameSerial:playback.frameSerial, draft:playback.suppressSoundLab });
       this.onStatus?.('Scene window complete');
@@ -532,7 +667,8 @@ export class RdrSoundLabRuntime {
 
   #loop() {
     if (!this.running) return;
-    if (this.scenePlayback) this.#captureReplayFrame();
+    if (this.playtest) this.#capturePlaytestFrame();
+    else if (this.scenePlayback) this.#captureReplayFrame();
     else if (!this.scene) this.#captureNormalFrame();
     this.raf = this.requestFrame(() => this.#loop());
   }

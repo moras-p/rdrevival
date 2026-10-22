@@ -104,3 +104,35 @@
 .stone-abx{border:1px solid var(--line,#64748b);border-radius:10px;padding:12px;margin:8px 0}
 .stone-abx p{margin:7px 0;font-size:12px;line-height:1.4}
 .stone-abx .earshot-toolbar{margin-top:8px}
+
+/* Rolling preview belongs to native replay; never a production score editor. */
+.roll-review{padding:9px 11px;border-top:1px solid var(--line);background:#131a20}
+.roll-review-header,.roll-review-controls{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.roll-review-header small{color:var(--muted);font-size:10px}
+.roll-review-controls{margin-top:7px;justify-content:flex-start}
+.roll-review-controls label{display:flex;gap:5px;align-items:center;color:var(--muted);font-size:11px}
+.roll-review-controls select{max-width:240px;min-height:34px}
+.roll-review p{margin:6px 0 0;color:var(--muted);font-size:11px}
+@media(max-width:699px){.roll-review-controls{display:grid}.roll-review-controls label{justify-content:space-between}.roll-review-controls select{max-width:55vw}}
+
+.roll-review-tuning{display:grid;grid-template-columns:minmax(130px,1fr) minmax(180px,1.5fr) minmax(160px,1.3fr) auto;align-items:end;gap:10px;margin-top:9px}
+.roll-review-tuning label{display:grid;gap:5px;min-width:0;color:var(--muted);font-size:11px}
+.roll-review-tuning select{min-height:34px;width:100%}
+.roll-review-tuning input[type=range]{width:100%;min-width:0;accent-color:var(--accent)}
+.roll-review-tuning output{font:600 10px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:#f3d28c;white-space:nowrap}
+.roll-review-tuning button{min-height:34px}
+@media(max-width:950px){.roll-review-tuning{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.roll-review-tuning{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}}
+
+.scene-capture-settings{display:flex;gap:8px;align-items:end;flex-wrap:wrap;padding:7px 10px;border-top:1px solid var(--line)}
+.scene-capture-settings label{display:grid;gap:3px;font-size:11px;color:var(--muted)}
+.scene-capture-settings input{width:78px;min-height:32px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:5px;padding:4px}
+.scene-capture-settings small,.scene-mixer small{color:var(--muted);font-size:10px}
+.scene-mixer{padding:7px 10px;border-top:1px solid var(--line);font-size:12px}
+.scene-mixer summary{cursor:pointer;font-weight:600}
+.scene-mixer summary output{font-size:10px;color:var(--muted);font-weight:400;margin-left:10px}
+.scene-mixer-rows{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.scene-mixer-rows label{display:flex;align-items:center;gap:5px;padding:5px 7px;background:#1c252c;border:1px solid var(--line);border-radius:6px;max-width:100%;font-size:11px}
+.scene-mixer-rows small{opacity:.7}
+.roll-review-tuning{grid-template-columns:repeat(3,minmax(140px,1fr)) auto}
+@media(max-width:560px){.roll-review-tuning{grid-template-columns:repeat(2,minmax(0,1fr))}}

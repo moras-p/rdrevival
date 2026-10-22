@@ -10,6 +10,7 @@ export class SoundLabAuthoringClient {
   async connect(){this.capabilities=await this.request('capabilities');return this.capabilities;}
   status(){return this.request('status');}
   sources(){return this.request('sources');}
+  reviewAudio(){return this.request('review-audio');}
   render(job){return this.request('render',{method:'POST',body:job});}
   batch(job){return this.request('batch',{method:'POST',body:job});}
   promote(job){return this.request('promote',{method:'POST',body:job});}

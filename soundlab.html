@@ -44,6 +44,8 @@
             <div class="panel-actions">
               <button id="sl-play-isolated" title="Audition the current sound without gameplay">Sound only</button>
               <button id="sl-reset-native">Reset capture</button>
+              <button id="sl-playtest-start" type="button" disabled>Playtest · immortal</button>
+              <button id="sl-playtest-reset" type="button" disabled>Reset playtest</button>
               <button id="sl-start-native" class="primary">Capture scene</button>
               <button id="sl-toggle-native" aria-expanded="false" aria-controls="sl-native-body">Hide</button>
             </div>
@@ -82,6 +84,17 @@
               </div>
               <output id="sl-scene-window-readout">Waiting for scene</output>
             </div>
+            <div class="scene-capture-settings" aria-label="Native capture duration">
+              <label>Before event (frames) <input id="sl-capture-pre" type="number" min="0" max="36" step="1" value="36"></label>
+              <label>After event (frames) <input id="sl-capture-post" type="number" min="8" max="240" step="8" value="96"></label>
+              <button id="sl-recapture" type="button" disabled>Recapture window</button>
+              <small>25 frames = 1 second · recapture runs native gameplay again</small>
+            </div>
+            <details id="sl-scene-mixer" class="scene-mixer" open>
+              <summary>Scene sounds <output id="sl-scene-mixer-count">Capture to discover sounds</output></summary>
+              <div id="sl-scene-mixer-rows" class="scene-mixer-rows"></div>
+              <small>Native SFX and SoundLab events, not individual PCM voices. Uncheck a sound to mute its next triggers during replay/playtest.</small>
+            </details>
             <section id="sl-score-workspace" class="score-workspace" hidden aria-label="Visual sound score">
               <div class="score-toolbar">
                 <div class="score-selection"><span>Selected segment</span><strong id="sl-score-segment-name">—</strong><small id="sl-score-range-readout">—</small></div>
@@ -102,6 +115,23 @@
                   <button type="button" data-playback-scope="scene">Full scene</button>
                 </div>
                 <div class="sequence-review-actions"><button id="sl-play-transition" type="button">Play transition</button><output id="sl-sequence-health" class="sequence-health" aria-live="polite">Sequence continuity: clean</output></div>
+              </div>
+              <div id="sl-roll-review" class="roll-review" hidden>
+                <div class="roll-review-header"><strong>Rolling sound review</strong><small>Local until explicit Publish · game audio unchanged during review</small></div>
+                <div class="roll-review-controls">
+                  <label>Listen to <select id="sl-roll-review-choice" aria-label="Rolling sound design"><option value="">Normal Sound Score Draft</option></select></label>
+                  <label>Quality <select id="sl-roll-review-quality" aria-label="Rolling preview quality"><option value="game">Game · 22.05 kHz PCM8</option><option value="master">Master · 48 kHz PCM16</option></select></label>
+                </div>
+                <div class="roll-review-tuning" id="sl-roll-review-tuning">
+                  <label>Replay speed <select id="sl-roll-review-speed" aria-label="Boulder replay speed"><option value="1">Normal · 1×</option><option value="0.75">Slow · 0.75×</option><option value="0.5">Slow motion · 0.5×</option><option value="0.25">Very slow · 0.25×</option></select></label>
+                  <label>Sound cadence <input id="sl-roll-review-tempo" type="range" min="0.5" max="1.5" step="0.05" value="1" aria-label="Rolling sound speed, independent of gameplay"><output id="sl-roll-review-tempo-value" for="sl-roll-review-tempo">1.00×</output></label>
+                  <label>Pitch <input id="sl-roll-review-pitch" type="range" min="-6" max="6" step="0.5" value="0" aria-label="Rolling sound pitch in semitones"><output id="sl-roll-review-pitch-value" for="sl-roll-review-pitch">Normal</output></label>
+                  <label>Volume <input id="sl-roll-review-volume" type="range" min="0" max="150" step="5" value="100" aria-label="Rolling sound preview volume"><output id="sl-roll-review-volume-value" for="sl-roll-review-volume">100%</output></label>
+                  <label><span>Follow boulder speed</span><input id="sl-roll-review-follow" type="checkbox" checked aria-label="Follow boulder speed during audio review"></label>
+                  <button type="button" id="sl-roll-review-reset" title="Reset replay speed, sound cadence, pitch, volume and speed follow">Reset</button>
+                </div>
+                <button type="button" id="sl-roll-review-publish" disabled>Publish tuned rolling sound…</button>
+                <p id="sl-roll-review-status" role="status">Capture SM00 and select a design to hear it with the boulder.</p>
               </div>
               <div class="score-loop-row">
                 <span>Selected loop</span>
