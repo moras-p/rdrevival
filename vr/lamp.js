@@ -45,12 +45,13 @@ export class LampEventBridge {
     if (this.seen.has(key)) return;
     this.seen.add(key);
     if (this.seen.size > 256) this.seen.delete(this.seen.values().next().value);
+    // Where it happened in the room (when the spatial profile maps it), so nearer props react more.
+    const point = event.world && this.projector?.selected?.calibration ? this.projector.project(event.world) : null;
     if (boulder) {
-      const point=this.projector.project(event.world);
       if (!point) return;
       const side = point.x < 0.7 ? -1 : 1;
-      this.lamp.impulse(side*this.projector.selected.calibration.lampImpact);
-    } else this.lamp.impulse();
+      this.lamp.impulse(side*this.projector.selected.calibration.lampImpact, point);
+    } else this.lamp.impulse(1, point);
   }
   reset() {
     this.seen.clear(); this.generation = null;

@@ -1,8 +1,8 @@
 import { mapGamepad } from '../rdx/src/runtime/input-router.js';
 import { XRICK_CONTROL as C } from '../rdx/src/runtime/controls.js';
 
-// WebXR standard-gamepad mapping: trigger 0, squeeze 1, thumbstick 2,
-// primary face 3, secondary face 4. Confirm actual Quest profile on hardware.
+// WebXR xr-standard mapping: trigger 0, squeeze 1, touchpad 2 (a placeholder
+// on Quest Touch), thumbstick press 3, A/X 4, B/Y 5.
 const XR_DEVICE = 'xr:controller';
 const held = (source, index) => !!source?.gamepad?.buttons?.[index]?.pressed;
 const pair = source => {
@@ -14,12 +14,15 @@ const pair = source => {
 /** Samples both hands at the native pre-actor hook; select events write immediately. */
 export class XRControllerInput {
   constructor(router, { onRoomAction = () => {}, onStatus = () => {}, onRecenter = () => {},
-    onHelp = () => {}, now = () => performance.now() } = {}) {
+    onHelp = () => {}, onLights = () => {}, onTimeOfDay = () => {}, onTidy = () => {}, now = () => performance.now() } = {}) {
     this.router = router;
     this.onRoomAction = onRoomAction;
     this.onStatus = onStatus;
     this.onRecenter = onRecenter;
     this.onHelp = onHelp;
+    this.onLights = onLights;
+    this.onTimeOfDay = onTimeOfDay;
+    this.onTidy = onTidy;
     this.roomButtons = {left:false,right:false};
     this.now = now;
     this.mode = 'game';
@@ -104,11 +107,14 @@ export class XRControllerInput {
   sample(timestamp = this.now()) {
     if (!this.session) return;
     if (this.mode === 'room') {
-      const leftClick = held(this.left, 2);
-      const rightClick = held(this.right, 2);
-      if (leftClick && !this.roomButtons.left) this.onHelp();
-      if (rightClick && !this.roomButtons.right) this.onRecenter();
-      this.roomButtons = {left:leftClick,right:rightClick};
+      const now = {left: held(this.left, 3), right: held(this.right, 3),
+        a: held(this.right, 4), b: held(this.right, 5), y: held(this.left, 5)};
+      if (now.left && !this.roomButtons.left) this.onHelp();
+      if (now.right && !this.roomButtons.right) this.onRecenter();
+      if (now.a && !this.roomButtons.a) this.onLights();
+      if (now.b && !this.roomButtons.b) this.onTimeOfDay();
+      if (now.y && !this.roomButtons.y) this.onTidy();
+      this.roomButtons = now;
       return;
     }
     const left = this.left || (!this.right ? this.sources[0] : null);
@@ -120,9 +126,9 @@ export class XRControllerInput {
     const buttons = Array.from({length: 16}, () => ({pressed: false}));
     // The GameInputRouter's existing CD32 chord semantics remain authoritative.
     if (profile === 'cd32') {
-      buttons[0].pressed = held(right, 3); // jump
-      buttons[1].pressed = held(right, 4); // dynamite
-      buttons[2].pressed = held(left, 3); // stick
+      buttons[0].pressed = held(right, 4); // A: jump
+      buttons[1].pressed = held(right, 5); // B: dynamite
+      buttons[2].pressed = held(left, 4); // X: stick
       buttons[3].pressed = trigger; // directional Fire
     } else buttons[0].pressed = trigger;
     const axes = pair(left);

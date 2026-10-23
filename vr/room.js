@@ -5,6 +5,8 @@ import { XRControllerInput } from './input.js';
 import { DampedLamp, LampEventBridge } from './lamp.js';
 import { selectFloorSpace, roomAnchor, floorSpaceDiagnostics } from './coordinates.js';
 import { SPATIAL_MODES } from './spatial/profile.js';
+import { RoomLighting } from './lighting.js';
+import { RoomPhysics, splitBookRows } from './physics.js';
 import { SpatialRoomAudio } from './spatial/audio.js';
 import { RoomSpatialController } from './spatial/controller.js';
 import { SM00_SPATIAL_REPLAY, replaySpatialMessage } from './spatial/fixture.js';
@@ -45,6 +47,7 @@ export function describeRoomControls({ mode = 'game', left = false, right = fals
     'ROOM: TRIGGER OR SQUEEZE TO RESUME',
     'ROOM: LEFT STICK CLICK = SPATIAL PROFILE',
     'ROOM: RIGHT STICK CLICK = RECENTER',
+    'ROOM: A = LIGHTS  B = TIME OF DAY  Y = TIDY ROOM',
     'EXIT: HEADSET MENU OR EXIT VR ON WEB PAGE',
     `INPUT: ${mask ? 'RECEIVED' : 'IDLE'}`,
     `SPATIAL: ${spatial}`,
@@ -171,7 +174,7 @@ function makeHud(world, {desktop = false, debug = false} = {}) {
     infoTexture.needsUpdate = true;
   };
   updatePanel({});
-  return {infoMesh,infoTexture,bubble,updatePanel,tick};
+  return {infoMesh,infoTexture,bubble,updatePanel,tick,say:showBubble};
 }
 
 function makeBoxRoom(sourceCanvas, options = {}) {
@@ -224,14 +227,18 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
   const roomStatic = gltf.scene.getObjectByName('RoomStatic');
   const screen = gltf.scene.getObjectByName('TVScreen');
   if (!roomStatic || !screen?.isMesh) throw new Error('living-room.glb is missing RoomStatic or TVScreen');
-  let lightMap = null;
-  const {lightmap, lightmapScale = 1} = roomStatic.userData;
-  if (lightmap) {
-    lightMap = await new THREE.TextureLoader().loadAsync(new URL(lightmap, LIVING_ROOM_URL).href);
-    lightMap.flipY = false; // glTF UV convention
-    lightMap.channel = 1;
-    lightMap.colorSpace = THREE.SRGBColorSpace;
-  }
+  const {lightmap, lightmapScale = 1, ambientMap, windowScale, tvScale} = roomStatic.userData;
+  const loadMap = async name => {
+    if (!name) return null;
+    const map = await new THREE.TextureLoader().loadAsync(new URL(name, LIVING_ROOM_URL).href);
+    map.flipY = false; // glTF UV convention
+    map.channel = 1;
+    map.colorSpace = THREE.SRGBColorSpace;
+    map.anisotropy = 8;
+    return map;
+  };
+  const [lightMap, ambient] = await Promise.all([loadMap(lightmap), loadMap(ambientMap)]);
+  const lighting = lightMap && ambient ? new RoomLighting({ambientMap:ambient,lampScale:lightmapScale,windowScale,tvScale}) : null;
   gltf.scene.traverse(object => {
     if (!object.isMesh || object === screen) return;
     const source = object.material;
@@ -245,27 +252,52 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
       source.dispose();
       return;
     }
+    const map = glow ? source.emissiveMap : source.map;
+    if (map) map.anisotropy = 8; // floors and walls seen at grazing angles stay sharp
+    // Closed opaque surfaces are front-faced only: no hidden back faces to z-fight or overdraw.
+    const thin = source.transparent || source.alphaTest > 0 || /leaf|leaves|plant|ficus|lace|curtain|paper/i.test(source.name);
+    const lit = !glow && lightMap && object.geometry.attributes.uv1;
     object.material = new THREE.MeshBasicMaterial({
-      name: source.name, map: glow ? source.emissiveMap : source.map,
+      name: source.name, map, vertexColors: source.vertexColors,
       color: glow ? source.emissive.clone().multiplyScalar(Math.min(1, source.emissiveIntensity)) : source.color,
-      lightMap: !glow && lightMap && object.geometry.attributes.uv1 ? lightMap : null,
+      lightMap: lit ? lightMap : null,
       lightMapIntensity: lightmapScale * Math.PI,
       transparent: source.transparent, opacity: source.opacity, depthWrite: !source.transparent,
-      alphaTest: source.alphaTest, side: source.side
+      alphaTest: source.alphaTest, side: thin ? THREE.DoubleSide : THREE.FrontSide
     });
+    if (lit) lighting?.patch(object.material);
+    else if (glow) lighting?.register(object.material);
     source.dispose();
   });
   const texture = gameTexture(sourceCanvas);
   const gameHeight = TUBE_ASPECT / GAME_ASPECT;
   screen.material.dispose();
   screen.material = crtMaterial(texture, [0, (1 - gameHeight) / 2, 1, gameHeight]);
-  const reactive = [];
+  const swinging = [], props = [], bookRows = [], colliders = [];
+  gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(object => {
-    if (!object.userData?.react) return;
-    const size = new THREE.Box3().setFromObject(object).getSize(new THREE.Vector3());
-    object.userData.swingAxis = size.x < size.z ? 'x' : 'z';
-    reactive.push(object);
+    if (object.name.startsWith('Collider_')) {
+      colliders.push({position:object.position.clone(),quaternion:object.quaternion.clone(),size:object.scale.clone()});
+      return;
+    }
+    const kind = object.userData?.react;
+    if (!kind) return;
+    if (kind === 'swing') {
+      const size = new THREE.Box3().setFromObject(object).getSize(new THREE.Vector3());
+      object.userData.swingAxis = size.x < size.z ? 'x' : 'z';
+      swinging.push(object);
+    } else if (kind === 'books') bookRows.push(object);
+    else props.push(object);
   });
+  let books = null;
+  if (bookRows.length) {
+    const rowMesh = row => row.isMesh ? row : row.getObjectByProperty('isMesh', true);
+    books = splitBookRows(bookRows, rowMesh(bookRows[0]).material);
+    for (const row of bookRows) { row.removeFromParent(); rowMesh(row).geometry.dispose(); }
+    gltf.scene.add(books.mesh);
+  }
+  const physics = new RoomPhysics({colliders, props, books,
+    worker: !new URLSearchParams(location.search).has('vr-physics-inline')});
   const hud = makeHud(world, options);
   const anchor = gltf.scene.getObjectByName('InfoPanelAnchor');
   if (anchor) { anchor.updateWorldMatrix(true, false); anchor.getWorldPosition(hud.infoMesh.position); }
@@ -277,7 +309,7 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
   // The lamp feedback pendulum is not part of the living room; keep an
   // unattached pivot so the event bridge stays harmless.
   return {scene,world,crt:screen,pivot:new THREE.Group(),texture,hud,fixedTv:true,screen,
-    reactions:new RoomReactions(reactive)};
+    reactions:new RoomReactions(swinging),physics,lighting,gameRect:[0,(1 - gameHeight) / 2,1,gameHeight]};
 }
 
 export async function makeRoom(sourceCanvas, options) {
@@ -301,6 +333,9 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     <button type="button" data-action="focus">GAME controls</button>
     <button type="button" data-action="recenter">Recenter</button>
     <button type="button" data-action="help">Hide help</button>
+    <button type="button" data-action="lights">Lights off</button>
+    <button type="button" data-action="time">Time of day</button>
+    <button type="button" data-action="tidy">Tidy room</button>
     <label>Spatial <select data-action="spatial">
       <option value="inside">Inside the map</option>
       <option value="behind-wall">Behind TV wall</option>
@@ -327,10 +362,14 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
   }
   const abort = new AbortController();
   const lamp = new DampedLamp();
-  let reactions = null; // set once the room has loaded
+  let reactions = null, physics = null; // set once the room has loaded
   // Explosions that swing the lamp also shake the living room's light props.
   const eventBridge = new LampEventBridge({
-    impulse:strength => { lamp.impulse(strength); reactions?.impulse(Math.abs(strength ?? 1)); },
+    impulse:(strength,origin) => {
+      lamp.impulse(strength);
+      reactions?.impulse(Math.abs(strength ?? 1));
+      physics?.impulse(Math.abs(strength ?? 1),origin);
+    },
     reset:() => lamp.reset()
   },{preserveMotion:true});
   const audio = new SpatialRoomAudio();
@@ -382,6 +421,7 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     window.xrickFocusGame?.();
     gameSession.input.setOwner('game');
     try { if (xrSession && xrSession.visibilityState !== 'ended') await xrSession.end(); } catch {}
+    physics?.dispose();
     renderer?.dispose();
     renderer?.forceContextLoss();
     canvas.remove(); overlay.remove(); sourcePanel?.remove();
@@ -390,7 +430,8 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       referenceSpace:floorInfo?.type || 'desktop'});
   };
   try {
-    renderer = new THREE.WebGLRenderer({canvas,antialias:false,alpha:false,powerPreference:'high-performance'});
+    // MSAA also applies to the XR layer (multisampled render-to-texture on Quest).
+    renderer = new THREE.WebGLRenderer({canvas,antialias:immersive ? xrSettings.antialias : true,alpha:false,powerPreference:'high-performance'});
     // The desktop mirror's DPR must not allocate a multi-megapixel backbuffer
     // on Quest. Immersive resolution is independently controlled by WebXR.
     renderer.setPixelRatio(immersive ? 1 : Math.min(devicePixelRatio || 1, 2));
@@ -401,8 +442,18 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.xr.enabled = immersive;
     const room = await makeRoom(document.getElementById('xrick-layer'),{desktop:!immersive,debug});
-    const {scene,world,crt,pivot,texture,hud,fixedTv,screen} = room;
+    const {scene,world,crt,pivot,texture,hud,fixedTv,screen,lighting,gameRect} = room;
     reactions = room.reactions;
+    physics = room.physics || null;
+    const toggleLights = () => {
+      if (!lighting) return;
+      hud.say(lighting.toggleLights() ? 'LIGHTS ON' : 'LIGHTS OFF');
+      overlay.querySelector('[data-action="lights"]').textContent = lighting.lightsOn ? 'Lights off' : 'Lights on';
+    };
+    const cycleTime = () => { if (lighting) hud.say(lighting.cycleTimeOfDay().toUpperCase()); };
+    const tidyRoom = () => { if (physics) { physics.reset(); hud.say('ROOM TIDIED'); } };
+    if (!lighting) for (const action of ['lights','time']) overlay.querySelector(`[data-action="${action}"]`).hidden = true;
+    if (!physics) overlay.querySelector('[data-action="tidy"]').hidden = true;
     const {updatePanel} = hud;
     if (!debug) overlay.querySelector('[data-action="help"]').hidden = true;
     worldAnchor=world;
@@ -665,6 +716,9 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
           });
         }
       }
+      if (action === 'lights') toggleLights();
+      if (action === 'time') cycleTime();
+      if (action === 'tidy') tidyRoom();
       if (action === 'audio') void audio.unlock().then(ok=>{event.target.textContent=ok?'Room audio enabled':'TV audio only';});
       if (action === 'help') {
         panelExpanded = !panelExpanded;
@@ -723,7 +777,10 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
         onRoomAction:setRoomState,
         onStatus:next => {status={...status,...next};updatePanel(status,panelExpanded);},
         onRecenter:() => {anchored=false;},
-        onHelp:cycleSpatial
+        onHelp:cycleSpatial,
+        onLights:toggleLights,
+        onTimeOfDay:cycleTime,
+        onTidy:tidyRoom
       });
     }
     window.addEventListener('pagehide',() => {void stop();},{signal:abort.signal});
@@ -766,7 +823,10 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       pivot.rotation.z = lamp.step(performance.now()/1000);
       hud.tick(performance.now());
       const now = performance.now();
-      reactions.step(lastReactionAt === null ? 0 : (now - lastReactionAt) / 1000);
+      const dt = lastReactionAt === null ? 0 : (now - lastReactionAt) / 1000;
+      reactions.step(dt);
+      physics?.step(dt);
+      lighting?.update(renderer,texture,gameRect,dt);
       lastReactionAt = now;
       if (audio.context?.state === 'running') {
         const tracked=immersive ? renderer.xr.getCamera(camera) : camera;

@@ -1,11 +1,14 @@
-/** Quest-oriented render budget. Applied before WebXRManager.setSession(), when
- * the XR framebuffer resolution can still be changed. Does not affect 2D. */
+/** Quest render settings, applied before WebXRManager.setSession() while the XR
+ * framebuffer can still be sized. The baked room is unlit with few draw calls, so
+ * Quest 3 can afford above-recommended resolution, 4x MSAA and no foveation
+ * (fixed foveation blurs and shimmers the periphery). ?vr-scale=0.5..1.5 overrides. */
 export function xrRenderSettings(search = '') {
   const raw = new URLSearchParams(search).get('vr-scale');
   const requested = raw === null || raw.trim() === '' ? NaN : Number(raw);
   return {
-    scale: Number.isFinite(requested) ? Math.max(0.5, Math.min(1, requested)) : 0.7,
-    foveation: 1
+    scale: Number.isFinite(requested) ? Math.max(0.5, Math.min(1.5, requested)) : 1.2,
+    foveation: 0,
+    antialias: true
   };
 }
 
