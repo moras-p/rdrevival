@@ -169,6 +169,19 @@ function makeBoxRoom(sourceCanvas, options = {}) {
 
 /** Baked room: unlit materials with the Cycles lightmap, so Quest pays for no
  * real-time lights or shadows. Only the TV screen is drawn live. */
+/** A painting or clock hangs on a nail at its top centre: a pivot there, rotating about the wall normal. */
+function hangFromNail(object) {
+  const box = new THREE.Box3().setFromObject(object), size = box.getSize(new THREE.Vector3());
+  const nail = new THREE.Vector3((box.min.x + box.max.x) / 2, box.max.y - Math.min(0.03, size.y * 0.1), (box.min.z + box.max.z) / 2);
+  const pivot = new THREE.Group();
+  pivot.name = `${object.name}_nail`;
+  object.parent.add(pivot);
+  pivot.position.copy(object.parent.worldToLocal(nail));
+  pivot.attach(object);
+  pivot.userData = {react: 'tilt', massKg: object.userData.massKg, tiltAxis: size.x < size.z ? 'x' : 'z'};
+  return pivot;
+}
+
 /** Per-frame glass for the tube: the room light it reflects and the ceiling lamp highlight. */
 function tubeUpdater(material, lighting, lamp) {
   const ambient = new THREE.Color(), warm = new THREE.Color(1.0, 0.8, 0.6), lampPosition = new THREE.Vector3();
@@ -242,22 +255,22 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
   // without a new lighting bake. A GLB from before they were exported has its node 32 mm deeper.
   screen.geometry.dispose();
   screen.geometry = faceplateGeometry(screen.userData.faceplate || {forward: 0.032});
-  const swinging = [], props = [], bookRows = [], colliders = [];
+  const swinging = [], hangings = [], props = [], joints = [], bookRows = [], colliders = [];
   gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(object => {
     if (object.name.startsWith('Collider_')) {
       colliders.push({position:object.position.clone(),quaternion:object.quaternion.clone(),size:object.scale.clone()});
       return;
     }
+    if (object.userData?.joint) { joints.push(object); return; }
     const kind = object.userData?.react;
     if (!kind) return;
-    if (kind === 'swing') {
-      const size = new THREE.Box3().setFromObject(object).getSize(new THREE.Vector3());
-      object.userData.swingAxis = size.x < size.z ? 'x' : 'z';
-      swinging.push(object);
-    } else if (kind === 'books') bookRows.push(object);
-    else props.push(object);
+    // Curtains hang still; 'swing' is how older room builds marked the wall hangings.
+    if (kind === 'tilt' || (kind === 'swing' && !/curtain/i.test(object.name))) hangings.push(object);
+    else if (kind === 'books') bookRows.push(object);
+    else if (kind !== 'swing') props.push(object);
   });
+  for (const object of hangings) swinging.push(hangFromNail(object));
   let books = null;
   if (bookRows.length) {
     const rowMesh = row => row.isMesh ? row : row.getObjectByProperty('isMesh', true);
@@ -265,7 +278,7 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
     for (const row of bookRows) { row.removeFromParent(); rowMesh(row).geometry.dispose(); }
     gltf.scene.add(books.mesh);
   }
-  const physics = new RoomPhysics({colliders, props, books,
+  const physics = new RoomPhysics({colliders, props, joints, books,
     worker: !new URLSearchParams(location.search).has('vr-physics-inline')});
   const hud = makeHud(world, options);
   const anchor = gltf.scene.getObjectByName('InfoPanelAnchor');
@@ -291,7 +304,7 @@ export async function makeRoom(sourceCanvas, options) {
   }
 }
 
-export async function openTestRoom({ xrSession = null, gameSession, presentation, onStatus, onEnd }) {
+export async function openTestRoom({ xrSession = null, gameSession, presentation, audioContext = null, onStatus, onEnd }) {
   const immersive = !!xrSession;
   const canvas = document.createElement('canvas');
   canvas.setAttribute('aria-label', 'Rick Dangerous 3D room preview');
@@ -333,16 +346,30 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
   const abort = new AbortController();
   const lamp = new DampedLamp();
   let reactions = null, physics = null; // set once the room has loaded
-  // Explosions that swing the lamp also shake the living room's light props.
+  // Controllers feel a hit through the floor and furniture: stronger the closer it lands.
+  const rumbleHands = (intensity, ms) => {
+    if (!immersive || !(intensity > 0.02)) return;
+    for (const source of renderer?.xr.getSession?.()?.inputSources ?? [])
+      source.gamepad?.hapticActuators?.[0]?.pulse?.(Math.min(1, intensity), ms);
+  };
+  const listenerAt = new THREE.Vector3(0, 1.2, 0);
+  const proximity = origin => {
+    if (!origin || !worldAnchor) return 0.3;
+    return 1 / (1 + 0.25 * worldAnchor.localToWorld(new THREE.Vector3(origin.x,origin.y,origin.z)).distanceToSquared(listenerAt));
+  };
+  // Hits and blasts swing the lamp and shake the living room from where they happened,
+  // so the props nearest the hit react most.
   const eventBridge = new LampEventBridge({
     impulse:(strength,origin) => {
       lamp.impulse(strength);
-      reactions?.impulse(Math.abs(strength ?? 1));
+      reactions?.impulse(Math.abs(strength ?? 1),origin);
       physics?.impulse(Math.abs(strength ?? 1),origin);
+      rumbleHands(0.9*Math.abs(strength ?? 1)*proximity(origin)/2.7,120);
     },
     reset:() => lamp.reset()
   },{preserveMotion:true});
-  const audio = new SpatialRoomAudio();
+  const audio = new SpatialRoomAudio({context: audioContext});
+  void audio.unlock(); // already resumed by the Enter VR click; this starts loading the recordings
   let spatial, worldAnchor, sourceMarkers=[], sourceDebugText='';
   let previewSources=[], previewBeacons=new Map(), cueOrigin='live';
   const cueStatus=sourcePanel?.querySelector('[data-role="source-status"]');
@@ -355,6 +382,10 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       if (!worldAnchor) return false;
       const transformed=worldAnchor.localToWorld(new THREE.Vector3(point.x,point.y,point.z));
       return audio.play(kind,transformed,calibration);
+    },
+    knock:(material,point,speed)=>{
+      if (!worldAnchor) return false;
+      return audio.knock(material,worldAnchor.localToWorld(new THREE.Vector3(point.x,point.y,point.z)),speed);
     }
   };
   let renderer, adapter, unsubscribe, ending = false, ownsPresentation = false;
@@ -415,15 +446,17 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     const {scene,world,crt,pivot,texture,hud,fixedTv,screen,lighting,gameRect,updateTube} = room;
     reactions = room.reactions;
     physics = room.physics || null;
+    // Books landing, vases toppling and doors clacking shut are heard where they happen.
+    if (physics) physics.onHit = ({material,point,speed}) => audioInRoom.knock(material,point,speed);
     const toggleLights = () => {
       if (!lighting) return;
       hud.say(lighting.toggleLights() ? 'LIGHTS ON' : 'LIGHTS OFF');
       overlay.querySelector('[data-action="lights"]').textContent = lighting.lightsOn ? 'Lights off' : 'Lights on';
     };
     const cycleTime = () => { if (lighting) hud.say(lighting.cycleTimeOfDay().toUpperCase()); };
-    const tidyRoom = () => { if (physics) { physics.reset(); hud.say('ROOM TIDIED'); } };
+    const tidyRoom = () => { physics?.reset(); reactions?.straighten(); hud.say('ROOM TIDIED'); };
     if (!lighting) for (const action of ['lights','time']) overlay.querySelector(`[data-action="${action}"]`).hidden = true;
-    if (!physics) overlay.querySelector('[data-action="tidy"]').hidden = true;
+    if (!physics && !reactions) overlay.querySelector('[data-action="tidy"]').hidden = true;
     const {updatePanel} = hud;
     if (!debug) overlay.querySelector('[data-action="help"]').hidden = true;
     worldAnchor=world;
@@ -770,7 +803,8 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       onStatus('Desktop room: mouse drag to look, wheel to zoom, arrows and Space to play');
     }
     const listenerPosition=new THREE.Vector3(),listenerForward=new THREE.Vector3();
-    let lastReactionAt=null;
+    let lastReactionAt=null, lastHapticAt=0;
+    const dt0=()=>lastReactionAt === null ? 0 : Math.min(0.05,(performance.now()-lastReactionAt)/1000);
     renderer.setAnimationLoop((_time,frame) => {
       if (ending) return;
       // ROOM is paused, so native pre-actor polling is stopped. Only room UI
@@ -789,6 +823,14 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
         updateDebugProjection();resetSources();
       }
       gameSession.events.poll(64);
+      // A rolling boulder buzzes the room and the controllers as it passes over.
+      for (const roll of spatial.update(performance.now())) {
+        reactions?.rumble(roll.intensity,roll.point,dt0());
+        if (performance.now()-lastHapticAt>110) {
+          lastHapticAt=performance.now();
+          rumbleHands(0.35*roll.intensity*proximity(roll.point),90);
+        }
+      }
       // The room's pendulum has wall-clock physics even when native GAME is paused.
       pivot.rotation.z = lamp.step(performance.now()/1000);
       hud.tick(performance.now());
@@ -805,6 +847,7 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
         tracked.getWorldPosition(listenerPosition);
         tracked.getWorldDirection(listenerForward);
         audio.setListener(listenerPosition,listenerForward);
+        listenerAt.copy(listenerPosition);
       }
       if (sourcePanel) {
         const now=performance.now();

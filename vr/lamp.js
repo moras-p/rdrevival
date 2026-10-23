@@ -46,7 +46,8 @@ export class LampEventBridge {
     this.seen.add(key);
     if (this.seen.size > 256) this.seen.delete(this.seen.values().next().value);
     // Where it happened in the room (when the spatial profile maps it), so nearer props react more.
-    const point = event.world && this.projector?.selected?.calibration ? this.projector.project(event.world) : null;
+    const point = event.world && event.coordinateSpace === 'rdx-world' && this.projector?.selected?.calibration ?
+      this.projector.project(event.world) : null;
     if (boulder) {
       if (!point) return;
       const side = point.x < 0.7 ? -1 : 1;

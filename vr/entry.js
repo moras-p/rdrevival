@@ -1,4 +1,12 @@
 // The 2D player never imports WebGL/Three.js unless immersive VR is requested.
+/** Made and resumed inside the click, while the browser still counts it as a user gesture. */
+function roomAudioContext() {
+  const Context = globalThis.AudioContext || globalThis.webkitAudioContext;
+  if (!Context) return null;
+  try { const context = new Context(); void context.resume().catch(() => {}); return context; }
+  catch { return null; }
+}
+
 export function installVrEntry(root = document) {
   const enterClassic = root.getElementById('rdr-vr-classic');
   const enterRevival = root.getElementById('rdr-vr-revival');
@@ -43,17 +51,19 @@ export function installVrEntry(root = document) {
         throw new Error('Load and validate your Sega ROM before entering Revival VR.');
     } catch (error) { opening = false; say(error.message); return; }
     // User activation MUST reach requestSession synchronously, before imports,
-    // file pickers or any unrelated await.
+    // file pickers or any unrelated await. The room's spatial audio starts in the same
+    // gesture, so room sounds play from the first frame in the headset.
+    const audioContext = roomAudioContext();
     let xrSession;
     try { xrSession = await navigator.xr.requestSession('immersive-vr', { requiredFeatures: ['local-floor'], optionalFeatures: ['bounded-floor'] }); }
-    catch (error) { opening = false; say(`Could not enter VR: ${error.message}`); return; }
+    catch (error) { void audioContext?.close(); opening = false; say(`Could not enter VR: ${error.message}`); return; }
     buttons(false);
     preview.disabled = true;
     try {
       if (gameSession.mode !== mode) gameSession.selectExperience(mode);
       if (gameSession.state !== 'playing') gameSession.start();
       const { openTestRoom } = await import('./room.js');
-      active = await openTestRoom({ xrSession, gameSession, presentation, onStatus: say, onEnd: () => {
+      active = await openTestRoom({ xrSession, gameSession, presentation, audioContext, onStatus: say, onEnd: () => {
         active = null;
         exit.hidden = true;
         buttons(true);
@@ -73,11 +83,12 @@ export function installVrEntry(root = document) {
     if (active || opening) return;
     opening = true;
     try {
+      const audioContext = roomAudioContext();
       const {gameSession,presentation} = getRuntime();
       gameSession.syncExperience();
       if (gameSession.state !== 'playing') gameSession.start();
       const {openTestRoom} = await import('./room.js');
-      active = await openTestRoom({gameSession,presentation,onStatus:say,onEnd:() => {
+      active = await openTestRoom({gameSession,presentation,audioContext,onStatus:say,onEnd:() => {
         active=null;exit.hidden=true;preview.disabled=false;say('Returned to ordinary 2D play.');
       }});
       preview.disabled=true;exit.hidden=false;

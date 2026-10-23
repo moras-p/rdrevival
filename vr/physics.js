@@ -1,11 +1,15 @@
 import * as THREE from './vendor/three.module.js';
-import { PhysicsCore, FLOATS_PER_BODY } from './physics-core.js';
+import { PhysicsCore, FLOATS_PER_BODY, FLOATS_PER_HIT } from './physics-core.js';
 
-/** Light room props as rigid bodies (cannon-es): every book on its own, the vitrine
+/** Light room props as rigid bodies (Rapier): every book on its own, the vitrine
  * finds, frames, the VCR and the CD32 set. Heavy furniture stays baked; the GLB's
  * Collider_<n> boxes give the props shelves, glass and a floor to land on. The
  * simulation runs in a worker; this side only applies the transforms it returns. */
 const PAPER_DENSITY = 700; // kg/m³, a cloth-bound book
+const HULL_POINTS = 1024;  // plenty to keep a vase round; Rapier reduces it to the hull
+// What a prop is made of, from its role name (layout.json can set userData.material).
+const MATERIAL_BY_NAME = [[/vase|jug|pot|amphora|bowl|skull|ceramic|figur/i, 'ceramic'],
+  [/cd32|pad|joystick|vcr|cassette|tape|console/i, 'plastic'], [/lamp|metal|tin/i, 'metal']];
 
 /** Split each React_books_* row (vertices tagged with _book) into one BatchedMesh
  * instance per book: a single draw call for every book in the room. */
@@ -64,41 +68,71 @@ function bookGeometry(source, triangles, matrix) {
 }
 
 export class RoomPhysics {
-  /** worker: false runs the simulation inline (tests, or browsers without module workers). */
-  constructor({colliders = [], props = [], books = null, random = Math.random, worker = true} = {}) {
+  /** joints: the furniture's doors and drawers (Joint_<n> nodes, origin at the hinge or
+   * slide; userData joint, axis, limits, massKg). onHit({material, point, speed}) hears
+   * every contact hard enough to make a sound, in room metres. worker: false runs the
+   * simulation inline (tests, or browsers without module workers). */
+  constructor({colliders = [], props = [], joints = [], books = null, random = Math.random, worker = true, onHit = null} = {}) {
+    this.onHit = onHit;
     this.targets = [];
     const bodies = [];
+    for (const node of joints) {
+      const [x, y, z] = node.userData.axis, box = localBox(node); // localBox also updates the matrices
+      bodies.push({mass: node.userData.massKg || 2, points: hullPoints(node), material: 'wood',
+        size: plain(box.getSize(new THREE.Vector3())), offset: plain(box.getCenter(new THREE.Vector3())),
+        joint: {type: node.userData.joint, axis: {x, y, z}, limits: node.userData.limits},
+        position: plain(node.position), quaternion: plainQ(node.quaternion)});
+      this.targets.push({node});
+    }
     for (const node of props) {
       const box = localBox(node);
       bodies.push({mass: node.userData.massKg || 1, size: plain(box.getSize(new THREE.Vector3())),
-        offset: plain(box.getCenter(new THREE.Vector3())), position: plain(node.position), quaternion: plainQ(node.quaternion)});
+        offset: plain(box.getCenter(new THREE.Vector3())), points: hullPoints(node), material: materialOf(node),
+        position: plain(node.position), quaternion: plainQ(node.quaternion)});
       this.targets.push({node});
     }
     this.books = books;
     for (const book of books?.books || []) {
-      bodies.push({mass: book.mass, size: plain(book.size), position: plain(book.position), quaternion: plainQ(book.quaternion)});
+      bodies.push({mass: book.mass, size: plain(book.size), material: 'paper',
+        position: plain(book.position), quaternion: plainQ(book.quaternion)});
       this.targets.push({book});
     }
     const scene = {colliders: colliders.map(c => ({position: plain(c.position), quaternion: plainQ(c.quaternion), size: plain(c.size)})), bodies};
+    this.materials = bodies.map(body => body.material);
     this.awake = false;
     this.pending = false;
     if (worker && typeof Worker !== 'undefined') {
       this.worker = new Worker(new URL('./physics-worker.js', import.meta.url), {type: 'module'});
-      this.worker.onmessage = ({data}) => { this.pending = false; this.awake = data.active; this.apply(data.transforms); };
+      this.worker.onmessage = ({data}) => {
+        this.pending = false; this.awake = data.active; this.apply(data.transforms); this.hear(data.hits);
+      };
       this.worker.postMessage({type: 'init', scene});
-    } else this.core = new PhysicsCore({...scene, random});
+      this.ready = Promise.resolve(); // the worker queues everything until Rapier is up
+    } else {
+      // Inline: a hit before Rapier is up is kept and applied once it is.
+      this.early = [];
+      this.ready = PhysicsCore.create({...scene, random}).then(core => {
+        this.core = core;
+        for (const [strength, origin] of this.early) core.impulse(strength, origin);
+        this.early = null;
+      }, error => console.warn('Room physics unavailable:', error.message));
+    }
   }
 
   impulse(strength = 1, origin = null) {
     origin = origin && {x: origin.x, y: origin.y, z: origin.z};
     if (this.core) this.core.impulse(strength, origin);
-    else this.worker.postMessage({type: 'impulse', strength, origin});
+    else if (this.worker) this.worker.postMessage({type: 'impulse', strength, origin});
+    else this.early.push([strength, origin]);
     this.awake = true;
   }
 
   step(dt) {
     if (!this.awake) return;
-    if (this.core) { this.apply(this.core.step(dt)); this.awake = this.core.active; return; }
+    if (!this.worker) {
+      if (!this.core) return;
+      this.apply(this.core.step(dt)); this.hear(this.core.takeHits()); this.awake = this.core.active; return;
+    }
     if (this.pending) return; // the worker is still on the last frame; never queue up
     this.pending = true;
     this.worker.postMessage({type: 'step', dt});
@@ -106,7 +140,7 @@ export class RoomPhysics {
 
   reset() {
     if (this.core) this.apply(this.core.reset());
-    else this.worker.postMessage({type: 'reset'});
+    else if (this.worker) this.worker.postMessage({type: 'reset'});
     this.awake = !!this.worker;
   }
 
@@ -122,6 +156,12 @@ export class RoomPhysics {
     }
   }
 
+  hear(hits) {
+    if (!this.onHit || !hits?.length) return;
+    for (let i = 0; i < hits.length; i += FLOATS_PER_HIT)
+      this.onHit({material: this.materials[hits[i]], point: {x: hits[i + 1], y: hits[i + 2], z: hits[i + 3]}, speed: hits[i + 4]});
+  }
+
   dispose() { this.worker?.terminate(); }
 }
 
@@ -135,6 +175,25 @@ function localBox(node) {
     box.union(mesh.geometry.boundingBox.clone().applyMatrix4(toNode.clone().multiply(mesh.matrixWorld)));
   });
   return box;
+}
+
+/** Mesh vertices in the node's own frame, evenly thinned to HULL_POINTS. */
+function hullPoints(node) {
+  const points = [], toNode = node.matrixWorld.clone().invert(), v = new THREE.Vector3();
+  let total = 0;
+  node.traverse(mesh => { if (mesh.isMesh) total += mesh.geometry.getAttribute('position').count; });
+  const stride = Math.max(1, Math.ceil(total / HULL_POINTS));
+  node.traverse(mesh => {
+    if (!mesh.isMesh) return;
+    const toLocal = toNode.clone().multiply(mesh.matrixWorld), position = mesh.geometry.getAttribute('position');
+    for (let i = 0; i < position.count; i += stride) points.push(...v.fromBufferAttribute(position, i).applyMatrix4(toLocal).toArray());
+  });
+  return points;
+}
+
+function materialOf(node) {
+  if (node.userData.material) return node.userData.material;
+  return MATERIAL_BY_NAME.find(([pattern]) => pattern.test(node.name))?.[1] || 'wood';
 }
 
 const plain = v => ({x: v.x, y: v.y, z: v.z});

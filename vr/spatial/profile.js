@@ -64,6 +64,8 @@ export class SpatialProjector {
       return 'footstep';
     }
     if (event.kind==='world.boulder.impact') return event.supportedContact ? 'impact' : null;
+    if (event.kind==='world.boulder.roll') return event.velocity ? 'roll' : null;
+    if (event.kind==='item.dynamite.exploded') return 'explosion';
     if (event.kind==='enemy.died') return 'death';
     return null;
   }
