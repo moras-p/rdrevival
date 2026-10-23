@@ -6,6 +6,7 @@ import { DampedLamp, LampEventBridge } from './lamp.js';
 import { selectFloorSpace, roomAnchor, floorSpaceDiagnostics } from './coordinates.js';
 import { SPATIAL_MODES } from './spatial/profile.js';
 import { RoomLighting } from './lighting.js';
+import { createCrtMaterial, crtTexture, updateCrt } from './crt.js';
 import { RoomPhysics, splitBookRows } from './physics.js';
 import { SpatialRoomAudio } from './spatial/audio.js';
 import { RoomSpatialController } from './spatial/controller.js';
@@ -60,54 +61,6 @@ export function describeRoomControls({ mode = 'game', left = false, right = fals
 const LIVING_ROOM_URL = new URL('./assets/living-room.glb', import.meta.url);
 const TUBE_ASPECT = 4 / 3, GAME_ASPECT = 320 / 200;
 
-function crtMaterial(texture, gameRect = [0, 0, 1, 1]) {
-  return new THREE.ShaderMaterial({
-    uniforms: {
-      map: {value: texture},
-      sourceSize: {value: new THREE.Vector2(320, 200)},
-      gameRect: {value: new THREE.Vector4(...gameRect)},
-      scanline: {value: 0.55}
-    },
-    vertexShader: `varying vec2 vUv;
-      void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
-    fragmentShader: `uniform sampler2D map; uniform vec2 sourceSize; uniform vec4 gameRect; uniform float scanline;
-      varying vec2 vUv;
-      void main() {
-        vec2 g = (vUv - gameRect.xy) / gameRect.zw;
-        vec2 c = g * 2.0 - 1.0;
-        c *= 1.0 + 0.035 * vec2(c.y * c.y, c.x * c.x); // slight barrel inside the tube
-        g = c * 0.5 + 0.5;
-        vec3 color = vec3(0.0);
-        if (all(greaterThanEqual(g, vec2(0.0))) && all(lessThanEqual(g, vec2(1.0)))) {
-          // Hold each source line, blend horizontally, then shape it as an electron beam.
-          vec2 texel = 1.0 / sourceSize;
-          vec2 p = vec2(g.x, (floor(g.y * sourceSize.y) + 0.5) * texel.y);
-          color = texture2D(map, p).rgb;
-          vec3 halo = texture2D(map, p + vec2(texel.x, 0.0)).rgb + texture2D(map, p - vec2(texel.x, 0.0)).rgb +
-            texture2D(map, p + vec2(0.0, texel.y)).rgb + texture2D(map, p - vec2(0.0, texel.y)).rgb;
-          float y = fract(g.y * sourceSize.y) - 0.5;
-          float beam = exp(-y * y * 10.0);
-          beam = mix(1.0, mix(beam, 1.0, dot(color, vec3(0.3, 0.59, 0.11)) * 0.4), scanline);
-          color = color * beam * (1.0 + 0.3 * scanline) + halo * 0.06;
-        }
-        vec2 v = vUv * 2.0 - 1.0;
-        color *= smoothstep(1.45, 0.75, length(v * vec2(0.92, 1.0)));
-        color += vec3(0.010, 0.012, 0.014); // unlit phosphor/glass is never pure black
-        gl_FragColor = vec4(color, 1.0);
-        #include <colorspace_fragment>
-      }`,
-    toneMapped: false
-  });
-}
-
-function gameTexture(sourceCanvas) {
-  const texture = new THREE.CanvasTexture(sourceCanvas);
-  // Lines are snapped in the shader, so linear filtering only softens horizontally.
-  texture.magFilter = texture.minFilter = THREE.LinearFilter;
-  texture.generateMipmaps = false;
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
 
 /** In-room help panel (debug only) and a short-lived bubble that announces
  * control-mode and spatial-profile changes. */
@@ -192,8 +145,8 @@ function makeBoxRoom(sourceCanvas, options = {}) {
   world.add(crt);
   box(crt, 0x2d2929, [1.38, 1.04, 0.17], [0, 0, -1.7]);
   box(crt, 0x161719, [1.23, 0.83, 0.024], [0, 0.05, -1.596]);
-  const texture = gameTexture(sourceCanvas);
-  const tv = new THREE.Mesh(new THREE.PlaneGeometry(1.13, 0.70625), crtMaterial(texture));
+  const texture = crtTexture(sourceCanvas);
+  const tv = new THREE.Mesh(new THREE.PlaneGeometry(1.13, 0.70625), createCrtMaterial(texture, {triads: 900}));
   tv.position.set(0, 0.06, -1.573);
   crt.add(tv);
   box(crt, 0x57412c, [1.52, 0.13, 0.44], [0, -0.46, -1.69]);
@@ -216,6 +169,18 @@ function makeBoxRoom(sourceCanvas, options = {}) {
 
 /** Baked room: unlit materials with the Cycles lightmap, so Quest pays for no
  * real-time lights or shadows. Only the TV screen is drawn live. */
+/** Per-frame glass for the tube: the room light it reflects and the ceiling lamp highlight. */
+function tubeUpdater(material, lighting, lamp) {
+  const ambient = new THREE.Color(), warm = new THREE.Color(1.0, 0.8, 0.6), lampPosition = new THREE.Vector3();
+  return seconds => {
+    const level = lighting ? lighting.lampLevel : 1;
+    ambient.copy(warm).multiplyScalar(0.06 * level);
+    if (lighting) ambient.add(lighting.windowColor.clone().multiplyScalar(0.03));
+    if (lamp) lamp.getWorldPosition(lampPosition);
+    updateCrt(material, {time: seconds, lampLevel: level, ambient, lampPosition: lamp ? lampPosition : null});
+  };
+}
+
 async function loadLivingRoom(sourceCanvas, options = {}) {
   const {GLTFLoader} = await import('./vendor/addons/loaders/GLTFLoader.js');
   const gltf = await new GLTFLoader().loadAsync(LIVING_ROOM_URL.href);
@@ -269,10 +234,11 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
     else if (glow) lighting?.register(object.material);
     source.dispose();
   });
-  const texture = gameTexture(sourceCanvas);
+  const texture = crtTexture(sourceCanvas);
   const gameHeight = TUBE_ASPECT / GAME_ASPECT;
   screen.material.dispose();
-  screen.material = crtMaterial(texture, [0, (1 - gameHeight) / 2, 1, gameHeight]);
+  screen.material = createCrtMaterial(texture, {gameRect: [0, (1 - gameHeight) / 2, 1, gameHeight]});
+  screen.geometry.computeVertexNormals(); // the GLB ships without normals; the glass needs them for reflections
   const swinging = [], props = [], bookRows = [], colliders = [];
   gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(object => {
@@ -309,7 +275,8 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
   // The lamp feedback pendulum is not part of the living room; keep an
   // unattached pivot so the event bridge stays harmless.
   return {scene,world,crt:screen,pivot:new THREE.Group(),texture,hud,fixedTv:true,screen,
-    reactions:new RoomReactions(swinging),physics,lighting,gameRect:[0,(1 - gameHeight) / 2,1,gameHeight]};
+    reactions:new RoomReactions(swinging),physics,lighting,gameRect:[0,(1 - gameHeight) / 2,1,gameHeight],
+    updateTube:tubeUpdater(screen.material,lighting,gltf.scene.getObjectByName('LampAnchor'))};
 }
 
 export async function makeRoom(sourceCanvas, options) {
@@ -442,7 +409,7 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.xr.enabled = immersive;
     const room = await makeRoom(document.getElementById('xrick-layer'),{desktop:!immersive,debug});
-    const {scene,world,crt,pivot,texture,hud,fixedTv,screen,lighting,gameRect} = room;
+    const {scene,world,crt,pivot,texture,hud,fixedTv,screen,lighting,gameRect,updateTube} = room;
     reactions = room.reactions;
     physics = room.physics || null;
     const toggleLights = () => {
@@ -827,6 +794,7 @@ export async function openTestRoom({ xrSession = null, gameSession, presentation
       reactions.step(dt);
       physics?.step(dt);
       lighting?.update(renderer,texture,gameRect,dt);
+      updateTube?.(now/1000);
       lastReactionAt = now;
       if (audio.context?.state === 'running') {
         const tracked=immersive ? renderer.xr.getCamera(camera) : camera;

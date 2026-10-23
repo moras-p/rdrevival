@@ -47,12 +47,12 @@
       "alignment": "136228a2b9ac914b6a4b0e1319cf3ce1b15c85407abf835ab5bb2478562dbf8e",
       "presentationDepth": "6512172f0926990561c99e2ffae2ea9aa89d46efcd43d942b800faf912f25d99",
       "presentationOcclusion": "eb22dea9343b1d6e495a72d5032e7b71ed5ad422e4fee8b2eb83949964fdfbd4",
-      "resolved": "29aaad651d6352fede9ed977f031ffe46a236511bc47a65f463501d6a54f5d38",
-      "reviewed": "951acc925eaa0a2f84691448fec58b05cbafc93471ead512e751d4ba7a57bdac",
+      "resolved": "d54e16cee8ad9f0b700fccb4d0d866d17cdfafddee59dc2e337f1aa46e98df63",
+      "reviewed": "5076323a8b89847b1eb18561feeef4fb4916747b5460e39055fb75772b0d2033",
       "semantic": "cd9807a29d8d50b07320880cd96b4846e74c19ccc6cc44bea978b8f64e1d9ab0",
       "sourceClassic": "1e68546a33277f7a26b7b1ffd78db02af3cc9d19735a123091d08af5bd8f86e0",
       "sourceRdx": "86b137cd3532c8c57092c60f8138c907e4bbe4296c3f3293ffebdfd01dceac8f",
-      "structural": "165994f9a274cde7ff7c1c954cc7c95eef251b7504a0bf25630346cf1d8c8d91",
+      "structural": "60033e91afc24c2c196c0288994e4237dd7152dbe879b4e0fd9e6148ad2ba282",
       "transitions": "0c081d7287efd9191247b4a886148394a2444a695709b55beddb898cb11cbdfa"
     },
     "group": "south_america",
@@ -573,7 +573,7 @@
               "clearLayer": "A",
               "tiles": [
                 {
-                  "globalTile": 5705,
+                  "assetId": "blue-feather-roots-tile-5705",
                   "offset": [
                     0,
                     0
@@ -582,7 +582,7 @@
                   "plane": "A"
                 },
                 {
-                  "globalTile": 5706,
+                  "assetId": "blue-feather-roots-tile-5706",
                   "offset": [
                     8,
                     0
@@ -630,7 +630,7 @@
               "clearLayer": "A",
               "tiles": [
                 {
-                  "globalTile": 5705,
+                  "assetId": "blue-feather-roots-tile-5705",
                   "offset": [
                     0,
                     0
@@ -639,7 +639,7 @@
                   "plane": "A"
                 },
                 {
-                  "globalTile": 5706,
+                  "assetId": "blue-feather-roots-tile-5706",
                   "offset": [
                     8,
                     0
@@ -687,7 +687,7 @@
               "clearLayer": "A",
               "tiles": [
                 {
-                  "globalTile": 5705,
+                  "assetId": "blue-feather-roots-tile-5705",
                   "offset": [
                     0,
                     0
@@ -696,7 +696,7 @@
                   "plane": "A"
                 },
                 {
-                  "globalTile": 5706,
+                  "assetId": "blue-feather-roots-tile-5706",
                   "offset": [
                     8,
                     0
@@ -744,7 +744,7 @@
               "clearLayer": "A",
               "tiles": [
                 {
-                  "globalTile": 5705,
+                  "assetId": "blue-feather-roots-tile-5705",
                   "offset": [
                     0,
                     0
@@ -753,7 +753,7 @@
                   "plane": "A"
                 },
                 {
-                  "globalTile": 5706,
+                  "assetId": "blue-feather-roots-tile-5706",
                   "offset": [
                     8,
                     0
@@ -856,6 +856,246 @@
                 16
               ],
               "plane": "A"
+            }
+          },
+          {
+            "id": "scene-sm04-a-25-18-overlay",
+            "provenance": {
+              "authority": "pixel-art-scene-plan",
+              "reason": "Room-local 1-pixel indexed edit; source sha256:ec9d5c0a8f0d80d8f47b752bd6d052e410493451ba85e4d87d76972bb8b63830; original ROM/global pattern unchanged"
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                200,
+                144,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5675",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "scene-sm04-a-28-18-overlay",
+            "provenance": {
+              "authority": "pixel-art-scene-plan",
+              "reason": "Room-local 2-pixel indexed edit; source sha256:ec9d5c0a8f0d80d8f47b752bd6d052e410493451ba85e4d87d76972bb8b63830; original ROM/global pattern unchanged"
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                224,
+                144,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5725",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "sm04-shared-blue-feather-roots-1-0",
+            "provenance": {
+              "authority": "user-approved-shared-feather-tile-edit-20261023",
+              "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                88,
+                144,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5675",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "sm04-shared-blue-feather-roots-1-3",
+            "provenance": {
+              "authority": "user-approved-shared-feather-tile-edit-20261023",
+              "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                112,
+                144,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5725",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "sm04-shared-blue-feather-roots-3-0",
+            "provenance": {
+              "authority": "user-approved-shared-feather-tile-edit-20261023",
+              "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                120,
+                192,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5675",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "sm04-shared-blue-feather-roots-3-3",
+            "provenance": {
+              "authority": "user-approved-shared-feather-tile-edit-20261023",
+              "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                144,
+                192,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5725",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "sm04-shared-blue-feather-roots-4-0",
+            "provenance": {
+              "authority": "user-approved-shared-feather-tile-edit-20261023",
+              "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                168,
+                192,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5675",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
+            }
+          },
+          {
+            "id": "sm04-shared-blue-feather-roots-4-3",
+            "provenance": {
+              "authority": "user-approved-shared-feather-tile-edit-20261023",
+              "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+            },
+            "target": "room:SM04",
+            "type": "visual-plane",
+            "value": {
+              "action": "overlay-tiles",
+              "bounds": [
+                192,
+                192,
+                8,
+                8
+              ],
+              "clearLayer": "A",
+              "tiles": [
+                {
+                  "assetId": "blue-feather-roots-tile-5725",
+                  "offset": [
+                    0,
+                    0
+                  ],
+                  "paletteLine": 0,
+                  "plane": "A"
+                }
+              ]
             }
           }
         ],
@@ -4013,7 +4253,7 @@
             "sourceKey": "room:SM04",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4022,7 +4262,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4066,7 +4306,7 @@
             "sourceKey": "room:SM04",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4075,7 +4315,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4119,7 +4359,7 @@
             "sourceKey": "room:SM04",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4128,7 +4368,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4172,7 +4412,7 @@
             "sourceKey": "room:SM04",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4181,7 +4421,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4203,6 +4443,214 @@
                 "offset": [
                   8,
                   8
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "pixel-art-scene-plan",
+            "bounds": [
+              200,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "scene-sm04-a-25-18-overlay",
+            "provenance": "Room-local 1-pixel indexed edit; source sha256:ec9d5c0a8f0d80d8f47b752bd6d052e410493451ba85e4d87d76972bb8b63830; original ROM/global pattern unchanged",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "pixel-art-scene-plan",
+            "bounds": [
+              224,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "scene-sm04-a-28-18-overlay",
+            "provenance": "Room-local 2-pixel indexed edit; source sha256:ec9d5c0a8f0d80d8f47b752bd6d052e410493451ba85e4d87d76972bb8b63830; original ROM/global pattern unchanged",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "bounds": [
+              88,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "sm04-shared-blue-feather-roots-1-0",
+            "provenance": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision.",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "bounds": [
+              112,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "sm04-shared-blue-feather-roots-1-3",
+            "provenance": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision.",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "bounds": [
+              120,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "sm04-shared-blue-feather-roots-3-0",
+            "provenance": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision.",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "bounds": [
+              144,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "sm04-shared-blue-feather-roots-3-3",
+            "provenance": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision.",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "bounds": [
+              168,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "sm04-shared-blue-feather-roots-4-0",
+            "provenance": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision.",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ],
+            "type": "visual-plane-patch"
+          },
+          {
+            "action": "overlay-tiles",
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "bounds": [
+              192,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "id": "sm04-shared-blue-feather-roots-4-3",
+            "provenance": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision.",
+            "sourceKey": "room:SM04",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
                 ],
                 "paletteLine": 0,
                 "plane": "A"
@@ -4281,7 +4729,7 @@
             "clearLayer": "A",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4290,7 +4738,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4340,7 +4788,7 @@
             "clearLayer": "A",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4349,7 +4797,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4399,7 +4847,7 @@
             "clearLayer": "A",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4408,7 +4856,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4458,7 +4906,7 @@
             "clearLayer": "A",
             "tiles": [
               {
-                "globalTile": 5705,
+                "assetId": "blue-feather-roots-tile-5705",
                 "offset": [
                   0,
                   0
@@ -4467,7 +4915,7 @@
                 "plane": "A"
               },
               {
-                "globalTile": 5706,
+                "assetId": "blue-feather-roots-tile-5706",
                 "offset": [
                   8,
                   0
@@ -4588,6 +5036,262 @@
           "semantic": "visual",
           "target": "room:SM04:presentation-depth:blue-feather-statue-4-feet",
           "type": "presentation-depth"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              200,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "scene-sm04-a-25-18-overlay",
+          "provenance": {
+            "authority": "pixel-art-scene-plan",
+            "reason": "Room-local 1-pixel indexed edit; source sha256:ec9d5c0a8f0d80d8f47b752bd6d052e410493451ba85e4d87d76972bb8b63830; original ROM/global pattern unchanged"
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              224,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "scene-sm04-a-28-18-overlay",
+          "provenance": {
+            "authority": "pixel-art-scene-plan",
+            "reason": "Room-local 2-pixel indexed edit; source sha256:ec9d5c0a8f0d80d8f47b752bd6d052e410493451ba85e4d87d76972bb8b63830; original ROM/global pattern unchanged"
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              88,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "sm04-shared-blue-feather-roots-1-0",
+          "provenance": {
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              112,
+              144,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "sm04-shared-blue-feather-roots-1-3",
+          "provenance": {
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              120,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "sm04-shared-blue-feather-roots-3-0",
+          "provenance": {
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              144,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "sm04-shared-blue-feather-roots-3-3",
+          "provenance": {
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              168,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5675",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "sm04-shared-blue-feather-roots-4-0",
+          "provenance": {
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
+        },
+        {
+          "after": {
+            "action": "overlay-tiles",
+            "bounds": [
+              192,
+              192,
+              8,
+              8
+            ],
+            "clearLayer": "A",
+            "tiles": [
+              {
+                "assetId": "blue-feather-roots-tile-5725",
+                "offset": [
+                  0,
+                  0
+                ],
+                "paletteLine": 0,
+                "plane": "A"
+              }
+            ]
+          },
+          "before": null,
+          "id": "sm04-shared-blue-feather-roots-4-3",
+          "provenance": {
+            "authority": "user-approved-shared-feather-tile-edit-20261023",
+            "reason": "Reuse the same four source-bound blue/brown feather-root tile assets across every statue; preserve palette, foreground depth, stone and collision."
+          },
+          "semantic": "visual",
+          "target": "room:SM04",
+          "type": "visual-plane"
         }
       ]
     },
