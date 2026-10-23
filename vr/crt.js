@@ -93,6 +93,42 @@ export function createCrtMaterial(texture, {gameRect = [0, 0, 1, 1], sourceSize 
   });
 }
 
+/** Magnavox RR1933 faceplate, in the TVScreen node's frame (apex at the origin, +Z out of the tube). */
+export const FACEPLATE = Object.freeze({width: 0.415, height: 0.31, radius: 0.6, raster: [0.4, 0.3], deflection: 0.55, forward: 0});
+
+/** The curved glass: a spherical cap whose edges curve back into the bezel's tube wall.
+ * UV 0..1 is the raster, placed where the beam lands: a glass point that curves back
+ * toward the yoke by s gets the deflection tan = d / (deflection - s), so the edges and
+ * corners show the picture pulled in. That is a tube's bulge, built from geometry, so it
+ * changes properly with the viewing angle. build_room.py makes the same mesh for the bake. */
+export function faceplateGeometry(options = {}) {
+  const {width, height, radius, raster, deflection, forward} = {...FACEPLATE, ...options};
+  const nx = 64, ny = 48;
+  const position = [], normal = [], uv = [], index = [];
+  for (let j = 0; j <= ny; j++) {
+    for (let i = 0; i <= nx; i++) {
+      const x = (i / nx - 0.5) * width, y = (j / ny - 0.5) * height;
+      const sag = radius - Math.sqrt(radius * radius - x * x - y * y);
+      const k = deflection / (deflection - sag);
+      position.push(x, y, forward - sag);
+      normal.push(x / radius, y / radius, (radius - sag) / radius);
+      uv.push(0.5 + x * k / raster[0], 0.5 + y * k / raster[1]);
+    }
+  }
+  for (let j = 0; j < ny; j++) {
+    for (let i = 0; i < nx; i++) {
+      const a = j * (nx + 1) + i, b = a + 1, c = a + nx + 2, d = a + nx + 1;
+      index.push(a, b, c, a, c, d);
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3));
+  geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normal, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geometry.setIndex(index);
+  return geometry;
+}
+
 /** The game canvas as a texture: mipmapped for the halation lookups. */
 export function crtTexture(sourceCanvas) {
   const texture = new THREE.CanvasTexture(sourceCanvas);

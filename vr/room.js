@@ -6,7 +6,7 @@ import { DampedLamp, LampEventBridge } from './lamp.js';
 import { selectFloorSpace, roomAnchor, floorSpaceDiagnostics } from './coordinates.js';
 import { SPATIAL_MODES } from './spatial/profile.js';
 import { RoomLighting } from './lighting.js';
-import { createCrtMaterial, crtTexture, updateCrt } from './crt.js';
+import { createCrtMaterial, crtTexture, faceplateGeometry, updateCrt } from './crt.js';
 import { RoomPhysics, splitBookRows } from './physics.js';
 import { SpatialRoomAudio } from './spatial/audio.js';
 import { RoomSpatialController } from './spatial/controller.js';
@@ -238,7 +238,10 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
   const gameHeight = TUBE_ASPECT / GAME_ASPECT;
   screen.material.dispose();
   screen.material = createCrtMaterial(texture, {gameRect: [0, (1 - gameHeight) / 2, 1, gameHeight]});
-  screen.geometry.computeVertexNormals(); // the GLB ships without normals; the glass needs them for reflections
+  // The glass is rebuilt here from the build's faceplate parameters, so its curve can change
+  // without a new lighting bake. A GLB from before they were exported has its node 32 mm deeper.
+  screen.geometry.dispose();
+  screen.geometry = faceplateGeometry(screen.userData.faceplate || {forward: 0.032});
   const swinging = [], props = [], bookRows = [], colliders = [];
   gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(object => {
