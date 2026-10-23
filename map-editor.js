@@ -9,6 +9,7 @@ import { classicPresentationBoundsToRdx, classicPresentationPointToRdx, projectC
 import { PaletteRegistry } from './rdx/src/data/palettes.js';
 import { createCanonicalLevelEditorPreviewRenderer, createDecodedRdxPreviewRenderer, CanonicalLevelEditorRoomRenderer } from './rdx/src/level-editor/rendering/canonical-room-renderer.js';
 import { extractMapScene } from './rdx/src/pixel-art/map-scene.js';
+import { parseMapSceneExportRequest } from './rdx/src/pixel-art/map-scene-export-request.js';
 import { geometryIdsClipboardText } from './rdx/src/preview/geometry-ids.js';
 import { buildDebugOverlayModel, DebugPrimitiveFlag, DebugPrimitiveType, primitiveVisible } from './rdx/src/debug/overlay-model.js';
 import { geometryProvenanceViewModel, geometryProvenanceClipboard } from './rdx/src/preview/geometry-provenance.js';
@@ -74,7 +75,7 @@ const COLLISION_RDX_DESCRIPTOR = 3; // RDX descriptor terrain + shared xrick Ric
 const EDITOR_BUNDLED_ROM_PATH = './rdx/data/editor/Rick_Dangerous_DX_1.3x.bin';
 
 const ui = Object.fromEntries([
-  'editor-app','level-name','save-state','new-level','previous-room','open-room','next-room','reset-rdx','import-level','export-control','export-level','export-menu','validate-level','play-level','import-file',
+  'editor-app','level-name','save-state','new-level','previous-room','open-room','next-room','reset-rdx','import-level','export-control','export-level','export-menu','map-scene-export-dialog','map-scene-export-form','map-scene-export-target','map-scene-export-pn','map-scene-export-mirror','map-scene-export-tick','map-scene-export-error','map-scene-export-close','map-scene-export-cancel','map-scene-export-submit','validate-level','play-level','import-file',
   'undo','redo','tool-buttons','simulate-toggle','presentation-view-toggle','snap-toggle','grid-toggle','system-modifications-toggle','zoom-out','zoom-label','zoom-in','frame-width','frame-height','authority-label','cursor-readout',
   'scene-tab','library-tab','diagnostics-tab','scene-tree','scene-summary','changes-panel','changes-count','changes-list','host-room-label','level-size-label','hero-label','level-settings-button',
   'library-search','tile-library','entity-library','terrain-library-pane','stamp-library-pane','raw-tile-library-pane','terrain-collision-mode','terrain-catalog','selected-terrain-label','autotile-debug-toggle','terrain-assist-ambiguity','stamp-categories','stamp-catalog','selected-stamp-label','tile-source-map','tile-source-plane','tile-palette','tile-palette-selection','selected-tile-label','tile-rotation-variants','entity-categories','entity-catalog',
@@ -2240,38 +2241,18 @@ function toggleExportMenu(){if(!ui.export_menu)return;const open=ui.export_menu.
 async function exportEditorArtifact(mode='implementation'){
   if(!store)return;const stem=exportStem();
   if(mode==='map-scene'){
+    closeExportMenu();
     const selectedMark=selection.find(item=>item.kind==='source')?.id;
-    const chosen=window.prompt('Map scene: mark:43 or x,y,width,height; optional ;pn=98;mirror=x;tick=2, ;pn=27 or ;pn=none',selectedMark||'192,120,56,56');
-    if(chosen==null){closeExportMenu();return;}
-    const parts=chosen.trim().split(';').map(v=>v.trim());
-    const options={};
-    for(const part of parts.slice(1)){
-      const match=part.match(/^(pn|mirror|tick)=(.*)$/i);
-      if(!match||Object.hasOwn(options,match[1].toLowerCase())){toast('Use ;pn=N or none; optional ;mirror=x, y or xy;tick=N','error');closeExportMenu();return;}
-      options[match[1].toLowerCase()]=match[2].toLowerCase();
-    }
-    if(options.pn!==undefined&&!/^(none|\d{1,3})$/.test(options.pn) ||
-      options.mirror!==undefined&&!/^(x|y|xy)$/.test(options.mirror) ||
-      options.tick!==undefined&&!/^\d{1,4}$/.test(options.tick)){
-      toast('Invalid PN or mirror: use ;pn=N;mirror=x, y or xy','error');closeExportMenu();return;
-    }
-    const testPn=options.pn==='none'?null:options.pn!==undefined?Number(options.pn):91;
-    const testSourceTick=options.tick===undefined?0:Number(options.tick);
-    const testMirrorX=!!options.mirror?.includes('x'),testMirrorY=!!options.mirror?.includes('y');
-    if(testPn!==null&&(!Number.isInteger(testPn)||testPn<0||testPn>255) || testPn===null&&(options.mirror||options.tick) || testSourceTick>1024){
-      toast('PN must be 0..255; tick must be 0..1024; options require a PN','error');closeExportMenu();return;
-    }
-    const mark=parts[0].match(/^mark:(\d+)$/i);
-    const rectangle=parts[0].split(',').map(v=>Number(v.trim()));
-    const location=mark?{stableEntityId:`mark:${mark[1]}`,margin:16}:rectangle.length===4&&rectangle.every(Number.isInteger)?{worldRect:rectangle}:null;
-    if(!location){toast('Enter mark:NUMBER or x,y,width,height','error');closeExportMenu();return;}
-    try{
-      const frameResources={...resources.canonicalPreviewOptions};
-      const renderer=new CanonicalLevelEditorRoomRenderer({resourcesProvider:()=>frameResources});
-      const scene=await extractMapScene({roomRenderer:renderer,resources,submap:store.document.base.submap,mapId:store.document.base.mapId,tick:0,testPn,testSourceTick,testMirrorX,testMirrorY,...location});
-      download(`${scene.room.id.toLowerCase()}-map-scene.rdr-map-scene.json`,JSON.stringify(scene));
-      toast(`Exported ${scene.cropWorld.join(',')} canonical scene; edit ownership requires a source-bound promotion plan.`,'ok',5200);
-    }catch(error){toast(`${error.code||'SCENE'}: ${error.message}`,'error',6500);}
+    ui.map_scene_export_target.value=selectedMark||'192,120,56,56';
+    ui.map_scene_export_pn.value='91';
+    ui.map_scene_export_mirror.value='';
+    ui.map_scene_export_tick.value='0';
+    ui.map_scene_export_error.hidden=true;
+    ui.map_scene_export_error.textContent='';
+    ui.map_scene_export_dialog.showModal();
+    ui.map_scene_export_target.focus();
+    ui.map_scene_export_target.select();
+    return;
   }
   else if(mode==='changes'){download(`${stem}-changes.json`,exportChangesJson(store.document,{heroStartChanged:heroStartChangedFromProduction(),entityContexts:changesEntityContexts()}));toast('Compact manual changes exported for code implementation.','ok');}
   else if(mode==='reviewed-fixes'){
@@ -2284,6 +2265,41 @@ async function exportEditorArtifact(mode='implementation'){
   else{download(`${stem}-implementation.json`,exportImplementationJson(store.document,{nativeDraftPlan:currentNativeDraftPlan()}));savedHash=hashDoc(store.document);markDirty();toast('Current implementation exported with the editor document and exact native draft plan.','ok');}
   closeExportMenu();
 }
+async function submitMapSceneExport(event){
+  event.preventDefault();
+  if(!store)return;
+  const error=ui.map_scene_export_error;
+  error.hidden=true;
+  error.textContent='';
+  let request;
+  try{
+    request=parseMapSceneExportRequest({
+      target:ui.map_scene_export_target.value,
+      pn:ui.map_scene_export_pn.value,
+      mirror:ui.map_scene_export_mirror.value,
+      tick:ui.map_scene_export_tick.value
+    });
+  }catch(cause){
+    error.textContent=cause.message;
+    error.hidden=false;
+    return;
+  }
+  ui.map_scene_export_submit.disabled=true;
+  try{
+    const frameResources={...resources.canonicalPreviewOptions};
+    const renderer=new CanonicalLevelEditorRoomRenderer({resourcesProvider:()=>frameResources});
+    const scene=await extractMapScene({roomRenderer:renderer,resources,submap:store.document.base.submap,mapId:store.document.base.mapId,tick:0,...request});
+    download(`${scene.room.id.toLowerCase()}-map-scene.rdr-map-scene.json`,JSON.stringify(scene));
+    ui.map_scene_export_dialog.close();
+    toast(`Exported ${scene.cropWorld.join(',')} canonical scene; edit ownership requires a source-bound promotion plan.`,'ok',5200);
+  }catch(cause){
+    error.textContent=`${cause.code||'SCENE'}: ${cause.message}`;
+    error.hidden=false;
+  }finally{
+    ui.map_scene_export_submit.disabled=false;
+  }
+}
+
 function importEditorArtifact(payload){
   if(payload?.schema===LEVEL_EDITOR_IMPLEMENTATION_SCHEMA)return implementationEditorDocument(payload);
   if(payload?.schema===LEVEL_EDITOR_CHANGES_SCHEMA)throw new Error('Changes-only exports are compact implementation handoffs, not complete Level Editor documents. Import the Current implementation export instead.');
@@ -2297,6 +2313,14 @@ function bindUI(){
   const openAdjacentRoom=delta=>{const rooms=resources.manifest.rooms||[],index=rooms.findIndex(row=>Number(row.submap)===Number(store.document.base.submap)),next=rooms[index+Number(delta)];if(!next)return;openDocument(productionDocument(next));toast(`Opened ${sm(next.submap)} · ${md(next.mapId)}.`);};
   ui.new_level.addEventListener('click',()=>ui.new_level_dialog.showModal());ui.previous_room?.addEventListener('click',()=>openAdjacentRoom(-1));ui.open_room.addEventListener('click',()=>{renderRoomGrid();ui.open_room_dialog.showModal()});ui.next_room?.addEventListener('click',()=>openAdjacentRoom(1));ui.reset_rdx.addEventListener('click',resetSelectionOrMap);
   ui.import_level.addEventListener('click',()=>ui.import_file.click());ui.import_file.addEventListener('change',async()=>{const f=ui.import_file.files?.[0];if(!f)return;try{openDocument(importEditorArtifact(JSON.parse(await f.text())));toast(`Imported ${f.name}.`)}catch(err){toast(err.message,'error',5000)}finally{ui.import_file.value=''}});
+  const clearMapSceneExportError=()=>{ui.map_scene_export_error.hidden=true;ui.map_scene_export_error.textContent='';};
+  for(const field of [ui.map_scene_export_target,ui.map_scene_export_pn,ui.map_scene_export_mirror,ui.map_scene_export_tick]){
+    field.addEventListener('input',clearMapSceneExportError);
+    field.addEventListener('change',clearMapSceneExportError);
+  }
+  ui.map_scene_export_form.addEventListener('submit',event=>{void submitMapSceneExport(event);});
+  ui.map_scene_export_close.addEventListener('click',()=>ui.map_scene_export_dialog.close());
+  ui.map_scene_export_cancel.addEventListener('click',()=>ui.map_scene_export_dialog.close());
   ui.export_level.addEventListener('click',e=>{e.stopPropagation();toggleExportMenu();});ui.export_menu.addEventListener('click',e=>{const b=e.target.closest('[data-export-mode]');if(!b)return;e.preventDefault();e.stopPropagation();void exportEditorArtifact(b.dataset.exportMode).catch(err=>toast(err.message,'error',6500));});document.addEventListener('click',e=>{if(!ui.export_control.contains(e.target))closeExportMenu();});
   ui.validate_level.addEventListener('click',()=>{renderValidation();switchInspector('validation');const e=validateCurrent().filter(x=>x.severity==='error').length;toast(e?`${e} blocking document/host issue${e===1?'':'s'} found.`:'Document + host checks complete. Use Simulate/Diagnostics for gameplay and visual parity. ',e?'error':'ok',4200)});ui.run_checks.addEventListener('click',()=>{renderValidation();toast('Document + host checks refreshed.','ok',2200)});
   ui.play_level.addEventListener('click',startPlaytest);ui.restart_playtest.addEventListener('click',startPlaytest);ui.stop_playtest.addEventListener('click',stopPlaytest);

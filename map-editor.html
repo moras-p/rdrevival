@@ -286,6 +286,23 @@
     </footer>
   </div>
 
+  <dialog id="map-scene-export-dialog" class="editor-dialog">
+    <form id="map-scene-export-form" method="dialog">
+      <header><div><strong>Export map scene crop</strong><span>Export canonical Revival layers and source provenance to Pixel Art Editor.</span></div><button type="button" class="icon-button" id="map-scene-export-close" aria-label="Cancel export">×</button></header>
+      <div class="dialog-body">
+        <label>Target mark or world rectangle<input id="map-scene-export-target" type="text" placeholder="mark:43 or 192,120,56,56" required autocomplete="off" spellcheck="false" aria-describedby="map-scene-export-help"></label>
+        <small id="map-scene-export-help">Use a source mark (e.g. mark:43) or world x,y,width,height (up to 128×128 pixels). The selected room is used.</small>
+        <div class="two-col">
+          <label>Test sprite PN<input id="map-scene-export-pn" type="text" value="91" autocomplete="off" spellcheck="false"><small>0–255, or none to omit</small></label>
+          <label>Mirror<select id="map-scene-export-mirror"><option value="">None</option><option value="x">Horizontal (x)</option><option value="y">Vertical (y)</option><option value="xy">Both (xy)</option></select></label>
+        </div>
+        <label>Sprite source tick<input id="map-scene-export-tick" type="number" min="0" max="1024" step="1" value="0"></label>
+        <p id="map-scene-export-error" class="map-scene-export-error" role="alert" hidden></p>
+      </div>
+      <footer><button type="button" id="map-scene-export-cancel">Cancel</button><button type="submit" id="map-scene-export-submit" class="primary">Export scene JSON</button></footer>
+    </form>
+  </dialog>
+
   <dialog id="new-level-dialog" class="editor-dialog">
     <form method="dialog">
       <header><div><strong>Create a level</strong><span>Start from an existing production room or a native blank host.</span></div><button value="cancel" class="icon-button">×</button></header>
