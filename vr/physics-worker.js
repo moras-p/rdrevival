@@ -15,7 +15,7 @@ const handle = data => {
 self.onmessage = ({data}) => {
   if (data.type === 'init') {
     starting = PhysicsCore.create(data.scene).then(created => { core = created; },
-      error => console.warn('Room physics unavailable:', error.message));
+      error => self.postMessage({unavailable: error.message}));
     return;
   }
   if (core) handle(data);

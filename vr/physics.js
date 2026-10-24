@@ -103,11 +103,16 @@ export class RoomPhysics {
     this.pending = false;
     if (worker && typeof Worker !== 'undefined') {
       this.worker = new Worker(new URL('./physics-worker.js', import.meta.url), {type: 'module'});
+      // The worker queues everything until Rapier is up; `ready` settles once it is, or
+      // rejects when the engine can't start (props then fall back to RoomReactions).
+      this.ready = new Promise((resolve, reject) => { this.started = resolve; this.failed = reject; });
       this.worker.onmessage = ({data}) => {
+        if (data.unavailable) { this.unavailable = true; this.failed(new Error(data.unavailable)); return; }
+        this.started();
         this.pending = false; this.awake = data.active; this.apply(data.transforms); this.hear(data.hits);
       };
       this.worker.postMessage({type: 'init', scene});
-      this.ready = Promise.resolve(); // the worker queues everything until Rapier is up
+      this.worker.postMessage({type: 'step', dt: 0}); // answered as soon as Rapier is up
     } else {
       // Inline: a hit before Rapier is up is kept and applied once it is.
       this.early = [];
@@ -115,7 +120,7 @@ export class RoomPhysics {
         this.core = core;
         for (const [strength, origin] of this.early) core.impulse(strength, origin);
         this.early = null;
-      }, error => console.warn('Room physics unavailable:', error.message));
+      }, error => { this.unavailable = true; throw error; });
     }
   }
 
@@ -128,7 +133,7 @@ export class RoomPhysics {
   }
 
   step(dt) {
-    if (!this.awake) return;
+    if (!this.awake || this.unavailable) return;
     if (!this.worker) {
       if (!this.core) return;
       this.apply(this.core.step(dt)); this.hear(this.core.takeHits()); this.awake = this.core.active; return;

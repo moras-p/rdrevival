@@ -35,6 +35,10 @@ export const MATERIALS = Object.freeze({
 // Loaded on first use, not imported: if the vendored engine is missing (vendor_three.mjs
 // not run after npm ci), the room still opens, just without moving props.
 let RAPIER = null, ready = null;
+
+/** How much of a hit reaches a prop d metres away (d2 = d²). The building carries every
+ * blast in the map: a far one still rattles the room at half strength, a near one at full. */
+export const shockFalloff = d2 => 0.5 + 0.5 / (1 + 0.15 * d2);
 const init = () => (ready ??= import('./vendor/rapier.mjs').then(async module => {
   await module.default.init();
   RAPIER = module.default;
@@ -171,7 +175,7 @@ export class PhysicsCore {
       let falloff = 1, ax = 0, az = 0;
       if (origin) {
         const dx = p.x - origin.x, dy = p.y - origin.y, dz = p.z - origin.z;
-        falloff = 1 / (1 + 0.3 * (dx * dx + dy * dy + dz * dz));
+        falloff = shockFalloff(dx * dx + dy * dy + dz * dz);
         const flat = Math.hypot(dx, dz) || 1;
         ax = dx / flat; az = dz / flat;
       }

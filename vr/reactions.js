@@ -1,3 +1,5 @@
+import { shockFalloff } from './physics-core.js';
+
 /** Presentation-only reactions of light room props to in-game explosions.
  * The GLB marks such props as React_<role> nodes with userData.react
  * (rattle | tilt | slide) and userData.massKg; heavy furniture is baked into
@@ -14,7 +16,13 @@ const TILT_LIMIT = 0.6;    // rad; the wire and the wall stop it beyond this
 export class RoomReactions {
   constructor(nodes = [], {random = Math.random} = {}) {
     this.random = random;
-    this.props = nodes.filter(node => ['rattle','tilt','slide'].includes(node.userData?.react)).map(node => ({
+    this.props = [];
+    this.add(nodes);
+  }
+
+  /** Take over more props, e.g. the rigid bodies when the physics engine can't start. */
+  add(nodes) {
+    this.props.push(...nodes.filter(node => ['rattle','tilt','slide'].includes(node.userData?.react)).map(node => ({
       node, kind: node.userData.react, mass: Math.max(0.1, node.userData.massKg || 1),
       // A wall hanging turns about the wall normal (room.js sets tiltAxis 'x' or 'z').
       tiltAxis: node.userData.tiltAxis || 'z',
@@ -22,7 +30,7 @@ export class RoomReactions {
         rx: node.rotation.x, ry: node.rotation.y, rz: node.rotation.z},
       // tilt about X/Z (rad), hop (m) and their velocities; slide offset persists
       tx: 0, tz: 0, hop: 0, vtx: 0, vtz: 0, vhop: 0, sx: 0, sz: 0, vsx: 0, vsz: 0
-    }));
+    })));
   }
 
   /** strength ~1 for a dynamite blast; origin is an optional room-space point. */
@@ -31,7 +39,7 @@ export class RoomReactions {
       let falloff = 1;
       if (origin) {
         const dx = p.node.position.x - origin.x, dy = p.node.position.y - origin.y, dz = p.node.position.z - origin.z;
-        falloff = 1 / (1 + 0.6 * (dx * dx + dy * dy + dz * dz));
+        falloff = shockFalloff(dx * dx + dy * dy + dz * dz);
       }
       const k = strength * falloff / Math.sqrt(p.mass) * (0.7 + 0.6 * this.random());
       const sign = () => (this.random() < 0.5 ? -1 : 1);

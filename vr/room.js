@@ -290,8 +290,15 @@ async function loadLivingRoom(sourceCanvas, options = {}) {
   world.add(hud.bubble);
   // The lamp feedback pendulum is not part of the living room; keep an
   // unattached pivot so the event bridge stays harmless.
+  const reactions = new RoomReactions(swinging);
+  // Without the physics engine (web/vr/vendor/rapier.mjs is made by vendor_three.mjs after
+  // npm ci) the props still react, kinematically, instead of standing still.
+  physics.ready.catch(error => {
+    console.warn(`Room physics unavailable (${error.message}); props fall back to simple reactions.`);
+    reactions.add(props);
+  });
   return {scene,world,crt:screen,pivot:new THREE.Group(),texture,hud,fixedTv:true,screen,
-    reactions:new RoomReactions(swinging),physics,lighting,gameRect:[0,(1 - gameHeight) / 2,1,gameHeight],
+    reactions,physics,lighting,gameRect:[0,(1 - gameHeight) / 2,1,gameHeight],
     updateTube:tubeUpdater(screen.material,lighting,gltf.scene.getObjectByName('LampAnchor'))};
 }
 
