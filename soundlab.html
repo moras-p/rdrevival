@@ -4,403 +4,102 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>SoundLab</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="soundlab.css">
 </head>
 <body>
-  <main id="soundlab-app" class="sl-shell">
-    <header class="sl-header">
-      <div class="sl-brand">
-        <div class="sl-kicker">Deterministic game-audio authoring</div>
-        <div class="sl-title-row"><h1>SoundLab</h1><p id="sl-project">Loading project…</p></div>
+  <main id="studio" class="studio">
+    <header class="bar">
+      <div class="brand"><strong>SoundLab</strong><span id="st-status" class="status" role="status">Loading…</span></div>
+      <div class="controls" role="toolbar" aria-label="Session">
+        <label class="field">Room
+          <select id="st-room" aria-label="Start room"></select>
+        </label>
+        <button id="st-new" type="button" data-tip="Start a new recording in the selected room">New session</button>
+        <button id="st-play" type="button" class="primary" aria-pressed="false" data-tip="Play or pause the game (P)">Play</button>
+        <button id="st-step" type="button" data-tip="Advance one game frame (.)">Step</button>
+        <label class="field">Speed
+          <select id="st-speed"><option value="0.25">¼×</option><option value="0.5">½×</option><option value="1" selected>1×</option></select>
+        </label>
+        <label class="check"><input id="st-invincible" type="checkbox" checked> Invincible</label>
+        <span class="sep" aria-hidden="true"></span>
+        <button id="st-save" type="button" data-tip="Download this session (inputs and recorded state) as JSON">Save</button>
+        <label class="button-like" data-tip="Load a saved session and replay its inputs">Replay…<input id="st-load" type="file" accept="application/json,.json" hidden></label>
+        <label class="button-like" id="st-rom-label" hidden>Load ROM…<input id="st-rom" type="file" accept=".bin" hidden></label>
+        <a class="legacy" href="soundlab-legacy.html" data-tip="Previous SoundLab (boulder Earshot workflows)">Legacy editor</a>
       </div>
-      <div class="sl-header-context">
-        <label class="sl-case-picker">Case<select id="sl-case-picker" aria-label="Authoring case"></select></label>
-        <button id="sl-focus-workspace" class="sl-header-tool" type="button" title="Hide unpinned tools not needed for the current operation">Focus</button>
-        <button id="sl-restore-workspace" class="sl-header-tool" type="button" disabled title="Restore the previous workspace layout">Restore</button>
-        <span id="sl-authoring-mode" class="sl-pill neutral">standalone preview</span>
-        <span id="sl-build-state" class="sl-pill">manifest</span>
-      </div>
+      <div id="st-agent" class="agent" hidden aria-live="polite"><span class="dot"></span><span id="st-agent-text">Agent working</span></div>
     </header>
 
-    <nav class="sl-tool-rail" aria-label="SoundLab workspace panels">
-      <button type="button" data-workspace-open="navigator" title="Show case navigator">Nav</button>
-      <button type="button" data-workspace-open="inspector" title="Show sound inspector">Edit</button>
-      <button id="sl-layers-rail" type="button" data-workspace-open="layers" title="Show layer editor" disabled>Layers</button>
-      <button type="button" data-workspace-open="references" title="Show reference browser">Ref</button>
-      <button type="button" data-workspace-open="diagnostics" title="Show diagnostics">Diag</button>
-    </nav>
+    <aside class="catalog" aria-label="Sound event catalog">
+      <div class="pane-head"><h2>Events</h2><input id="st-filter" type="search" placeholder="Filter" aria-label="Filter events"></div>
+      <ol id="st-catalog" class="catalog-list"></ol>
+      <p class="legend"><span class="badge original">original</span> game sound only · <span class="badge soundlab">soundlab</span> has a SoundLab design · <span class="badge needs-hook">needs hook</span> the game cannot emit it yet</p>
+    </aside>
 
-    <section class="sl-layout">
-      <aside id="sl-cases-panel" class="sl-cases panel" data-workspace-panel="navigator">
-        <div class="panel-title"><span>Cases</span><div class="workspace-panel-actions"><small id="sl-case-count"></small><button type="button" data-workspace-pin="navigator" aria-pressed="false" title="Pin case navigator">Pin</button></div></div>
-        <div id="sl-case-list" class="case-list"></div>
-        <div class="sl-note">Manifest-defined authoring cases. Project semantics stay outside the reusable SoundLab core.</div>
-      </aside>
+    <section class="stage" aria-label="Game view">
+      <div class="stage-head">
+        <span id="st-frame" class="mono">frame –</span>
+        <span id="st-viewing" class="viewing" hidden>Viewing a recorded frame · <button id="st-live" type="button" class="link">back to live</button></span>
+        <label class="check"><input id="st-overlay" type="checkbox" checked> Overlay</label>
+      </div>
+      <div class="screen-wrap">
+        <canvas id="st-screen" width="320" height="200" tabindex="0" aria-label="Game. Focus and use arrow keys, Space to fire, X gun, C dynamite."></canvas>
+        <canvas id="st-overlay-canvas" width="640" height="400" aria-hidden="true"></canvas>
+      </div>
+      <p class="hint">Click the game, then play with arrows, <kbd>Space</kbd> fire, <kbd>X</kbd> gun, <kbd>C</kbd> dynamite. The game runs at its native 25 frames per second and every frame is recorded.</p>
+    </section>
 
-      <section class="sl-main">
-        <section id="sl-native-panel" class="panel preview-panel" data-collapsed="false">
-          <div class="panel-title native-title">
-            <div><span>Native context</span><small id="sl-native-status">Not started</small></div>
-            <div class="panel-actions">
-              <button id="sl-play-isolated" title="Audition the current sound without gameplay">Sound only</button>
-              <button id="sl-reset-native">Reset capture</button>
-              <button id="sl-playtest-start" type="button" disabled>Playtest · immortal</button>
-              <button id="sl-playtest-reset" type="button" disabled>Reset playtest</button>
-              <button id="sl-start-native" class="primary">Capture scene</button>
-              <button id="sl-toggle-native" aria-expanded="false" aria-controls="sl-native-body">Hide</button>
-            </div>
+    <aside class="side" aria-label="Details">
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tab-inspect" aria-selected="true" aria-controls="panel-inspect" data-tip="The game state behind a sound: who made it, where, how fast">Inspect</button>
+        <button role="tab" id="tab-foley" aria-selected="false" aria-controls="panel-foley" data-tip="Generate Foley from the scene, a description and a reference sound">Foley</button>
+        <button role="tab" id="tab-design" aria-selected="false" aria-controls="panel-design" data-tip="Layers, mappings and playback of the sound design">Design</button>
+        <button role="tab" id="tab-review" aria-selected="false" aria-controls="panel-review" data-tip="Listen to submitted designs and give a verdict">Review <span id="st-review-count" class="pill" hidden></span></button>
+      </div>
+      <div id="panel-inspect" role="tabpanel" aria-labelledby="tab-inspect" class="panel">
+        <div id="st-inspect-empty" class="empty">Select a sound on the timeline, or an event on the left, to see the game state behind it.</div>
+        <div id="in-emitters" class="emitters" hidden></div>
+        <div id="st-inspect" hidden>
+          <div class="inspect-head">
+            <h3 id="in-title">–</h3>
+            <div class="nav" data-tip="Other times this event was heard"><button id="in-prev" type="button" class="icon-btn" aria-label="Previous occurrence"></button><span id="in-index" class="mono">–</span><button id="in-next" type="button" class="icon-btn" aria-label="Next occurrence"></button></div>
           </div>
-          <div id="sl-native-body" class="preview-body">
-            <div id="sl-native-setup" class="native-setup" hidden>
-              <div class="native-input-state"><strong id="sl-native-input-title">Native input</strong><small id="sl-native-input-status"></small></div>
-              <label id="sl-native-input-button" class="native-file-button"><span id="sl-native-input-button-label">Load…</span><input id="sl-native-input-file" type="file"></label>
-            </div>
-            <div class="scene-views">
-              <section class="scene-view" aria-label="Native gameplay view">
-                <div class="scene-view-title"><div><strong>Game preview</strong><small>Authoritative native scene</small></div><span id="sl-scene-audio-version" class="scene-audio-version" aria-live="polite">Draft</span></div>
-                <div class="scene-game-stage">
-                  <canvas id="sl-native-canvas" width="640" height="400" tabindex="0" aria-label="Native game preview"></canvas>
-                </div>
-              </section>
-              <section class="scene-view" aria-label="Motion and segment view">
-                <div class="scene-view-title"><div><strong>Motion &amp; segments</strong><small>Select a path segment to edit its sound</small></div></div>
-                <div id="sl-scene-stage" class="scene-stage" title="Click a trajectory segment to select it">
-                  <canvas id="sl-scene-overlay" width="640" height="400" aria-label="Scene motion and semantic segments"></canvas>
-                  <button id="sl-scene-contact" class="scene-contact" type="button" hidden aria-label="Select semantic contact event" title="Select semantic contact"></button>
-                </div>
-              </section>
-            </div>
-            <div class="scene-readout">
-              <div><strong id="sl-scene-title">Watch the scene</strong><small id="sl-scene-motion">Capture the semantic event to extract object motion.</small><small id="sl-scene-script" class="scene-script">Scene timing will appear here.</small></div>
-              <output id="sl-event-readout">No captured event</output>
-            </div>
-            <div class="scene-window">
-              <span>Sound interval</span>
-              <div id="sl-scene-window" class="scene-window-track" aria-label="Scene audition window">
-                <span id="sl-scene-selection" class="scene-selection"></span>
-                <i id="sl-event-marker" class="scene-proof" title="Semantic contact"></i>
-                <button id="sl-scene-start" class="scene-handle start" aria-label="Scene start frame"></button>
-                <button id="sl-scene-end" class="scene-handle end" aria-label="Scene end frame"></button>
-              </div>
-              <output id="sl-scene-window-readout">Waiting for scene</output>
-            </div>
-            <div class="scene-capture-settings" aria-label="Native capture duration">
-              <label>Before event (frames) <input id="sl-capture-pre" type="number" min="0" max="36" step="1" value="36"></label>
-              <label>After event (frames) <input id="sl-capture-post" type="number" min="8" max="240" step="8" value="96"></label>
-              <button id="sl-recapture" type="button" disabled>Recapture window</button>
-              <small>25 frames = 1 second · recapture runs native gameplay again</small>
-            </div>
-            <details id="sl-scene-mixer" class="scene-mixer" open>
-              <summary>Scene sounds <output id="sl-scene-mixer-count">Capture to discover sounds</output></summary>
-              <div id="sl-scene-mixer-rows" class="scene-mixer-rows"></div>
-              <small>Native SFX and SoundLab events, not individual PCM voices. Uncheck a sound to mute its next triggers during replay/playtest.</small>
-            </details>
-            <section id="sl-score-workspace" class="score-workspace" hidden aria-label="Visual sound score">
-              <div class="score-toolbar">
-                <div class="score-selection"><span>Selected segment</span><strong id="sl-score-segment-name">—</strong><small id="sl-score-range-readout">—</small></div>
-                <div class="score-toolbar-controls">
-                  <div class="segmented score-versions" aria-label="Audio version">
-                    <button type="button" data-audio-version="draft" class="active">Draft</button>
-                    <button type="button" data-audio-version="published">Published</button>
-                    <button type="button" data-audio-version="original">Original</button>
-                  </div>
-                  <button id="sl-play-score" type="button" class="primary">Play scope</button>
-                </div>
-              </div>
-              <div class="score-scope-row">
-                <span>Playback</span>
-                <div class="segmented score-scopes" aria-label="Playback scope">
-                  <button type="button" data-playback-scope="selected" class="active">Selected segment</button>
-                  <button type="button" data-playback-scope="sequence">Whole sequence</button>
-                  <button type="button" data-playback-scope="scene">Full scene</button>
-                </div>
-                <div class="sequence-review-actions"><button id="sl-play-transition" type="button">Play transition</button><output id="sl-sequence-health" class="sequence-health" aria-live="polite">Sequence continuity: clean</output></div>
-              </div>
-              <div id="sl-roll-review" class="roll-review" hidden>
-                <div class="roll-review-header"><strong>Rolling sound review</strong><small>Local until explicit Publish · game audio unchanged during review</small></div>
-                <div class="roll-review-controls">
-                  <label>Listen to <select id="sl-roll-review-choice" aria-label="Rolling sound design"><option value="">Normal Sound Score Draft</option></select></label>
-                  <label>Quality <select id="sl-roll-review-quality" aria-label="Rolling preview quality"><option value="game">Game · 22.05 kHz PCM8</option><option value="master">Master · 48 kHz PCM16</option></select></label>
-                </div>
-                <div class="roll-review-tuning" id="sl-roll-review-tuning">
-                  <label>Replay speed <select id="sl-roll-review-speed" aria-label="Boulder replay speed"><option value="1">Normal · 1×</option><option value="0.75">Slow · 0.75×</option><option value="0.5">Slow motion · 0.5×</option><option value="0.25">Very slow · 0.25×</option></select></label>
-                  <label>Sound cadence <input id="sl-roll-review-tempo" type="range" min="0.5" max="1.5" step="0.05" value="1" aria-label="Rolling sound speed, independent of gameplay"><output id="sl-roll-review-tempo-value" for="sl-roll-review-tempo">1.00×</output></label>
-                  <label>Pitch <input id="sl-roll-review-pitch" type="range" min="-6" max="6" step="0.5" value="0" aria-label="Rolling sound pitch in semitones"><output id="sl-roll-review-pitch-value" for="sl-roll-review-pitch">Normal</output></label>
-                  <label>Volume <input id="sl-roll-review-volume" type="range" min="0" max="150" step="5" value="100" aria-label="Rolling sound preview volume"><output id="sl-roll-review-volume-value" for="sl-roll-review-volume">100%</output></label>
-                  <label><span>Follow boulder speed</span><input id="sl-roll-review-follow" type="checkbox" checked aria-label="Follow boulder speed during audio review"></label>
-                  <button type="button" id="sl-roll-review-reset" title="Reset replay speed, sound cadence, pitch, volume and speed follow">Reset</button>
-                </div>
-                <button type="button" id="sl-roll-review-publish" disabled>Publish tuned rolling sound…</button>
-                <p id="sl-roll-review-status" role="status">Capture SM00 and select a design to hear it with the boulder.</p>
-              </div>
-              <div class="score-loop-row">
-                <span>Selected loop</span>
-                <div class="segmented score-loop-modes" aria-label="Selected segment loop mode">
-                  <button type="button" data-segment-loop="exact">Exact</button>
-                  <button type="button" data-segment-loop="context" class="active">Context</button>
-                  <button type="button" data-segment-loop="custom">Custom</button>
-                </div>
-                <label class="score-sound-range">Sound range <input id="sl-sound-start" type="number" step="1" aria-label="Sound authoring range start frame"><span>–</span><input id="sl-sound-end" type="number" step="1" aria-label="Sound authoring range end frame"><span>f</span></label>
-              </div>
-              <div id="sl-segment-strip" class="segment-strip" aria-label="Sound score segments"></div>
-              <div class="segment-reuse-bar" aria-label="Reuse segment sound design" hidden><output id="sl-segment-link-state">Independent segment design</output><div><button id="sl-segment-copy" type="button">Copy design</button><button id="sl-segment-link" type="button">Link design</button><button id="sl-segment-unlink" type="button" disabled>Unlink</button></div></div>
-              <div class="score-edit-grid">
-                <section class="gesture-editor" aria-label="Gesture editor">
-                  <div class="score-editor-title gesture-editor-title">
-                    <div class="gesture-identity"><span>Gesture</span><strong id="sl-gesture-title">Generated motion</strong><select id="sl-gesture-select" aria-label="Selected gesture"></select></div>
-                    <div class="score-editor-actions gesture-tools"><button id="sl-gesture-draw" type="button" aria-pressed="true">Draw</button><button id="sl-gesture-erase" type="button" aria-pressed="false">Erase</button><button id="sl-gesture-smooth" type="button">Smooth</button><button id="sl-gesture-reset" type="button">Reset</button><button id="sl-score-undo" type="button" disabled>Undo</button><button id="sl-score-redo" type="button" disabled>Redo</button></div>
-                  </div>
-                  <canvas id="sl-gesture-canvas" width="900" height="150" tabindex="0" aria-label="Edit sound gesture"></canvas>
-                  <small id="sl-gesture-status">Draw across the canvas to reshape the selected gesture. Pen pressure is used when available.</small>
-                  <div class="pen-pressure-preview" aria-live="polite"><span>Input pressure</span><progress id="sl-pressure-meter" max="1" value="0.5"></progress><output id="sl-pressure-readout">Mouse fallback 0.50</output></div>
-                  <details id="sl-pen-pressure" class="pen-pressure"><summary>Pen pressure calibration</summary><div class="pen-pressure-grid"><label>Minimum<input id="sl-pressure-min" type="range" min="0" max="0.95" step="0.01" value="0"></label><label>Maximum<input id="sl-pressure-max" type="range" min="0.05" max="1" step="0.01" value="1"></label><button id="sl-pressure-reset" type="button">Reset</button></div><small>Device calibration changes how future pen/touch samples are normalized. It is local workspace state and does not rewrite existing gestures.</small></details>
-                  <details id="sl-gesture-numeric" class="gesture-numeric"><summary>Curve values</summary><div id="sl-gesture-anchors" class="gesture-anchor-grid" aria-label="Numeric gesture curve anchors"></div><small>Five deterministic anchors provide a non-drawing alternative for curve height and pressure.</small></details>
-                </section>
-                <section class="layer-editor" aria-label="Sound layers">
-                  <div class="score-editor-title"><div><span>Layers</span><strong id="sl-layer-title">Selected segment</strong></div><div class="score-editor-actions"><button type="button" data-workspace-pin="layers" aria-pressed="false" title="Pin layer editor">Pin</button><button id="sl-layer-add" type="button">+ Layer</button><button id="sl-layer-up" type="button" title="Move selected layer up">↑</button><button id="sl-layer-down" type="button" title="Move selected layer down">↓</button><button id="sl-layer-remove" type="button">Remove</button></div></div>
-                  <div id="sl-layer-stack" class="layer-stack"></div>
-                  <div class="layer-properties">
-                    <label>Label<input id="sl-layer-label" type="text" maxlength="80" aria-label="Selected layer semantic label"></label>
-                    <label>Source<select id="sl-layer-source" aria-label="Selected layer source"><option value="binding">Existing generator</option><option value="procedural">Procedural primitive</option><option value="noise">Noise</option><option value="contact-train">Contact train</option><option value="resonant-body">Resonant body</option><option value="accent">Accent / debris</option><option value="frozen-sample">Frozen sample</option></select></label>
-                    <label>Gain<div class="range-row"><input id="sl-layer-gain" type="range" min="0" max="2" step="0.01" aria-label="Selected layer gain"><output id="sl-layer-gain-out">1.00</output></div></label>
-                    <label>Gesture<select id="sl-layer-gesture" aria-label="Selected layer gesture"></select></label>
-                    <label id="sl-layer-source-id-wrap" hidden>Frozen source<select id="sl-layer-source-id" aria-label="Frozen source asset"></select></label>
-                  </div>
-                  <div id="sl-layer-source-params" class="layer-source-params" aria-label="Selected layer source parameters" hidden></div>
-                  <details id="sl-layer-shaping" class="layer-shaping"><summary>Envelope &amp; variation</summary><div class="layer-shaping-grid"><label>Fade in (ms)<input id="sl-layer-attack-ms" type="number" min="0" max="4000" step="5" value="0"></label><label>Fade out (ms)<input id="sl-layer-release-ms" type="number" min="0" max="4000" step="5" value="0"></label><label>Gain variation<input id="sl-layer-variation-amount" type="number" min="0" max="1" step="0.01" value="0"></label><label>Variation rate (Hz)<input id="sl-layer-variation-rate" type="number" min="0.1" max="20" step="0.1" value="4"></label><label>Seed offset<input id="sl-layer-variation-seed" type="number" min="-2147483648" max="2147483647" step="1" value="0"></label></div><small>Variation is deterministic around the layer signal. The same project seed and offset reproduce the same result.</small></details>
-                  <div class="mapping-editor-head"><span>Mappings</span><div><button id="sl-mapping-reset" type="button" title="Restore generated mappings for this semantic layer">Reset mappings</button><button id="sl-mapping-add" type="button">+ Mapping</button></div></div>
-                  <div id="sl-mapping-editor" class="mapping-editor" aria-label="Exact layer mappings"></div>
-                  <div id="sl-mapping-summary" class="mapping-summary">Mappings update with the selected layer.</div>
-                </section>
-              </div>
-              <div class="score-timeline" aria-label="Synchronized sound score timeline">
-                <div class="score-lane" data-score-lane="segments"><div class="score-lane-label"><button type="button" data-lane-toggle="segments" aria-expanded="true">Segments</button><button type="button" data-lane-pin="segments" aria-pressed="false" aria-label="Pin Segments lane">Pin</button></div><div id="sl-segment-lane" class="score-lane-track"><i class="timeline-proof-marker" title="Native proof frame"></i><b class="timeline-playhead"></b></div></div>
-                <div class="score-lane" data-score-lane="motion"><div class="score-lane-label"><button type="button" data-lane-toggle="motion" aria-expanded="true">Motion</button><button type="button" data-lane-pin="motion" aria-pressed="false" aria-label="Pin Motion lane">Pin</button></div><div class="score-lane-track motion-lane"><canvas id="sl-motion-lane" width="900" height="72" aria-label="Native motion speed"></canvas><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
-                <div class="score-lane" data-score-lane="score"><div class="score-lane-label"><button type="button" data-lane-toggle="score" aria-expanded="true">Score</button><button type="button" data-lane-pin="score" aria-pressed="false" aria-label="Pin Score lane">Pin</button></div><div id="sl-score-lane" class="score-lane-track"><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
-                <div class="score-lane" data-score-lane="spectrum"><div class="score-lane-label"><button type="button" data-lane-toggle="spectrum" aria-expanded="true">Spectrum</button><button type="button" data-lane-pin="spectrum" aria-pressed="false" aria-label="Pin Spectrum lane">Pin</button></div><div class="score-lane-track analysis-lane"><canvas id="sl-spectrogram-lane" width="900" height="96" aria-label="Spectral energy aligned to the sound score timeline"></canvas><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
-                <div class="score-lane" data-score-lane="waveform"><div class="score-lane-label"><button type="button" data-lane-toggle="waveform" aria-expanded="true">Waveform</button><button type="button" data-lane-pin="waveform" aria-pressed="false" aria-label="Pin Waveform lane">Pin</button></div><div class="score-lane-track analysis-lane"><canvas id="sl-score-waveform-lane" width="900" height="72" aria-label="Waveform aligned to the sound score timeline"></canvas><i class="timeline-proof-marker"></i><b class="timeline-playhead"></b></div></div>
-                <div class="score-analysis-footer">
-                  <label>Analyze<select id="sl-analysis-source" aria-label="Audio analysis source"><option value="layer">Selected layer</option><option value="segment" selected>Selected segment</option><option value="sequence">Full Draft sequence</option><option value="published">Published</option><option value="original">Original</option></select></label>
-                  <span id="sl-analysis-version" class="score-analysis-version">Draft</span><output id="sl-analysis-summary" class="score-analysis-summary">Audio analysis appears after auditioning Draft or Published.</output>
-                </div>
-              </div>
-            </section>
+          <div class="in-actions">
+            <button id="in-design" type="button" class="primary">Design this sound</button>
+            <button id="in-foley" type="button" data-tip="Generate a Foley sound for this moment from its game state">Foley for this</button>
+            <button id="in-play" type="button" class="icon-btn" data-tip="Replay the seconds around this moment with the sounds the game played"><span data-icon="context"></span> Hear the moment</button>
           </div>
-        </section>
-
-        <section class="panel waveform-panel">
-          <div class="panel-title waveform-title">
-            <div><span>Audition</span><small id="sl-waveform-caption">Current browser preview</small></div>
-            <span id="sl-waveform-version" class="waveform-version">Draft</span>
-          </div>
-          <canvas id="sl-waveform" width="900" height="180" aria-label="Sound waveform"></canvas>
-          <div class="metrics">
-            <span id="sl-metric-duration">— ms</span>
-            <span id="sl-metric-peak">peak —</span>
-            <span id="sl-metric-rate">—</span>
-            <span id="sl-metric-hash">hash —</span>
-          </div>
-        </section>
-
-        <details id="sl-reference-panel" class="panel reference-panel" data-persist-key="references" data-workspace-panel="references">
-          <summary class="panel-title"><span>Reference sound color</span><div class="workspace-panel-actions"><small>approved library · perceptual axes</small><button type="button" data-workspace-pin="references" aria-pressed="false" title="Pin reference browser">Pin</button></div></summary>
-          <div class="reference-body">
-            <div class="reference-toolbar">
-              <label>X axis<select id="sl-reference-axis-x" aria-label="Reference map horizontal axis"></select></label>
-              <label>Y axis<select id="sl-reference-axis-y" aria-label="Reference map vertical axis"></select></label>
-              <span id="sl-reference-current">Current draft fingerprint</span>
-            </div>
-            <canvas id="sl-reference-map" width="900" height="260" aria-label="Perceptual reference sound map"></canvas>
-            <div class="reference-selection">
-              <div><strong id="sl-reference-title">Choose a promoted sound or imported reference</strong><small id="sl-reference-delta">Nearest approved sounds update with the current draft.</small></div>
-              <div><button id="sl-reference-play" disabled>Play reference</button><button id="sl-reference-match" disabled>Match color</button></div>
-            </div>
-            <div id="sl-reference-nearest" class="reference-nearest" aria-label="Nearest sound references"></div>
-            <p class="sl-help">Matching changes only the explicit timbre controls (depth, hardness, roughness, boom, brightness, warmth, ring and room). Material, event timing and motion remain authoritative scene choices.</p>
-          </div>
-        </details>
-
-        <details id="sl-diagnostics-panel" class="panel capture-panel" data-persist-key="diagnostics" data-workspace-panel="diagnostics">
-          <summary class="panel-title"><span>Telemetry & diagnostics</span><div class="workspace-panel-actions"><small>collapsed</small><button type="button" data-workspace-pin="diagnostics" aria-pressed="false" title="Pin diagnostics">Pin</button></div></summary>
-          <div class="diagnostics-body">
-            <div class="diagnostic-audition"><span>Technical audition sources</span><div class="segmented" aria-label="Technical audition source">
-              <button data-profile="preview" class="active">Browser preview</button>
-              <button data-profile="current-master" disabled>Current canonical</button>
-              <button data-profile="current-runtime" disabled>Current runtime</button>
-              <button data-profile="master">Promoted master</button>
-              <button data-profile="runtime">Promoted runtime</button>
-            </div></div>
-            <div class="diagnostics-toolbar"><span>Exact native telemetry</span><div><button id="sl-use-capture" aria-pressed="false">Use trace</button><button id="sl-clear-capture">Clear</button><button id="sl-export-capture">Export trace</button></div></div>
-            <pre id="sl-telemetry">Capture the authoritative game event; no browser collision inference is used.</pre>
-            <div class="semantic-facts">
-              <div><span>Recipe</span><strong id="sl-recipe"></strong></div>
-              <div><span>Style</span><strong id="sl-style"></strong></div>
-              <div><span>Event</span><strong id="sl-event"></strong></div>
-              <div><span>Renderer</span><strong id="sl-renderer"></strong></div>
-              <div><span>Browser playback</span><strong id="sl-browser-rate">not started</strong></div>
-              <div><span>Canonical build</span><strong id="sl-canonical-state">not connected</strong></div>
-            </div>
-            <p class="sl-help">The browser renderer is a low-latency, non-authoritative preview. Connected canonical render, export conversion, hashes, stale detection, and promotion remain owned by the local SoundLab renderer.</p>
-          </div>
-        </details>
-      </section>
-
-      <aside id="sl-author-panel" class="sl-author panel" data-workspace-panel="inspector">
-        <div class="panel-title author-title">
-          <div><span>Shape current sound</span><small id="sl-author-mode-caption">browser preview</small></div>
-          <div class="author-title-actions"><div class="object-chip">Object <strong id="sl-object"></strong></div><button type="button" data-workspace-pin="inspector" aria-pressed="false" title="Pin sound inspector">Pin</button></div>
+          <dl id="in-facts" class="facts"></dl>
+          <h4>Playing nearby (±0.5 s)</h4>
+          <ul id="in-nearby" class="nearby"></ul>
+          <details class="raw"><summary>Raw inspector data</summary><pre id="in-json"></pre></details>
         </div>
+      </div>
+      <div id="panel-foley" role="tabpanel" aria-labelledby="tab-foley" class="panel designer foley" hidden></div>
+      <div id="panel-design" role="tabpanel" aria-labelledby="tab-design" class="panel designer" hidden></div>
+      <div id="panel-review" role="tabpanel" aria-labelledby="tab-review" class="panel review" hidden></div>
+    </aside>
 
-        <div class="author-fields focus-fields">
-          <div class="control-row" data-control="material">
-            <label>Contact material<select id="sl-material"></select></label><button class="reset-control" data-reset="material" title="Reset material">↺</button>
+    <section class="timeline" aria-label="Event timeline">
+      <div class="timeline-head">
+        <div class="transport" role="toolbar" aria-label="Timeline playback">
+          <button id="tl-play" type="button" class="icon-btn primary" aria-label="Play from here" data-tip="Play the recording from the playhead (Space). Inside the highlighted range it stops at the range end"></button>
+          <button id="tl-stop" type="button" class="icon-btn" aria-label="Stop" data-tip="Stop playback (Esc)"></button>
+          <label class="check" data-tip="Keep replaying the highlighted range (also for “in context”); takes effect immediately"><input id="tl-loop" type="checkbox"> Loop</label>
+          <label class="vol" data-tip="Volume of everything SoundLab plays"><span data-icon="volume"></span><input id="tl-volume" type="range" min="0" max="100" value="80" aria-label="Volume"></label>
+          <div class="seg" role="radiogroup" aria-label="Hear">
+            <button type="button" role="radio" id="tl-hear-game" aria-checked="true" data-tip="Play what the game sounds like today">Game sounds</button>
+            <button type="button" role="radio" id="tl-hear-designs" aria-checked="false" data-tip="Swap in every sound you have a draft for">With my designs</button>
           </div>
-          <div class="control-row" data-control="energy">
-            <label><span id="sl-energy-label">Impact energy</span>
-              <div class="range-row"><div id="sl-energy-surface" class="sl-range-surface" data-soundlab-essential="energy"><input id="sl-energy" type="range" min="0" max="1" step="0.01" aria-label="Impact energy"></div><output id="sl-energy-out"></output></div>
-              <small class="range-ends"><span>gentle</span><span>forceful</span></small>
-            </label><button class="reset-control" data-reset="energy" title="Reset impact energy">↺</button>
-          </div>
-          <div class="control-row" data-control="depth">
-            <label>Weight / depth
-              <div class="range-row"><div id="sl-depth-surface" class="sl-range-surface"><input id="sl-depth" type="range" min="0" max="1" step="0.01" aria-label="Weight and depth"></div><output id="sl-depth-out"></output></div>
-              <small class="range-ends"><span>light · thin</span><span>heavy · deep</span></small>
-            </label><button class="reset-control" data-reset="depth" title="Reset weight and depth">↺</button>
-          </div>
-          <div class="control-row" data-control="texture">
-            <label>Rocky texture
-              <div class="range-row"><div id="sl-texture-surface" class="sl-range-surface"><input id="sl-texture" type="range" min="0" max="1" step="0.01" aria-label="Rocky texture"></div><output id="sl-texture-out"></output></div>
-              <small class="range-ends"><span>smooth</span><span>rocky · rough</span></small>
-            </label><button class="reset-control" data-reset="texture" title="Reset texture">↺</button>
-          </div>
-          <div class="control-row" data-control="attack">
-            <label>Attack
-              <div class="range-row"><div id="sl-attack-surface" class="sl-range-surface"><input id="sl-attack" type="range" min="0" max="1" step="0.01" aria-label="Attack hardness"></div><output id="sl-attack-out"></output></div>
-              <small class="range-ends"><span>soft · rounded</span><span>hard · sharp</span></small>
-            </label><button class="reset-control" data-reset="attack" title="Reset attack">↺</button>
-          </div>
-          <div class="control-row" data-control="ring">
-            <label>Ring / tail
-              <div class="range-row"><div id="sl-ring-surface" class="sl-range-surface"><input id="sl-ring" type="range" min="0" max="1" step="0.01" aria-label="Ring and tail"></div><output id="sl-ring-out"></output></div>
-              <small class="range-ends"><span>short · dead</span><span>ringing · long</span></small>
-            </label><button class="reset-control" data-reset="ring" title="Reset ring and tail">↺</button>
-          </div>
-          <details class="tone-space" data-persist-key="tone-space">
-            <summary>Color & space <small>plain-language tone</small></summary>
-            <div class="tone-space-grid">
-              <div class="control-row" data-control="boominess"><label>Boom / punch<div class="range-row"><div id="sl-boominess-surface" class="sl-range-surface"><input id="sl-boominess" type="range" min="0" max="1" step="0.01" aria-label="Boom and punch"></div><output id="sl-boominess-out"></output></div><small class="range-ends"><span>tight</span><span>boomy</span></small></label><button class="reset-control" data-reset="boominess" title="Reset boom and punch">↺</button></div>
-              <div class="control-row" data-control="brightness"><label>Brightness<div class="range-row"><div id="sl-brightness-surface" class="sl-range-surface"><input id="sl-brightness" type="range" min="0" max="1" step="0.01" aria-label="Brightness"></div><output id="sl-brightness-out"></output></div><small class="range-ends"><span>dark · dull</span><span>bright · crisp</span></small></label><button class="reset-control" data-reset="brightness" title="Reset brightness">↺</button></div>
-              <div class="control-row" data-control="warmth"><label>Warmth<div class="range-row"><div id="sl-warmth-surface" class="sl-range-surface"><input id="sl-warmth" type="range" min="0" max="1" step="0.01" aria-label="Warmth"></div><output id="sl-warmth-out"></output></div><small class="range-ends"><span>cold</span><span>warm</span></small></label><button class="reset-control" data-reset="warmth" title="Reset warmth">↺</button></div>
-              <div class="control-row" data-control="space"><label>Room / echo<div class="range-row"><div id="sl-space-surface" class="sl-range-surface"><input id="sl-space" type="range" min="0" max="1" step="0.01" aria-label="Room and echo"></div><output id="sl-space-out"></output></div><small class="range-ends"><span>dry · close</span><span>roomy · echoing</span></small></label><button class="reset-control" data-reset="space" title="Reset room and echo">↺</button></div>
-            </div>
-          </details>
-          <p id="sl-sound-summary" class="sound-summary">Sound color will appear here.</p>
-          <details class="describe-sound" data-persist-key="describe-sound">
-            <summary>Describe a change <small>optional · constrained</small></summary>
-            <div class="describe-sound-body">
-              <textarea id="sl-description" rows="2" placeholder="Make it heavier and deeper, but less ringy."></textarea>
-              <div class="describe-sound-actions"><button id="sl-apply-description" type="button">Apply description</button><small id="sl-description-result">Changes map to the visible controls and scene window.</small></div>
-            </div>
-          </details>
-          <div class="author-pair">
-            <label>Current seed<input id="sl-seed" type="number" min="1" max="4294967295" step="1"></label>
-            <label>Promoted variant<select id="sl-variant"></select></label>
-          </div>
+          <span id="tl-range" class="range-chip mono" data-tip="The highlighted range is what “in context” plays. Drag its edges to hear more or less; drag in the ruler to mark a new one">no range</span>
+          <button id="tl-range-clear" type="button" class="link" hidden>clear</button>
+          <span id="tl-now" class="now-playing mono" data-now></span>
         </div>
-
-        <details id="sl-expert" class="expert" data-persist-key="expert">
-          <summary>Expert controls <small id="sl-changed-count">profile defaults</small></summary>
-          <div class="expert-sections">
-            <details open data-persist-key="expert-object"><summary>Object & contact</summary><div class="expert-grid">
-              <div class="control-row" data-control="object"><label>Object profile<select id="sl-object-profile"></select></label><button class="reset-control" data-reset="object">↺</button></div>
-              <div class="control-row" data-control="size"><label>Size / mass <div class="mini-range"><input id="sl-size" type="range" min="0.6" max="1.4" step="0.01"><output id="sl-size-out"></output></div></label><button class="reset-control" data-reset="size">↺</button></div>
-              <div class="control-row" data-control="roughness"><label>Roughness <div class="mini-range"><input id="sl-roughness" type="range" min="0" max="1" step="0.01"><output id="sl-roughness-out"></output></div></label><button class="reset-control" data-reset="roughness">↺</button></div>
-            </div></details>
-            <details data-persist-key="expert-transient"><summary>Transient & body</summary><div class="expert-grid">
-              <div class="control-row" data-control="hardness"><label>Hardness <div class="mini-range"><input id="sl-hardness" type="range" min="0" max="1" step="0.01"><output id="sl-hardness-out"></output></div></label><button class="reset-control" data-reset="hardness">↺</button></div>
-              <div class="control-row" data-control="transient"><label>Transient balance <div class="mini-range"><input id="sl-transient" type="range" min="0" max="1.2" step="0.01"><output id="sl-transient-out"></output></div></label><button class="reset-control" data-reset="transient">↺</button></div>
-              <div class="control-row" data-control="body"><label>Body balance <div class="mini-range"><input id="sl-body" type="range" min="0" max="1.2" step="0.01"><output id="sl-body-out"></output></div></label><button class="reset-control" data-reset="body">↺</button></div>
-              <div class="control-row" data-control="residual"><label>Residual balance <div class="mini-range"><input id="sl-residual" type="range" min="0" max="1.2" step="0.01"><output id="sl-residual-out"></output></div></label><button class="reset-control" data-reset="residual">↺</button></div>
-              <div class="control-row" data-control="damping"><label>Modal damping <div class="mini-range"><input id="sl-damping" type="range" min="0.6" max="1.6" step="0.01"><output id="sl-damping-out"></output></div></label><button class="reset-control" data-reset="damping">↺</button></div>
-            </div></details>
-            <details data-persist-key="expert-style"><summary>Style & variation</summary><div class="expert-grid">
-              <div class="control-row" data-control="style"><label>Style profile<select id="sl-style-profile"></select></label><button class="reset-control" data-reset="style">↺</button></div>
-              <div class="control-row" data-control="style-amount"><label>Style amount <div class="mini-range"><input id="sl-style-amount" type="range" min="0" max="1.5" step="0.01"><output id="sl-style-amount-out"></output></div></label><button class="reset-control" data-reset="style-amount">↺</button></div>
-              <div class="control-row" data-control="variants"><label>Variant count<input id="sl-variant-count" type="number" min="1" max="16" step="1"></label><button class="reset-control" data-reset="variants">↺</button></div>
-              <div class="control-row" data-control="covariance"><label>Variation covariance <div class="mini-range"><input id="sl-covariance" type="range" min="0" max="2" step="0.05"><output id="sl-covariance-out"></output></div></label><button class="reset-control" data-reset="covariance">↺</button></div>
-              <div class="snapshot-bar"><span>Parameter A/B</span><button data-snapshot-save="A">Store A</button><button data-snapshot-load="A">Recall A</button><button data-snapshot-save="B">Store B</button><button data-snapshot-load="B">Recall B</button></div>
-            </div></details>
-            <details data-persist-key="expert-source"><summary>Source material</summary><div class="expert-grid">
-              <div class="control-row" data-control="source"><label>Residual source<select id="sl-source"><option value="">Procedural residual</option></select></label><button class="reset-control" data-reset="source">↺</button></div>
-              <div id="sl-source-meta" class="source-meta">No frozen source selected.</div>
-              <div class="source-import">
-                <label>Import WAV<input id="sl-source-file" type="file" accept="audio/wav,.wav"></label>
-                <label>Source ID<input id="sl-source-id" type="text" placeholder="stone-residual-01"></label>
-                <label>Role<select id="sl-source-role"><option value="residual">residual</option><option value="transient">transient</option><option value="body-reference">body reference</option><option value="texture">texture</option></select></label>
-                <label>Provider<input id="sl-source-provider" type="text" value="recorded"></label>
-                <button id="sl-import-source" disabled>Import frozen source</button>
-              </div>
-            </div></details>
-          </div>
-        </details>
-
-        <div class="button-grid" aria-label="Audition actions">
-          <button id="sl-render-preview" class="primary">Refresh preview</button>
-          <button id="sl-play-preview">▶ Current</button>
-          <button id="sl-play-master">▶ Master</button>
-          <button id="sl-play-runtime">▶ Runtime</button>
-        </div>
-
-        <section id="sl-canonical-panel" class="canonical-card" aria-label="Canonical authoring" hidden>
-          <div class="canonical-head"><div><strong>Canonical authoring</strong><span id="sl-publish-audio-version" class="publish-audio-version" aria-live="polite">Listening Draft</span></div><small id="sl-service-detail">Connect by opening SoundLab through the local authoring service.</small></div>
-          <div class="canonical-actions">
-            <button id="sl-render-canonical" disabled>Render current</button>
-            <button id="sl-render-variants" disabled>Variants</button>
-            <button id="sl-render-materials" disabled>Materials</button>
-            <button id="sl-render-sweep" disabled>Strength sweep</button>
-            <button id="sl-promote" class="primary" disabled>Promote…</button>
-          </div>
-          <details id="sl-stone-family" class="earshot-loop" data-persist-key="stone-family">
-            <summary>Stone chamber · Contact sequences <small>reviewed Fit sound</small></summary>
-            <p>Approved Stone chamber stays unchanged. Earshot Fit generates independent modeled rock contacts (not excerpts of the mixed WAV). First listen blind at game quality, then reveal the physical event plans. The automatic onset check screens for weak contacts; an eight-trial blind A/B/X check is required before importing a new modeled take. Neither check guarantees natural stone timbre.</p>
-            <div class="earshot-toolbar stone-controls">
-              <label>Sound variation seed <input id="sl-stone-seed" type="number" min="0" max="2147483607" step="1" value="349"></label>
-              <button id="sl-stone-generate" disabled>Generate Fit event patterns</button>
-            </div>
-            <label class="stone-reveal"><input id="sl-stone-reveal" type="checkbox"> Reveal proposed designs, timing and measured onset contrast</label>
-            <div id="sl-stone-round" class="earshot-takes" aria-live="polite"></div>
-            <div id="sl-stone-abx" class="stone-abx" hidden>
-              <strong>Hear the difference? · Game-format blind A/B/X</strong>
-              <p>Sound A is the most acoustically similar *other* candidate; Sound B is your selected candidate. This tests the distinguishing feature rather than obvious level or timbre changes from the published original. Play both, then play X (randomly A or B) and identify which it was. You need 7 correct answers in 8 trials to confirm a clear distinction.</p>
-              <div class="earshot-toolbar"><button id="sl-stone-abx-play-a" type="button">▶ A</button><button id="sl-stone-abx-play-b" type="button">▶ B</button><button id="sl-stone-abx-play-x" type="button">▶ X</button></div>
-              <div class="earshot-toolbar"><button id="sl-stone-abx-guess-a" type="button">X was A</button><button id="sl-stone-abx-guess-b" type="button">X was B</button><button id="sl-stone-abx-reset" type="button">Restart</button></div>
-              <p id="sl-stone-abx-status" role="status">Select a candidate to begin.</p>
-            </div>
-            <div class="earshot-toolbar"><button id="sl-stone-accept" disabled>Accept verified take as frozen source…</button></div>
-            <p id="sl-stone-status" role="status">Connect SoundLab with Earshot 0.3 to synthesize fitted stone contacts.</p>
-          </details>
-          <details id="sl-earshot" class="earshot-loop" data-persist-key="earshot">
-            <summary>Earshot · Improve sound <small>optional offline synthesizer</small></summary>
-            <p>Make new sounds, not copies of the current reference. Compare with <strong>▶ Master</strong>, choose a take, refine it, and accept only what sounds better in gameplay.</p>
-            <div class="earshot-toolbar">
-              <label>Target length <select id="sl-earshot-duration"><option value="240">240 ms</option><option value="360" selected>360 ms</option><option value="480">480 ms</option></select></label>
-              <label>Seed <input id="sl-earshot-seed" type="number" value="13" min="0" max="2147483607" step="1"></label>
-              <button id="sl-earshot-start" disabled>Generate 4 takes</button><button id="sl-earshot-preset" disabled>Refine reviewed A (stone)</button>
-            </div>
-            <div id="sl-earshot-round" class="earshot-takes" aria-live="polite"></div>
-            <div class="earshot-toolbar">
-              <label>Change <select id="sl-earshot-direction"><option value="variation">Another take</option><option value="crisper">Sharper contact</option><option value="heavier">More body</option><option value="drier">Less tail</option><option value="rougher">More gritty detail</option><option value="stone">Stone thud · less metallic</option><option value="mineral">Denser stone · less metal and wood</option></select></label>
-              <button id="sl-earshot-refine" disabled>Refine selection</button>
-              <button id="sl-earshot-accept" disabled>Accept frozen source…</button>
-            </div>
-            <p id="sl-earshot-status" role="status">Connect a local Earshot 0.3 installation to explore sound improvements.</p>
-          </details>
-          <div id="sl-batch-strip" class="batch-strip" aria-live="polite"></div>
-          <div id="sl-publish-diff" class="publish-diff">Publish diff: no authored production changes.</div>
-          <div id="sl-promotion-state" class="promotion-state">Standalone mode: canonical filesystem operations are unavailable.</div>
-        </section>
-        <p class="author-note">Focus mode stays browser-fast. Expert controls remain one disclosure away; connected canonical render/promotion never changes browser preview into production authority.</p>
-      </aside>
+        <span class="legend-inline"><i class="k sound"></i>game sound <i class="k cue"></i>SoundLab cue <i class="k state"></i>state change <i class="k span"></i>motion <i class="k range"></i>range · <b>M</b>/<b>S</b> mute/solo a source</span>
+        <div class="zoom"><button id="tl-out" type="button" aria-label="Zoom out" data-tip="Zoom out (or scroll)">−</button><button id="tl-in" type="button" aria-label="Zoom in" data-tip="Zoom in (or scroll)">+</button><button id="tl-all" type="button" data-tip="Fit the whole recording">All</button></div>
+      </div>
+      <div class="timeline-scroll"><canvas id="st-timeline" aria-label="Sound events over time; click a marker to inspect, drag to scrub, drag in the ruler to mark a range"></canvas></div>
     </section>
   </main>
   <canvas id="sl-engine-canvas" width="320" height="200" hidden aria-hidden="true"></canvas>

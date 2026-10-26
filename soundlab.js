@@ -1,906 +1,666 @@
-import { PERCEPTUAL_FINGERPRINT_AXES, assertSoundLabManifest, bindingFor, energyForStrength, fingerprintDistance, interpretSoundDescription, materialOptions, outputsFor, perceptualFingerprint, perceptualSoundDescription, referenceLibrary, resourceOptions, resolvePreviewResources, sceneMotionSamples, sceneSoundIntent, sourceOptions, strengthForEnergy, telemetryTrace } from './rdx/src/soundlab/model.js';
-import { matchingRollingReviewScene, rollingReviewPlaybackPlan, rollingReviewPitchTime, rollingReviewLoop, rollingReviewTuning, rollingReviewTimePlan, rollingPublishedScore, encodeRollingPcm16 } from './rdx/src/soundlab/review-audio.js';
-import { renderSoundPreview, renderScoreLayerPreview, mixScoreLayerPreviews, audioBufferFrom, decodePcmWavPreview, fitFrozenScoreLayerPreview } from './rdx/src/soundlab/preview-renderer.js';
-import { SoundLabAuthoringClient } from './rdx/src/soundlab/authoring-client.js';
-import { adjacentPlaybackRange, applySoundScoreToBinding, applySoundScoreLayerToBinding, authoringRangeForTiming, buildDefaultSoundScore, compileLayerControlSignals, compileSoundScoreAdjustments, copySegmentDesign, generatedGestureForSegment, normalizeGesture, playbackRange, recommendedMappingsForLayer, selectedPlaybackRange, selectedScoreSegment, synchronizeLinkedSegments } from './rdx/src/soundlab/score.js';
+/* SoundLab Studio: play the game, scrub to any moment, see every sound that
+ * fired with the game state behind it, produce Foley and design a
+ * replacement against that moment, and hand it to a person for review.
+ * Session recording, event catalog, timeline with playback, game view
+ * overlay, state inspector, emitter navigation, Foley producer, designer,
+ * review queue and WebMCP. The panels and the agent tools share one
+ * Workbench. */
 
-const $=id=>document.getElementById(id);
-const spectrogramCache=new WeakMap();
-const numeric=id=>Number($(id).value);
-const state={manifest:null,manifestUrl:null,binding:null,preview:null,audio:null,decoded:new Map(),sourceDecoded:new Map(),sourceLoads:new Map(),displayProfile:'preview',events:[],selectedEvent:-1,scene:null,sceneWindow:null,score:null,scoreBaseline:null,scoreIntent:null,selectedSegmentId:null,selectedLayerId:null,selectedGestureId:null,gestureTool:'draw',scoreHistory:{undo:[],redo:[]},gestureDraw:null,penPressure:{min:0,max:1,lastRaw:.5,last:.5,pointerType:'mouse'},audioVersion:'draft',playbackScope:'selected',segmentLoopMode:'context',customLoopRanges:{},analysisSource:'segment',analysisToken:0,timelineLanes:{segments:{collapsed:false,pinned:false,userSet:false},motion:{collapsed:false,pinned:false,userSet:false},score:{collapsed:false,pinned:false,userSet:false},spectrum:{collapsed:true,pinned:false,userSet:false},waveform:{collapsed:true,pinned:false,userSet:false}},playheadFrame:null,runtime:null,sceneReplayMode:'draft',sceneDraftSource:null,auditionSource:null,client:null,capabilities:null,currentRender:null,batch:null,earshotRows:[],earshotChoice:null,earshotBusy:false,stoneChoice:null,stoneBusy:false,stoneRound:null,stoneAbx:null,stoneReview:null,stoneAbxPlayer:null,rollReviewCatalog:null,rollReviewId:'',rollReviewQuality:'game',rollReviewBuffer:null,rollReviewPrepared:null,rollReviewSpeed:1,rollReviewTempo:1,rollReviewPitch:0,rollReviewVolume:100,rollReviewFollow:true,rollReviewPublishing:false,sceneSounds:[],sceneSoundEnabled:new Map(),playtesting:false,playtestPreviousBoulder:null,rollReviewLoad:0,useCapturedTelemetry:false,controlDefaults:{},snapshots:{A:null,B:null},referenceAxisX:'depth',referenceAxisY:'hardness',referenceSelected:null,referencePoints:[],previewFingerprint:null,workspace:{context:'scene-browse',panels:{navigator:{state:'visible',pinned:false},inspector:{state:'visible',pinned:false},layers:{state:'visible',pinned:false},references:{state:'visible',pinned:false},diagnostics:{state:'visible',pinned:false}},restore:null}};
-const primaryRangeControls=['energy','depth','texture','attack','ring','boominess','brightness','warmth','space'];
-const rangeControls=['size','roughness','hardness','transient','body','residual','damping','style-amount','covariance'];
-const controlIds=['material',...primaryRangeControls,'object','size','roughness','hardness','transient','body','residual','damping','style','style-amount','variants','covariance','source'];
-const clone=value=>value==null?value:JSON.parse(JSON.stringify(value));
-const close=(a,b,epsilon=.0001)=>Math.abs(Number(a)-Number(b))<=epsilon;
-const clamp=(value,min=0,max=1)=>Math.max(min,Math.min(max,Number(value)));
-const LEGACY_WORKSPACE_STORAGE='soundlab:workspace:v1';
-const WORKSPACE_STORAGE='soundlab:workspace:v2';
-const PRESSURE_STORAGE='soundlab:pen-pressure:v1';
-const SCORE_DRAFT_STORAGE='soundlab:score-draft:v1';
-const workspacePanelPointers=new Map();
-const panelElement=id=>({navigator:$('sl-cases-panel'),inspector:$('sl-author-panel'),layers:document.querySelector('.layer-editor'),references:$('sl-reference-panel'),diagnostics:$('sl-diagnostics-panel')})[id]||null;
-function workspaceDeviceClass(width=(typeof window!=='undefined'?window.innerWidth:1440)){const value=Number(width);return value<=699?'phone':value<=1199?'tablet':'desktop';}
-function workspaceStorageKey(project=state.manifest?.project,width=(typeof window!=='undefined'?window.innerWidth:1440)){return project?`${WORKSPACE_STORAGE}:${project}:${workspaceDeviceClass(width)}`:null;}
-function workspaceSerializable(){return{panels:Object.fromEntries(Object.entries(state.workspace.panels).map(([id,row])=>[id,{state:row.state,pinned:!!row.pinned}])),lanes:Object.fromEntries(Object.entries(state.timelineLanes).map(([id,row])=>[id,{collapsed:!!row.collapsed,pinned:!!row.pinned,userSet:!!row.userSet}]))};}
-function saveWorkspace(){const key=workspaceStorageKey();if(!key)return;try{localStorage.setItem(key,JSON.stringify(workspaceSerializable()));}catch{}}
-function calibratePressure(raw,{min=0,max=1}={}){const lo=clamp(min,0,.95),hi=Math.max(lo+.05,clamp(max,.05,1));return clamp((clamp(raw)-lo)/(hi-lo));}
-function pressureCalibrationSerializable(){return{min:Number(state.penPressure.min),max:Number(state.penPressure.max)};}
-function savePressureCalibration(){try{localStorage.setItem(PRESSURE_STORAGE,JSON.stringify(pressureCalibrationSerializable()));}catch{}}
-function updatePressurePreview(raw=state.penPressure.lastRaw,calibrated=state.penPressure.last,pointerType=state.penPressure.pointerType){state.penPressure.lastRaw=clamp(raw);state.penPressure.last=clamp(calibrated);state.penPressure.pointerType=pointerType||'mouse';const meter=$('sl-pressure-meter'),readout=$('sl-pressure-readout');if(meter)meter.value=state.penPressure.last;if(readout){const label=state.penPressure.pointerType==='pen'?'Pen':state.penPressure.pointerType==='touch'?'Touch':'Mouse fallback';readout.textContent=state.penPressure.pointerType==='mouse'?`${label} ${state.penPressure.last.toFixed(2)}`:`${label} ${state.penPressure.lastRaw.toFixed(2)} → ${state.penPressure.last.toFixed(2)}`;}}
-function loadPressureCalibration(){try{const stored=JSON.parse(localStorage.getItem(PRESSURE_STORAGE)||'null');if(stored){const min=clamp(stored.min,0,.95),max=Math.max(min+.05,clamp(stored.max,.05,1));state.penPressure.min=min;state.penPressure.max=Math.min(1,max);}}catch{}const minInput=$('sl-pressure-min'),maxInput=$('sl-pressure-max');if(minInput)minInput.value=String(state.penPressure.min);if(maxInput)maxInput.value=String(state.penPressure.max);updatePressurePreview();}
-function setPressureCalibration(which,value){let min=state.penPressure.min,max=state.penPressure.max;if(which==='min')min=clamp(value,0,.95);else max=clamp(value,.05,1);if(min>max-.05){if(which==='min')min=Math.max(0,max-.05);else max=Math.min(1,min+.05);}state.penPressure.min=min;state.penPressure.max=max;$('sl-pressure-min').value=String(min);$('sl-pressure-max').value=String(max);savePressureCalibration();updatePressurePreview(state.penPressure.lastRaw,calibratePressure(state.penPressure.lastRaw,state.penPressure),state.penPressure.pointerType);}
-function loadWorkspace(){const key=workspaceStorageKey();if(!key)return;try{let raw=localStorage.getItem(key),migrated=false;if(raw==null){raw=localStorage.getItem(LEGACY_WORKSPACE_STORAGE);migrated=raw!=null;}const stored=JSON.parse(raw||'null');for(const [id,row] of Object.entries(stored?.panels||{})){if(!state.workspace.panels[id])continue;state.workspace.panels[id].state=['visible','peek','hidden'].includes(row?.state)?row.state:'visible';state.workspace.panels[id].pinned=!!row?.pinned;}for(const [id,row] of Object.entries(stored?.lanes||{})){if(!state.timelineLanes[id])continue;state.timelineLanes[id].collapsed=!!row?.collapsed;state.timelineLanes[id].pinned=!!row?.pinned;state.timelineLanes[id].userSet=!!row?.userSet;}if(migrated)localStorage.setItem(key,JSON.stringify(workspaceSerializable()));}catch{}}
+import { installWebMcpTools } from './rdx/src/agent/webmcp.js';
+import { CATALOG, CATALOG_BY_ID, FAMILIES, groupOf, stageOf } from './rdx/src/soundlab/studio/catalog.js';
+import { spanEventId } from './rdx/src/soundlab/studio/context.js';
+import { LIVE_HEIGHT, LIVE_WIDTH, StudioRuntime } from './rdx/src/soundlab/studio/runtime.js';
+import { Workbench } from './rdx/src/soundlab/studio/workbench.js';
+import { StudioPanels, WebAudioPlayer, safeLocalStorage } from './rdx/src/soundlab/studio/panels.js';
+import { confirmDialog, installTooltips, toast } from './rdx/src/soundlab/studio/dialogs.js';
+import { hasEmitters, locationIndex } from './rdx/src/soundlab/studio/emitters.js';
+import { icon } from './rdx/src/soundlab/studio/icons.js';
+import { SampleLibrary } from './rdx/src/soundlab/studio/library.js';
+import { discoverEarshot } from './rdx/src/soundlab/studio/earshot.js';
+import { FRAME_HZ, StudioSession } from './rdx/src/soundlab/studio/session.js';
+import { Timeline } from './rdx/src/soundlab/studio/timeline.js';
+import { soundlabWebMcpTools } from './rdx/src/soundlab/studio/webmcp-tools.js';
 
-const LANE_CONTEXT_DEFAULTS={
-  'segment-edit':{segments:false,motion:false,score:false,spectrum:true,waveform:true},
-  'gesture-edit':{segments:false,motion:false,score:false,spectrum:true,waveform:true},
-  'layer-edit':{segments:false,motion:true,score:false,spectrum:false,waveform:true},
-  'sequence-review':{segments:false,motion:true,score:false,spectrum:false,waveform:false},
-  diagnostics:{segments:false,motion:false,score:false,spectrum:false,waveform:false}
+const $ = id => document.getElementById(id);
+const els = {
+  status: $('st-status'), room: $('st-room'), newSession: $('st-new'), play: $('st-play'), step: $('st-step'),
+  speed: $('st-speed'), invincible: $('st-invincible'), save: $('st-save'), load: $('st-load'),
+  romLabel: $('st-rom-label'), rom: $('st-rom'), agent: $('st-agent'), agentText: $('st-agent-text'),
+  filter: $('st-filter'), catalog: $('st-catalog'), frame: $('st-frame'), viewing: $('st-viewing'), live: $('st-live'),
+  overlayToggle: $('st-overlay'), screen: $('st-screen'), overlay: $('st-overlay-canvas'), timeline: $('st-timeline'),
+  inspectEmpty: $('st-inspect-empty'), inspect: $('st-inspect'), inTitle: $('in-title'), inIndex: $('in-index'),
+  inPrev: $('in-prev'), inNext: $('in-next'), inFacts: $('in-facts'), inNearby: $('in-nearby'), inJson: $('in-json'),
+  inDesign: $('in-design'), inFoley: $('in-foley'), inPlay: $('in-play'), reviewCount: $('st-review-count'), emitters: $('in-emitters'),
+  tlPlay: $('tl-play'), tlStop: $('tl-stop'), tlLoop: $('tl-loop'), tlHearGame: $('tl-hear-game'), tlHearDesigns: $('tl-hear-designs'),
+  tlRange: $('tl-range'), tlRangeClear: $('tl-range-clear'), tlVolume: $('tl-volume')
 };
-function applyTimelineLanes(){for(const [id,row] of Object.entries(state.timelineLanes)){const lane=document.querySelector(`[data-score-lane="${id}"]`);if(!lane)continue;lane.dataset.collapsed=String(!!row.collapsed);const toggle=lane.querySelector(`[data-lane-toggle="${id}"]`),pin=lane.querySelector(`[data-lane-pin="${id}"]`);if(toggle)toggle.setAttribute('aria-expanded',String(!row.collapsed));if(pin)pin.setAttribute('aria-pressed',String(!!row.pinned));}}
-function applyLaneContext(context){const defaults=LANE_CONTEXT_DEFAULTS[context];if(!defaults)return;for(const [id,collapsed] of Object.entries(defaults)){const row=state.timelineLanes[id];if(!row||row.pinned||row.userSet)continue;row.collapsed=collapsed;}applyTimelineLanes();}
-function toggleTimelineLane(id){const row=state.timelineLanes[id];if(!row)return;row.collapsed=!row.collapsed;row.userSet=true;if(row.collapsed)row.pinned=false;applyTimelineLanes();saveWorkspace();}
-function toggleTimelineLanePin(id){const row=state.timelineLanes[id];if(!row)return;row.pinned=!row.pinned;row.userSet=row.pinned;if(row.pinned)row.collapsed=false;applyTimelineLanes();saveWorkspace();}
-function panelMayHide(id){const panel=panelElement(id),activePointers=workspacePanelPointers.get(id);return !!panel&&!panel.matches(':focus-within')&&!(activePointers?.size)&&panel.dataset.workspaceDirty!=='true';}
-function trackWorkspacePointer(id,pointerId,active){if(!state.workspace.panels[id])return;const set=workspacePanelPointers.get(id)||new Set();if(active)set.add(pointerId);else set.delete(pointerId);if(set.size)workspacePanelPointers.set(id,set);else workspacePanelPointers.delete(id);}
-function applyWorkspace(){
-  const layout=document.querySelector('.sl-layout');
-  for(const [id,row] of Object.entries(state.workspace.panels)){
-    const panel=panelElement(id);if(!panel)continue;const hidden=row.state==='hidden'&&!row.pinned;panel.hidden=hidden;
-    const pin=panel.querySelector(`[data-workspace-pin="${id}"]`);if(pin)pin.setAttribute('aria-pressed',String(!!row.pinned));
-    const rail=document.querySelector(`[data-workspace-open="${id}"]`);if(rail)rail.classList.toggle('active',!hidden);
-  }
-  if(layout){layout.dataset.navigatorHidden=String(!!panelElement('navigator')?.hidden);layout.dataset.inspectorHidden=String(!!panelElement('inspector')?.hidden);}
-  const editGrid=document.querySelector('.score-edit-grid');if(editGrid)editGrid.dataset.layersHidden=String(!!panelElement('layers')?.hidden);
-  $('sl-restore-workspace').disabled=!state.workspace.restore;
-}
-function contextualPanels(context){
-  if(context==='sequence-review')return new Set();
-  if(context==='scene-browse')return new Set(['navigator','inspector']);
-  if(context==='reference-compare')return new Set(['references','inspector']);
-  if(context==='diagnostics')return new Set(['diagnostics']);
-  if(context==='layer-edit')return new Set(['layers']);
-  if(context==='gesture-edit')return new Set();
-  return new Set(['inspector']);
-}
-function setWorkspaceContext(context){
-  state.workspace.context=context;const required=contextualPanels(context);
-  for(const [id,row] of Object.entries(state.workspace.panels)){
-    if(row.pinned){row.state='visible';continue;}
-    if(required.has(id))row.state='visible';else if(panelMayHide(id))row.state='hidden';
-  }
-  applyWorkspace();applyLaneContext(context);saveWorkspace();
-}
-function focusWorkspace(){
-  if(!state.workspace.restore)state.workspace.restore=workspaceSerializable().panels;
-  const required=contextualPanels(state.workspace.context);
-  for(const [id,row] of Object.entries(state.workspace.panels)){if(row.pinned||required.has(id))row.state='visible';else if(panelMayHide(id))row.state='hidden';}
-  applyWorkspace();saveWorkspace();
-}
-function restoreWorkspace(){if(!state.workspace.restore)return;for(const [id,row] of Object.entries(state.workspace.restore)){if(state.workspace.panels[id])Object.assign(state.workspace.panels[id],row);}state.workspace.restore=null;applyWorkspace();saveWorkspace();}
-function toggleWorkspacePanel(id){const row=state.workspace.panels[id],panel=panelElement(id);if(!row||!panel)return;if(row.state==='hidden'){row.state='peek';panel.hidden=false;if(panel instanceof HTMLDetailsElement)panel.open=true;}else if(!row.pinned)row.state='hidden';applyWorkspace();saveWorkspace();}
-function toggleWorkspacePin(id){const row=state.workspace.panels[id];if(!row)return;row.pinned=!row.pinned;if(row.pinned)row.state='visible';applyWorkspace();saveWorkspace();}
-function installWorkspace(){
-  loadWorkspace();applyWorkspace();applyTimelineLanes();
-  document.querySelectorAll('[data-lane-toggle]').forEach(button=>button.addEventListener('click',()=>toggleTimelineLane(button.dataset.laneToggle)));
-  document.querySelectorAll('[data-lane-pin]').forEach(button=>button.addEventListener('click',()=>toggleTimelineLanePin(button.dataset.lanePin)));
-  $('sl-focus-workspace').addEventListener('click',focusWorkspace);$('sl-restore-workspace').addEventListener('click',restoreWorkspace);
-  document.querySelectorAll('[data-workspace-open]').forEach(button=>button.addEventListener('click',()=>toggleWorkspacePanel(button.dataset.workspaceOpen)));
-  document.querySelectorAll('[data-workspace-pin]').forEach(button=>button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();toggleWorkspacePin(button.dataset.workspacePin);}));
-  for(const id of Object.keys(state.workspace.panels)){const panel=panelElement(id);panel?.addEventListener('pointerdown',event=>trackWorkspacePointer(id,event.pointerId,true),true);}
-  const releaseWorkspacePointer=event=>{for(const id of Object.keys(state.workspace.panels))trackWorkspacePointer(id,event.pointerId,false);};document.addEventListener('pointerup',releaseWorkspacePointer,true);document.addEventListener('pointercancel',releaseWorkspacePointer,true);
-  $('sl-reference-panel').addEventListener('toggle',()=>{if($('sl-reference-panel').open)setWorkspaceContext('reference-compare');});
-  $('sl-diagnostics-panel').addEventListener('toggle',()=>{if($('sl-diagnostics-panel').open)setWorkspaceContext('diagnostics');});
-  document.addEventListener('keydown',event=>{if(event.key!=='\\'||event.ctrlKey||event.metaKey||event.altKey)return;event.preventDefault();if(event.shiftKey)restoreWorkspace();else focusWorkspace();});
-}
+const TABS = ['inspect', 'foley', 'design', 'review'];
+const screenCtx = els.screen.getContext('2d');
+const overlayCtx = els.overlay.getContext('2d');
+screenCtx.imageSmoothingEnabled = false;
 
+const state = {
+  tab: 'inspect',
+  playhead: 0,
+  live: true,
+  selectedId: null,
+  focusEventId: null,
+  lastLiveCanvas: null,
+  viewToken: 0,
+  hear: 'game',
+  emitters: null, /* { eventId, list, index } */
+  highlight: null /* emitter to outline on the game view: { submap, type, mark } */
+};
 
-function audioContext(){if(!state.audio)state.audio=new (window.AudioContext||window.webkitAudioContext)();$('sl-browser-rate').textContent=`${state.audio.sampleRate} Hz AudioContext`;return state.audio;}
-async function resumeAudioContext(){const ctx=audioContext();if(ctx.state==='suspended'&&typeof ctx.resume==='function')await ctx.resume();return ctx;}
-function fmtHash(value=''){return value?value.slice(0,10):'—';}
-function fmtRate(value){const rate=Number(value||0);return rate>=1000?`${(rate/1000).toLocaleString(undefined,{maximumFractionDigits:2})} kHz`:`${rate} Hz`;}
-function fmtEncoding(value=''){const encoding=String(value||'').toLowerCase();if(encoding==='u8')return 'PCM8 unsigned';if(encoding==='pcm16')return 'PCM16';return encoding?encoding.toUpperCase():'source';}
-function samplesOf(buffer){return buffer?.getChannelData?buffer.getChannelData(0):buffer?.samples||new Float32Array();}
-function metrics(samples,sampleRate){let peak=0,last=-1;for(let i=0;i<samples.length;i++){const a=Math.abs(samples[i]);peak=Math.max(peak,a);if(a>.008)last=i;}return{peak,duration:last>=0?(last+1)*1000/sampleRate:0};}
-function drawWaveform(samples){const canvas=$('sl-waveform'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#29313b';ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();if(!samples?.length)return;ctx.strokeStyle='#e4ad55';ctx.lineWidth=1;ctx.beginPath();const bucket=Math.max(1,Math.floor(samples.length/w));for(let x=0;x<w;x++){let lo=1,hi=-1;const start=x*bucket,end=Math.min(samples.length,start+bucket);for(let i=start;i<end;i++){lo=Math.min(lo,samples[i]);hi=Math.max(hi,samples[i]);}ctx.moveTo(x,(1-hi)*h/2);ctx.lineTo(x,(1-lo)*h/2);}ctx.stroke();}
-function scoreAnalysisRange(){const segment=selectedSegment(),sequence=state.score?.sequence;if(['sequence','original'].includes(state.analysisSource)&&sequence)return[sequence.startFrame,sequence.endFrame];return segment?.authoringRange||(sequence?[sequence.startFrame,sequence.endFrame]:null);}
-function scoreAnalysisBounds(canvas){const range=scoreAnalysisRange();if(!range||!state.score)return{x0:0,x1:canvas.width};const x0=scorePercent(range[0])*canvas.width/100,x1=scorePercent(range[1])*canvas.width/100;return{x0:Math.max(0,Math.min(canvas.width,x0)),x1:Math.max(0,Math.min(canvas.width,x1))};}
-function drawScoreWaveformLane(samples){const canvas=$('sl-score-waveform-lane');if(!canvas)return;const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#29313b';ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();if(!samples?.length||!state.score)return;const {x0,x1}=scoreAnalysisBounds(canvas),span=Math.max(1,Math.floor(x1-x0)),bucket=Math.max(1,Math.floor(samples.length/span));ctx.strokeStyle='#e4ad55';ctx.beginPath();for(let x=0;x<span;x++){let lo=1,hi=-1;const start=x*bucket,end=x===span-1?samples.length:Math.min(samples.length,start+bucket);for(let i=start;i<end;i++){lo=Math.min(lo,samples[i]);hi=Math.max(hi,samples[i]);}const px=x0+x;ctx.moveTo(px,(1-hi)*h/2);ctx.lineTo(px,(1-lo)*h/2);}ctx.stroke();}
-function spectrogramData(samples,{timeBins=96,freqBins=24,windowSize=128}={}){if(!samples?.length)return null;const cached=spectrogramCache.get(samples);if(cached&&cached.timeBins===timeBins&&cached.freqBins===freqBins&&cached.windowSize===windowSize)return cached;const values=Array.from({length:timeBins},()=>new Float32Array(freqBins));let max=1e-9;for(let t=0;t<timeBins;t++){const center=Math.floor((t+.5)*samples.length/timeBins),start=Math.max(0,Math.min(Math.max(0,samples.length-windowSize),center-Math.floor(windowSize/2)));for(let f=0;f<freqBins;f++){const k=f+1;let re=0,im=0;for(let n=0;n<windowSize;n++){const index=start+n;if(index>=samples.length)break;const win=.5-.5*Math.cos(2*Math.PI*n/Math.max(1,windowSize-1)),sample=samples[index]*win,angle=2*Math.PI*k*n/windowSize;re+=sample*Math.cos(angle);im-=sample*Math.sin(angle);}const power=Math.log1p(Math.hypot(re,im));values[t][f]=power;max=Math.max(max,power);}}const result={timeBins,freqBins,windowSize,values,max};spectrogramCache.set(samples,result);return result;}
-function drawSpectrogramLane(samples){const canvas=$('sl-spectrogram-lane');if(!canvas)return;const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);if(!samples?.length||!state.score)return;const analysis=spectrogramData(samples);if(!analysis)return;const {x0,x1}=scoreAnalysisBounds(canvas),span=Math.max(1,x1-x0),cellW=span/analysis.timeBins,cellH=h/analysis.freqBins;for(let t=0;t<analysis.timeBins;t++){for(let f=0;f<analysis.freqBins;f++){const level=Math.max(0,Math.min(1,analysis.values[t][f]/analysis.max)),v=Math.round(24+level*190);ctx.fillStyle=`rgb(${v},${Math.round(v*.82)},${Math.round(v*.48)})`;ctx.fillRect(x0+t*cellW,h-(f+1)*cellH,Math.ceil(cellW),Math.ceil(cellH));}}}
-function analysisSourceLabel(){const segment=selectedSegment(),layer=selectedLayer();if(state.analysisSource==='layer')return layer?`${segment?.label||segment?.semanticType||'Segment'} · ${layer.label||layer.id}`:'Selected layer';if(state.analysisSource==='sequence')return 'Full Draft sequence';if(state.analysisSource==='published')return 'Published master';if(state.analysisSource==='original')return 'Original native route';return segment?.label||segment?.semanticType||'Selected segment';}
-function drawScoreAudioAnalysis(samples,sampleRate,{name=analysisSourceLabel(),empty='No decoded audio for this analysis source.'}={}){drawScoreWaveformLane(samples);drawSpectrogramLane(samples);const summary=$('sl-analysis-summary');if(!summary)return;if(!samples?.length){summary.textContent=empty;return;}const m=metrics(samples,sampleRate);summary.textContent=`${name}: ${m.duration.toFixed(1)} ms audible · peak ${m.peak.toFixed(3)} · cached bounded spectral analysis`;const spectrum=$('sl-spectrogram-lane'),wave=$('sl-score-waveform-lane');if(spectrum)spectrum.setAttribute('aria-label',`${name} spectral energy, ${m.duration.toFixed(1)} milliseconds`);if(wave)wave.setAttribute('aria-label',`${name} waveform, ${m.duration.toFixed(1)} milliseconds`);}
-
-function profileCaption(profile){return({preview:'Current browser preview','current-master':'Current canonical master','current-runtime':'Current runtime derivative',master:'Frozen promoted master',runtime:'Frozen shipping derivative'})[profile]||profile;}
-function referenceKey(row){return row?.kind==='source'?`source:${row.id}`:`promoted:${row?.binding}:${row?.variant}`;}
-function referenceAxisLabel(axis){return({depth:'Depth',hardness:'Hardness',roughness:'Roughness',boominess:'Boominess',brightness:'Brightness',warmth:'Warmth',ring:'Ring',reverberance:'Reverberance'})[axis]||axis;}
-function referenceCandidate(){const key=state.referenceSelected;return referenceLibrary(state.manifest).find(row=>referenceKey(row)===key)||null;}
-function referenceDeltaText(candidate,current=state.previewFingerprint){
-  if(!candidate?.fingerprint||!current)return 'Choose a reference to compare its sound color.';
-  const ranked=PERCEPTUAL_FINGERPRINT_AXES.map(axis=>({axis,delta:Number(candidate.fingerprint[axis]||0)-Number(current[axis]||0)})).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,3);
-  return ranked.map(row=>`${referenceAxisLabel(row.axis)} ${row.delta>=0?'+':''}${row.delta.toFixed(2)}`).join(' · ');
-}
-function selectReference(row){
-  state.referenceSelected=row?referenceKey(row):null;const selected=referenceCandidate();$('sl-reference-title').textContent=selected?.label||'Choose a promoted sound or imported reference';$('sl-reference-delta').textContent=selected?referenceDeltaText(selected):'Nearest approved sounds update with the current draft.';$('sl-reference-play').disabled=!selected||selected.kind!=='promoted';$('sl-reference-match').disabled=!selected;document.querySelectorAll('.reference-nearest button').forEach(button=>button.classList.toggle('active',button.dataset.referenceKey===state.referenceSelected));drawReferenceMap();
-}
-function drawReferenceMap(){
-  const canvas=$('sl-reference-map');if(!canvas||!state.manifest)return;const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,pad=34,xAxis=state.referenceAxisX,yAxis=state.referenceAxisY,rows=referenceLibrary(state.manifest);ctx.clearRect(0,0,w,h);ctx.fillStyle='#0b1015';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#25303a';ctx.lineWidth=1;for(let i=0;i<=4;i++){const x=pad+(w-pad*2)*i/4,y=pad+(h-pad*2)*i/4;ctx.beginPath();ctx.moveTo(x,pad);ctx.lineTo(x,h-pad);ctx.stroke();ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad,y);ctx.stroke();}ctx.fillStyle='#758290';ctx.font='12px ui-monospace, SFMono-Regular, Menlo, monospace';ctx.fillText(referenceAxisLabel(xAxis),w-pad-ctx.measureText(referenceAxisLabel(xAxis)).width,h-9);ctx.save();ctx.translate(12,pad+ctx.measureText(referenceAxisLabel(yAxis)).width);ctx.rotate(-Math.PI/2);ctx.fillText(referenceAxisLabel(yAxis),0,0);ctx.restore();
-  const points=[];for(const row of rows){const x=pad+clamp(row.fingerprint?.[xAxis])*(w-pad*2),y=h-pad-clamp(row.fingerprint?.[yAxis])*(h-pad*2),selected=referenceKey(row)===state.referenceSelected;ctx.beginPath();ctx.arc(x,y,selected?6:4,0,Math.PI*2);ctx.fillStyle=row.kind==='source'?'#87a6c5':'#78838f';ctx.fill();if(selected){ctx.strokeStyle='#e4ad55';ctx.lineWidth=2;ctx.stroke();}points.push({row,x,y});}
-  if(state.previewFingerprint){const x=pad+clamp(state.previewFingerprint[xAxis])*(w-pad*2),y=h-pad-clamp(state.previewFingerprint[yAxis])*(h-pad*2);ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fillStyle='#e4ad55';ctx.fill();ctx.strokeStyle='#fff1d2';ctx.lineWidth=1;ctx.stroke();}state.referencePoints=points;
-}
-function renderReferenceExplorer(){
-  if(!state.preview||!$('sl-reference-map'))return;state.previewFingerprint=perceptualFingerprint(samplesOf(state.preview),Number(state.preview.sampleRate||48000));$('sl-reference-current').textContent=`Draft · ${referenceAxisLabel(state.referenceAxisX)} ${state.previewFingerprint[state.referenceAxisX].toFixed(2)} · ${referenceAxisLabel(state.referenceAxisY)} ${state.previewFingerprint[state.referenceAxisY].toFixed(2)}`;
-  const nearest=referenceLibrary(state.manifest).filter(row=>row.kind==='source'||row.binding!==state.binding?.id).map(row=>({...row,distance:fingerprintDistance(state.previewFingerprint,row.fingerprint)})).sort((a,b)=>a.distance-b.distance).slice(0,6);$('sl-reference-nearest').replaceChildren(...nearest.map(row=>{const button=document.createElement('button');button.dataset.referenceKey=referenceKey(row);button.classList.toggle('active',button.dataset.referenceKey===state.referenceSelected);button.innerHTML=`<span>${row.label}</span><small>distance ${row.distance.toFixed(3)}</small>`;button.addEventListener('click',()=>selectReference(row));return button;}));const selected=referenceCandidate();if(selected)$('sl-reference-delta').textContent=referenceDeltaText(selected);drawReferenceMap();
-}
-async function playReference(){const row=referenceCandidate();if(!row||row.kind!=='promoted')return;playAudition(await decodeUrl(`reference:${row.sha256}`,new URL(row.file,state.manifestUrl)));}
-function matchReference(){
-  const row=referenceCandidate();if(!row?.fingerprint||!state.previewFingerprint)return;if(state.score)pushScoreHistory();const controls={depth:'depth',hardness:'attack',roughness:'texture',boominess:'boominess',brightness:'brightness',warmth:'warmth',ring:'ring',reverberance:'space'},applied=[];for(const [axis,id] of Object.entries(controls)){const delta=Number(row.fingerprint[axis])-Number(state.previewFingerprint[axis]),current=numeric(`sl-${id}`),next=clamp(current+delta);setRange(`sl-${id}`,Number(next.toFixed(2)));if(Math.abs(delta)>=.015)applied.push(`${referenceAxisLabel(axis)} ${delta>=0?'+':''}${delta.toFixed(2)}`);}updateChangedState();renderPreview();$('sl-reference-delta').textContent=applied.length?`Applied semantic delta · ${applied.slice(0,4).join(' · ')}`:'Current draft already matches this reference closely.';
-}
-function installReferenceMap(){
-  const x=$('sl-reference-axis-x'),y=$('sl-reference-axis-y'),options=PERCEPTUAL_FINGERPRINT_AXES.map(axis=>new Option(referenceAxisLabel(axis),axis));x.replaceChildren(...options.map(o=>o.cloneNode(true)));y.replaceChildren(...options.map(o=>o.cloneNode(true)));x.value=state.referenceAxisX;y.value=state.referenceAxisY;const update=()=>{state.referenceAxisX=x.value;state.referenceAxisY=y.value;renderReferenceExplorer();};x.addEventListener('change',update);y.addEventListener('change',update);$('sl-reference-map').addEventListener('click',event=>{const canvas=event.currentTarget,rect=canvas.getBoundingClientRect(),sx=canvas.width/Math.max(1,rect.width),sy=canvas.height/Math.max(1,rect.height),px=(event.clientX-rect.left)*sx,py=(event.clientY-rect.top)*sy;let best=null,bestDistance=Infinity;for(const point of state.referencePoints){const d=Math.hypot(point.x-px,point.y-py);if(d<bestDistance){bestDistance=d;best=point.row;}}if(best&&bestDistance<=18*Math.max(sx,sy))selectReference(best);});$('sl-reference-play').addEventListener('click',()=>playReference().catch(error=>serviceState(error.message,'bad')));$('sl-reference-match').addEventListener('click',matchReference);
-}
-function showAudio(render,{hash='',profile='preview',sourceSampleRate=null,encoding=''}={}){const samples=samplesOf(render),playbackRate=Number(render.sampleRate||48000),sourceRate=Number(sourceSampleRate||playbackRate);drawWaveform(samples);void refreshScoreAnalysis();const m=metrics(samples,playbackRate);$('sl-metric-duration').textContent=`${m.duration.toFixed(1)} ms`;$('sl-metric-peak').textContent=`peak ${m.peak.toFixed(3)}`;$('sl-metric-rate').textContent=profile==='preview'?`${fmtRate(sourceRate)} preview`:`${fmtRate(sourceRate)} · ${fmtEncoding(encoding)} source`;$('sl-metric-hash').textContent=profile==='preview'?'non-authoritative':`sha ${fmtHash(hash)}`;$('sl-waveform-caption').textContent=profileCaption(profile);state.displayProfile=profile;document.querySelectorAll('[data-profile]').forEach(b=>b.classList.toggle('active',b.dataset.profile===profile));}
-function sceneDraftPlaybackPlan({replayFrame,startFrame,endFrame,audioStartFrame,audioEndFrame,frameRateHz=25,bufferDuration=0}={}){
-  const fps=Math.max(1,Number(frameRateHz)||25),current=Number.isFinite(Number(replayFrame))?Number(replayFrame):Number(startFrame),playEnd=Number(endFrame),audioStart=Number(audioStartFrame),audioEnd=Number(audioEndFrame);if(![current,playEnd,audioStart,audioEnd].every(Number.isFinite))return null;
-  const audibleStart=Math.max(current,audioStart),audibleEnd=Math.min(playEnd,audioEnd);if(audibleEnd<audibleStart)return null;
-  const delaySeconds=Math.max(0,audioStart-current)/fps,offsetSeconds=Math.max(0,current-audioStart)/fps,maxDuration=Math.max(0,Number(bufferDuration)||0)-offsetSeconds,durationSeconds=Math.min(maxDuration,(audibleEnd-audibleStart+1)/fps);return durationSeconds>0?{delaySeconds,offsetSeconds,durationSeconds}:null;
-}
-function playBuffer(buffer,{delaySeconds=0,offsetSeconds=0,durationSeconds=null,volume=1,loop=false}={}){const ctx=audioContext(),source=ctx.createBufferSource();source.buffer=buffer;source.loop=loop;const gain=ctx.createGain();gain.gain.value=volume;source.connect(gain);gain.connect(ctx.destination);source.reviewGain=gain;const when=ctx.currentTime+Math.max(0,Number(delaySeconds)||0),requestedOffset=Math.max(0,Number(offsetSeconds)||0),offset=loop?requestedOffset%buffer.duration:Math.max(0,Math.min(requestedOffset,Math.max(0,buffer.duration-.000001)));if(loop){source.start(when,offset);if(durationSeconds!=null)source.stop(when+Math.max(.001,Number(durationSeconds)||0));}else if(durationSeconds==null)source.start(when,offset);else source.start(when,offset,Math.max(.001,Math.min(Number(durationSeconds)||0,buffer.duration-offset)));return source;}
-function stopAudition(){if(!state.auditionSource)return;try{state.auditionSource.stop();}catch{}state.auditionSource=null;}
-function playAudition(buffer){stopAudition();document.querySelectorAll('#sl-earshot-round audio').forEach(audio=>audio.pause());const source=playBuffer(buffer);state.auditionSource=source;source.onended=()=>{if(state.auditionSource===source)state.auditionSource=null;};return source;}
-function playRollingReviewAudition(){const source=playAudition(prepareRollingReview());if(source?.reviewGain)source.reviewGain.gain.value=state.rollReviewVolume/100;source.playbackRate.value=1;return source;}
-function stopSceneDraft(){if(!state.sceneDraftSource)return;try{state.sceneDraftSource.stop();}catch{}state.sceneDraftSource=null;}
-function sceneDraftPlayback(event){
-  if(state.rollReviewId && state.rollReviewBuffer && state.rollReviewCatalog && matchingRollingReviewScene(state.scene,state.rollReviewCatalog)){
-    const plan=rollingReviewPlaybackPlan(state.scene,event,state.rollReviewFollow?Math.max(state.rollReviewCatalog.frameCount,state.scene.endFrame-state.scene.proofFrame+1):state.rollReviewCatalog.frameCount,state.rollReviewCatalog.frameRateHz);
-    const settings=rollingReviewTuning({speed:state.rollReviewSpeed,pitch:state.rollReviewPitch,volume:state.rollReviewVolume});
-    return plan&&state.rollReviewPrepared?{buffer:state.rollReviewFollow?prepareRollingReview(state.rollReviewSpeed,true):state.rollReviewPrepared,plan:{...rollingReviewTimePlan(plan,settings.speed),volume:settings.volume/100,loop:state.rollReviewFollow}}:null;
-  }
-  const selected=selectedSegment(),sequence=state.score?.sequence,render=state.playbackScope==='selected'?(state.preview||renderPreview()):(renderScoreSequencePreview()||state.preview||renderPreview());if(!render)return null;
-  const origin=state.playbackScope==='selected'?(selected?.authoringRange?.[0]??selected?.gameRange?.[0]??event.startFrame):(sequence?.startFrame??event.startFrame),audioEnd=state.playbackScope==='selected'?(selected?.authoringRange?.[1]??selected?.gameRange?.[1]??event.endFrame):(sequence?.endFrame??event.endFrame),buffer=audioBufferFrom(audioContext(),render),plan=sceneDraftPlaybackPlan({replayFrame:event.frameSerial,startFrame:event.startFrame,endFrame:event.endFrame,audioStartFrame:origin,audioEndFrame:audioEnd,frameRateHz:state.scoreIntent?.interval?.frameRateHz||25,bufferDuration:buffer.duration});return plan?{buffer,plan}:null;
-}
-function applyRollingAudioMotion(snapshot=null, frame=state.playheadFrame) {
-  const source=state.sceneDraftSource;
-  if(!source || !state.rollReviewId || !source.reviewGain)return;
-  let rate=1, level=state.rollReviewVolume/100;
-  if(state.rollReviewFollow && (snapshot||Number.isFinite(Number(frame)))) {
-    let observed=null;
-    if(state.playtesting && snapshot){
-      const actor=(snapshot.presentation||[]).find(row=>Number(row.slot)===Number(state.scene?.target?.slot) && Number(row.visiblePixels)>0);
-      if(actor){const position={x:Number(actor.drawX),y:Number(actor.drawY)},prior=state.playtestPreviousBoulder;
-        state.playtestPreviousBoulder=position;
-        observed=prior?{dx:Math.abs(position.x-prior.x),dy:Math.abs(position.y-prior.y)}:{dx:0,dy:0};
-      } else {observed={dx:0,dy:1};state.playtestPreviousBoulder=null;}
+const runtime = new StudioRuntime({
+  onStatus: text => { els.status.textContent = text; },
+  onState: s => renderControls(s),
+  onFrame: ({ record, canvas }) => {
+    state.lastLiveCanvas = canvas;
+    if (state.live) {
+      state.playhead = record.frame;
+      drawScreen(canvas, record);
     }
-    // Reuse authoritative sampled native actor motion. No browser-side physics.
-    const rows=state.scene?.path || [];
-    const here=rows.find(row=>Number(row.frameSerial)===Number(frame));
-    const prior=rows.find(row=>Number(row.frameSerial)===Number(frame)-1);
-    const dx=observed?.dx??(here&&prior?Math.abs(Number(here.x)-Number(prior.x)):null);
-    const dy=observed?.dy??(here&&prior?Math.abs(Number(here.y)-Number(prior.y)):null);
-    if(dx!=null) {
-      const grounded=dy<.5, motion=Math.min(1.6,Math.max(0,dx/2));
-      level*=grounded?Math.min(1,Math.sqrt(motion)):0;
-      rate*=grounded?Math.max(.15,Math.sqrt(motion)):.15;
-    } else if(state.playtesting && snapshot) {
-      // A missing actor has no ground contact: stop the rolling layer.
-      level=0;
-    } else if(frame>Number(state.scene?.proofFrame)+95){
-      level=0;
-    }
+    scheduleUi();
   }
-  const time=audioContext().currentTime;
-  source.playbackRate.setTargetAtTime(rate,time,.06);
-  source.reviewGain.gain.setTargetAtTime(level,time,.035);
-}
-async function publishRollingCandidate(){
-  if(!state.client||!state.rollReviewId||!state.scene||state.rollReviewPublishing)return;
-  if(!matchingRollingReviewScene(state.scene,state.rollReviewCatalog))throw new Error('The reviewed capture no longer matches the candidate motion. Recapture first.');
-  const chosen=rollReviewSelection();
-  const confirmation=`Publish ${chosen.label} as the canonical SM00 rolling sound?\n\nPitch ${state.rollReviewPitch} semitones · audio cadence ${state.rollReviewTempo.toFixed(2)}× · volume ${state.rollReviewVolume}%.\n\nThis stores a fixed frozen sample through SoundLab and rebuilds runtime audio. Immortal preview speed-following is NOT baked into the shipping engine; it remains an experimental review behavior. The approved Stone chamber impact is untouched.\n\nContinue?`;
-  if(!window.confirm(confirmation))return;
-  state.rollReviewPublishing=true;updateRollReviewUi();
-  try{
-    serviceState('Preparing the reviewed rolling take and canonical Sound Score…');
-    const original=state.rollReviewBuffer, samples=rollingReviewPitchTime(original.getChannelData(0),original.sampleRate,{speed:1,pitch:state.rollReviewPitch,tempo:state.rollReviewTempo});
-    const master=new Float32Array(samples.length);
-    for(let i=0;i<samples.length;i++)master[i]=Math.max(-1,Math.min(1,samples[i]*state.rollReviewVolume/100));
-    const bytes=encodeRollingPcm16(master,original.sampleRate);
-    const digest=await crypto.subtle.digest('SHA-256',bytes);
-    const hash=[...new Uint8Array(digest)].map(value=>value.toString(16).padStart(2,'0')).join('');
-    const id=`sm00-roll-${state.rollReviewId}-${hash.slice(0,12)}`;
-    let base64='';for(let i=0;i<bytes.length;i+=0x8000)base64+=String.fromCharCode(...bytes.subarray(i,i+0x8000));
-    await state.client.importSource({id,fileName:`${id}.wav`,role:'body-reference',bytesBase64:btoa(base64),provenance:{provider:'earshot-0.3-review',model:'reviewed-sm00-native-motion',prompt:JSON.stringify({design:state.rollReviewId,quality:state.rollReviewQuality,pitch:state.rollReviewPitch,tempo:state.rollReviewTempo,volume:state.rollReviewVolume,sha256:chosen.profiles[state.rollReviewQuality].sha256}),license:'RDR Earshot generation'} });
-    const first=Number(state.scene.proofFrame),count=Math.max(1,Math.ceil(master.length/original.sampleRate*25));
-    const score=rollingPublishedScore({sourceId:id,firstFrame:first,frameCount:Math.min(480,count)});
-    const job={...currentJob(),soundScore:score};delete job.scoreSegmentId;
-    // Review publication changes only this binding. Do not overwrite a longer
-    // capture's unrelated telemetry with a truncated candidate roll excerpt.
-    delete job.telemetryTrace;delete job.useCapturedTelemetry;
-    const result=await state.client.promote(job);
-    serviceState(`Published ${chosen.label}: ${result.outputs.length} canonical outputs. Rebuild/reload the native WASM runtime before testing its production PCM8 playback.`,'good');
-    await reloadManifest(state.binding.id);
-  }finally{state.rollReviewPublishing=false;updateRollReviewUi();}
-}
-
-function renderSceneSounds(rows=state.sceneSounds) {
-  state.sceneSounds=rows;
-  const parent=$('sl-scene-mixer-rows');if(!parent)return;
-  $('sl-scene-mixer-count').textContent=rows.length?`${rows.length} event type${rows.length===1?'':'s'} captured`:'No captured sound events';
-  parent.replaceChildren(...rows.map(row=>{
-    const label=document.createElement('label'),input=document.createElement('input'),name=document.createElement('span'),count=document.createElement('small');
-    input.type='checkbox';input.checked=state.sceneSoundEnabled.get(row.key)!==false;
-    input.setAttribute('aria-label',`Enable ${row.label}`);
-    input.addEventListener('change',()=>{state.sceneSoundEnabled.set(row.key,input.checked);state.runtime?.setSceneSoundEnabled(row.key,input.checked);});
-    name.textContent=row.label;count.textContent=`${row.source} · ${row.count}×`;
-    label.append(input,name,count);return label;
-  }));
-}
-function updateNativeActions(){
-  $('sl-playtest-start').disabled=!state.scene;
-  $('sl-playtest-start').textContent=state.playtesting?'Stop playtest':'Playtest · immortal';
-  $('sl-playtest-reset').disabled=!state.playtesting;
-  $('sl-recapture').disabled=!state.runtime;
-}
-async function captureWithWindow(){
-  if(!state.runtime)return startNative();
-  stopSceneDraft();stopAudition();state.playtesting=false;
-  const pre=Number($('sl-capture-pre').value),post=Number($('sl-capture-post').value);
-  state.runtime.configureCaptureWindow({preFrames:pre,postFrames:post});
-  state.scene=null;state.sceneWindow=null;state.sceneSounds=[];
-  renderSceneSounds();updateNativeActions();
-  $('sl-score-workspace').hidden=true;
-}
-async function togglePlaytest(){
-  if(!state.runtime||!state.scene)return;
-  stopSceneDraft();stopAudition();
-  if(state.playtesting){state.runtime.stopPlaytest();state.playtesting=false;}
-  else{if(state.rollReviewId)await resumeAudioContext();state.playtesting=state.runtime.startPlaytest();state.playtestPreviousBoulder=null;if(state.rollReviewId)state.runtime.setSceneSoundEnabled(`semantic:${state.scene.event.eventId}`,false);}
-  updateNativeActions();$('sl-native-canvas').focus();
-}
-
-function handleSceneReplay(event){if(!event)return;if(event.phase==='playtest-roll-start'){if(state.rollReviewId&&state.rollReviewBuffer){stopSceneDraft();const source=playBuffer(prepareRollingReview(1,state.rollReviewFollow),{volume:state.rollReviewVolume/100,loop:state.rollReviewFollow});state.sceneDraftSource=source;state.playtestPreviousBoulder=null;applyRollingAudioMotion();source.onended=()=>{if(state.sceneDraftSource===source)state.sceneDraftSource=null;};}return;}if(event.phase==='playtest-roll-end'){stopSceneDraft();return;}if(event.phase==='start'){stopSceneDraft();stopAudition();if((event.draft||state.rollReviewId)&&state.audioVersion==='draft'){const playback=sceneDraftPlayback(event);if(playback){const source=playBuffer(playback.buffer,playback.plan);state.sceneDraftSource=source;if(state.rollReviewId)applyRollingAudioMotion(null,event.frameSerial);source.onended=()=>{if(state.sceneDraftSource===source)state.sceneDraftSource=null;};}}return;}if(event.phase==='end')stopSceneDraft();}
-function selectedMaterial(){return $('sl-material').value||state.binding.surface;}
-function selectedVariant(){return Number($('sl-variant').value||0);}
-function selectedObject(){return $('sl-object-profile').value||state.binding.object;}
-function selectedStyle(){return $('sl-style-profile').value||state.binding.style;}
-function rawResource(kind,id){return state.manifest.previewModel?.resources?.[kind]?.[id];}
-function profileResources(){const binding={...state.binding,object:selectedObject(),style:selectedStyle(),surface:selectedMaterial()};return resolvePreviewResources(state.manifest,binding,selectedMaterial(),{object:selectedObject(),style:selectedStyle()});}
-
-function currentPerceptualDescription(){return perceptualSoundDescription({energy:numeric('sl-energy'),depth:numeric('sl-depth'),texture:numeric('sl-texture'),attack:numeric('sl-attack'),ring:numeric('sl-ring'),boominess:numeric('sl-boominess'),brightness:numeric('sl-brightness'),warmth:numeric('sl-warmth'),space:numeric('sl-space')});}
-function perceptualMapping(){return state.manifest.previewModel?.perceptualMapping||{};}
-function authoringOverrides(){
-  const base=profileResources(),defaults=state.controlDefaults,overrides=clone(state.binding.overrides||{});
-  const ensure=(kind,key,value)=>{overrides[kind]??={};let cursor=overrides[kind],parts=key.split('.');for(const part of parts.slice(0,-1))cursor=cursor[part]??={};cursor[parts.at(-1)]=value;};
-  const size=numeric('sl-size'),damping=numeric('sl-damping'),covariance=numeric('sl-covariance');
-  if(!close(size,defaults.size)||!close(damping,defaults.damping)){
-    const modal=base.object.modal||{},root=Math.sqrt(size/Number(defaults.size||1)),damp=damping/Number(defaults.damping||1);
-    ensure('object','modal.frequencyScale',Number(modal.frequencyScale??1)/root);
-    ensure('object','modal.decayScale',Number(modal.decayScale??1)*root*damp);
-    ensure('object','modal.coupling',Number(modal.coupling??1)*(0.85+0.15*size));
+});
+const library = new SampleLibrary();
+const bench = new Workbench({
+  session: () => runtime.session,
+  library,
+  player: new WebAudioPlayer(),
+  storage: safeLocalStorage(),
+  hooks: {
+    changed: kind => benchChanged(kind),
+    status: text => { els.status.textContent = text; },
+    showFrame: frame => seek({ frame, fromPlayback: true })
   }
-  if(!close(covariance,defaults.covariance)){
-    const factor=covariance/Number(defaults.covariance||1),v=base.object.variation||{};
-    ensure('object','variation.frequency',Number(v.frequency??.018)*factor);ensure('object','variation.decay',Number(v.decay??.08)*factor);ensure('object','variation.brightness',Number(v.brightness??.035)*factor);
+});
+/* Earshot is reachable when the Studio is opened from the SoundLab
+ * authoring service (npm run soundlab:serve -- --earshot-root …). */
+discoverEarshot().then(service => { bench.earshot = service; if (service.connected) panels.renderFoley(); }).catch(() => {});
+const panels = new StudioPanels({
+  bench,
+  roots: { foley: $('panel-foley'), design: $('panel-design'), review: $('panel-review') },
+  hooks: {
+    selectTab: name => selectTab(name),
+    error: error => showError(error),
+    catalogChanged: () => { els.catalog.dataset.html = ''; scheduleUi(); renderReviewCount(); }
   }
-  for(const [id,path] of [['roughness','contact.roughness'],['hardness','transient.hardness']])if(!close(numeric(`sl-${id}`),defaults[id]))ensure('material',path,numeric(`sl-${id}`));
-  for(const id of ['transient','body','residual'])if(!close(numeric(`sl-${id}`),defaults[id]))ensure('recipe',`mix.${id}`,numeric(`sl-${id}`));
-  const amount=numeric('sl-style-amount');if(!close(amount,defaults['style-amount'])){
-    const f=base.style.finishing||{},ratio=amount/Number(defaults['style-amount']||1);
-    ensure('style','finishing.drive',1+(Number(f.drive??1)-1)*ratio);ensure('style','finishing.softClip',Number(f.softClip??.75)*ratio);ensure('style','finishing.periodColoration',Number(f.periodColoration??0)*ratio);
+});
+const timeline = new Timeline(els.timeline, {
+  onSeek: frame => { if (bench.playback) bench.stop(); seek({ frame }); },
+  onSelect: id => select(id),
+  onRange: (range, { final }) => { if (final) bench.setRange(range); else renderRange(range); },
+  onLane: (key, kind) => bench.toggleLane(key, kind),
+  laneState: () => bench.laneState()
+});
+
+function benchChanged(kind) {
+  panels.changed(kind);
+  if (kind === 'playback') renderTransport();
+  else if (kind === 'loop') els.tlLoop.checked = bench.loop;
+  else if (kind === 'volume') els.tlVolume.value = String(Math.round(bench.volume * 100));
+  else if (kind === 'lanes') timeline.render();
+  else if (kind === 'review') renderReviewCount();
+  else {
+    timeline.setRange(bench.range); renderRange(bench.range);
+    if (bench.eventId && bench.eventId !== state.focusEventId && (kind === 'design' || kind === 'target')) { state.focusEventId = bench.eventId; timeline.setFocusEvent(bench.eventId); scheduleUi(); }
+    if (kind === 'design-agent' && state.tab !== 'design' && state.tab !== 'foley') selectTab('design');
   }
-  const source=$('sl-source').value,defaultSource=String(defaults.source||'');if(source!==defaultSource)ensure('material','residual.source',source||null);
-  return overrides;
-}
-function currentBinding(){return{...state.binding,surface:selectedMaterial(),object:selectedObject(),style:selectedStyle(),strength:strengthForEnergy(numeric('sl-energy'),perceptualMapping()),variants:Math.max(1,Math.min(16,Math.round(numeric('sl-variant-count')||1))),perceptual:currentPerceptualDescription(),overrides:authoringOverrides()};}
-function currentSceneMotion(){return state.scene?sceneMotionSamples(state.scene,state.sceneWindow):[];}
-function currentSceneIntent(binding=currentBinding()){return state.scene?sceneSoundIntent(state.manifest,binding,state.scene,state.sceneWindow,{object:binding.object,surface:binding.surface,recipe:binding.recipe}):null;}
-function scoreDraftEvidenceValue(baseline,intent){const score=clone(baseline)||null;if(score&&typeof score==='object')delete score.sceneIntentId;const native={action:intent?.action||null,target:intent?.target||null,interval:intent?.interval?{startFrame:Number(intent.interval.startFrame),endFrame:Number(intent.interval.endFrame),proofFrame:Number(intent.interval.proofFrame),frameRateHz:Number(intent.interval.frameRateHz||0)}:null,segments:(intent?.segments||[]).map(row=>({id:row.id,startFrame:Number(row.startFrame),endFrame:Number(row.endFrame),semanticType:row.semanticType||null})),motion:(intent?.motion?.samples||[]).map(row=>({frame:Number(row.frame),dx:Number(row.dx||0),dy:Number(row.dy||0),speed:Number(row.speed||0),acceleration:Number(row.acceleration||0)}))};return JSON.stringify({native,score});}
-function scoreDraftKey(bindingId=state.binding?.id){return state.manifest?.project&&bindingId?`${SCORE_DRAFT_STORAGE}:${state.manifest.project}:${bindingId}`:null;}
-function loadScoreDraft(baseline,intent){const key=scoreDraftKey();if(!key)return null;try{const stored=JSON.parse(localStorage.getItem(key)||'null'),evidence=scoreDraftEvidenceValue(baseline,intent);if(stored?.evidence!==evidence||stored?.score?.schema!=='soundlab.sound-score.v1'){if(stored)localStorage.removeItem(key);return null;}return clone(stored.score);}catch{return null;}}
-function saveScoreDraft(){const key=scoreDraftKey();if(!key||!state.score||!state.scoreBaseline||!state.scoreIntent)return;try{if(!scoreDirty()){localStorage.removeItem(key);return;}localStorage.setItem(key,JSON.stringify({evidence:scoreDraftEvidenceValue(state.scoreBaseline,state.scoreIntent),score:state.score}));}catch{}}
-function clearScoreDraft(bindingId=state.binding?.id){const key=scoreDraftKey(bindingId);if(!key)return;try{localStorage.removeItem(key);}catch{}}
-function scoreDirty(){return !!state.score&&!!state.scoreBaseline&&JSON.stringify(state.score)!==JSON.stringify(state.scoreBaseline);}
-function scoreIsActive(){return !!state.score&&(!!state.binding?.soundScore||scoreDirty());}
-function scoredBinding(binding=currentBinding()){const intent=currentSceneIntent(binding)||state.scoreIntent;if(!scoreIsActive()||!state.score||!intent)return{binding,compiled:null};return applySoundScoreToBinding(binding,state.score,intent,{segmentId:state.selectedSegmentId});}
-function currentResources(){const base=currentBinding(),scored=scoredBinding(base).binding;return resolvePreviewResources(state.manifest,scored,scored.surface,{object:scored.object,style:scored.style});}
-function currentTrace(){
-  if(!state.useCapturedTelemetry||!state.events.length)return null;
-  const binding=currentBinding(),intent=currentSceneIntent(binding),motion=currentSceneMotion();
-  return telemetryTrace(state.manifest.project,state.events,{binding:state.binding.id,...(intent?{sceneIntent:intent}:{}),...(motion.length?{motion}:{}),...(state.sceneWindow?{window:{startFrame:state.sceneWindow.startFrame,endFrame:state.sceneWindow.endFrame}}:{})});
-}
-function currentJob(){const binding=currentBinding(),trace=currentTrace(),activeScore=scoreIsActive();return{bindingId:binding.id,surface:binding.surface,object:binding.object,recipe:binding.recipe,style:binding.style,strength:binding.strength,variants:binding.variants,seed:Number($('sl-seed').value)>>>0,perceptual:binding.perceptual,overrides:binding.overrides,...(activeScore?{soundScore:clone(state.score),scoreSegmentId:state.selectedSegmentId}:{}),...(trace?{telemetryTrace:trace,useCapturedTelemetry:true}:{})};}
-
-function scoreSegmentPreviewMotion(intent,segment){const fps=Math.max(1,Number(intent?.interval?.frameRateHz||25)),start=Number(segment?.gameRange?.[0]??intent?.interval?.startFrame??0),end=Number(segment?.gameRange?.[1]??intent?.interval?.endFrame??start);return(intent?.motion?.samples||[]).filter(row=>Number(row.frame)>=start&&Number(row.frame)<=end).map(row=>({time:(Number(row.frame)-start)/fps,dx:Number(row.dx||0),dy:Number(row.dy||0)}));}
-function scoreSegmentPreviewDuration(intent,segment,recipe){const fps=Math.max(1,Number(intent?.interval?.frameRateHz||25)),range=segment?.authoringRange||segment?.gameRange;return Array.isArray(range)?Math.max(40,(Number(range[1])-Number(range[0])+1)*1000/fps):Number(recipe?.durationMs||240);}
-function frozenSourceDescriptor(source){return sourceOptions(state.manifest).find(row=>row.id===source?.id)||null;}
-function frozenSourceKey(row){return row?`${row.id}:${row.sha256||''}`:'';}
-function queueFrozenSourceLoad(row){
-  if(!row?.url)return;const key=frozenSourceKey(row);if(state.sourceDecoded.has(key)||state.sourceLoads.has(key))return;
-  const pending=fetch(new URL(row.url,document.baseURI),{cache:'no-store'}).then(response=>{if(!response.ok)throw new Error(`frozen source load failed (${response.status})`);return response.arrayBuffer();}).then(bytes=>{const decoded=decodePcmWavPreview(bytes);state.sourceDecoded.set(key,decoded);state.sourceLoads.delete(key);if(state.score){renderPreview();void refreshScoreAnalysis();}return decoded;}).catch(error=>{state.sourceLoads.delete(key);serviceState(error.message,'bad');return null;});state.sourceLoads.set(key,pending);
-}
-function renderFrozenLayerPreview(source,{sampleRate,length}){const row=frozenSourceDescriptor(source);if(!row)return null;const decoded=state.sourceDecoded.get(frozenSourceKey(row));if(!decoded){queueFrozenSourceLoad(row);return{samples:new Float32Array(length),sampleRate,pending:true,source:{id:row.id,sha256:row.sha256,role:row.role}};}return fitFrozenScoreLayerPreview(decoded,{sampleRate,length,onsetSample:row.onsetSample,source:row});}
-function renderScoreLayerRow(segment,layer,{index=0,seedOffset=0}={}){
-  const base=currentBinding(),sampleRate=Number(state.manifest.previewModel?.renderer?.sampleRate||48000),seed=(Number($('sl-seed').value)>>>0)+seedOffset,intent=state.scoreIntent;if(!state.score||!intent||!segment||!layer)return null;
-  const layerBinding=applySoundScoreLayerToBinding(base,intent,segment,layer).binding,{material,object,recipe,style,environment}=resolvePreviewResources(state.manifest,layerBinding,layerBinding.surface,{object:layerBinding.object,style:layerBinding.style}),durationMs=scoreSegmentPreviewDuration(intent,segment,recipe),length=Math.max(1,Math.ceil(sampleRate*durationMs/1000)),controlSignals=compileLayerControlSignals(intent,segment,layer),sourceType=layer.source?.type||'binding',layerRender=sourceType==='frozen-sample'?renderFrozenLayerPreview(layer.source,{sampleRate,length}):renderScoreLayerPreview({sampleRate,durationMs,strength:layerBinding.strength,seed:(seed+(index+1)*0x9e3779b1)>>>0,material,object,recipe,style,environment,telemetry:scoreSegmentPreviewMotion(intent,segment),binding:layerBinding,source:layer.source,semanticType:segment.semanticType,controlSignals});
-  return{id:layer.id,source:sourceType,gain:Number(layer.gain??1),envelope:layer.envelope||null,variation:layer.variation||null,mixSeed:(seed+(index+1)*0x9e3779b1)>>>0,render:layerRender};
-}
-function renderScoreSegmentPreview(segment,{seedOffset=0}={}){
-  const base=currentBinding(),sampleRate=Number(state.manifest.previewModel?.renderer?.sampleRate||48000),seed=(Number($('sl-seed').value)>>>0)+seedOffset,intent=state.scoreIntent;if(!state.score||!intent||!segment?.layers?.length)return null;
-  const enabled=segment.layers.filter(row=>row.enabled!==false),solo=enabled.filter(row=>row.solo),layers=solo.length?solo:enabled,layerRows=[];
-  for(const [index,layer] of layers.entries()){
-    const row=renderScoreLayerRow(segment,layer,{index,seedOffset});if(row?.render)layerRows.push(row);
-  }
-  return mixScoreLayerPreviews(layerRows,{sampleRate});
-}
-function renderScoreSequencePreview(){
-  if(!state.score||!state.scoreIntent)return null;const sampleRate=Number(state.manifest.previewModel?.renderer?.sampleRate||48000),fps=Math.max(1,Number(state.scoreIntent.interval?.frameRateHz||25)),sequence=state.score.sequence,length=Math.max(1,Math.ceil((sequence.endFrame-sequence.startFrame+1)*sampleRate/fps)),out=new Float32Array(length),layerMeta=[];
-  state.score.segments.forEach((segment,index)=>{const render=renderScoreSegmentPreview(segment,{seedOffset:(index+1)*0x45d9f3b});if(!render)return;const startFrame=segment.authoringRange?.[0]??segment.gameRange?.[0]??sequence.startFrame,offset=Math.max(0,Math.round((startFrame-sequence.startFrame)*sampleRate/fps));for(let i=0;i<render.samples.length&&offset+i<out.length;i++)out[offset+i]+=render.samples[i];layerMeta.push({segmentId:segment.id,layers:render.layers||[]});});let peak=0;for(const value of out)peak=Math.max(peak,Math.abs(value));if(peak>.985){const scale=.985/peak;for(let i=0;i<out.length;i++)out[i]*=scale;}return{samples:out,sampleRate,layers:layerMeta};
-}
-function renderPreview(){
-  const segment=selectedSegment(),scored=state.score&&segment?renderScoreSegmentPreview(segment):null;let render=scored;
-  if(!render){const base=currentBinding(),resolved=scoredBinding(base).binding,{material,object,recipe,style,environment}=resolvePreviewResources(state.manifest,resolved,resolved.surface,{object:resolved.object,style:resolved.style}),telemetry=currentTrace()||(state.useCapturedTelemetry?currentSceneMotion():[]);render=renderSoundPreview({sampleRate:Number(state.manifest.previewModel?.renderer?.sampleRate||48000),strength:resolved.strength,seed:Number($('sl-seed').value)>>>0,material,object,recipe,style,environment,telemetry,binding:resolved});}
-  state.preview=render;if(state.audioVersion==='draft')showAudio(render,{profile:'preview',sourceSampleRate:render.sampleRate});else void refreshScoreAnalysis();updateChangedState();renderReferenceExplorer();renderGestureEditor();return render;
-}
-function outputRow(profile){return outputsFor(state.manifest,state.binding.id,profile).find(row=>row.variant===selectedVariant())||outputsFor(state.manifest,state.binding.id,profile)[0];}
-async function decodeUrl(key,url){if(state.decoded.has(key))return state.decoded.get(key);const response=await fetch(new URL(url,document.baseURI),{cache:'no-store'});if(!response.ok)throw new Error(`audio load failed (${response.status})`);const buffer=await audioContext().decodeAudioData(await response.arrayBuffer());state.decoded.set(key,buffer);return buffer;}
-async function decodedOutput(profile){const row=outputRow(profile);if(!row)throw new Error(`No ${profile} output for ${state.binding.id}`);const buffer=await decodeUrl(`promoted:${profile}:${row.variant}:${row.sha256}`,new URL(row.file,state.manifestUrl));return{buffer,row};}
-async function refreshScoreAnalysis(){
-  const token=++state.analysisToken,empty=(message)=>{if(token!==state.analysisToken)return;drawScoreAudioAnalysis(new Float32Array(),48000,{name:analysisSourceLabel(),empty:message});};if(!state.score){empty('Capture a native scene to enable score analysis.');return;}
-  if(state.analysisSource==='original'){empty('Original uses the live native game route; no detached browser audio buffer is available for spectral analysis.');return;}
-  if(state.analysisSource==='published'){
-    try{const {buffer}=await decodedOutput('master');if(token!==state.analysisToken)return;drawScoreAudioAnalysis(samplesOf(buffer),buffer.sampleRate,{name:'Published master'});}catch(error){empty(`Published analysis unavailable: ${error.message}`);}return;
-  }
-  let render=null;
-  if(state.analysisSource==='sequence')render=renderScoreSequencePreview();
-  else if(state.analysisSource==='layer'){
-    const segment=selectedSegment(),layer=selectedLayer();if(layer?.enabled!==false){const row=renderScoreLayerRow(segment,layer);if(row?.render)render=mixScoreLayerPreviews([row],{sampleRate:row.render.sampleRate});}
-  }else render=renderScoreSegmentPreview(selectedSegment());
-  if(token!==state.analysisToken)return;if(!render?.samples?.length){empty('No decoded audio for this analysis source.');return;}drawScoreAudioAnalysis(render.samples,render.sampleRate,{name:analysisSourceLabel()});
-}
-function currentProfile(profile){const key=profile==='current-master'?'master':'runtime',row=state.currentRender?.profiles?.[key];if(!row)throw new Error('Render the current canonical sound first');return{key,row};}
-async function showProfile(profile){
-  if(profile==='preview'){if(!state.preview)renderPreview();showAudio(state.preview,{profile,sourceSampleRate:state.preview.sampleRate});return;}
-  if(profile.startsWith('current-')){const {key,row}=currentProfile(profile),buffer=await decodeUrl(`current:${key}:${row.sha256}`,row.url);showAudio(buffer,{hash:row.sha256,profile,sourceSampleRate:row.sampleRate,encoding:row.encoding});return;}
-  const {buffer,row}=await decodedOutput(profile);showAudio(buffer,{hash:row.sha256,profile,sourceSampleRate:row.sampleRate,encoding:row.encoding});
-}
-async function playProfile(profile){if(profile==='preview'){playAudition(audioBufferFrom(audioContext(),state.preview||renderPreview()));return;}if(profile.startsWith('current-')){const {key,row}=currentProfile(profile);playAudition(await decodeUrl(`current:${key}:${row.sha256}`,row.url));return;}const {buffer}=await decodedOutput(profile);playAudition(buffer);}
-
-function syncCaseControls(){document.querySelectorAll('.case-button').forEach(b=>b.classList.toggle('active',b.dataset.id===state.binding.id));if($('sl-case-picker').value!==state.binding.id)$('sl-case-picker').value=state.binding.id;}
-function optionNodes(rows,selected,label=row=>row.id.replaceAll('-',' ')){return rows.map(row=>new Option(label(row),row.id,row.id===selected,row.id===selected));}
-function sourceNodes(selected){return [new Option('Procedural residual','',!selected,!selected),...sourceOptions(state.manifest).map(row=>new Option(`${row.id} · ${row.role}`,row.id,row.id===selected,row.id===selected))];}
-function setRange(id,value){$(id).value=String(value);const out=$(`${id}-out`);if(out)out.textContent=Number(value).toFixed(2);}
-function actionGenerator(){return String(rawResource('recipes',state.binding?.recipe)?.generator||'impact');}
-function updateActionLabels(){const continuous=['roll','slide','scrape','mechanism','emitter'].includes(actionGenerator()),label=continuous?'Motion energy':actionGenerator()==='explosion'?'Blast energy':actionGenerator()==='launch'?'Launch energy':'Impact energy';$('sl-energy-label').textContent=label;$('sl-energy').setAttribute('aria-label',label);}
-function setBinding(id){
-  stopSceneDraft();stopAudition();if(state.runtime){state.runtime.stop?.();state.runtime=null;$('sl-start-native').disabled=false;}state.binding=bindingFor(state.manifest,id);syncCaseControls();state.currentRender=null;state.batch=null;state.decoded.clear();state.events=[];state.selectedEvent=-1;state.scene=null;state.sceneWindow=null;state.score=null;state.scoreBaseline=null;state.scoreIntent=null;state.selectedSegmentId=null;state.selectedLayerId=null;state.selectedGestureId=null;state.gestureTool='draw';state.scoreHistory={undo:[],redo:[]};state.gestureDraw=null;state.playheadFrame=null;state.audioVersion='draft';state.playbackScope='selected';state.segmentLoopMode='context';state.customLoopRanges={};state.analysisSource='segment';state.analysisToken+=1;state.sceneReplayMode='draft';state.rollReviewId='';state.rollReviewBuffer=null;state.rollReviewPrepared=null;state.playtesting=false;state.sceneSounds=[];state.sceneSoundEnabled=new Map();state.rollReviewLoad+=1;state.useCapturedTelemetry=false;state.referenceSelected=null;if($('sl-analysis-source'))$('sl-analysis-source').value='segment';$('sl-use-capture').setAttribute('aria-pressed','false');$('sl-scene-contact').hidden=true;$('sl-score-workspace').hidden=true;const layersRail=$('sl-layers-rail');if(layersRail)layersRail.disabled=true;setWorkspaceContext('scene-browse');
-  $('sl-object').textContent=state.binding.object;$('sl-recipe').textContent=state.binding.recipe;$('sl-style').textContent=state.binding.style;$('sl-event').textContent=state.binding.event;
-  updateActionLabels();
-  $('sl-material').replaceChildren(...optionNodes(materialOptions(state.manifest),state.binding.surface));$('sl-object-profile').replaceChildren(...optionNodes(resourceOptions(state.manifest,'objects'),state.binding.object));$('sl-style-profile').replaceChildren(...optionNodes(resourceOptions(state.manifest,'styles'),state.binding.style));
-  const base=profileResources(),master=outputsFor(state.manifest,state.binding.id,'master');$('sl-variant').replaceChildren(...master.map(row=>new Option(`variant ${row.variant+1} · seed ${row.seed}`,String(row.variant))));$('sl-seed').value=String(master[0]?.seed||1);$('sl-source').replaceChildren(...sourceNodes(base.material.residual?.source||''));
-  const semantic=state.binding.perceptual||{};state.controlDefaults={material:state.binding.surface,energy:Number(semantic.energy??energyForStrength(Number(state.binding.strength??.7),perceptualMapping())),depth:Number(semantic.depth??.5),texture:Number(semantic.roughness??base.material.contact?.roughness??.5),attack:Number(semantic.hardness??base.material.transient?.hardness??.5),ring:Number(semantic.ring??.5),boominess:Number(semantic.boominess??base.recipe.perceptual?.boominess??.5),brightness:Number(semantic.brightness??base.recipe.perceptual?.brightness??.5),warmth:Number(semantic.warmth??base.recipe.perceptual?.warmth??.5),space:Number(semantic.reverberance??base.recipe.perceptual?.reverberance??0),object:state.binding.object,size:1,roughness:Number(base.material.contact?.roughness??.5),hardness:Number(base.material.transient?.hardness??.5),transient:Number(base.recipe.mix?.transient??.6),body:Number(base.recipe.mix?.body??.8),residual:Number(base.recipe.mix?.residual??.3),damping:1,style:state.binding.style,'style-amount':1,variants:Number(state.binding.variants||4),covariance:1,source:String(base.material.residual?.source||'')};
-  for(const id of primaryRangeControls)setRange(`sl-${id}`,state.controlDefaults[id]);setRange('sl-size',1);setRange('sl-roughness',state.controlDefaults.roughness);setRange('sl-hardness',state.controlDefaults.hardness);setRange('sl-transient',state.controlDefaults.transient);setRange('sl-body',state.controlDefaults.body);setRange('sl-residual',state.controlDefaults.residual);setRange('sl-damping',1);setRange('sl-style-amount',1);setRange('sl-covariance',1);$('sl-variant-count').value=String(state.controlDefaults.variants);updateSourceMeta();loadSnapshots();state.preview=null;renderPreview();renderTimeline();updateCurrentButtons();$('sl-batch-strip').replaceChildren();updateRollReviewUi();void loadRollingReview();state.earshotRows=[];state.earshotChoice=null;$('sl-earshot-round').replaceChildren();updateEarshotEnabled();
-}
-function populateCases(){const rows=state.manifest.bindings;$('sl-case-list').replaceChildren(...rows.map(binding=>{const b=document.createElement('button');b.className='case-button';b.dataset.id=binding.id;b.innerHTML=`<strong>${binding.event}</strong><small>${binding.match?.actorFamily||binding.id} · ${binding.surface}</small>`;b.addEventListener('click',()=>setBinding(binding.id));return b;}));$('sl-case-picker').replaceChildren(...rows.map(binding=>new Option(binding.event,binding.id)));$('sl-case-count').textContent=`${rows.length}`;}
-
-function controlValue(id){if(id==='material')return selectedMaterial();if(primaryRangeControls.includes(id))return numeric(`sl-${id}`);if(id==='object')return selectedObject();if(id==='style')return selectedStyle();if(id==='variants')return numeric('sl-variant-count');if(id==='source')return $('sl-source').value;return numeric(`sl-${id}`);}
-function changed(id){const a=controlValue(id),b=state.controlDefaults[id];return typeof a==='number'&&!Number.isNaN(a)?!close(a,b):String(a)!==String(b??'');}
-function soundColorSummary(){
-  if(!state.binding)return '';
-  const object=(state.binding.match?.actorFamily||state.binding.object||'object').replace(/^sm\d+-/,'').replaceAll('-',' ');
-  const depth=numeric('sl-depth'),texture=numeric('sl-texture'),attack=numeric('sl-attack'),ring=numeric('sl-ring'),boom=numeric('sl-boominess'),brightness=numeric('sl-brightness'),warmth=numeric('sl-warmth'),space=numeric('sl-space');
-  const depthLabel=depth>.68?'heavy · deep':depth<.34?'light · thin':'solid';
-  const textureLabel=texture>.68?'rocky':texture<.34?'smooth':'textured';
-  const attackLabel=attack>.68?'hard attack':attack<.34?'soft attack':'clear attack';
-  const ringLabel=ring>.7?'ringing tail':ring<.32?'short · dead tail':'short-to-medium ring';
-  const tone=[boom>.68?'boomy':boom<.34?'tight':null,brightness>.68?'bright':brightness<.34?'dark':null,warmth>.68?'warm':warmth<.34?'cold':null,space>.55?'roomy':space>.15?'slightly roomy':'dry'].filter(Boolean).join(' · ');
-  const surface=selectedMaterial().replaceAll('-',' '),relation=({roll:'rolling on',slide:'sliding on',scrape:'scraping across',mechanism:'moving against',emitter:'venting through',launch:'launching from',explosion:'exploding against'}[actionGenerator()]||'hitting');
-  return `${object} ${relation} ${surface} — ${depthLabel}, ${textureLabel}, ${attackLabel}, ${ringLabel}${tone?`, ${tone}`:''}.`;
-}
-function updateSoundSummary(){const node=$('sl-sound-summary');if(node)node.textContent=soundColorSummary();}
-function sameJson(a,b){return JSON.stringify(a??null)===JSON.stringify(b??null);}
-function publishDiffRows(){if(!state.binding)return[];const current=currentBinding(),rows=[];for(const [label,key] of [['Material','surface'],['Object','object'],['Style','style'],['Variants','variants']])if(String(current[key])!==String(state.binding[key]))rows.push(`${label}: ${state.binding[key]} → ${current[key]}`);if(!close(current.strength,state.binding.strength??.7))rows.push(`Strength: ${Number(state.binding.strength??.7).toFixed(2)} → ${Number(current.strength).toFixed(2)}`);if(!sameJson(current.perceptual,state.binding.perceptual))rows.push('Semantic sound controls edited');if(!sameJson(current.overrides,state.binding.overrides))rows.push('Expert overrides edited');if(state.score&&scoreDirty())rows.push(state.binding.soundScore?'Sound Score edited':'Sound Score added');if(state.useCapturedTelemetry&&state.events.length)rows.push('Captured scene context will be persisted');return rows;}
-function renderPublishDiff(){const node=$('sl-publish-diff');if(!node)return;const rows=publishDiffRows();node.innerHTML=rows.length?`<strong>Publish diff · ${rows.length}</strong><br>${rows.map(row=>row.replaceAll('&','&amp;').replaceAll('<','&lt;')).join(' · ')}`:'Publish diff: no authored production changes.';if($('sl-promote'))$('sl-promote').textContent=rows.length?`Promote ${rows.length} change${rows.length===1?'':'s'}…`:'Promote…';}
-function updateChangedState(){let count=0;for(const id of controlIds){const row=document.querySelector(`[data-control="${id}"]`);if(!row)continue;const yes=changed(id);row.classList.toggle('changed',yes);if(yes)count+=1;}$('sl-changed-count').textContent=count?`${count} changed`:'profile defaults';$('sl-object').textContent=selectedObject();$('sl-style').textContent=selectedStyle();updateSourceMeta();updateSoundSummary();renderPublishDiff();}
-function resetControl(id){const value=state.controlDefaults[id];if(id==='material')$('sl-material').value=value;else if(primaryRangeControls.includes(id))setRange(`sl-${id}`,value);else if(id==='object')$('sl-object-profile').value=value;else if(id==='style')$('sl-style-profile').value=value;else if(id==='variants')$('sl-variant-count').value=value;else if(id==='source')$('sl-source').value=value;else setRange(`sl-${id}`,value);renderPreview();}
-function snapshotValues(){return Object.fromEntries(controlIds.map(id=>[id,controlValue(id)]));}
-function applySnapshot(values,{preview=true}={}){if(!values)return;for(const [id,value] of Object.entries(values)){if(id==='material')$('sl-material').value=value;else if(primaryRangeControls.includes(id))setRange(`sl-${id}`,value);else if(id==='object')$('sl-object-profile').value=value;else if(id==='style')$('sl-style-profile').value=value;else if(id==='variants')$('sl-variant-count').value=value;else if(id==='source')$('sl-source').value=value;else if(document.getElementById(`sl-${id}`))setRange(`sl-${id}`,value);}if(preview)renderPreview();else updateChangedState();}
-function snapshotKey(){return `soundlab:snapshots:${state.manifest.project}:${state.binding.id}`;}
-function loadSnapshots(){try{state.snapshots={A:null,B:null,...JSON.parse(localStorage.getItem(snapshotKey())||'{}')};}catch{state.snapshots={A:null,B:null};}}
-function saveSnapshot(slot){state.snapshots[slot]=snapshotValues();localStorage.setItem(snapshotKey(),JSON.stringify(state.snapshots));$('sl-promotion-state').textContent=`Stored parameter snapshot ${slot}.`;}
-
-
-function applySoundDescription(){
-  const values=Object.fromEntries(primaryRangeControls.map(id=>[id,numeric(`sl-${id}`)]));
-  const result=interpretSoundDescription($('sl-description').value,{values,scene:state.scene}),range=result.timing&&state.score?authoringRangeForTiming(state.score,state.selectedSegmentId,result.timing):null,creative=!!state.score&&(result.changes.some(change=>change.type==='control'&&primaryRangeControls.includes(change.axis))||!!range);
-  if(creative)pushScoreHistory();
-  for(const change of result.changes){if(change.type==='control'&&primaryRangeControls.includes(change.axis))setRange(`sl-${change.axis}`,change.value);}
-  if(range)selectedSegment().authoringRange=range;
-  if(creative)finishScoreEdit({preview:false});
-  renderPreview();
-  const applied=result.changes.map(change=>change.type==='control'?`${change.axis} ${Number(change.value).toFixed(2)}`:`${change.edge} ${change.frame}f`);
-  $('sl-description-result').textContent=applied.length?`Applied: ${applied.join(' · ')}${result.notes.length?` · ${result.notes.join(' ')}`:''}`:result.notes.join(' ')||'No changes applied.';
-  if(result.timing)replaySelectedEvent();
 }
 
-function updateSourceMeta(){const id=$('sl-source')?.value,row=sourceOptions(state.manifest).find(item=>item.id===id);$('sl-source-meta').textContent=row?`${row.id} · ${row.role} · onset ${row.onsetSample||0} · sha ${fmtHash(row.sha256)} · ${row.provenance?.provider||'unknown provider'}${row.provenance?.model?` / ${row.provenance.model}`:''}`:'No frozen source selected; procedural residual is used.';}
-function selectedSegment(){return selectedScoreSegment(state.score,state.selectedSegmentId);}
-function selectedLayer(){const segment=selectedSegment();return segment?.layers?.find(row=>row.id===state.selectedLayerId)||segment?.layers?.[0]||null;}
-function selectedGesture(){const segment=selectedSegment();if(!segment?.gestures?.length)return null;const layer=selectedLayer(),preferred=state.selectedGestureId||layer?.gestureId,gesture=segment.gestures.find(row=>row.id===preferred)||segment.gestures[0];state.selectedGestureId=gesture?.id||null;return gesture||null;}
-function syncSelectedGesture(){const segment=selectedSegment(),layer=selectedLayer();if(!segment?.gestures?.length){state.selectedGestureId=null;return null;}const layerGesture=segment.gestures.find(row=>row.id===layer?.gestureId),current=segment.gestures.find(row=>row.id===state.selectedGestureId);state.selectedGestureId=(layerGesture||current||segment.gestures[0]).id;return selectedGesture();}
-const SCORE_LAYER_SOURCES=['binding','procedural','noise','contact-train','resonant-body','accent','frozen-sample'];
-const SCORE_LAYER_SOURCE_PARAMETERS={
-  noise:[{key:'speedReference',label:'Speed ref',unit:'px/f',min:.1,max:20,step:.1,default:8},{key:'brightness',label:'Brightness',unit:'',min:0,max:1,step:.01,default:.62}],
-  'contact-train':[{key:'density',label:'Density',unit:'/s',min:.2,max:24,step:.1,default:7},{key:'decayMs',label:'Contact decay',unit:'ms',min:6,max:120,step:1,default:35},{key:'speedReference',label:'Speed ref',unit:'px/f',min:.1,max:20,step:.1,default:4}],
-  'resonant-body':[{key:'modeLimit',label:'Modes',unit:'',min:1,max:8,step:1,default:4,integer:true},{key:'decayScale',label:'Decay scale',unit:'×',min:.1,max:4,step:.05,default:1},{key:'frequencyScale',label:'Frequency scale',unit:'×',min:.2,max:3,step:.05,default:1},{key:'speedReference',label:'Speed ref',unit:'px/f',min:.1,max:20,step:.1,default:8}],
-  accent:[{key:'density',label:'Density',unit:'/s',min:.2,max:24,step:.1,default:7},{key:'decayMs',label:'Decay',unit:'ms',min:4,max:120,step:1,default:18},{key:'frequencyHz',label:'Frequency',unit:'Hz',min:60,max:6000,step:10,default:900}],
-};
-function layerSourceParameterSpecs(type){return (SCORE_LAYER_SOURCE_PARAMETERS[String(type)]||[]).map(row=>({...row}));}
-const SCORE_MAPPING_SOURCES=['native.speed','native.velocityX','native.velocityY','native.acceleration','native.progress','native.distance','native.proofDistance','gesture.width','gesture.pressure','gesture.curvature','gesture.wiggle','gesture.deviation','gesture.drawSpeed','gesture.phase','gesture.frequency','manual.constant','manual.automation','manual.envelope'];
-const SCORE_MAPPING_TARGETS=['binding.strength','recipe.mapping.contactDensity','recipe.mapping.transientGain','recipe.mapping.bodyGain','recipe.mapping.residualGain','recipe.mapping.frictionGain','recipe.perceptual.brightness','material.contact.roughness','material.transient.hardness','object.modal.decayScale','object.modal.frequencyScale','style.finishing.masterGain'];
-function scoreEdit(mutator,{preview=true,preserveLink=false}={}){if(!state.score)return;pushScoreHistory();const segment=selectedSegment();if(segment?.linkedFromSegmentId&&!preserveLink)delete segment.linkedFromSegmentId;mutator();synchronizeLinkedSegments(state.score);finishScoreEdit({preview});}
-function uniqueLayerId(segment,base='layer'){const used=new Set((segment?.layers||[]).map(row=>row.id));let id=base,index=2;while(used.has(id))id=`${base}-${index++}`;return id;}
-function uniqueMappingId(layer,base='mapping'){const used=new Set((layer?.mappings||[]).map(row=>row.id));let id=base,index=2;while(used.has(id))id=`${base}-${index++}`;return id;}
-function defaultLayerSource(type,semanticType){if(type==='procedural')return{type,id:'score-transient',params:{decayMs:18}};if(type==='noise')return{type,id:semanticType==='falling'?'fall-whoosh':'texture-noise',params:{brightness:.62,speedReference:8}};if(type==='contact-train')return{type,params:{density:7,speedReference:4}};if(type==='resonant-body')return{type,params:{modeLimit:4,decayScale:1,frequencyScale:1,speedReference:8}};if(type==='accent')return{type,params:{density:7,decayMs:18,frequencyHz:900}};if(type==='frozen-sample')return{type,id:sourceOptions(state.manifest)[0]?.id||''};return{type:'binding'};}
-function addScoreLayer(){const segment=selectedSegment();if(!segment)return;scoreEdit(()=>{const id=uniqueLayerId(segment,'layer');segment.layers.push({id,label:`Layer ${segment.layers.length+1}`,source:defaultLayerSource('noise',segment.semanticType),enabled:true,solo:false,gain:1,envelope:{attackMs:0,releaseMs:0},variation:{amount:0,rateHz:4,seedOffset:0},gestureId:segment.gestures?.[0]?.id||null,mappings:[]});state.selectedLayerId=id;});setWorkspaceContext('layer-edit');}
-function removeScoreLayer(){const segment=selectedSegment();if(!segment||segment.layers.length<=1)return;scoreEdit(()=>{const index=Math.max(0,segment.layers.findIndex(row=>row.id===state.selectedLayerId));segment.layers.splice(index,1);state.selectedLayerId=segment.layers[Math.min(index,segment.layers.length-1)]?.id||null;});}
-function moveScoreLayer(direction){const segment=selectedSegment();if(!segment)return;const index=segment.layers.findIndex(row=>row.id===state.selectedLayerId),next=index+direction;if(index<0||next<0||next>=segment.layers.length)return;scoreEdit(()=>{[segment.layers[index],segment.layers[next]]=[segment.layers[next],segment.layers[index]];});}
-function addScoreMapping(){const layer=selectedLayer();if(!layer)return;scoreEdit(()=>{layer.mappings??=[];layer.mappings.push({id:uniqueMappingId(layer,'mapping'),source:'manual.constant',target:'binding.strength',inputRange:[0,1],outputRange:[.5,.8],curve:'linear',clamp:true,enabled:true});});}
-function resetSelectedLayerMappings(){const segment=selectedSegment(),layer=selectedLayer();if(!segment||!layer)return false;const recommended=recommendedMappingsForLayer(segment.semanticType,layer.id);if(recommended===null)return false;scoreEdit(()=>{layer.mappings=recommended;});return true;}
-function segmentReuseSource(segment=selectedSegment()){if(!segment||!state.score)return null;if(segment.linkedFromSegmentId)return state.score.segments.find(row=>row.id===segment.linkedFromSegmentId)||null;const rows=state.score.segments,index=rows.findIndex(row=>row.id===segment.id),matches=rows.map((row,i)=>({row,i})).filter(({row})=>row.id!==segment.id&&row.semanticType===segment.semanticType);return matches.filter(({i})=>i<index).at(-1)?.row||matches[0]?.row||null;}
-function reuseSegmentDesign(link=false){const target=selectedSegment(),source=segmentReuseSource(target);if(!target||!source)return;scoreEdit(()=>{copySegmentDesign(state.score,source.id,target.id,{link});state.selectedLayerId=target.layers?.[0]?.id||null;state.selectedGestureId=target.layers?.[0]?.gestureId||target.gestures?.[0]?.id||null;},{preserveLink:true});}
-function unlinkSegmentDesign(){const target=selectedSegment();if(!target?.linkedFromSegmentId)return;scoreEdit(()=>{delete target.linkedFromSegmentId;},{preserveLink:true});}
-function renderSegmentReuse(){const target=selectedSegment(),source=segmentReuseSource(target),linked=!!target?.linkedFromSegmentId,bar=document.querySelector('.segment-reuse-bar'),copy=$('sl-segment-copy'),link=$('sl-segment-link'),unlink=$('sl-segment-unlink'),status=$('sl-segment-link-state');if(!copy||!link||!unlink||!status)return;if(bar)bar.hidden=!source&&!linked;copy.disabled=!source;link.disabled=!source||linked;unlink.disabled=!linked;copy.textContent=source?`Copy ${source.label}`:'Copy design';link.textContent=source?`Link ${source.label}`:'Link design';status.textContent=linked&&source?`Linked to ${source.label} · edits detach automatically`:'Independent segment design';}
+/* ---------- rendering ---------- */
 
-function updateScoreHistoryButtons(){$('sl-score-undo').disabled=!state.scoreHistory.undo.length;$('sl-score-redo').disabled=!state.scoreHistory.redo.length;}
-function creativeHistorySnapshot(){return{score:clone(state.score),controls:snapshotValues()};}
-function pushScoreHistory(snapshot=creativeHistorySnapshot()){if(!state.score)return;state.scoreHistory.undo.push(snapshot);if(state.scoreHistory.undo.length>64)state.scoreHistory.undo.shift();state.scoreHistory.redo=[];updateScoreHistoryButtons();}
-function finishScoreEdit({preview=true}={}){saveScoreDraft();renderSoundScore();if(preview)renderPreview();updateScoreHistoryButtons();}
-function restoreCreativeHistory(snapshot){if(!snapshot)return;const row=snapshot?.score? snapshot:{score:snapshot,controls:null};state.score=clone(row.score);if(row.controls)applySnapshot(row.controls,{preview:false});if(!state.score.segments.some(item=>item.id===state.selectedSegmentId))state.selectedSegmentId=state.score.segments[0]?.id||null;const segment=selectedSegment();if(!segment?.layers?.some(item=>item.id===state.selectedLayerId))state.selectedLayerId=segment?.layers?.[0]?.id||null;syncSelectedGesture();syncSelectedSegmentWindow();}
-function undoScore(){if(!state.scoreHistory.undo.length||!state.score)return;state.scoreHistory.redo.push(creativeHistorySnapshot());restoreCreativeHistory(state.scoreHistory.undo.pop());finishScoreEdit();}
-function redoScore(){if(!state.scoreHistory.redo.length||!state.score)return;state.scoreHistory.undo.push(creativeHistorySnapshot());restoreCreativeHistory(state.scoreHistory.redo.pop());finishScoreEdit();}
-function drawGestureCanvas(points=null){
-  const canvas=$('sl-gesture-canvas'),ctx=canvas?.getContext('2d'),segment=selectedSegment(),gesture=selectedGesture();if(!ctx)return;const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#24303b';ctx.lineWidth=1;for(let i=1;i<4;i+=1){ctx.beginPath();ctx.moveTo(i*w/4,0);ctx.lineTo(i*w/4,h);ctx.stroke();}ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
-  const stroke=(rows,color,width,dash=[])=>{if(rows.length<2)return;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.setLineDash(dash);ctx.beginPath();rows.forEach((row,index)=>{const x=clamp(Number(row.x??row.progress),0,1)*w,y=clamp(Number(row.y),0,1)*h;if(index)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();ctx.restore();};
-  const native=state.scoreIntent&&segment?generatedGestureForSegment(state.scoreIntent,segment)?.points||[]:[];stroke(native,'#536371',1.5,[6,5]);const rows=points||gesture?.points||[];stroke(rows,'#e4ad55',3);if(rows.length<2)return;ctx.fillStyle='#f3d28c';for(const row of rows.filter((_,index)=>index%Math.max(1,Math.floor(rows.length/8))===0)){ctx.beginPath();ctx.arc(clamp(Number(row.x??row.progress),0,1)*w,clamp(Number(row.y),0,1)*h,2+clamp(Number(row.pressure??.5),0,1)*2,0,Math.PI*2);ctx.fill();}}
-
-const MAPPING_SOURCE_LABELS={
-  'native.speed':'Motion speed','native.velocityX':'Horizontal speed','native.velocityY':'Vertical speed','native.acceleration':'Acceleration','native.progress':'Segment progress','native.distance':'Distance traveled','native.proofDistance':'Distance from proof event',
-  'gesture.width':'Gesture width','gesture.pressure':'Gesture pressure','gesture.curvature':'Gesture curvature','gesture.wiggle':'Gesture roughness','gesture.deviation':'Gesture deviation','gesture.drawSpeed':'Drawing speed','gesture.phase':'Gesture phase','gesture.frequency':'Gesture frequency',
-  'manual.constant':'Constant value','manual.automation':'Automation curve','manual.envelope':'Envelope'
-};
-const MAPPING_TARGET_LABELS={
-  'binding.strength':'Intensity','recipe.mapping.contactDensity':'Contact density','recipe.mapping.transientGain':'Transient level','recipe.mapping.bodyGain':'Body level','recipe.mapping.residualGain':'Residual level','recipe.mapping.frictionGain':'Friction level','recipe.perceptual.brightness':'Brightness','material.contact.roughness':'Roughness','material.transient.hardness':'Hardness','object.modal.decayScale':'Resonance length','object.modal.frequencyScale':'Resonance pitch','style.finishing.masterGain':'Master level'
-};
-function mappingPlainLabel(map){return `${MAPPING_SOURCE_LABELS[map?.source]||String(map?.source||'Input').replaceAll('.',' ')} → ${MAPPING_TARGET_LABELS[map?.target]||String(map?.target||'Parameter').replaceAll('.',' ')}`;}
-function mappingResponseValue(map,recommended){if(!map||!recommended)return null;const a=Number(recommended.outputRange?.[0]),b=Number(recommended.outputRange?.[1]),current=Number(map.outputRange?.[1]);if(!Number.isFinite(a)||!Number.isFinite(b)||!Number.isFinite(current)||Math.abs(b-a)<1e-9)return null;return clamp((current-a)/(b-a));}
-function mappingWithResponse(map,recommended,response){if(!map||!recommended)return clone(map);const next=clone(map),a=Number(recommended.outputRange?.[0]),b=Number(recommended.outputRange?.[1]);if(!Number.isFinite(a)||!Number.isFinite(b))return next;next.outputRange=[a,a+(b-a)*clamp(response)];return next;}
-function recommendedMappingFor(segment,layer,map){return recommendedMappingsForLayer(segment?.semanticType,layer?.id)?.find(row=>row.id===map?.id)||null;}
-function mappingOptionNodes(values,current){const rows=[...values];if(current&&!rows.includes(current))rows.push(current);return rows.map(value=>new Option(value,value,value===current,value===current));}
-function renderMappingEditor(layer,evalById){const host=$('sl-mapping-editor');if(!host)return;const mappings=layer?.mappings||[],segment=selectedSegment();if(!mappings.length){const empty=document.createElement('div');empty.className='mapping-empty';empty.textContent='No mapping on this layer. Add one to connect motion, gesture, or automation to a reviewed parameter.';host.replaceChildren(empty);return;}
-  const rows=mappings.map(map=>{const row=document.createElement('div');row.className='mapping-row';const semantic=document.createElement('div');semantic.className='mapping-semantic';const relation=document.createElement('strong');relation.textContent=mappingPlainLabel(map);semantic.append(relation);const recommended=recommendedMappingFor(segment,layer,map),responseValue=mappingResponseValue(map,recommended);if(responseValue!=null){const response=document.createElement('label');response.className='mapping-response';const title=document.createElement('span');title.textContent='Response';const slider=document.createElement('input');slider.type='range';slider.min='0';slider.max='1';slider.step='0.01';slider.value=String(responseValue);slider.setAttribute('aria-label',`${mappingPlainLabel(map)} response`);const output=document.createElement('output');output.textContent=`${Math.round(responseValue*100)}%`;slider.addEventListener('input',()=>output.textContent=`${Math.round(Number(slider.value)*100)}%`);slider.addEventListener('change',()=>scoreEdit(()=>{const index=layer.mappings.findIndex(item=>item.id===map.id);if(index>=0)layer.mappings[index]=mappingWithResponse(layer.mappings[index],recommended,Number(slider.value));}));response.append(title,slider,output);semantic.append(response);}else{const hint=document.createElement('small');hint.textContent='Custom mapping · edit exact values below';semantic.append(hint);}
-    const details=document.createElement('details');details.className='mapping-exact';const summary=document.createElement('summary');summary.textContent='Exact mapping values';details.append(summary);const exact=document.createElement('div');exact.className='mapping-exact-grid';const source=document.createElement('select');source.setAttribute('aria-label','Mapping source');source.replaceChildren(...mappingOptionNodes(SCORE_MAPPING_SOURCES,map.source));const target=document.createElement('select');target.setAttribute('aria-label','Mapping target');target.replaceChildren(...mappingOptionNodes(SCORE_MAPPING_TARGETS,map.target));const curve=document.createElement('select');curve.setAttribute('aria-label','Mapping curve');curve.replaceChildren(...mappingOptionNodes(['linear','ease-in','ease-out','smoothstep'],map.curve||'linear'));const inMin=document.createElement('input');inMin.type='number';inMin.step='0.01';inMin.value=String(map.inputRange?.[0]??0);inMin.setAttribute('aria-label','Mapping input minimum');const inMax=document.createElement('input');inMax.type='number';inMax.step='0.01';inMax.value=String(map.inputRange?.[1]??1);inMax.setAttribute('aria-label','Mapping input maximum');const outMin=document.createElement('input');outMin.type='number';outMin.step='0.01';outMin.value=String(map.outputRange?.[0]??0);outMin.setAttribute('aria-label','Mapping output minimum');const outMax=document.createElement('input');outMax.type='number';outMax.step='0.01';outMax.value=String(map.outputRange?.[1]??1);outMax.setAttribute('aria-label','Mapping output maximum');const clampButton=document.createElement('button');clampButton.type='button';clampButton.textContent='Clamp';clampButton.title='Clamp mapping input to its input range';clampButton.setAttribute('aria-pressed',String(map.clamp!==false));const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.title='Remove mapping';
-    const mutate=fn=>scoreEdit(()=>fn(map));source.addEventListener('change',()=>mutate(current=>{current.source=source.value;if(current.source==='manual.automation'){current.automation??=[{progress:0,value:0},{progress:1,value:1}];delete current.envelope;}else if(current.source==='manual.envelope'){current.envelope??={attackEnd:.2,releaseStart:.8};delete current.automation;}else{delete current.automation;delete current.envelope;}}));target.addEventListener('change',()=>mutate(current=>current.target=target.value));curve.addEventListener('change',()=>mutate(current=>current.curve=curve.value));inMin.addEventListener('change',()=>mutate(current=>current.inputRange=[Number(inMin.value),Number(current.inputRange?.[1]??1)]));inMax.addEventListener('change',()=>mutate(current=>current.inputRange=[Number(current.inputRange?.[0]??0),Number(inMax.value)]));outMin.addEventListener('change',()=>mutate(current=>current.outputRange=[Number(outMin.value),Number(current.outputRange?.[1]??1)]));outMax.addEventListener('change',()=>mutate(current=>current.outputRange=[Number(current.outputRange?.[0]??0),Number(outMax.value)]));clampButton.addEventListener('click',()=>mutate(current=>current.clamp=current.clamp===false));remove.addEventListener('click',()=>scoreEdit(()=>{layer.mappings=layer.mappings.filter(item=>item.id!==map.id);}));
-    const automation=document.createElement('div');automation.className='mapping-automation';automation.hidden=map.source!=='manual.automation';if(!automation.hidden){const head=document.createElement('div');head.className='mapping-automation-head';const title=document.createElement('span');title.textContent='Automation keyframes';const add=document.createElement('button');add.type='button';add.textContent='+ Keyframe';add.addEventListener('click',()=>mutate(current=>{const points=(current.automation||[{progress:0,value:0},{progress:1,value:1}]).slice().sort((a,b)=>Number(a.progress)-Number(b.progress));let gap=-1,index=0;for(let i=0;i<points.length-1;i+=1){const width=Number(points[i+1].progress)-Number(points[i].progress);if(width>gap){gap=width;index=i;}}const a=points[index],b=points[index+1],progress=(Number(a.progress)+Number(b.progress))/2,value=(Number(a.value)+Number(b.value))/2;points.push({progress,value});current.automation=points.sort((x,y)=>Number(x.progress)-Number(y.progress));}));head.append(title,add);const points=document.createElement('div');points.className='mapping-automation-points';const sorted=(map.automation||[{progress:0,value:0},{progress:1,value:1}]).slice().sort((a,b)=>Number(a.progress)-Number(b.progress));sorted.forEach((point,index)=>{const pointRow=document.createElement('div');pointRow.className='mapping-keyframe';const progress=document.createElement('input');progress.type='number';progress.min='0';progress.max='1';progress.step='0.01';progress.value=String(Number(point.progress));progress.setAttribute('aria-label',`Automation keyframe ${index+1} progress`);const value=document.createElement('input');value.type='number';value.step='0.01';value.value=String(Number(point.value));value.setAttribute('aria-label',`Automation keyframe ${index+1} value`);const deletePoint=document.createElement('button');deletePoint.type='button';deletePoint.textContent='×';deletePoint.title='Remove keyframe';const endpoint=index===0||index===sorted.length-1;progress.disabled=endpoint;deletePoint.disabled=endpoint;progress.addEventListener('change',()=>mutate(current=>{const targetPoint=(current.automation||[]).find(item=>Number(item.progress)===Number(point.progress)&&Number(item.value)===Number(point.value))||current.automation?.[index];if(!targetPoint)return;targetPoint.progress=clamp(Number(progress.value),.001,.999);current.automation.sort((a,b)=>Number(a.progress)-Number(b.progress));}));value.addEventListener('change',()=>mutate(current=>{const targetPoint=(current.automation||[]).find(item=>Number(item.progress)===Number(point.progress)&&Number(item.value)===Number(point.value))||current.automation?.[index];if(targetPoint)targetPoint.value=Number(value.value);}));deletePoint.addEventListener('click',()=>mutate(current=>{if((current.automation||[]).length<=2)return;const targetIndex=(current.automation||[]).findIndex(item=>Number(item.progress)===Number(point.progress)&&Number(item.value)===Number(point.value));if(targetIndex>0&&targetIndex<current.automation.length-1)current.automation.splice(targetIndex,1);}));pointRow.append(progress,value,deletePoint);points.append(pointRow);});automation.append(head,points);}
-    const envelope=document.createElement('div');envelope.className='mapping-envelope';envelope.hidden=map.source!=='manual.envelope';if(!envelope.hidden){const attack=document.createElement('input');attack.type='number';attack.min='0';attack.max='1';attack.step='0.01';attack.value=String(Number(map.envelope?.attackEnd??.2));attack.setAttribute('aria-label','Envelope attack end');const release=document.createElement('input');release.type='number';release.min='0';release.max='1';release.step='0.01';release.value=String(Number(map.envelope?.releaseStart??.8));release.setAttribute('aria-label','Envelope release start');attack.addEventListener('change',()=>mutate(current=>{current.envelope??={attackEnd:.2,releaseStart:.8};current.envelope.attackEnd=clamp(Number(attack.value),0,Number(current.envelope.releaseStart??1));}));release.addEventListener('change',()=>mutate(current=>{current.envelope??={attackEnd:.2,releaseStart:.8};current.envelope.releaseStart=clamp(Number(release.value),Number(current.envelope.attackEnd??0),1);}));const attackLabel=document.createElement('label');attackLabel.textContent='Attack end';attackLabel.append(attack);const releaseLabel=document.createElement('label');releaseLabel.textContent='Release start';releaseLabel.append(release);envelope.append(attackLabel,releaseLabel);}
-    const variation=document.createElement('div');variation.className='mapping-variation';const variationAmount=document.createElement('input');variationAmount.type='number';variationAmount.min='0';variationAmount.max='1';variationAmount.step='0.01';variationAmount.value=String(Number(map.variation?.amount??0));variationAmount.setAttribute('aria-label','Mapping variation amount');const variationRate=document.createElement('input');variationRate.type='number';variationRate.min='.25';variationRate.max='32';variationRate.step='.25';variationRate.value=String(Number(map.variation?.rateCycles??4));variationRate.setAttribute('aria-label','Mapping variation cycles');const variationSeed=document.createElement('input');variationSeed.type='number';variationSeed.step='1';variationSeed.value=String(Math.round(Number(map.variation?.seedOffset??0)));variationSeed.setAttribute('aria-label','Mapping variation seed offset');const setVariation=(key,value)=>mutate(current=>{current.variation??={amount:0,rateCycles:4,seedOffset:0};current.variation[key]=value;if(Number(current.variation.amount||0)===0&&Number(current.variation.rateCycles||4)===4&&Number(current.variation.seedOffset||0)===0)delete current.variation;});variationAmount.addEventListener('change',()=>setVariation('amount',clamp(Number(variationAmount.value),0,1)));variationRate.addEventListener('change',()=>setVariation('rateCycles',clamp(Number(variationRate.value),.25,32)));variationSeed.addEventListener('change',()=>setVariation('seedOffset',Math.round(Number(variationSeed.value)||0)));for(const [title,input] of [['Variation',variationAmount],['Cycles',variationRate],['Seed',variationSeed]]){const label=document.createElement('label');label.textContent=title;label.append(input);variation.append(label);}
-    const evaluated=evalById.get(`${layer.id}:${map.id}`);if(evaluated)semantic.title=`source ${Number(evaluated.sourceValue).toFixed(3)} → ${Number(evaluated.value).toFixed(3)}`;exact.append(source,target,curve,inMin,inMax,outMin,outMax,clampButton,remove,automation,envelope,variation);details.append(exact);row.append(semantic,details);return row;});host.replaceChildren(...rows);
-}
-
-function renderLayerSourceParameters(layer){const host=$('sl-layer-source-params');if(!host)return;const specs=layerSourceParameterSpecs(layer?.source?.type);host.hidden=!layer||!specs.length;if(host.hidden){host.replaceChildren();return;}const params=layer.source.params||{};const rows=specs.map(spec=>{const label=document.createElement('label');const title=document.createElement('span');title.textContent=spec.label;const row=document.createElement('div');row.className='source-param-row';const input=document.createElement('input');input.type='number';input.min=String(spec.min);input.max=String(spec.max);input.step=String(spec.step);input.value=String(Number(params[spec.key]??spec.default));input.setAttribute('aria-label',`Layer source parameter ${spec.label}`);const unit=document.createElement('output');unit.textContent=spec.unit||'';input.addEventListener('change',()=>{const current=selectedLayer();if(!current||current.id!==layer.id)return;const raw=clamp(Number(input.value),spec.min,spec.max),value=spec.integer?Math.round(raw):raw;scoreEdit(()=>{current.source.params??={};current.source.params[spec.key]=value;});});row.append(input,unit);label.append(title,row);return label;});host.replaceChildren(...rows);}
-function renderLayerShaping(layer){const fields=[['sl-layer-attack-ms',Number(layer?.envelope?.attackMs??0)],['sl-layer-release-ms',Number(layer?.envelope?.releaseMs??0)],['sl-layer-variation-amount',Number(layer?.variation?.amount??0)],['sl-layer-variation-rate',Number(layer?.variation?.rateHz??4)],['sl-layer-variation-seed',Math.round(Number(layer?.variation?.seedOffset??0))]];for(const [id,value] of fields){const input=$(id);if(!input)continue;input.disabled=!layer;input.value=String(value);}}
-function renderLayerEditor(){
-  const segment=selectedSegment();if(!segment)return;if(!segment.layers.some(row=>row.id===state.selectedLayerId))state.selectedLayerId=segment.layers[0]?.id||null;const layer=selectedLayer();$('sl-layer-title').textContent=segment.label||segment.semanticType;
-  const nodes=segment.layers.map(row=>{const wrap=document.createElement('div');wrap.className='layer-row';wrap.classList.toggle('active',row.id===state.selectedLayerId);const select=document.createElement('button');select.type='button';select.textContent=`${row.label} · ${Number(row.gain??1).toFixed(2)}`;select.title=`${row.source?.type||'layer'} · gain ${Number(row.gain??1).toFixed(2)}`;select.addEventListener('click',()=>{state.selectedLayerId=row.id;state.selectedGestureId=row.gestureId||segment.gestures?.[0]?.id||null;setWorkspaceContext('layer-edit');renderGestureEditor();if(state.analysisSource==='layer')void refreshScoreAnalysis();});const enabled=document.createElement('button');enabled.type='button';enabled.className='layer-toggle';enabled.textContent='On';enabled.setAttribute('aria-pressed',String(row.enabled!==false));enabled.addEventListener('click',()=>scoreEdit(()=>row.enabled=row.enabled===false));const solo=document.createElement('button');solo.type='button';solo.className='layer-solo';solo.textContent='Solo';solo.setAttribute('aria-pressed',String(!!row.solo));solo.addEventListener('click',()=>scoreEdit(()=>row.solo=!row.solo));wrap.append(select,enabled,solo);return wrap;});$('sl-layer-stack').replaceChildren(...nodes);
-  const index=segment.layers.findIndex(row=>row.id===layer?.id);$('sl-layer-remove').disabled=!layer||segment.layers.length<=1;$('sl-layer-up').disabled=index<=0;$('sl-layer-down').disabled=index<0||index>=segment.layers.length-1;$('sl-layer-source').disabled=!layer;$('sl-layer-gain').disabled=!layer;$('sl-layer-gesture').disabled=!layer;$('sl-mapping-add').disabled=!layer;const recommended=layer?recommendedMappingsForLayer(segment.semanticType,layer.id):null;$('sl-mapping-reset').disabled=recommended===null;
-  if(layer){$('sl-layer-label').value=String(layer.label||layer.id||'Layer');$('sl-layer-source').value=SCORE_LAYER_SOURCES.includes(layer.source?.type)?layer.source.type:'binding';$('sl-layer-gain').value=String(Number(layer.gain??1));$('sl-layer-gain-out').textContent=Number(layer.gain??1).toFixed(2);$('sl-layer-gesture').replaceChildren(...(segment.gestures||[]).map(row=>new Option(row.label||row.id,row.id,row.id===layer.gestureId,row.id===layer.gestureId)));const frozen=layer.source?.type==='frozen-sample',wrap=$('sl-layer-source-id-wrap');wrap.hidden=!frozen;if(frozen){const sources=sourceOptions(state.manifest);$('sl-layer-source-id').replaceChildren(...sources.map(row=>new Option(`${row.id} · ${row.role}`,row.id,row.id===layer.source?.id,row.id===layer.source?.id)));}}
-  renderLayerSourceParameters(layer);renderLayerShaping(layer);
-  const intent=state.scoreIntent||currentSceneIntent(currentBinding()),compiled=intent&&state.score?compileSoundScoreAdjustments(state.score,intent,{segmentId:segment.id}):null,evalById=new Map((compiled?.evaluations||[]).map(row=>[`${row.layerId}:${row.mappingId}`,row]));const lines=[];for(const map of layer?.mappings||[]){const value=evalById.get(`${layer.id}:${map.id}`);lines.push(`<span class="mapping-line"><strong>${map.source}</strong> → ${map.target}${value?` = ${Number(value.value).toFixed(3)}`:''}</span>`);} $('sl-mapping-summary').innerHTML=lines.length?lines.join(''):'This layer has no explicit mappings yet.';renderMappingEditor(layer,evalById);
-}
-function gestureAnchorIndices(points){const last=Math.max(0,(points?.length||1)-1);return [...new Set([0,.25,.5,.75,1].map(progress=>Math.round(progress*last)))];}
-function smoothGesturePoints(points){const rows=normalizeGesture(points||[],{samples:32});if(rows.length<3)return rows;return rows.map((row,index)=>{if(index===0||index===rows.length-1)return{...row};const a=rows[index-1],b=rows[index],c=rows[index+1],mean=key=>(Number(a[key]||0)+Number(b[key]||0)+Number(c[key]||0))/3;return{...row,y:mean('y'),pressure:mean('pressure'),width:mean('width'),drawSpeed:mean('drawSpeed')};});}
-function applyGestureAnchor(points,anchorIndex,channel,value){const rows=normalizeGesture(points||[],{samples:32}),anchors=gestureAnchorIndices(rows);if(!rows.length||!anchors.includes(anchorIndex)||!['y','pressure'].includes(channel))return rows;const values=new Map(anchors.map(index=>[index,Number(rows[index]?.[channel]||0)]));values.set(anchorIndex,clamp(Number(value),0,1));for(let span=0;span<anchors.length-1;span+=1){const a=anchors[span],b=anchors[span+1],av=values.get(a),bv=values.get(b);for(let index=a;index<=b;index+=1){const t=(index-a)/Math.max(1,b-a);rows[index]={...rows[index],[channel]:av+(bv-av)*t};}}return rows;}
-function setGestureTool(tool){if(!['draw','erase'].includes(tool))return;state.gestureTool=tool;setWorkspaceContext('gesture-edit');$('sl-gesture-draw').setAttribute('aria-pressed',String(tool==='draw'));$('sl-gesture-erase').setAttribute('aria-pressed',String(tool==='erase'));$('sl-gesture-canvas').dataset.tool=tool;$('sl-gesture-status').textContent=tool==='erase'?'Erase restores brushed regions toward the authoritative native-motion gesture.':'Draw across the canvas to reshape the selected gesture. Pen pressure is used when available.';}
-function renderGestureNumeric(gesture){const host=$('sl-gesture-anchors');if(!host)return;const points=gesture?.points||[];const anchors=gestureAnchorIndices(points);const nodes=anchors.map((index,ordinal)=>{const row=document.createElement('div');row.className='gesture-anchor';const label=document.createElement('span');label.textContent=`${Math.round(Number(points[index]?.progress??index/Math.max(1,points.length-1))*100)}%`;const make=(channel,title)=>{const wrap=document.createElement('label');wrap.textContent=title;const input=document.createElement('input');input.type='number';input.min='0';input.max='1';input.step='0.01';input.value=Number(points[index]?.[channel]??0).toFixed(2);input.setAttribute('aria-label',`Gesture anchor ${ordinal+1} ${channel}`);input.addEventListener('change',()=>queueMicrotask(()=>scoreEdit(()=>{const target=selectedGesture();if(!target)return;target.points=applyGestureAnchor(target.points,index,channel,input.value);target.kind='authored';target.label='Authored gesture';})));wrap.append(input);return wrap;};row.append(label,make('y','Height'),make('pressure','Pressure'));return row;});host.replaceChildren(...nodes);}
-function renderGestureEditor(){const segment=selectedSegment();if(!segment)return;const gesture=syncSelectedGesture();if(!gesture)return;const picker=$('sl-gesture-select');picker.replaceChildren(...segment.gestures.map(row=>new Option(row.label||row.id,row.id,row.id===gesture.id,row.id===gesture.id)));$('sl-gesture-title').textContent=gesture.kind==='authored'?'Authored gesture':gesture.label||'Generated motion';$('sl-gesture-draw').setAttribute('aria-pressed',String(state.gestureTool==='draw'));$('sl-gesture-erase').setAttribute('aria-pressed',String(state.gestureTool==='erase'));$('sl-gesture-canvas').dataset.tool=state.gestureTool;drawGestureCanvas();renderGestureNumeric(gesture);renderLayerEditor();updateScoreHistoryButtons();}
-function gesturePointFromEvent(event){const canvas=$('sl-gesture-canvas'),rect=canvas.getBoundingClientRect(),now=performance.now(),x=clamp((event.clientX-rect.left)/Math.max(1,rect.width),0,1),y=clamp((event.clientY-rect.top)/Math.max(1,rect.height),0,1),rawPressure=event.pressure>0?clamp(event.pressure,0,1):.5,pointerType=event.pointerType||'mouse',pressure=pointerType==='mouse'?rawPressure:calibratePressure(rawPressure,state.penPressure),previous=state.gestureDraw?.points?.at?.(-1),previousTime=state.gestureDraw?.time??now,dist=previous?Math.hypot(x-previous.x,y-previous.y):0,drawSpeed=clamp(dist/Math.max(.001,(now-previousTime)/1000),0,4)/4;updatePressurePreview(rawPressure,pressure,pointerType);return{x,y,pressure,width:pressure,drawSpeed,time:now};}
-function gestureCanvasProgressFromEvent(event){const rect=$('sl-gesture-canvas').getBoundingClientRect();return clamp((event.clientX-rect.left)/Math.max(1,rect.width),0,1);}
-function eraseGestureAtProgress(progress){const segment=selectedSegment(),gesture=selectedGesture();if(!segment||!gesture||!state.scoreIntent)return false;const current=normalizeGesture(gesture.points||[],{samples:32}),native=normalizeGesture(generatedGestureForSegment(state.scoreIntent,segment)?.points||[],{samples:32});let changed=false;for(let index=0;index<current.length;index+=1){if(Math.abs(Number(current[index].progress)-progress)>.07)continue;for(const key of ['y','pressure','width','drawSpeed']){const next=Number(native[index]?.[key]??current[index][key]??0);if(Math.abs(Number(current[index][key]??0)-next)>1e-6)changed=true;current[index][key]=next;}}if(changed){gesture.points=current;gesture.kind='authored';gesture.label='Authored gesture';}return changed;}
-function beginGestureDraw(event){if(!state.score||!selectedGesture())return;event.preventDefault();pushScoreHistory();$('sl-gesture-canvas').setPointerCapture?.(event.pointerId);setWorkspaceContext('gesture-edit');if(state.gestureTool==='erase'){state.gestureDraw={pointerId:event.pointerId,mode:'erase',changed:false,pointerType:event.pointerType||'mouse'};state.gestureDraw.changed=eraseGestureAtProgress(gestureCanvasProgressFromEvent(event))||state.gestureDraw.changed;$('sl-gesture-status').textContent='Erasing toward native motion…';drawGestureCanvas();return;}const point=gesturePointFromEvent(event);state.gestureDraw={pointerId:event.pointerId,mode:'draw',points:[point],time:point.time,pointerType:event.pointerType||'mouse'};$('sl-gesture-status').textContent=`Drawing with ${state.gestureDraw.pointerType}${event.pointerType==='pen'?' · pressure enabled':''}`;drawGestureCanvas(state.gestureDraw.points);}
-function moveGestureDraw(event){if(!state.gestureDraw||state.gestureDraw.pointerId!==event.pointerId)return;event.preventDefault();if(state.gestureDraw.mode==='erase'){state.gestureDraw.changed=eraseGestureAtProgress(gestureCanvasProgressFromEvent(event))||state.gestureDraw.changed;drawGestureCanvas();return;}const point=gesturePointFromEvent(event),last=state.gestureDraw.points.at(-1);if(!last||Math.hypot(point.x-last.x,point.y-last.y)>.003){state.gestureDraw.points.push(point);state.gestureDraw.time=point.time;drawGestureCanvas(state.gestureDraw.points);}}
-function endGestureDraw(event){if(!state.gestureDraw||state.gestureDraw.pointerId!==event.pointerId)return;event.preventDefault();const edit=state.gestureDraw;state.gestureDraw=null;if(edit.mode==='erase'){if(!edit.changed){state.scoreHistory.undo.pop();updateScoreHistoryButtons();renderGestureEditor();return;}$('sl-gesture-status').textContent='Erased region restored toward native motion.';finishScoreEdit();return;}const raw=edit.points.map(({time,...row})=>row);if(raw.length<2){state.scoreHistory.undo.pop();updateScoreHistoryButtons();renderGestureEditor();return;}const points=normalizeGesture(raw,{samples:32}),gesture=selectedGesture();Object.assign(gesture,{id:gesture.id||'generated',label:'Authored gesture',kind:'authored',points});$('sl-gesture-status').textContent=`Authored ${points.length}-point gesture · deterministic resample`;finishScoreEdit();}
-function smoothSelectedGesture(){const gesture=selectedGesture();if(!gesture)return;scoreEdit(()=>{gesture.points=smoothGesturePoints(gesture.points);gesture.kind='authored';gesture.label='Authored gesture';});$('sl-gesture-status').textContent='Smoothed selected gesture with deterministic three-point averaging.';}
-function resetSelectedGesture(){const segment=selectedSegment(),gesture=selectedGesture();if(!segment||!gesture||!state.scoreIntent)return;pushScoreHistory();const generated=generatedGestureForSegment(state.scoreIntent,segment),id=gesture.id;Object.assign(gesture,generated,{id});state.selectedGestureId=id;$('sl-gesture-status').textContent='Reset to authoritative native-motion suggestion without changing gesture identity.';finishScoreEdit();}
-
-function scorePercent(frame){const sequence=state.score?.sequence;if(!sequence)return 0;return clamp(100*(Number(frame)-sequence.startFrame)/Math.max(1,sequence.endFrame-sequence.startFrame),0,100);}
-function renderScorePlayhead(){const left=`${scorePercent(state.playheadFrame??state.score?.sequence?.startFrame??0)}%`;document.querySelectorAll('.timeline-playhead').forEach(node=>{node.style.left=left;node.style.opacity=state.playheadFrame==null?'0':'1';});}
-function drawMotionLane(){const canvas=$('sl-motion-lane');if(!canvas||!state.score)return;const ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,path=(state.scene?.path||[]).filter(row=>row.frameSerial>=state.score.sequence.startFrame&&row.frameSerial<=state.score.sequence.endFrame);ctx.clearRect(0,0,w,h);if(path.length<2)return;const speeds=path.map((row,index)=>{const previous=path[Math.max(0,index-1)];return Math.hypot(Number(row.x)-Number(previous.x),Number(row.y)-Number(previous.y));}),max=Math.max(1,...speeds);ctx.strokeStyle='#6f8091';ctx.lineWidth=2;ctx.beginPath();path.forEach((row,index)=>{const x=scorePercent(row.frameSerial)*w/100,y=h-4-(speeds[index]/max)*(h-8);if(index)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();}
-function updateScoreVersionUi(){
-  document.querySelectorAll('[data-audio-version]').forEach(button=>button.classList.toggle('active',button.dataset.audioVersion===state.audioVersion));
-  document.querySelectorAll('[data-playback-scope]').forEach(button=>button.classList.toggle('active',button.dataset.playbackScope===state.playbackScope));
-  document.querySelectorAll('[data-segment-loop]').forEach(button=>{button.classList.toggle('active',button.dataset.segmentLoop===state.segmentLoopMode);button.disabled=state.playbackScope!=='selected';});
-  const candidate=state.audioVersion==='draft'?rollReviewSelection():null,label=candidate?`Review: ${candidate.label} · ${state.rollReviewQuality==='game'?'PCM8':'48 kHz'}`:state.audioVersion[0].toUpperCase()+state.audioVersion.slice(1),scopeLabel=state.playbackScope==='selected'?(selectedSegment()?.label||'segment'):state.playbackScope==='sequence'?'sequence':'scene',play=$('sl-play-score');if(play){play.textContent=`Play ${scopeLabel} · ${label}`;play.title=`Replay the ${scopeLabel} using ${label} audio`;}$('sl-waveform-version').textContent=label;if($('sl-scene-audio-version'))$('sl-scene-audio-version').textContent=label;if($('sl-analysis-version'))$('sl-analysis-version').textContent=label;if($('sl-publish-audio-version'))$('sl-publish-audio-version').textContent=`Listening ${label}`;
-}
-function selectedLoopRange(){if(!state.score||!state.scene)return null;const custom=state.customLoopRanges[state.selectedSegmentId];return selectedPlaybackRange(state.score,state.scene,state.selectedSegmentId,{mode:state.segmentLoopMode,contextFrames:2,customRange:custom?[custom.startFrame,custom.endFrame]:null});}
-function syncSelectedSegmentWindow(){const range=selectedLoopRange();if(!range)return;state.sceneWindow={...range};renderSceneWindow();}
-function setSegmentLoopMode(mode,{preserveWindow=false}={}){if(!['exact','context','custom'].includes(mode)||!state.score||!state.scene)return;if(mode==='custom'&&preserveWindow&&state.sceneWindow)state.customLoopRanges[state.selectedSegmentId]={...state.sceneWindow};state.segmentLoopMode=mode;syncSelectedSegmentWindow();renderSoundScore();}
-function setAuthoringRangeEdge(edge,value){const segment=selectedSegment(),sequence=state.score?.sequence;if(!segment||!sequence)return;const gameStart=Number(segment.gameRange[0]),gameEnd=Number(segment.gameRange[1]),current=[...segment.authoringRange],min=Number(sequence.startFrame),max=Number(sequence.endFrame);let start=current[0],end=current[1];if(edge==='start')start=Math.max(min,Math.min(Math.round(Number(value)),gameStart,end));else end=Math.min(max,Math.max(Math.round(Number(value)),gameEnd,start));scoreEdit(()=>{segment.authoringRange=[start,end];},{preserveLink:true});}
-function selectScoreSegment(id){if(!state.score?.segments?.some(row=>row.id===id))return;state.selectedSegmentId=id;state.selectedLayerId=selectedSegment()?.layers?.[0]?.id||null;state.selectedGestureId=selectedLayer()?.gestureId||selectedSegment()?.gestures?.[0]?.id||null;syncSelectedSegmentWindow();renderSoundScore();renderPreview();setWorkspaceContext('segment-edit');}
-function renderSoundScore(){
-  const workspace=$('sl-score-workspace');if(!state.score||!state.scene){workspace.hidden=true;const layersRail=$('sl-layers-rail');if(layersRail)layersRail.disabled=true;return;}workspace.hidden=false;const layersRail=$('sl-layers-rail');if(layersRail)layersRail.disabled=false;const current=selectedSegment();if(!current)return;
-  $('sl-score-segment-name').textContent=current.label||current.semanticType;$('sl-score-range-readout').textContent=`game ${current.gameRange[0]}–${current.gameRange[1]}f · sound ${current.authoringRange[0]}–${current.authoringRange[1]}f`;const soundStart=$('sl-sound-start'),soundEnd=$('sl-sound-end');if(soundStart&&soundEnd){soundStart.min=String(state.score.sequence.startFrame);soundStart.max=String(current.gameRange[0]);soundStart.value=String(current.authoringRange[0]);soundEnd.min=String(current.gameRange[1]);soundEnd.max=String(state.score.sequence.endFrame);soundEnd.value=String(current.authoringRange[1]);}
-  const buttonFor=segment=>{const button=document.createElement('button');button.type='button';button.className=`segment-chip semantic-${segment.semanticType}`;button.classList.toggle('active',segment.id===state.selectedSegmentId);button.innerHTML=`<strong>${segment.label}</strong><small>${segment.gameRange[0]}–${segment.gameRange[1]}f</small>`;button.addEventListener('click',()=>selectScoreSegment(segment.id));return button;};
-  $('sl-segment-strip').replaceChildren(...state.score.segments.map(buttonFor));
-  const laneFor=(segment,score=false)=>{const button=document.createElement('button');button.type='button';button.className=`timeline-segment semantic-${segment.semanticType}`;button.classList.toggle('active',segment.id===state.selectedSegmentId);const range=score?segment.authoringRange:segment.gameRange;button.style.left=`${scorePercent(range[0])}%`;button.style.width=`${Math.max(.8,scorePercent(range[1])-scorePercent(range[0]))}%`;button.textContent=segment.label;button.title=`${segment.label} ${range[0]}–${range[1]}f`;button.addEventListener('click',()=>selectScoreSegment(segment.id));return button;};
-  const segmentLane=$('sl-segment-lane'),scoreLane=$('sl-score-lane');const segmentAnchors=[...segmentLane.querySelectorAll('i,b')],scoreAnchors=[...scoreLane.querySelectorAll('i,b')];segmentLane.replaceChildren(...state.score.segments.map(segment=>laneFor(segment,false)),...segmentAnchors);scoreLane.replaceChildren(...state.score.segments.map(segment=>laneFor(segment,true)),...scoreAnchors);
-  const proof=scorePercent(state.scene.proofFrame);document.querySelectorAll('.timeline-proof-marker').forEach(marker=>marker.style.left=`${proof}%`);drawMotionLane();renderScorePlayhead();renderSequenceContinuity();renderSegmentReuse();updateScoreVersionUi();renderGestureEditor();
-}
-function sequenceContinuity(){const segments=[...(state.score?.segments||[])].sort((a,b)=>a.authoringRange[0]-b.authoringRange[0]),issues=[];for(let i=1;i<segments.length;i++){const previous=segments[i-1],next=segments[i],gap=next.authoringRange[0]-previous.authoringRange[1]-1,overlap=previous.authoringRange[1]-next.authoringRange[0]+1;if(gap>0)issues.push(`gap ${gap}f ${previous.label}→${next.label}`);else if(overlap>4)issues.push(`overlap ${overlap}f ${previous.label}→${next.label}`);}return issues;}
-function renderSequenceContinuity(){const output=$('sl-sequence-health');if(!output)return;const issues=sequenceContinuity(),transition=scoreTransitionWindow(),button=$('sl-play-transition');output.textContent=issues.length?`Check ${issues.join(' · ')}`:'Sequence continuity: clean';output.classList.toggle('warn',issues.length>0);if(button){button.disabled=!transition;button.title=transition?`Audition ${transition.from} → ${transition.to}, frames ${transition.startFrame}–${transition.endFrame}`:'No adjacent segment';}}
-function scorePlaybackWindow(){if(state.playbackScope==='selected')return selectedLoopRange()||state.sceneWindow;return playbackRange(state.score,state.scene,state.playbackScope,state.selectedSegmentId);}
-function rollReviewSelection(){return state.rollReviewCatalog?.rows?.find(row=>row.id===state.rollReviewId)||null;}
-function rollingReviewSettings(){return rollingReviewTuning({speed:state.rollReviewSpeed,pitch:state.rollReviewPitch,volume:state.rollReviewVolume});}
-function updateRollingTuningUi(){
-  const values=rollingReviewSettings(),chosen=!!state.rollReviewId;
-  for(const [id,value] of [['speed',values.speed],['tempo',state.rollReviewTempo],['pitch',values.pitch],['volume',values.volume]]){
-    const control=$(`sl-roll-review-${id}`);if(control){control.value=String(value);control.disabled=!chosen;}
-  }
-  $('sl-roll-review-reset').disabled=!chosen;
-  $('sl-roll-review-follow').checked=state.rollReviewFollow;
-  $('sl-roll-review-follow').disabled=!chosen;
-  $('sl-roll-review-tempo-value').textContent=`${state.rollReviewTempo.toFixed(2)}×`;
-  $('sl-roll-review-pitch-value').textContent=values.pitch===0?'Normal':`${values.pitch>0?'+':''}${values.pitch} st`;
-  $('sl-roll-review-volume-value').textContent=`${values.volume}%`;
-}
-function changeRollingTuning(id,value){
-  if(!state.rollReviewId)return;
-  if(id==='tempo'){state.rollReviewTempo=Math.max(.5,Math.min(1.5,Number(value)));state.rollReviewPrepared=null;state.rollReviewPreparedLoop=null;updateRollingTuningUi();updateRollReviewUi();return;}
-  const candidate={speed:state.rollReviewSpeed,pitch:state.rollReviewPitch,volume:state.rollReviewVolume,[id]:Number(value)};
-  const settings=rollingReviewTuning(candidate);
-  state.rollReviewSpeed=settings.speed;state.rollReviewPitch=settings.pitch;state.rollReviewVolume=settings.volume;
-  if(id!=='volume'){state.rollReviewPrepared=null;state.rollReviewPreparedLoop=null;}
-  if(id==='volume')for(const source of [state.sceneDraftSource,state.auditionSource])if(source?.reviewGain)source.reviewGain.gain.setValueAtTime(settings.volume/100,audioContext().currentTime);
-  applyRollingAudioMotion();
-  updateRollingTuningUi();updateRollReviewUi();
-}
-function prepareRollingReview(speed=state.rollReviewSpeed,loop=false){
-  if(!state.rollReviewId||!state.rollReviewBuffer)return null;
-  const settings={...rollingReviewSettings(),speed,tempo:state.rollReviewTempo},original=state.rollReviewBuffer;
-  if(speed===state.rollReviewSpeed && (loop?state.rollReviewPreparedLoop:state.rollReviewPrepared))return loop?state.rollReviewPreparedLoop:state.rollReviewPrepared;
-  const transformed=rollingReviewPitchTime(original.getChannelData(0),original.sampleRate,settings);
-  const samples=loop?rollingReviewLoop(transformed,original.sampleRate):transformed;
-  const buffer=audioContext().createBuffer(1,samples.length,original.sampleRate);
-  buffer.copyToChannel(samples,0);
-  if(speed===state.rollReviewSpeed){if(loop)state.rollReviewPreparedLoop=buffer;else state.rollReviewPrepared=buffer;}
-  return buffer;
-}
-function updateRollReviewUi(){
-  const wrapper=$('sl-roll-review'),select=$('sl-roll-review-choice'),quality=$('sl-roll-review-quality'),status=$('sl-roll-review-status');
-  if(!wrapper)return;
-  wrapper.hidden=state.binding?.id!=='sm00-boulder-opening-roll';if(wrapper.hidden)return;
-  const catalog=state.rollReviewCatalog;
-  select.replaceChildren(new Option('Normal Sound Score Draft',''),...(catalog?.rows||[]).map(row=>new Option(row.label,row.id)));
-  select.value=state.rollReviewId;select.disabled=!catalog?.available||!state.scene;
-  quality.value=state.rollReviewQuality;quality.disabled=!catalog?.available;
-  const chosen=rollReviewSelection();
-  $('sl-roll-review-publish').disabled=!chosen||!state.client||state.rollReviewPublishing;
-  updateRollingTuningUi();
-  status.textContent=!catalog?.available?(catalog?.reason||'Connect SoundLab and generate the offline rolling gallery first.'):
-    !state.scene?'Capture the SM00 boulder scene before reviewing rolling candidates.':
-    !matchingRollingReviewScene(state.scene,catalog)?'Captured rolling-contact trajectory differs from the pinned gallery trace. Regenerate the gallery from this capture before synchronized review.':
-    chosen?`${chosen.description} · game ${state.rollReviewSpeed}×, sound ${state.rollReviewTempo.toFixed(2)}×, pitch ${state.rollReviewPitch>0?'+':''}${state.rollReviewPitch} st, ${state.rollReviewVolume}% volume · Audition-only; speed/pitch apply on next Play, volume adjusts live.`:'Select a design; then Play scope replays the same native movement with its preview. Published/Original remain unmodified.';
-  const promote=$('sl-promote');if(promote)promote.disabled=!!chosen||!state.client;
-  updateScoreVersionUi();
-}
-async function loadRollingReview(){
-  const generation=++state.rollReviewLoad;
-  if(state.binding?.id!=='sm00-boulder-opening-roll')return;
-  if(!state.client){state.rollReviewCatalog=null;updateRollReviewUi();return;}
-  try{const catalog=await state.client.reviewAudio();if(generation!==state.rollReviewLoad||state.binding?.id!=='sm00-boulder-opening-roll')return;state.rollReviewCatalog=catalog;updateRollReviewUi();}
-  catch(error){if(generation!==state.rollReviewLoad)return;state.rollReviewCatalog={available:false,reason:error.message,rows:[]};updateRollReviewUi();}
-}
-async function chooseRollingReview(id=state.rollReviewId,quality=state.rollReviewQuality){
-  const wasReview=!!state.rollReviewId,generation=++state.rollReviewLoad,catalog=state.rollReviewCatalog;
-  if(id&&!catalog?.available)throw new Error('Rolling review gallery is unavailable');
-  const row=catalog?.rows?.find(row=>row.id===id);
-  if(id&&!row)throw new Error('Unknown rolling review candidate');
-  if(!['game','master'].includes(quality))throw new Error('Unsupported rolling preview format');
-  if(id&&!matchingRollingReviewScene(state.scene,catalog))throw new Error('The native rolling-contact motion differs from the captured experiment; no substitute preview can be synchronized safely.');
-  stopSceneDraft();stopAudition();state.rollReviewId='';state.rollReviewBuffer=null;state.rollReviewPrepared=null;state.rollReviewPreparedLoop=null;state.rollReviewQuality=quality;
-  if(row){
-    const source=row.profiles[quality];
-    const buffer=await decodeUrl(`review:${row.id}:${quality}:${source.sha256}`,source.url);
-    if(generation!==state.rollReviewLoad||state.binding?.id!==catalog.bindingId)return;
-    state.rollReviewBuffer=buffer;state.rollReviewId=id;state.audioVersion='draft';
-    if(!wasReview&&state.scene)setPlaybackScope('scene');
-  }
-  updateRollReviewUi();
-}
-function scoreTransitionWindow(){return adjacentPlaybackRange(state.score,state.selectedSegmentId,{contextFrames:2});}
-async function setAudioVersion(version){if(!['draft','published','original'].includes(version))return;if(version!=='draft'&&state.rollReviewId)await chooseRollingReview('');state.audioVersion=version;updateScoreVersionUi();if(version==='draft'){await showProfile('preview');return;}if(version==='published'){await showProfile('master');return;}drawWaveform(new Float32Array());void refreshScoreAnalysis();$('sl-waveform-caption').textContent='Original native game route';$('sl-metric-duration').textContent='— ms';$('sl-metric-peak').textContent='peak —';$('sl-metric-rate').textContent='native';$('sl-metric-hash').textContent='original';}
-function setPlaybackScope(scope){if(!['selected','sequence','scene'].includes(scope))return;state.playbackScope=scope;if(scope==='selected')syncSelectedSegmentWindow();updateScoreVersionUi();if(scope==='sequence')setWorkspaceContext('sequence-review');else if(scope==='selected')setWorkspaceContext('segment-edit');}
-function setAnalysisSource(source){if(!['layer','segment','sequence','published','original'].includes(source))return;state.analysisSource=source;if($('sl-analysis-source'))$('sl-analysis-source').value=source;void refreshScoreAnalysis();}
-
-function renderTimeline(){
-  const event=state.events[state.selectedEvent]||state.events.at(-1);
-  if(!event){$('sl-event-readout').textContent='No captured event';$('sl-event-marker').style.opacity='.2';return;}
-  $('sl-event-readout').textContent=`${event.event} · tick ${event.tick} · Δ ${(event.frameDelta||[]).join(',')}`;
-  $('sl-telemetry').textContent=JSON.stringify(event,null,2);
-}
-function showEvent(event){state.events.push(event);state.selectedEvent=state.events.length-1;renderTimeline();}
-function scenePercent(frame,scene=state.scene){if(!scene)return 0;return 100*(Number(frame)-scene.minFrame)/Math.max(1,scene.maxFrame-scene.minFrame);}
-function renderSceneWindow(){
-  const scene=state.scene,windowState=state.sceneWindow;if(!scene||!windowState){$('sl-scene-window-readout').textContent='Waiting for scene';return;}
-  const start=clamp(scenePercent(windowState.startFrame),0,100),end=clamp(scenePercent(windowState.endFrame),0,100),proof=clamp(scenePercent(scene.proofFrame),0,100);
-  $('sl-scene-start').style.left=`${start}%`;$('sl-scene-end').style.left=`${end}%`;$('sl-event-marker').style.left=`${proof}%`;$('sl-event-marker').style.opacity='1';
-  $('sl-scene-selection').style.left=`${start}%`;$('sl-scene-selection').style.width=`${Math.max(0,end-start)}%`;
-  $('sl-scene-window-readout').textContent=`loop ${windowState.startFrame}–${windowState.endFrame}f · ${state.segmentLoopMode} · contact ${scene.proofFrame}f`;
-  renderSceneOverlay();
-}
-function scenePointAt(frame,scene=state.scene){if(!scene?.path?.length)return null;return scene.path.reduce((best,row)=>!best||Math.abs(row.frameSerial-frame)<Math.abs(best.frameSerial-frame)?row:best,null);}
-function scenePathPointAtFrame(path,frame){const rows=(path||[]).filter(row=>Number.isFinite(Number(row?.frameSerial))&&Number.isFinite(Number(row?.x))&&Number.isFinite(Number(row?.y)));if(!rows.length)return null;if(frame<=Number(rows[0].frameSerial))return{x:Number(rows[0].x),y:Number(rows[0].y)};if(frame>=Number(rows.at(-1).frameSerial))return{x:Number(rows.at(-1).x),y:Number(rows.at(-1).y)};for(let index=1;index<rows.length;index+=1){const a=rows[index-1],b=rows[index],af=Number(a.frameSerial),bf=Number(b.frameSerial);if(frame>bf)continue;const t=bf===af?0:clamp((frame-af)/(bf-af),0,1);return{x:Number(a.x)+(Number(b.x)-Number(a.x))*t,y:Number(a.y)+(Number(b.y)-Number(a.y))*t};}return null;}
-function sceneGestureOverlayPoints(scene,segment,gesture,{deviationPx=14}={}){if(!scene?.path?.length||!segment?.gameRange||!gesture?.points?.length)return[];const points=normalizeGesture(gesture.points,{samples:Math.max(8,Math.min(64,gesture.points.length))}),start=Number(segment.gameRange[0]),end=Number(segment.gameRange[1]),span=Math.max(1,end-start),step=Math.max(.35,span/40);return points.map(point=>{const progress=clamp(Number(point.progress),0,1),frame=start+span*progress,base=scenePathPointAtFrame(scene.path,frame),before=scenePathPointAtFrame(scene.path,frame-step)||base,after=scenePathPointAtFrame(scene.path,frame+step)||base;if(!base)return null;let tx=Number(after?.x)-Number(before?.x),ty=Number(after?.y)-Number(before?.y),mag=Math.hypot(tx,ty);if(mag<1e-6){tx=1;ty=0;mag=1;}const nx=-ty/mag,ny=tx/mag,offset=(clamp(Number(point.y),0,1)-.5)*2*deviationPx;return{x:base.x+nx*offset,y:base.y+ny*offset,baseX:base.x,baseY:base.y,progress,pressure:clamp(Number(point.pressure),0,1),width:clamp(Number(point.width??point.pressure),0,1)};}).filter(Boolean);}
-function trajectorySegmentAtPoint(scene,score,x,y,{width=scene?.viewport?.width||320,height=scene?.viewport?.height||200,threshold=18}={}){
-  const path=scene?.path||[],segments=score?.segments||[],viewport=scene?.viewport||{width:320,height:200};if(!path.length||!segments.length||!Number.isFinite(x)||!Number.isFinite(y)||width<=0||height<=0)return null;
-  const sx=width/Math.max(1,viewport.width),sy=height/Math.max(1,viewport.height),points=path.map(row=>({x:Number(row.x)*sx,y:Number(row.y)*sy,frame:Number(row.frameSerial)})).filter(row=>Number.isFinite(row.x)&&Number.isFinite(row.y)&&Number.isFinite(row.frame));if(!points.length)return null;
-  let nearest={distance:Infinity,frame:points[0].frame};const consider=(ax,ay,bx,by,af,bf)=>{const dx=bx-ax,dy=by-ay,length2=dx*dx+dy*dy,t=length2>0?clamp(((x-ax)*dx+(y-ay)*dy)/length2,0,1):0,px=ax+dx*t,py=ay+dy*t,distance=Math.hypot(x-px,y-py);if(distance<nearest.distance)nearest={distance,frame:af+(bf-af)*t};};
-  if(points.length===1)consider(points[0].x,points[0].y,points[0].x,points[0].y,points[0].frame,points[0].frame);else for(let index=1;index<points.length;index+=1){const a=points[index-1],b=points[index];consider(a.x,a.y,b.x,b.y,a.frame,b.frame);}
-  if(nearest.distance>threshold)return null;const frame=Math.round(nearest.frame),exact=segments.find(segment=>frame>=segment.gameRange[0]&&frame<=segment.gameRange[1]);if(exact)return exact;return segments.reduce((best,segment)=>{const distance=frame<segment.gameRange[0]?segment.gameRange[0]-frame:frame>segment.gameRange[1]?frame-segment.gameRange[1]:0;return !best||distance<best.distance?{segment,distance}:best;},null)?.segment||null;
-}
-function drawSceneMarker(ctx,row,sx,sy,label,direction=1){if(!row)return;const x=row.x*sx,y=row.y*sy;ctx.save();ctx.strokeStyle='#f3d28c';ctx.fillStyle='#0d1014';ctx.lineWidth=2;ctx.beginPath();ctx.rect(x-4,y-4,8,8);ctx.fill();ctx.stroke();ctx.font='bold 9px ui-monospace,monospace';ctx.textBaseline='middle';ctx.fillStyle='#f3d28c';ctx.fillText(label,x+7*direction,y);ctx.restore();}
-function trajectoryMotifKind(semanticType){const type=String(semanticType||'').toLowerCase();if(type==='rolling'||type==='sliding'||type==='scrape')return'ticks';if(type==='falling')return'arrows';if(type==='impact')return'burst';if(type==='mechanism')return'notches';return'none';}
-function drawTrajectoryMotif(ctx,segment,rows,sx,sy){const kind=trajectoryMotifKind(segment?.semanticType);if(kind==='none'||!rows?.length)return;const point=(index)=>rows[Math.max(0,Math.min(rows.length-1,index))],tangent=(index)=>{const a=point(index-1),b=point(index+1),dx=(Number(b.x)-Number(a.x))*sx,dy=(Number(b.y)-Number(a.y))*sy,mag=Math.hypot(dx,dy)||1;return{tx:dx/mag,ty:dy/mag,nx:-dy/mag,ny:dx/mag};};ctx.save();ctx.strokeStyle='#f3d28c';ctx.fillStyle='#f3d28c';ctx.globalAlpha=.95;ctx.lineWidth=1.5;ctx.lineCap='round';if(kind==='ticks'||kind==='notches'){const count=Math.min(7,Math.max(3,Math.floor(rows.length/2))),step=Math.max(1,(rows.length-1)/Math.max(1,count-1)),half=kind==='notches'?3.5:4.5;for(let n=0;n<count;n++){const index=Math.round(n*step),row=point(index),{nx,ny}=tangent(index),x=Number(row.x)*sx,y=Number(row.y)*sy;ctx.beginPath();ctx.moveTo(x-nx*half,y-ny*half);ctx.lineTo(x+nx*half,y+ny*half);ctx.stroke();}}else if(kind==='arrows'){for(const fraction of [.25,.55,.85]){const index=Math.round((rows.length-1)*fraction),row=point(index),{tx,ty,nx,ny}=tangent(index),x=Number(row.x)*sx,y=Number(row.y)*sy,back=5,wing=3.5;ctx.beginPath();ctx.moveTo(x-tx*back+nx*wing,y-ty*back+ny*wing);ctx.lineTo(x,y);ctx.lineTo(x-tx*back-nx*wing,y-ty*back-ny*wing);ctx.stroke();}}else if(kind==='burst'){const row=point(Math.round((rows.length-1)/2)),x=Number(row.x)*sx,y=Number(row.y)*sy;for(let ray=0;ray<8;ray++){const angle=ray*Math.PI/4,inner=3,outer=7;ctx.beginPath();ctx.moveTo(x+Math.cos(angle)*inner,y+Math.sin(angle)*inner);ctx.lineTo(x+Math.cos(angle)*outer,y+Math.sin(angle)*outer);ctx.stroke();}}ctx.restore();}
-function renderSceneOverlay(){
-  const canvas=$('sl-scene-overlay'),ctx=canvas?.getContext('2d'),scene=state.scene;if(!ctx)return;ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#080d12';ctx.fillRect(0,0,canvas.width,canvas.height);const viewport=scene?.viewport||{width:320,height:200},gridX=canvas.width/Math.max(1,viewport.width)*32,gridY=canvas.height/Math.max(1,viewport.height)*32;ctx.save();ctx.strokeStyle='#17212b';ctx.lineWidth=1;for(let x=gridX;x<canvas.width;x+=gridX){ctx.beginPath();ctx.moveTo(Math.round(x)+.5,0);ctx.lineTo(Math.round(x)+.5,canvas.height);ctx.stroke();}for(let y=gridY;y<canvas.height;y+=gridY){ctx.beginPath();ctx.moveTo(0,Math.round(y)+.5);ctx.lineTo(canvas.width,Math.round(y)+.5);ctx.stroke();}ctx.restore();if(!scene)return;
-  const sx=canvas.width/viewport.width,sy=canvas.height/viewport.height,path=scene.path||[],windowState=state.sceneWindow||scene;
-  const drawPath=(rows,alpha,width,dash=[])=>{if(rows.length<2)return;ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#e4ad55';ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.setLineDash(dash);ctx.beginPath();rows.forEach((row,index)=>{const x=row.x*sx,y=row.y*sy;if(index)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();ctx.restore();};
-  drawPath(path,.22,2);
-  const activeSegment=selectedSegment(),authoring=path.filter(row=>row.frameSerial>=windowState.startFrame&&row.frameSerial<=windowState.endFrame);drawPath(authoring,.46,2,[5,4]);
-  const selected=activeSegment?path.filter(row=>row.frameSerial>=activeSegment.gameRange[0]&&row.frameSerial<=activeSegment.gameRange[1]):authoring;drawPath(selected,.98,4);if(activeSegment)drawTrajectoryMotif(ctx,activeSegment,selected,sx,sy);
-  const activeGesture=activeSegment?selectedGesture():null,gesturePoints=sceneGestureOverlayPoints(scene,activeSegment,activeGesture);if(gesturePoints.length>1){ctx.save();ctx.lineCap='round';ctx.lineJoin='round';for(let index=1;index<gesturePoints.length;index+=1){const a=gesturePoints[index-1],b=gesturePoints[index],width=1.5+2.8*((a.width+b.width)/2),pressure=.45+.55*((a.pressure+b.pressure)/2);ctx.beginPath();ctx.strokeStyle=`rgba(116,216,255,${Math.min(.95,pressure).toFixed(3)})`;ctx.lineWidth=width;ctx.moveTo(a.x*sx,a.y*sy);ctx.lineTo(b.x*sx,b.y*sy);ctx.stroke();}ctx.restore();}
-  const rebound=scene.segments?.find(row=>row.id==='rebound');if(rebound&&!activeSegment)drawPath(path.filter(row=>row.frameSerial>=rebound.startFrame&&row.frameSerial<=rebound.endFrame),.95,3,[7,5]);
-  const before=path.filter(row=>row.frameSerial<scene.proofFrame).at(-1),contact=scene.contact;if(before&&contact){const dx=contact.x-before.x,dy=contact.y-before.y,m=Math.hypot(dx,dy);if(m>.5){const scale=Math.min(18,Math.max(8,m*3))/m,x1=contact.x*sx,y1=contact.y*sy,x0=(contact.x-dx*scale)*sx,y0=(contact.y-dy*scale)*sy,angle=Math.atan2(y1-y0,x1-x0);ctx.save();ctx.strokeStyle='#f3d28c';ctx.globalAlpha=.8;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x1-Math.cos(angle-.55)*7,y1-Math.sin(angle-.55)*7);ctx.moveTo(x1,y1);ctx.lineTo(x1-Math.cos(angle+.55)*7,y1-Math.sin(angle+.55)*7);ctx.stroke();ctx.restore();}}
-  drawSceneMarker(ctx,scenePointAt(windowState.startFrame),sx,sy,'S',1);drawSceneMarker(ctx,scenePointAt(windowState.endFrame),sx,sy,'E',-1);
-  const marker=$('sl-scene-contact');if(contact&&marker){marker.hidden=false;marker.style.left=`${100*contact.x/viewport.width}%`;marker.style.top=`${100*contact.y/viewport.height}%`;}
-}
-function selectSceneContact(){if(!state.scene)return;const index=state.events.findIndex(event=>Number(event.serial)===Number(state.scene.serial));if(index>=0){state.selectedEvent=index;renderTimeline();}const impact=state.score?.segments?.find(segment=>segment.proofFrames?.includes(state.scene.proofFrame)||(state.scene.proofFrame>=segment.gameRange[0]&&state.scene.proofFrame<=segment.gameRange[1]));if(impact)selectScoreSegment(impact.id);$('sl-native-canvas').focus();}
-function selectSceneTrajectoryAt(clientX,clientY){const stage=$('sl-scene-stage');if(!stage||!state.scene||!state.score)return null;const rect=stage.getBoundingClientRect(),segment=trajectorySegmentAtPoint(state.scene,state.score,clientX-rect.left,clientY-rect.top,{width:rect.width,height:rect.height,threshold:20});if(segment)selectScoreSegment(segment.id);return segment;}
-function showScene(scene){
-  state.playtesting=false;state.scene={...scene,viewport:scene.viewport||{width:320,height:200}};state.sceneWindow={startFrame:scene.startFrame,endFrame:scene.endFrame};state.useCapturedTelemetry=true;$('sl-use-capture').setAttribute('aria-pressed','true');const proofEventIndex=state.events.findIndex(event=>Number(event.serial)===Number(scene.serial));if(proofEventIndex>=0)state.selectedEvent=proofEventIndex;
-  const binding=currentBinding(),intent=sceneSoundIntent(state.manifest,binding,state.scene,state.sceneWindow,{object:binding.object,surface:binding.surface,recipe:binding.recipe});
-  state.scoreIntent=clone(intent);const baseline=state.binding.soundScore?clone(state.binding.soundScore):buildDefaultSoundScore(intent,{sceneIntentId:`${state.binding.id}:${scene.serial}`});state.scoreBaseline=clone(baseline);state.score=loadScoreDraft(state.scoreBaseline,state.scoreIntent)||clone(state.scoreBaseline);state.selectedSegmentId=state.score.segments[0]?.id||null;state.selectedLayerId=selectedSegment()?.layers?.[0]?.id||null;state.selectedGestureId=selectedLayer()?.gestureId||selectedSegment()?.gestures?.[0]?.id||null;state.scoreHistory={undo:[],redo:[]};syncSelectedSegmentWindow();setWorkspaceContext('segment-edit');
-  const label=(state.binding.match?.actorFamily||state.binding.object||'object').replace(/^sm\d+-/,'').replaceAll('-',' '),surface=selectedMaterial().replaceAll('-',' '),action=String(rawResource('recipes',state.binding.recipe)?.generator||'impact').replaceAll('-',' ');
-  $('sl-scene-title').textContent=`${label} → ${surface} · ${action}`;
-  const facts=scene.facts||{};$('sl-scene-motion').textContent=`captured ${scene.startFrame}–${scene.endFrame}f (${((scene.endFrame-scene.startFrame+1)/25).toFixed(1)}s) · fall ${facts.fallPx||0}px · horizontal ${facts.horizontalPx||0}px · contact ${scene.proofFrame}f · bounce ${facts.bouncePx||0}px${facts.bounceCount?` ×${facts.bounceCount}`:''}`;
-  $('sl-scene-script').textContent=state.score.segments.length?state.score.segments.map(row=>`${row.label} ${Math.max(1,row.gameRange[1]-row.gameRange[0]+1)}f`).join(' → '):'contact anchored to the native semantic event';
-  renderSceneWindow();renderSoundScore();renderTimeline();renderPreview();updateRollReviewUi();renderSceneSounds(scene.audioEvents||state.sceneSounds);updateNativeActions();$('sl-play-score').disabled=false;
-}
-function downloadJson(name,value){const url=URL.createObjectURL(new Blob([`${JSON.stringify(value,null,2)}\n`],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),0);}
-function setNativeCollapsed(collapsed){const panel=$('sl-native-panel');panel.dataset.collapsed=String(collapsed);$('sl-toggle-native').textContent=collapsed?'Show':'Hide';$('sl-toggle-native').setAttribute('aria-expanded',String(!collapsed));}
-function nativeSceneAuthoringOptions({manifest=state.manifest,binding=state.binding}={}){const recipe=manifest.previewModel?.resources?.recipes?.[binding.recipe]||{};return{submap:binding.scene?.submap??binding.match?.submap??0,event:binding.event,match:binding.match||{},scene:binding.scene||null,action:recipe.generator||'impact',playback:recipe.playback?.kind||'',durationMs:Number(recipe.durationMs||0)};}
-function nativeInputConfig(){return state.manifest?.authoring?.nativeInput||null;}
-function showNativeInput(info={}){const config=nativeInputConfig(),setup=$('sl-native-setup');if(!config||!setup)return;setup.hidden=false;$('sl-native-input-title').textContent=info.name?`${config.label} · ${info.name}`:config.label;$('sl-native-input-status').textContent=info.status==='ready'?(info.remembered?'Ready · remembered in this browser':`Ready · ${String(info.source||'loaded').replaceAll('-',' ')}`):(info.message||config.help||'Choose the required native input.');$('sl-native-input-button-label').textContent=info.status==='ready'?`Replace ${config.label}`:config.buttonLabel||`Load ${config.label}`;}
-function configureNativeInput(){const config=nativeInputConfig(),setup=$('sl-native-setup'),input=$('sl-native-input-file');if(!setup||!input)return;setup.hidden=!config;if(!config)return;input.accept=config.accept||'';showNativeInput();}
-async function ensureNativeRuntime(){if(state.runtime)return state.runtime;const adapterPath=state.manifest.authoring?.nativeAdapter;if(!adapterPath)throw new Error(`Project ${state.manifest.project} does not provide a native preview adapter`);const module=await import(new URL(adapterPath,state.manifestUrl)),SoundLabRuntime=module.SoundLabRuntime||module.default;if(typeof SoundLabRuntime!=='function')throw new Error(`Native adapter ${adapterPath} must export SoundLabRuntime or default`);state.runtime=new SoundLabRuntime({canvas:$('sl-native-canvas'),onEvent:showEvent,onScene:showScene,onSounds:rows=>renderSceneSounds(rows),onFrame:info=>{state.playheadFrame=Number(info?.frame?.snapshot?.frameSerial);if(!Number.isFinite(state.playheadFrame))state.playheadFrame=null;if(info?.replay||info?.playtest)applyRollingAudioMotion(info?.frame?.snapshot,state.playheadFrame);renderSceneOverlay();renderScorePlayhead();},onReplay:handleSceneReplay,onStatus:text=>$('sl-native-status').textContent=text,onNativeInput:showNativeInput});return state.runtime;}
-function handleNativeError(error){$('sl-native-status').textContent=error?.message||String(error);if(error?.code==='SOUNDLAB_NATIVE_INPUT_REQUIRED')showNativeInput({message:error.message});}
-async function startNative({focus=true}={}){if(state.capabilities?.capabilities?.nativePreview===false)throw new Error(state.capabilities.nativePreviewReason||'Native preview runtime is unavailable.');setNativeCollapsed(false);const runtime=await ensureNativeRuntime();await runtime.start(nativeSceneAuthoringOptions());$('sl-start-native').disabled=true;updateNativeActions();if(focus)$('sl-native-canvas').focus();}
-async function loadNativeInput(file){if(!file)return;const runtime=await ensureNativeRuntime();if(typeof runtime.loadNativeInput!=='function')throw new Error('This native preview adapter does not accept a local input file.');$('sl-native-status').textContent=`Loading ${file.name||nativeInputConfig()?.label||'native input'}…`;await runtime.loadNativeInput(file);if(state.capabilities?.capabilities?.nativePreview===false){$('sl-native-status').textContent=state.capabilities.nativePreviewReason||'ROM ready; native preview runtime is unavailable.';return;}await startNative();}
-function sceneReplaySerial(scene=state.scene,events=state.events,selectedEvent=state.selectedEvent){const sceneSerial=Number(scene?.serial);if(Number.isFinite(sceneSerial))return sceneSerial>>>0;const event=events?.[selectedEvent],eventSerial=Number(event?.serial);return Number.isFinite(eventSerial)?eventSerial>>>0:null;}
-async function replayEventWindow(windowState,version=state.audioVersion){if(!state.runtime)return;if(state.rollReviewId&&(!state.rollReviewBuffer||!matchingRollingReviewScene(state.scene,state.rollReviewCatalog)))throw new Error('Review candidate needs matching captured SM00 rolling-contact motion');if(['draft','published','original'].includes(version))state.audioVersion=version;if(state.audioVersion==='draft')await resumeAudioContext();state.sceneReplayMode=state.audioVersion;updateScoreVersionUi();stopSceneDraft();stopAudition();const serial=sceneReplaySerial();if(serial==null)return;if(state.rollReviewId&&state.audioVersion==='draft')prepareRollingReview();const reviewMix=!!state.rollReviewId&&state.audioVersion==='draft';const options={suppressSoundLab:!reviewMix&&state.audioVersion!=='published',suppressNativeSfx:!reviewMix&&state.audioVersion==='draft',preserveSceneSounds:reviewMix,reviewEventId:reviewMix?state.scene.event.eventId:null,requireProof:false,speed:state.rollReviewId&&state.audioVersion==='draft'?state.rollReviewSpeed:1},ok=state.scene&&Number(state.scene.serial)===Number(serial)?state.runtime.replayScene?.(serial,windowState,options):state.runtime.replayEvent?.(serial);if(!ok)return;$('sl-native-canvas').focus();}
-async function replaySelectedEvent(version=state.audioVersion){return replayEventWindow(state.score?scorePlaybackWindow():state.sceneWindow,version);}
-async function replaySelectedTransition(){const range=scoreTransitionWindow();if(!range)return;return replayEventWindow({startFrame:range.startFrame,endFrame:range.endFrame},state.audioVersion);}
-
-function rangeValueAt(input,surface,clientX){const rect=surface.getBoundingClientRect(),min=Number(input.min||0),max=Number(input.max||1),step=Number(input.step||.01),ratio=Math.max(0,Math.min(1,(clientX-rect.left)/Math.max(1,rect.width))),raw=min+(max-min)*ratio,steps=Math.round((raw-min)/step);return Math.max(min,Math.min(max,min+steps*step));}
-function installPointerRange(id){const surface=$(`sl-${id}-surface`),input=$(`sl-${id}`);if(!surface||!input)return;let active=null;const update=event=>{input.value=String(rangeValueAt(input,surface,event.clientX));input.dispatchEvent(new Event('input',{bubbles:true}));};surface.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button!==0)return;active=event.pointerId;surface.setPointerCapture?.(active);input.focus({preventScroll:true});update(event);event.preventDefault();});surface.addEventListener('pointermove',event=>{if(event.pointerId!==active)return;update(event);event.preventDefault();});const finish=event=>{if(event.pointerId!==active)return;update(event);if(surface.hasPointerCapture?.(active))surface.releasePointerCapture(active);active=null;renderPreview();event.preventDefault();};surface.addEventListener('pointerup',finish);surface.addEventListener('pointercancel',event=>{if(event.pointerId!==active)return;if(surface.hasPointerCapture?.(active))surface.releasePointerCapture(active);active=null;});}
-function installSceneWindow(){
-  const track=$('sl-scene-window');
-  for(const [id,key] of [['sl-scene-start','startFrame'],['sl-scene-end','endFrame']]){const handle=$(id);let active=null;const update=event=>{const segment=selectedSegment();if(!state.scene||!state.sceneWindow||!segment)return;const rect=track.getBoundingClientRect(),ratio=clamp((event.clientX-rect.left)/Math.max(1,rect.width)),raw=Math.round(state.scene.minFrame+ratio*(state.scene.maxFrame-state.scene.minFrame)),gameStart=segment.gameRange[0],gameEnd=segment.gameRange[1];state.sceneWindow[key]=key==='startFrame'?Math.max(state.scene.minFrame,Math.min(raw,gameStart,state.sceneWindow.endFrame-1)):Math.min(state.scene.maxFrame,Math.max(raw,gameEnd,state.sceneWindow.startFrame+1));state.customLoopRanges[state.selectedSegmentId]={...state.sceneWindow};renderSceneWindow();updateScoreVersionUi();};handle.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button!==0)return;if(state.segmentLoopMode!=='custom')setSegmentLoopMode('custom',{preserveWindow:true});active=event.pointerId;handle.setPointerCapture?.(active);update(event);event.preventDefault();});handle.addEventListener('pointermove',event=>{if(event.pointerId===active){update(event);event.preventDefault();}});const finish=event=>{if(event.pointerId!==active)return;update(event);if(handle.hasPointerCapture?.(active))handle.releasePointerCapture(active);active=null;replaySelectedEvent();event.preventDefault();};handle.addEventListener('pointerup',finish);handle.addEventListener('pointercancel',()=>{active=null;});}
-}
-function installPersistedDetails(){document.querySelectorAll('details[data-persist-key]').forEach(details=>{const key=`soundlab:open:${details.dataset.persistKey}`;try{const stored=localStorage.getItem(key);if(stored!==null)details.open=stored==='1';}catch{}details.addEventListener('toggle',()=>{try{localStorage.setItem(key,details.open?'1':'0');}catch{}});});}
-
-function updateCurrentButtons(){const enabled=!!state.currentRender;for(const profile of ['current-master','current-runtime'])document.querySelector(`[data-profile="${profile}"]`).disabled=!enabled;}
-function updateEarshotEnabled(){
-  updateStoneEnabled();
-  const enabled=!!state.client&&!!state.capabilities?.capabilities?.earshotImprovement&&state.binding?.id==='sm00-boulder-impact'&&!state.earshotBusy;
-  $('sl-earshot-start').disabled=!enabled;
-  $('sl-earshot-preset').disabled=!enabled;
-  $('sl-earshot-refine').disabled=!enabled||!state.earshotChoice;
-  $('sl-earshot-accept').disabled=!enabled||!state.earshotChoice;
-  if(!state.client)$('sl-earshot-status').textContent='Connect to SoundLab’s authoring service first.';
-  else if(!state.capabilities?.capabilities?.earshotImprovement)$('sl-earshot-status').textContent='Earshot unavailable: restart the authoring service with --earshot-root /path/to/earshot-main.';
-  else if(state.binding?.id!=='sm00-boulder-impact')$('sl-earshot-status').textContent='Pilot supports the SM00 boulder impact. Rolling sound still follows native motion telemetry.';
-}
-function updateStoneEnabled(){
-  const available=!!state.client&&!!state.capabilities?.capabilities?.stoneStructureAuthoring&&state.binding?.id==='sm00-boulder-impact'&&!state.stoneBusy;
-  $('sl-stone-generate').disabled=!available;
-  $('sl-stone-accept').disabled=!available||!state.stoneChoice||state.stoneChoice.structureId==='approved'||state.stoneChoice.perceptual.status!=='candidate'||state.stoneReview!=='clearly-different';
-  if(!state.client)$('sl-stone-status').textContent='Connect to local SoundLab to preview modeled rock contacts.';
-  else if(state.binding?.id!=='sm00-boulder-impact')$('sl-stone-status').textContent='These presets are for the SM00 boulder impact only.';
-  else if(!state.capabilities?.capabilities?.stoneStructureAuthoring)$('sl-stone-status').textContent='Verified Fit model/Earshot 0.3 unavailable. Start SoundLab with --earshot-root /path/to/earshot-main.';
-}
-function stoneControls(){return{bindingId:state.binding.id,seed:numeric('sl-stone-seed')};}
-function revealStoneNames(){
-  const reveal=$('sl-stone-reveal').checked;
-  $('sl-stone-round').querySelectorAll('.earshot-take').forEach(card=>{
-    card.querySelector('[data-stone-label]').textContent=reveal?card.dataset.fullLabel:card.dataset.blindLabel;
-    card.querySelector('[data-stone-facts]').hidden=!reveal;
-    card.querySelector('[data-stone-indicator]').hidden=!reveal;
+let uiQueued = false;
+function scheduleUi() {
+  if (uiQueued) return;
+  uiQueued = true;
+  requestAnimationFrame(() => {
+    uiQueued = false;
+    timeline.setPlayhead(state.playhead);
+    renderCatalog();
+    els.frame.textContent = `frame ${state.playhead}${state.live ? ' · live' : ''} · ${runtime.session.length} recorded`;
   });
 }
-function stoneABXStatus(text){$('sl-stone-abx-status').textContent=text;}
-function stoneResetABX(){
-  state.stoneReview=null;
-  if(state.stoneAbxPlayer)state.stoneAbxPlayer.pause();
-  if(!state.stoneChoice||state.stoneChoice.structureId==='approved'){
-    state.stoneAbx=null;$('sl-stone-abx').hidden=true;updateStoneEnabled();return;
-  }
-  state.stoneAbx={candidateId:state.stoneChoice.id,comparisonId:state.stoneChoice.perceptual.closestOther?.id,trial:0,score:0,xIsA:Math.random()<.5,heardX:false};
-  $('sl-stone-abx').hidden=false;
-  stoneABXStatus('Trial 1 of 8. Listen to A, B and X, then choose which sound X matches.');
-  updateStoneEnabled();
+
+function drawScreen(source, record) {
+  if (source) screenCtx.drawImage(source, 0, 0, LIVE_WIDTH, LIVE_HEIGHT);
+  drawOverlay(record);
 }
-function stoneABXPlay(part){
-  const a=state.stoneAbx,row=state.stoneChoice;
-  if(!a||!row||row.id!==a.candidateId||!state.stoneRound)return;
-  const comparison=state.stoneRound.rows.find(other=>other.structureId===row.perceptual.closestOther?.id)||state.stoneRound.rows[0];
-  const selected=part==='a'||part==='x'&&a.xIsA?comparison:row;
-  if(part==='x')a.heardX=true;
-  if(!state.stoneAbxPlayer)state.stoneAbxPlayer=new Audio();
-  const audio=state.stoneAbxPlayer;
-  audio.pause();stopAudition();
-  document.querySelectorAll('#sl-stone-round audio').forEach(other=>other.pause());
-  audio.src=selected.runtimeUrl;audio.currentTime=0;audio.play().catch(()=>stoneABXStatus('Audio playback was blocked. Use the sound cards instead.'));
-}
-function stoneABXGuess(guessA){
-  const a=state.stoneAbx;if(!a||!a.heardX||a.trial>=8)return;
-  if(a.xIsA===guessA)a.score++;
-  a.trial++;
-  if(a.trial===8){
-    const passed=a.score>=7;
-    state.stoneReview=passed?'clearly-different':null;
-    stoneABXStatus(`${a.score}/8 identified correctly. ${passed?'Distinct at game quality; candidate eligible for acceptance.':'Not reliably distinct yet; do not accept as a separate variant. Restart or generate a different take.'}`);
-  }else{
-    a.heardX=false;a.xIsA=Math.random()<.5;
-    stoneABXStatus(`Trial ${a.trial+1} of 8. Choose which sound X matches.`);
-  }
-  updateStoneEnabled();
-}
-function showStoneRound(result){
-  state.stoneChoice=null;state.stoneRound=result;state.stoneReview=null;
-  $('sl-stone-abx').hidden=true;
-  const parent=$('sl-stone-round');parent.replaceChildren(...result.rows.map((row,index)=>{
-    const card=document.createElement('div');card.className='earshot-take';card.dataset.selected='false';card.dataset.fullLabel=row.label;card.dataset.blindLabel=`Take ${String.fromCharCode(65+index)}`;
-    const head=document.createElement('div');head.className='earshot-take-head';
-    const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='sl-stone-choice';radio.value=row.id;
-    const title=document.createElement('span');title.dataset.stoneLabel='';title.textContent=card.dataset.blindLabel;label.append(radio,title);
-    radio.addEventListener('change',()=>{state.stoneChoice=row;parent.querySelectorAll('.earshot-take').forEach(el=>el.dataset.selected=String(el===card));stoneResetABX();});
-    const indicator=document.createElement('small');indicator.textContent=row.structureId==='approved'?'PUBLISHED · unchanged':`${row.events.length-1} synthesized later contacts · ${row.perceptual.status}`;
-    indicator.dataset.stoneIndicator='';head.append(label,indicator);
-    const contacts=document.createElement('small');contacts.textContent=row.structureId==='approved'?'Accepted Stone chamber; exact original WAV.':`Physical plan: ${row.events.map(e=>`${e.kind} at ${e.timeMs} ms`).join(' · ')}. Game-format onset contrast: ${row.perceptual.onsets.map(e=>`${e.gameContrastDb} dB`).join(', ')||'none'}. Closest other tail-envelope distance: ${row.perceptual.closestOther?.tailEnvelopeDistance??'n/a'}. These are diagnostics, not proof of better sound.`;
-    contacts.dataset.stoneFacts='';const players=document.createElement('div');players.className='stone-players';
-    for(const [name,url] of [['Master 48 kHz',row.masterUrl],['Game PCM8',row.runtimeUrl],...(row.differenceUrl?[['Added contacts only',row.differenceUrl]]:[])]){
-      const column=document.createElement('label');column.textContent=name;
-      const audio=document.createElement('audio');audio.controls=true;audio.preload='none';audio.src=url;audio.setAttribute('aria-label',`${row.label} ${name}`);
-      audio.addEventListener('play',()=>{stopAudition();state.stoneAbxPlayer?.pause();document.querySelectorAll('#sl-stone-round audio, #sl-earshot-round audio').forEach(other=>{if(other!==audio)other.pause();});});
-      column.append(audio);players.append(column);
+
+function drawOverlay(record) {
+  const o = overlayCtx, sx = els.overlay.width / LIVE_WIDTH, sy = els.overlay.height / LIVE_HEIGHT;
+  o.clearRect(0, 0, els.overlay.width, els.overlay.height);
+  if (!record || !els.overlayToggle.checked) return;
+  const selected = state.selectedId ? runtime.session.occurrence(state.selectedId) : null;
+  const hl = state.highlight && state.highlight.submap === record.submap ? state.highlight : null;
+  o.font = '11px system-ui, sans-serif'; o.lineWidth = 1.5;
+  for (const e of record.ents) {
+    if (!e.b) continue;
+    const [l, t, r, b] = e.b;
+    if (hl && (e.type & 0x7f) === (hl.type & 0x7f) && e.mark === hl.mark) {
+      o.strokeStyle = '#3fb68b'; o.lineWidth = 3; o.setLineDash([6, 4]);
+      o.strokeRect(l * sx - 4, t * sy - 4, (r - l) * sx + 8, (b - t) * sy + 8); o.setLineDash([]);
+      o.fillStyle = '#3fb68b'; o.fillText('emitter', l * sx - 4, Math.max(10, t * sy - 8));
     }
-    card.append(head,contacts,players);return card;
-  }));
-  revealStoneNames();
-  $('sl-stone-status').textContent='Generated independent fitted stone contacts. Listen at game quality. The A/B/X check is required before importing a take; production is unchanged.';
-  updateStoneEnabled();
-}
-async function stoneGenerate(){
-  if(!state.client||state.stoneBusy)return;
-  state.stoneBusy=true;updateStoneEnabled();$('sl-stone-status').textContent='Synthesizing independently modeled falling-rock contact events…';
-  const bindingId=state.binding.id;
-  try{const result=await state.client.boulderFamilyRound(stoneControls());if(state.binding.id===bindingId)showStoneRound(result);}
-  catch(error){$('sl-stone-status').textContent=error.message;}
-  finally{state.stoneBusy=false;updateStoneEnabled();}
-}
-async function stoneAccept(){
-  const row=state.stoneChoice;if(!state.client||!row||row.structureId==='approved'||state.stoneReview!=='clearly-different'||row.perceptual.status!=='candidate')return;
-  if(!window.confirm(`Import verified ${row.label} as a frozen source?\nThis does not replace the reviewed baseline or published sound slots.`))return;
-  state.stoneBusy=true;updateStoneEnabled();
-  try{const {source}=await state.client.acceptBoulderFamily({bindingId:state.binding.id,candidateId:row.id,audibilityReview:'clearly-different',abxCorrect:state.stoneAbx?.score,abxTrials:state.stoneAbx?.trial,comparisonId:state.stoneAbx?.comparisonId});
-    const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;
-    $('sl-source').replaceChildren(...sourceNodes(source.id));$('sl-source').value=source.id;updateSourceMeta();renderPreview();renderReferenceExplorer();
-    $('sl-stone-status').textContent=`Imported ${source.id} (${fmtHash(source.sha256)}). Available for Sound Score; published Stone chamber is unchanged.`;
-  }catch(error){$('sl-stone-status').textContent=error.message;}
-  finally{state.stoneBusy=false;updateStoneEnabled();}
-}
-function showEarshotRound(result){
-  state.earshotRows=result.rows;state.earshotChoice=null;
-  $('sl-earshot-round').replaceChildren(...result.rows.map((row,index)=>{
-    const card=document.createElement('div');card.className='earshot-take';card.dataset.selected='false';
-    const head=document.createElement('div');head.className='earshot-take-head';
-    const label=document.createElement('label'),radio=document.createElement('input');radio.type='radio';radio.name='sl-earshot-choice';radio.value=row.id;
-    label.append(radio,document.createTextNode(row.label));
-    radio.addEventListener('change',()=>{state.earshotChoice=row;$('sl-earshot-round').querySelectorAll('.earshot-take').forEach(el=>el.dataset.selected=String(el===card));updateEarshotEnabled();});
-    const m=row.metrics;const diagnostic=document.createElement('small');diagnostic.textContent=m.integrityOk?'signal clean':`check: ${m.warnings.join(', ')}`;
-    head.append(label,diagnostic);
-    const audio=document.createElement('audio');audio.controls=true;audio.preload='none';audio.src=row.url;
-    audio.setAttribute('aria-label',`Audition ${row.label}`);
-    audio.addEventListener('play',()=>{stopAudition();document.querySelectorAll('#sl-earshot-round audio').forEach(other=>{if(other!==audio)other.pause();});});
-    const metrics=document.createElement('small');metrics.textContent=`Contact peak ${m.peakMs} ms · RMS ${m.rmsDb} dBFS · sub-bass ${(m.subBassShare*100).toFixed(0)}% · seed ${row.recipe.seed}`;
-    card.append(head,audio,metrics);return card;
-  }));
-  $('sl-earshot-status').textContent=`Round ready · ${result.rows.length} takes · select by listening, not by waveform similarity or signal-integrity flags.`;
-  updateEarshotEnabled();
-}
-async function earshotGenerate(refine=false,fromReviewedA=false){
-  if(!state.client||state.earshotBusy)return;
-  const bindingId=state.binding.id,parentId=refine?state.earshotChoice?.id:null;
-  if(refine&&!parentId)return;
-  state.earshotBusy=true;updateEarshotEnabled();
-  $('sl-earshot-status').textContent=fromReviewedA?'Refining reviewed stone take A…':refine?'Rendering improvements to selected sound…':'Generating new Earshot candidates…';
-  try{
-    const result=await state.client.earshotRound({bindingId,parentId,direction:fromReviewedA?'mineral':$('sl-earshot-direction').value,presetId:fromReviewedA?'boulder-stone-a':undefined,
-      seed:Number($('sl-earshot-seed').value),durationMs:Number($('sl-earshot-duration').value)});
-    if(state.binding?.id===bindingId)showEarshotRound(result);
-  }catch(error){$('sl-earshot-status').textContent=error.message;}
-  finally{state.earshotBusy=false;updateEarshotEnabled();}
-}
-async function earshotAccept(){
-  const row=state.earshotChoice;if(!state.client||!row)return;
-  if(!window.confirm(`Accept ${row.label} as a frozen SoundLab source?\nSignal audit: ${row.metrics.integrityOk?'clean':row.metrics.warnings.join(', ')}.\nThis does NOT promote or replace the published sound.`))return;
-  state.earshotBusy=true;updateEarshotEnabled();
-  try{
-    const {source}=await state.client.acceptEarshot({bindingId:state.binding.id,candidateId:row.id,role:'residual'});
-    const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;
-    $('sl-source').replaceChildren(...sourceNodes(source.id));$('sl-source').value=source.id;
-    updateSourceMeta();renderPreview();renderReferenceExplorer();
-    $('sl-earshot-status').textContent=`Accepted ${source.id} (${fmtHash(source.sha256)}). Selected as Draft residual; review in the native scene before promoting.`;
-  }catch(error){$('sl-earshot-status').textContent=error.message;}
-  finally{state.earshotBusy=false;updateEarshotEnabled();}
-}
-
-function serviceState(text,kind=''){$('sl-promotion-state').textContent=text;$('sl-promotion-state').className=`promotion-state ${kind}`.trim();}
-function setServiceEnabled(enabled){for(const id of ['sl-render-canonical','sl-render-variants','sl-render-materials','sl-render-sweep','sl-promote','sl-import-source'])$(id).disabled=!enabled;$('sl-canonical-panel').hidden=!enabled;updateEarshotEnabled();}
-async function connectAuthoringService(base){if(!base){state.client=null;state.capabilities=null;setServiceEnabled(false);return;}state.client=new SoundLabAuthoringClient(base);try{state.capabilities=await state.client.connect();if(!state.capabilities?.connected)throw new Error('SoundLab authoring service unavailable');setServiceEnabled(true);updateEarshotEnabled();$('sl-authoring-mode').textContent='connected authoring';$('sl-authoring-mode').className='sl-pill';$('sl-author-mode-caption').textContent='preview + canonical';$('sl-service-detail').textContent='Canonical renderer and promotion are connected to this development host.';if(state.capabilities.capabilities?.nativePreview===false){$('sl-native-status').textContent=state.capabilities.nativePreviewReason||'Native preview package is unavailable.';$('sl-start-native').disabled=true;}$('sl-canonical-state').textContent=state.capabilities.build.ok?'current':'stale';$('sl-build-state').textContent=state.capabilities.build.ok?`${state.capabilities.build.outputs} promoted outputs`:'promoted outputs stale';$('sl-build-state').classList.toggle('stale',!state.capabilities.build.ok);serviceState(state.capabilities.build.ok?'Canonical build is current.':state.capabilities.build.problems[0]||'Canonical build is stale.',state.capabilities.build.ok?'good':'bad');const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;void loadRollingReview();const selected=$('sl-source').value;$('sl-source').replaceChildren(...sourceNodes(selected));updateSourceMeta();renderReferenceExplorer();}catch{state.client=null;state.capabilities=null;setServiceEnabled(false);}}
-async function renderCanonical(){if(!state.client)return;serviceState('Rendering current canonical master + runtime…');const result=await state.client.render(currentJob());state.currentRender=result;state.decoded.clear();updateCurrentButtons();serviceState(`Current canonical ready · master ${fmtHash(result.profiles.master.sha256)} · runtime ${fmtHash(result.profiles.runtime.sha256)}`,'good');await showProfile('current-master');}
-function renderBatchStrip(result){state.batch=result;$('sl-batch-strip').replaceChildren(...result.rows.map(row=>{const b=document.createElement('button');b.textContent=row.label;b.title=`${row.label} · ${fmtHash(row.profiles.master.sha256)}`;b.addEventListener('click',async()=>{state.currentRender=row;updateCurrentButtons();await showProfile('current-master');});return b;}));}
-async function renderBatch(mode){if(!state.client)return;serviceState(`Rendering ${mode} batch…`);const result=await state.client.batch({...currentJob(),mode,count:numeric('sl-variant-count')});renderBatchStrip(result);serviceState(`${result.rows.length} canonical ${mode} renders ready for one-tap solo.`,'good');}
-async function promoteCurrent(){if(!state.client)return;if(state.rollReviewId)throw new Error('Review audio is not publishable. Choose Normal Sound Score Draft first.');const diff=publishDiffRows(),details=diff.length?`\n\nChanges:\n- ${diff.join('\n- ')}`:'\n\nNo authored production differences are currently detected; promotion may still rebuild stale outputs.';if(!window.confirm(`Promote the current canonical sound for ${state.binding.id}?${details}\n\nThis rebuilds master/runtime outputs and refreshes stale state.`))return;serviceState('Promoting current sound and rebuilding canonical outputs…');const id=state.binding.id,job=currentJob();delete job.scoreSegmentId;const result=await state.client.promote(job);clearScoreDraft(id);serviceState(`Promoted ${result.outputs.length} outputs; refreshing manifest…`,'good');await reloadManifest(id);const caps=await state.client.connect();state.capabilities=caps;$('sl-canonical-state').textContent=caps.build.ok?'current':'stale';$('sl-build-state').textContent=caps.build.ok?`${caps.build.outputs} promoted outputs`:'promoted outputs stale';}
-async function importSource(){if(!state.client)return;const file=$('sl-source-file').files?.[0];if(!file)throw new Error('Choose a WAV file first');const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));serviceState(`Importing frozen source ${file.name}…`);const result=await state.client.importSource({fileName:file.name,id:$('sl-source-id').value||file.name.replace(/\.wav$/i,''),role:$('sl-source-role').value,provenance:{provider:$('sl-source-provider').value||'recorded'},bytesBase64:btoa(binary)});const sources=await state.client.sources();state.manifest.previewModel.sources=sources.sources;$('sl-source').replaceChildren(...sourceNodes(result.source.id));$('sl-source').value=result.source.id;updateSourceMeta();renderPreview();renderReferenceExplorer();serviceState(`Imported ${result.source.id} · sha ${fmtHash(result.source.sha256)}.`,'good');}
-
-async function reloadManifest(bindingId){const response=await fetch(state.manifestUrl,{cache:'no-store'});if(!response.ok)throw new Error(`SoundLab manifest reload failed (${response.status})`);state.manifest=assertSoundLabManifest(await response.json());$('sl-project').textContent=`${state.manifest.project} · ${state.manifest.rendererVersion}`;$('sl-renderer').textContent=state.manifest.rendererVersion;populateCases();setBinding(bindingId||state.manifest.bindings[0]?.id);}
-function installEvents(){
-  installReferenceMap();
-  for(const id of primaryRangeControls){const input=$(`sl-${id}`);input.addEventListener('input',()=>{const out=$(`sl-${id}-out`);if(out)out.textContent=Number(input.value).toFixed(2);updateChangedState();});input.addEventListener('change',renderPreview);installPointerRange(id);}installSceneWindow();
-  for(const id of ['sl-material','sl-object-profile','sl-style-profile','sl-source'])$(id).addEventListener('change',renderPreview);
-  for(const id of rangeControls){const input=$(`sl-${id}`);input.addEventListener('input',()=>{const out=$(`sl-${id}-out`);if(out)out.textContent=Number(input.value).toFixed(2);updateChangedState();});input.addEventListener('change',renderPreview);}
-  $('sl-variant-count').addEventListener('change',()=>{updateChangedState();renderPreview();});$('sl-seed').addEventListener('change',renderPreview);$('sl-variant').addEventListener('change',()=>showProfile(state.displayProfile));$('sl-case-picker').addEventListener('change',()=>setBinding($('sl-case-picker').value));
-  $('sl-apply-description').addEventListener('click',applySoundDescription);$('sl-description').addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter'){event.preventDefault();applySoundDescription();}});
-  document.querySelectorAll('.reset-control').forEach(button=>button.addEventListener('click',()=>resetControl(button.dataset.reset)));document.querySelectorAll('[data-snapshot-save]').forEach(button=>button.addEventListener('click',()=>saveSnapshot(button.dataset.snapshotSave)));document.querySelectorAll('[data-snapshot-load]').forEach(button=>button.addEventListener('click',()=>applySnapshot(state.snapshots[button.dataset.snapshotLoad])));
-  $('sl-render-preview').addEventListener('click',renderPreview);$('sl-play-preview').addEventListener('click',()=>playProfile('preview'));$('sl-play-master').addEventListener('click',()=>playProfile('master'));$('sl-play-runtime').addEventListener('click',()=>playProfile('runtime'));document.querySelectorAll('[data-profile]').forEach(button=>button.addEventListener('click',()=>showProfile(button.dataset.profile)));
-  $('sl-segment-copy').addEventListener('click',()=>reuseSegmentDesign(false));$('sl-segment-link').addEventListener('click',()=>reuseSegmentDesign(true));$('sl-segment-unlink').addEventListener('click',unlinkSegmentDesign);$('sl-layer-add').addEventListener('click',addScoreLayer);$('sl-layer-remove').addEventListener('click',removeScoreLayer);$('sl-layer-up').addEventListener('click',()=>moveScoreLayer(-1));$('sl-layer-down').addEventListener('click',()=>moveScoreLayer(1));$('sl-mapping-add').addEventListener('click',addScoreMapping);$('sl-mapping-reset').addEventListener('click',resetSelectedLayerMappings);$('sl-layer-label').addEventListener('change',()=>{const layer=selectedLayer();if(!layer)return;const label=$('sl-layer-label').value.trim().slice(0,80);if(!label){$('sl-layer-label').value=layer.label||layer.id;return;}scoreEdit(()=>{layer.label=label;});});$('sl-layer-source').addEventListener('change',()=>{const layer=selectedLayer(),segment=selectedSegment();if(!layer||!segment)return;scoreEdit(()=>{layer.source=defaultLayerSource($('sl-layer-source').value,segment.semanticType);});});$('sl-layer-source-id').addEventListener('change',()=>{const layer=selectedLayer();if(!layer||layer.source?.type!=='frozen-sample')return;scoreEdit(()=>{layer.source.id=$('sl-layer-source-id').value;});});$('sl-layer-gesture').addEventListener('change',()=>{const layer=selectedLayer(),segment=selectedSegment(),id=$('sl-layer-gesture').value;if(!layer||!segment?.gestures?.some(row=>row.id===id))return;scoreEdit(()=>{layer.gestureId=id;state.selectedGestureId=id;});});$('sl-layer-gain').addEventListener('change',()=>{const layer=selectedLayer();if(!layer)return;scoreEdit(()=>{layer.gain=Number($('sl-layer-gain').value);});});$('sl-layer-gain').addEventListener('input',()=>{$('sl-layer-gain-out').textContent=Number($('sl-layer-gain').value).toFixed(2);});
-  const setLayerShape=(id,group,key,{integer=false}={})=>$(id).addEventListener('change',()=>{const layer=selectedLayer();if(!layer)return;let value=Number($(id).value);if(!Number.isFinite(value))return;if(integer)value=Math.round(value);scoreEdit(()=>{layer[group]??={};layer[group][key]=value;});});setLayerShape('sl-layer-attack-ms','envelope','attackMs');setLayerShape('sl-layer-release-ms','envelope','releaseMs');setLayerShape('sl-layer-variation-amount','variation','amount');setLayerShape('sl-layer-variation-rate','variation','rateHz');setLayerShape('sl-layer-variation-seed','variation','seedOffset',{integer:true});
-  $('sl-pressure-min').addEventListener('input',()=>setPressureCalibration('min',Number($('sl-pressure-min').value)));$('sl-pressure-max').addEventListener('input',()=>setPressureCalibration('max',Number($('sl-pressure-max').value)));$('sl-pressure-reset').addEventListener('click',()=>{state.penPressure.min=0;state.penPressure.max=1;$('sl-pressure-min').value='0';$('sl-pressure-max').value='1';savePressureCalibration();updatePressurePreview(state.penPressure.lastRaw,calibratePressure(state.penPressure.lastRaw,state.penPressure),state.penPressure.pointerType);});
-  const gestureCanvas=$('sl-gesture-canvas');gestureCanvas.addEventListener('pointerdown',beginGestureDraw);gestureCanvas.addEventListener('pointermove',moveGestureDraw);gestureCanvas.addEventListener('pointerup',endGestureDraw);gestureCanvas.addEventListener('pointercancel',endGestureDraw);$('sl-gesture-select').addEventListener('change',()=>{const segment=selectedSegment(),id=$('sl-gesture-select').value;if(!segment?.gestures?.some(row=>row.id===id))return;state.selectedGestureId=id;setWorkspaceContext('gesture-edit');renderGestureEditor();});$('sl-gesture-draw').addEventListener('click',()=>setGestureTool('draw'));$('sl-gesture-erase').addEventListener('click',()=>setGestureTool('erase'));$('sl-gesture-smooth').addEventListener('click',smoothSelectedGesture);$('sl-gesture-reset').addEventListener('click',resetSelectedGesture);$('sl-score-undo').addEventListener('click',undoScore);$('sl-score-redo').addEventListener('click',redoScore);document.addEventListener('keydown',event=>{if(!(event.ctrlKey||event.metaKey)||event.altKey)return;const key=event.key.toLowerCase();if(key==='z'&&!event.shiftKey){event.preventDefault();undoScore();}else if(key==='y'||(key==='z'&&event.shiftKey)){event.preventDefault();redoScore();}});
-  document.querySelectorAll('[data-segment-loop]').forEach(button=>button.addEventListener('click',()=>setSegmentLoopMode(button.dataset.segmentLoop)));$('sl-sound-start').addEventListener('change',()=>setAuthoringRangeEdge('start',$('sl-sound-start').value));$('sl-sound-end').addEventListener('change',()=>setAuthoringRangeEdge('end',$('sl-sound-end').value));
-  $('sl-scene-stage').addEventListener('click',event=>{if(event.target.closest?.('#sl-scene-contact'))return;selectSceneTrajectoryAt(event.clientX,event.clientY);});$('sl-start-native').addEventListener('click',()=>startNative().catch(handleNativeError));$('sl-native-input-file').addEventListener('change',async event=>{const file=event.target.files?.[0];if(!file)return;try{await loadNativeInput(file);}catch(error){handleNativeError(error);}finally{event.target.value='';}});$('sl-reset-native').addEventListener('click',()=>{stopSceneDraft();stopAudition();state.playtesting=false;state.runtime?.reset();updateNativeActions();});
-  $('sl-recapture').addEventListener('click',()=>captureWithWindow().catch(handleNativeError));
-  $('sl-playtest-start').addEventListener('click',()=>togglePlaytest().catch(handleNativeError));
-  $('sl-playtest-reset').addEventListener('click',()=>{stopSceneDraft();stopAudition();state.playtestPreviousBoulder=null;state.runtime?.resetPlaytest();$('sl-native-canvas').focus();});$('sl-toggle-native').addEventListener('click',()=>setNativeCollapsed($('sl-native-panel').dataset.collapsed!=='true'));$('sl-play-isolated').addEventListener('click',()=>{if(state.rollReviewId&&state.rollReviewBuffer)playRollingReviewAudition();else void playProfile(state.currentRender?'current-master':'preview');});$('sl-play-score').addEventListener('click',()=>replaySelectedEvent().catch(error=>serviceState(error.message,'bad')));$('sl-play-transition').addEventListener('click',()=>replaySelectedTransition().catch(error=>serviceState(error.message,'bad')));
-  for(const id of ['speed','tempo','pitch','volume']){
-    const input=$(`sl-roll-review-${id}`);
-    input.addEventListener(id==='speed'?'change':'input',()=>changeRollingTuning(id,input.value));
+    const isSel = selected?.source && selected.source.slot === e.slot && (selected.source.mark == null || selected.source.mark === e.mark);
+    o.strokeStyle = isSel ? '#ffffff' : e.slot === 1 ? 'rgba(240,180,67,.8)' : 'rgba(91,155,224,.7)';
+    o.lineWidth = isSel ? 2.5 : 1.25;
+    o.strokeRect(l * sx, t * sy, (r - l) * sx, (b - t) * sy);
+    if (isSel || e.slot !== 1) {
+      o.fillStyle = isSel ? '#ffffff' : 'rgba(200,215,235,.85)';
+      o.fillText(`${e.slot}·0x${e.type.toString(16)}${e.mps ? ` ${['', 'wait', 'move', 'rel'][e.mps]}` : ''}`, l * sx, Math.max(10, t * sy - 3));
+    }
   }
-  $('sl-roll-review-reset').addEventListener('click',()=>{for(const [id,value] of [['speed',1],['tempo',1],['pitch',0],['volume',100]])changeRollingTuning(id,value);state.rollReviewFollow=true;updateRollingTuningUi();});
-  $('sl-roll-review-follow').addEventListener('change',event=>{state.rollReviewFollow=event.target.checked;applyRollingAudioMotion();});
-  $('sl-roll-review-publish').addEventListener('click',()=>publishRollingCandidate().catch(error=>serviceState(error.message,'bad')));
-  for(const id of ['sl-roll-review-choice','sl-roll-review-quality'])$(id).addEventListener('change',()=>chooseRollingReview($('sl-roll-review-choice').value,$('sl-roll-review-quality').value).catch(error=>{serviceState(error.message,'bad');updateRollReviewUi();}));document.querySelectorAll('[data-audio-version]').forEach(button=>button.addEventListener('click',()=>setAudioVersion(button.dataset.audioVersion).catch(error=>serviceState(error.message,'bad'))));document.querySelectorAll('[data-playback-scope]').forEach(button=>button.addEventListener('click',()=>setPlaybackScope(button.dataset.playbackScope)));$('sl-analysis-source').addEventListener('change',()=>setAnalysisSource($('sl-analysis-source').value));$('sl-scene-contact').addEventListener('click',selectSceneContact);
-  $('sl-clear-capture').addEventListener('click',()=>{state.events=[];state.selectedEvent=-1;state.useCapturedTelemetry=false;$('sl-use-capture').setAttribute('aria-pressed','false');$('sl-telemetry').textContent='Capture cleared.';renderTimeline();});$('sl-use-capture').addEventListener('click',()=>{state.useCapturedTelemetry=!state.useCapturedTelemetry;$('sl-use-capture').setAttribute('aria-pressed',String(state.useCapturedTelemetry));});$('sl-export-capture').addEventListener('click',()=>downloadJson(`${state.manifest.project}-${state.binding.id}-trace.json`,currentTrace()||telemetryTrace(state.manifest.project,state.events,{binding:state.binding.id})));
-  $('sl-earshot-start').addEventListener('click',()=>earshotGenerate(false));$('sl-earshot-refine').addEventListener('click',()=>earshotGenerate(true));$('sl-earshot-accept').addEventListener('click',()=>earshotAccept());
-  $('sl-earshot-preset').addEventListener('click',()=>earshotGenerate(false,true));
-  $('sl-stone-generate').addEventListener('click',stoneGenerate);$('sl-stone-accept').addEventListener('click',stoneAccept);$('sl-stone-reveal').addEventListener('change',revealStoneNames);for(const key of ['a','b','x'])$('sl-stone-abx-play-'+key).addEventListener('click',()=>stoneABXPlay(key));for(const key of ['a','b'])$('sl-stone-abx-guess-'+key).addEventListener('click',()=>stoneABXGuess(key==='a'));$('sl-stone-abx-reset').addEventListener('click',stoneResetABX);
-  $('sl-render-canonical').addEventListener('click',()=>renderCanonical().catch(error=>serviceState(error.message,'bad')));$('sl-render-variants').addEventListener('click',()=>renderBatch('variants').catch(error=>serviceState(error.message,'bad')));$('sl-render-materials').addEventListener('click',()=>renderBatch('materials').catch(error=>serviceState(error.message,'bad')));$('sl-render-sweep').addEventListener('click',()=>renderBatch('strength').catch(error=>serviceState(error.message,'bad')));$('sl-promote').addEventListener('click',()=>promoteCurrent().catch(error=>serviceState(error.message,'bad')));$('sl-import-source').addEventListener('click',()=>importSource().catch(error=>serviceState(error.message,'bad')));$('sl-source-file').addEventListener('change',()=>{$('sl-import-source').disabled=!state.client||!$('sl-source-file').files?.length;});
+  /* pings for sounds that fired on this frame, at their stereo position */
+  const rows = runtime.session.occurrencesBetween(record.frame, record.frame);
+  rows.forEach((row, i) => {
+    const x = Number.isFinite(row.screenX) ? row.screenX * sx : els.overlay.width / 2;
+    const y = 18 + i * 16;
+    o.fillStyle = row.kind === 'sound' ? '#f0b443' : row.kind === 'cue' ? '#5b9be0' : '#b48ae6';
+    o.beginPath(); o.arc(x, y, 4, 0, Math.PI * 2); o.fill();
+    o.fillText(row.name, x + 8, y + 4);
+  });
 }
 
-async function init(){const params=new URLSearchParams(location.search),manifestPath=params.get('manifest')||'rdx/data/soundlab/manifest.json',serviceBase=params.get('service')||document.querySelector('meta[name="soundlab-service-base"]')?.content;state.manifestUrl=new URL(manifestPath,document.baseURI);const response=await fetch(state.manifestUrl,{cache:'no-store'});if(!response.ok)throw new Error(`SoundLab manifest load failed (${response.status})`);state.manifest=assertSoundLabManifest(await response.json());$('sl-project').textContent=`${state.manifest.project} · ${state.manifest.rendererVersion}`;$('sl-renderer').textContent=state.manifest.rendererVersion;$('sl-build-state').textContent=`${state.manifest.outputs.length} promoted outputs`;populateCases();setBinding(state.manifest.bindings[0]?.id);configureNativeInput();installPersistedDetails();installWorkspace();loadPressureCalibration();installEvents();await connectAuthoringService(serviceBase);renderSceneOverlay();$('sl-native-status').textContent='Ready · capture a scene when needed';document.documentElement.dataset.soundlabReady='true';}
-if(typeof document!=='undefined'&&document.getElementById('soundlab-app'))init().catch(error=>{$('sl-project').textContent=error.message;document.documentElement.dataset.soundlabError=error.message;console.error(error);});
+async function showRecordedFrame(frame) {
+  const token = ++state.viewToken;
+  const record = runtime.session.nearest(frame);
+  if (!record) return;
+  const bitmap = await runtime.imageFor(record.frame);
+  if (token !== state.viewToken) return;
+  if (bitmap) screenCtx.drawImage(bitmap, 0, 0, LIVE_WIDTH, LIVE_HEIGHT);
+  drawOverlay(record);
+}
 
-export { applyGestureAnchor, calibratePressure, contextualPanels, focusWorkspace, layerSourceParameterSpecs, mappingPlainLabel, mappingResponseValue, mappingWithResponse, nativeSceneAuthoringOptions, restoreWorkspace, sceneDraftPlaybackPlan, sceneGestureOverlayPoints, sceneReplaySerial, scoreDraftEvidenceValue, showEvent, showScene, smoothGesturePoints, trajectoryMotifKind, trajectorySegmentAtPoint, workspaceDeviceClass, workspaceStorageKey };
+function renderControls(s) {
+  els.play.textContent = s.playing ? 'Pause' : 'Play';
+  els.play.setAttribute('aria-pressed', String(!!s.playing));
+  for (const b of [els.play, els.step, els.newSession, els.save]) b.disabled = !s.ready;
+  els.invincible.checked = !!s.invincible;
+}
+
+function renderCatalog() {
+  const coverage = runtime.session.coverage();
+  const drafts = new Set(bench.store.designedEvents());
+  const filter = els.filter.value.trim().toLowerCase();
+  const match = e => !filter || `${e.label} ${e.id} ${e.description} ${groupOf(e.id)?.label || ''}`.toLowerCase().includes(filter);
+  const row = (e, { member = false } = {}) => {
+    const c = coverage[e.id] || { count: 0, rooms: [] }, stage = stageOf(e.id);
+    return `<li class="${member ? 'member' : ''}"><button type="button" data-event="${e.id}" aria-current="${state.focusEventId === e.id}" data-tip="${escapeHtml(e.description)}">
+        <span class="name">${escapeHtml(e.label)}</span><span class="count ${c.count ? '' : 'zero'}">${c.count}</span>
+        <span class="meta">${member && stage ? `<span class="badge phase">${stage}</span>` : ''}<span class="badge ${e.status}">${e.status === 'needs-hook' ? 'needs hook' : e.status}</span>${drafts.has(e.id) ? '<span class="badge draft">draft</span>' : ''}${c.rooms.length ? `rooms ${c.rooms.map(roomId).join(', ')}` : ''}</span>
+      </button></li>`;
+  };
+  const html = [];
+  for (const fam of FAMILIES) {
+    const rows = CATALOG.filter(e => e.family === fam.id && match(e));
+    if (!rows.length) continue;
+    html.push(`<li class="family">${fam.label}</li>`);
+    const done = new Set();
+    for (const e of rows) {
+      if (done.has(e.id)) continue;
+      const grp = groupOf(e.id);
+      if (!grp) { html.push(row(e)); continue; }
+      /* a group: its staged design (on the lead event), then its member events */
+      const members = [...grp.stages.flatMap(st => st.events), ...grp.also].filter(id => id !== grp.lead && CATALOG_BY_ID[id].family === fam.id);
+      [grp.lead, ...members].forEach(id => done.add(id));
+      const lead = CATALOG_BY_ID[grp.lead], runs = runtime.session.spans.filter(sp => spanEventId(sp) === grp.lead).length;
+      html.push(`<li class="group"><button type="button" data-event="${grp.lead}" aria-current="${state.focusEventId === grp.lead}" data-tip="Design the whole ${escapeHtml(grp.label.toLowerCase())} as one sound in stages: ${grp.stages.map(st => st.label.toLowerCase()).join(' → ')}">
+          <span class="name">${escapeHtml(grp.label)} <span class="hint">${grp.stages.map(st => escapeHtml(st.label.toLowerCase())).join(' → ')}</span></span><span class="count ${runs ? '' : 'zero'}" data-tip="Recorded runs">${runs}</span>
+          <span class="meta"><span class="badge phase">staged</span>${drafts.has(lead.id) ? '<span class="badge draft">draft</span>' : ''}</span></button></li>`);
+      for (const id of members) html.push(row(CATALOG_BY_ID[id], { member: true }));
+    }
+  }
+  const next = html.join('');
+  if (els.catalog.dataset.html !== next) { els.catalog.innerHTML = next; els.catalog.dataset.html = next; }
+}
+
+function renderInspector() {
+  const data = state.selectedId ? runtime.session.inspect(state.selectedId) : null;
+  els.inspect.hidden = !data; els.inspectEmpty.hidden = !!data;
+  if (!data) return;
+  const o = runtime.session.occurrence(state.selectedId);
+  const event = data.event;
+  els.inTitle.textContent = event ? event.label : data.occurrence.name;
+  const peers = siblings(o);
+  const index = peers.findIndex(p => p.id === o.id);
+  els.inIndex.textContent = peers.length ? `${index + 1} / ${peers.length}` : '–';
+  els.inPrev.disabled = index <= 0; els.inNext.disabled = index < 0 || index >= peers.length - 1;
+  els.inDesign.disabled = !event; els.inFoley.disabled = !event;
+  els.inDesign.textContent = event ? `Design “${event.label}”` : 'Not a catalog event';
+  const a = data.actor;
+  const facts = [
+    ['Event', event ? `${event.id} · ${event.status === 'needs-hook' ? 'needs hook' : event.status}` : 'not in catalog'],
+    ['Sound', `${data.occurrence.name}${data.occurrence.kind !== 'sound' ? ` (${data.occurrence.kind})` : ''}${data.occurrence.suppressed ? ' · muted' : ''}`],
+    ['Time', `${(data.occurrence.timeMs / 1000).toFixed(2)} s · frame ${data.occurrence.frame}`],
+    ['Room', data.room ? `${data.room.id}${data.room.region ? ` · ${data.room.region}` : ''}` : '–'],
+    ['Source', data.source ? `${data.source.label} · slot ${data.source.slot}${data.source.mark != null && data.source.mark !== 0xffff ? ` · mark ${data.source.mark}` : ''}` : 'global'],
+    ['Position', a ? `${a.position.x}, ${a.position.y} px` : '–'],
+    ['Velocity', a ? `${a.velocity.x}, ${a.velocity.y} px/s` : '–'],
+    ['Speed', a ? `${a.speed} px/s · ${a.direction}` : '–'],
+    ['Acceleration', a ? `${a.acceleration.x}, ${a.acceleration.y} px/s²` : '–'],
+    ['Platform', data.platform ? data.platform.state : '–'],
+    ['Distance to Rick', data.listener?.distancePx != null ? `${data.listener.distancePx} px` : '–'],
+    ['Stereo pan', data.pan != null ? `${data.pan > 0 ? 'right' : data.pan < 0 ? 'left' : 'centre'} ${Math.abs(data.pan).toFixed(2)}` : '–'],
+    ['Ongoing', data.activeSpans.length ? data.activeSpans.map(s => s.label).join(', ') : '–'],
+    ['Input held', inputName(data.input?.mask)]
+  ];
+  els.inFacts.innerHTML = facts.map(([k, v]) => `<dt>${k}</dt><dd>${escapeHtml(String(v))}</dd>`).join('');
+  els.inNearby.innerHTML = data.nearby.length
+    ? data.nearby.map(n => `<li><button type="button" data-occ="${n.id}">${escapeHtml(n.eventId ? CATALOG_BY_ID[n.eventId]?.label || n.name : n.name)}</button><span class="offset">${n.offsetMs > 0 ? '+' : ''}${Math.round(n.offsetMs)} ms</span></li>`).join('')
+    : '<li><span class="offset">nothing else</span></li>';
+  els.inJson.textContent = JSON.stringify(data, null, 1);
+}
+
+function renderReviewCount() {
+  const n = bench.store.list({ status: 'pending' }).length;
+  els.reviewCount.hidden = !n; els.reviewCount.textContent = String(n);
+}
+
+function renderTransport() {
+  const p = bench.playback, timelinePlaying = p?.kind === 'range';
+  els.tlPlay.innerHTML = icon(timelinePlaying ? 'pause' : 'play');
+  els.tlPlay.setAttribute('aria-label', timelinePlaying ? 'Pause' : 'Play from here');
+  els.tlStop.classList.toggle('live', !!p);
+}
+
+function renderRange(range) {
+  const s = runtime.session;
+  els.tlRange.textContent = range ? `range ${((range.from - s.firstFrame) / FRAME_HZ).toFixed(1)}–${((range.to - s.firstFrame) / FRAME_HZ).toFixed(1)} s` : 'no range · drag in the ruler';
+  els.tlRange.classList.toggle('on', !!range);
+  els.tlRangeClear.hidden = !range;
+}
+
+function setHear(which) {
+  state.hear = which === 'designs' ? 'designs' : 'game';
+  els.tlHearGame.setAttribute('aria-checked', String(state.hear === 'game'));
+  els.tlHearDesigns.setAttribute('aria-checked', String(state.hear === 'designs'));
+}
+
+/* Play the recording from the playhead (to the end of the highlighted range
+ * when the playhead is inside it, or looping the range). Pressing it while
+ * playing pauses: the playhead stays where the audio got to. */
+async function playFromHere({ toggle = true, from = null, to = null, loop = bench.loop, hear = state.hear } = {}) {
+  const s = runtime.session;
+  if (!s.length) throw new Error('Nothing recorded yet');
+  if (toggle && bench.playback?.kind === 'range') { bench.stop(); return { stopped: true, playhead: state.playhead }; }
+  if (runtime.playing) runtime.pause();
+  const r = bench.range;
+  let start = from ?? state.playhead, end = to ?? s.lastFrame;
+  const inRange = r && start >= r.from && start < r.to - 1;
+  if (from == null && to == null) {
+    if (loop && r) { start = r.from; end = r.to; }
+    else if (inRange) end = r.to;
+    if (start >= end - 1) start = r && !inRange ? r.from : s.firstFrame;
+  }
+  const designs = hear === 'designs' ? bench.drafts() : {};
+  return bench.playRange({ from: start, to: end, mode: hear === 'designs' ? 'candidate' : 'original', designs, loop: loop && !bench.loop, label: hear === 'designs' ? 'Recording with my designs' : 'Recording' });
+}
+
+async function refreshEmitters(eventId, occurrence = null) {
+  if (!eventId || !hasEmitters(eventId)) { state.emitters = null; renderEmitters(); return null; }
+  const list = await bench.emitters(eventId);
+  const keep = state.emitters?.eventId === eventId ? state.emitters.index : -1;
+  const index = occurrence ? locationIndex(list, occurrence) : keep;
+  state.emitters = { eventId, list, index };
+  renderEmitters();
+  return state.emitters;
+}
+
+function renderEmitters() {
+  const em = state.emitters;
+  els.emitters.hidden = !em || !em.list.length;
+  if (els.emitters.hidden) return;
+  const loc = em.list[em.index], label = CATALOG_BY_ID[em.eventId].label;
+  els.emitters.innerHTML = `<div class="em-row">
+      <span class="em-title">${icon('pin')} ${escapeHtml(label)} <span class="hint">placed in the level</span></span>
+      <span class="nav" data-tip="Jump between the places this sound comes from (← →; Shift+← → for other times it was heard)">
+        <button type="button" class="icon-btn" data-em="-1" aria-label="Previous location" ${em.index <= 0 && em.index !== -1 ? 'disabled' : ''}>${icon('prev')}</button>
+        <span class="mono">${em.index >= 0 ? em.index + 1 : '–'} / ${em.list.length}</span>
+        <button type="button" class="icon-btn" data-em="1" aria-label="Next location" ${em.index >= em.list.length - 1 ? 'disabled' : ''}>${icon('next')}</button></span></div>
+    <p class="mono em-where">${loc ? `${loc.roomId} · ${escapeHtml(loc.label)} · mark ${loc.mark} · ${loc.heard ? `heard ${loc.heard}× this session` : 'not heard yet'}` : `${em.list.length} locations in ${[...new Set(em.list.map(l => l.roomId))].length} rooms · ${em.list.filter(l => l.heard).length} heard this session`}</p>`;
+}
+
+/* Jump to an emitter location: its first recorded occurrence, or (after a
+ * confirmation, since it replaces the recording) a new session in its room
+ * with the emitter outlined on the game view. */
+async function gotoEmitter(index, { eventId = state.emitters?.eventId, startNewSession = null } = {}) {
+  if (!state.emitters || state.emitters.eventId !== eventId) await refreshEmitters(eventId);
+  const em = state.emitters;
+  if (!em?.list.length) throw new Error(`${eventId} has no placed emitters`);
+  const i = Math.max(0, Math.min(em.list.length - 1, Number(index)));
+  const loc = em.list[i];
+  em.index = i;
+  state.highlight = { submap: loc.submap, type: loc.type, mark: loc.mark };
+  renderEmitters();
+  if (loc.occurrenceId && runtime.session.occurrence(loc.occurrenceId)) { select(loc.occurrenceId, { keepEmitter: true }); return { location: loc, index: i, moved: 'occurrence', occurrenceId: loc.occurrenceId }; }
+  let go = startNewSession;
+  if (go == null) go = await confirmDialog(`Go to ${loc.roomId}?`, `This ${loc.label.toLowerCase()} has not been heard in this session yet. Starting a new session in ${loc.roomId} replaces the current recording (save it first if you need it). The emitter is outlined in green.`, { confirm: `Start in ${loc.roomId}` });
+  if (!go) { drawOverlay(runtime.session.nearest(state.playhead)); return { location: loc, index: i, moved: null }; }
+  await startSession(loc.submap, { keepEmitters: true });
+  await refreshEmitters(eventId);
+  state.emitters.index = i; renderEmitters();
+  return { location: loc, index: i, moved: 'session', submap: loc.submap };
+}
+
+function stepEmitter(delta) {
+  const em = state.emitters;
+  if (!em?.list.length) return false;
+  const next = em.index < 0 ? (delta > 0 ? 0 : em.list.length - 1) : em.index + delta;
+  if (next < 0 || next >= em.list.length) return true;
+  gotoEmitter(next).catch(showError);
+  return true;
+}
+
+function siblings(o) {
+  if (!o) return [];
+  return o.eventId ? runtime.session.occurrencesOf(o.eventId) : runtime.session.occurrences.filter(r => r.name === o.name);
+}
+
+/* ---------- actions (shared by UI and WebMCP) ---------- */
+
+function seek({ frame, occurrenceId, fromPlayback = false } = {}) {
+  if (occurrenceId) return select(occurrenceId);
+  const session = runtime.session;
+  if (!session.length) return summary();
+  if (!fromPlayback && bench.playback?.kind === 'range') bench.stop();
+  const f = Math.max(session.firstFrame, Math.min(session.lastFrame, Number(frame)));
+  if (runtime.playing) runtime.pause();
+  state.playhead = f;
+  state.live = f >= session.lastFrame;
+  els.viewing.hidden = state.live;
+  if (state.live && state.lastLiveCanvas) drawScreen(state.lastLiveCanvas, session.frameAt(f));
+  else showRecordedFrame(f);
+  scheduleUi();
+  return summary();
+}
+
+function select(id, { keepEmitter = false } = {}) {
+  const o = runtime.session.occurrence(id);
+  if (!o) throw new Error(`Unknown occurrence ${id}`);
+  state.selectedId = id;
+  if (!keepEmitter) state.highlight = o.source?.mark != null ? { submap: o.submap, type: o.source.type, mark: o.source.mark } : null;
+  timeline.setSelected(id);
+  timeline.reveal(o.frame);
+  seek({ frame: o.frame });
+  renderInspector();
+  refreshEmitters(o.eventId, o).catch(showError);
+  if ((state.tab === 'design' || state.tab === 'foley') && o.eventId) {
+    if (bench.eventId === o.eventId) bench.setTarget(id); else bench.open(o.eventId, { target: id });
+  } else if (state.tab !== 'inspect') selectTab('inspect');
+  return runtime.session.inspect(id);
+}
+
+function focusEvent(eventId) {
+  if (state.tab === 'design' || state.tab === 'foley') { state.focusEventId = eventId; timeline.setFocusEvent(eventId); bench.open(eventId); scheduleUi(); return; }
+  state.focusEventId = state.focusEventId === eventId ? null : eventId;
+  timeline.setFocusEvent(state.focusEventId);
+  scheduleUi();
+  if (!state.focusEventId) { refreshEmitters(null); return; }
+  const first = runtime.session.occurrencesOf(eventId)[0];
+  if (first) select(first.id);
+  else {
+    state.selectedId = null; timeline.setSelected(null); renderInspector();
+    refreshEmitters(eventId).catch(showError);
+    els.status.textContent = `${CATALOG_BY_ID[eventId].label}: not heard yet in this session${hasEmitters(eventId) ? ' · use the location arrows to go to one' : ''}`;
+  }
+}
+
+async function startSession(submap = Number(els.room.value), { keepEmitters = false } = {}) {
+  bench.stop();
+  state.selectedId = null; state.live = true;
+  if (!keepEmitters) { state.focusEventId = null; state.emitters = null; state.highlight = null; renderEmitters(); }
+  els.viewing.hidden = true;
+  renderInspector();
+  await runtime.startSession({ submap });
+  if (bench.eventId) bench.open(bench.eventId, { target: null });
+  bench.setRange(null);
+  els.room.value = String(submap);
+  timeline.setSession(runtime.session);
+  timeline.setFocusEvent(keepEmitters ? state.focusEventId : null);
+  els.status.textContent = `Recording in ${roomId(submap)} · click the game and play`;
+  scheduleUi();
+  return summary();
+}
+
+function runFrames(frames, mask = 0) {
+  goLive();
+  const before = runtime.session.occurrences.length;
+  runtime.run(frames, mask);
+  state.playhead = runtime.session.lastFrame;
+  if (state.lastLiveCanvas) drawScreen(state.lastLiveCanvas, runtime.session.frameAt(state.playhead));
+  scheduleUi();
+  return { ...summary(), heard: runtime.session.occurrences.slice(before).map(compactOccurrence) };
+}
+
+function setPlaying(playing) {
+  if (playing) { goLive(); runtime.play(); els.screen.focus(); } else runtime.pause();
+  return summary();
+}
+
+function goLive() {
+  state.live = true; els.viewing.hidden = true;
+  state.playhead = runtime.session.lastFrame;
+  if (state.lastLiveCanvas) drawScreen(state.lastLiveCanvas, runtime.session.frameAt(state.playhead));
+}
+
+async function replaySession(json) {
+  bench.stop();
+  state.selectedId = null; renderInspector();
+  await runtime.replaySession(json);
+  timeline.setSession(runtime.session);
+  goLive();
+  return summary();
+}
+
+function findOccurrences({ eventId, name, submap, limit = 50 }) {
+  if (!eventId && !name) throw new Error('Pass eventId or name');
+  if (eventId && !CATALOG_BY_ID[eventId]) throw new Error(`Unknown event ${eventId}`);
+  let rows = runtime.session.occurrences.filter(o => (eventId ? o.eventId === eventId && !o.paired : o.name === name) && (submap == null || o.submap === Number(submap)));
+  const total = rows.length;
+  rows = rows.slice(0, limit);
+  return { total, occurrences: rows.map(compactOccurrence) };
+}
+
+async function frameDetail(frame, { image = false } = {}) {
+  const record = runtime.session.frameAt(frame) || runtime.session.nearest(frame);
+  if (!record) throw new Error('No recorded frames yet');
+  const out = { frame: record.frame, submap: record.submap, mask: record.mask, actors: record.ents, sounds: runtime.session.occurrencesBetween(record.frame, record.frame).map(compactOccurrence) };
+  if (image) {
+    const bitmap = await runtime.imageFor(record.frame);
+    const c = document.createElement('canvas'); c.width = els.overlay.width; c.height = els.overlay.height;
+    const ctx = c.getContext('2d'); ctx.imageSmoothingEnabled = false;
+    if (bitmap) ctx.drawImage(bitmap, 0, 0, c.width, c.height);
+    drawOverlay(record); ctx.drawImage(els.overlay, 0, 0); drawOverlay(runtime.session.nearest(state.playhead));
+    out.image = c.toDataURL('image/png');
+  }
+  return out;
+}
+
+function compactOccurrence(o) {
+  return { id: o.id, frame: o.frame, eventId: o.eventId, name: o.name, kind: o.kind, submap: o.submap, source: o.source };
+}
+
+function summary() {
+  const s = runtime.state();
+  return {
+    ready: s.ready, playing: s.playing, replaying: s.replaying,
+    session: s.session, playhead: state.playhead, live: state.live,
+    selected: state.selectedId ? compactOccurrence(runtime.session.occurrence(state.selectedId)) : null,
+    focusEvent: state.focusEventId
+  };
+}
+
+/* ---------- UI wiring ---------- */
+
+function selectTab(name) {
+  state.tab = name;
+  $('studio').classList.toggle('wide-side', name !== 'inspect');
+  for (const t of TABS) {
+    $(`tab-${t}`).setAttribute('aria-selected', String(t === name));
+    $(`panel-${t}`).hidden = t !== name;
+  }
+  if (name === 'review') panels.renderReview();
+  if (name === 'design' || name === 'foley') {
+    const o = state.selectedId && runtime.session.occurrence(state.selectedId);
+    const eventId = o?.eventId || state.focusEventId;
+    if (!bench.design && eventId) bench.open(eventId, { target: o?.eventId === eventId ? o.id : undefined });
+    else if (name === 'design') panels.renderDesign(); else panels.renderFoley();
+  }
+}
+for (const t of TABS) $(`tab-${t}`).addEventListener('click', () => { try { selectTab(t); } catch (e) { showError(e); } });
+
+function designSelected(tab) {
+  const o = runtime.session.occurrence(state.selectedId);
+  if (!o?.eventId) return;
+  bench.open(o.eventId, { target: o.id });
+  selectTab(tab);
+}
+
+els.newSession.addEventListener('click', () => startSession().catch(showError));
+els.play.addEventListener('click', () => setPlaying(!runtime.playing));
+els.step.addEventListener('click', () => { goLive(); runtime.step(1); });
+els.live.addEventListener('click', () => goLive());
+els.speed.addEventListener('change', () => runtime.setSpeed(els.speed.value));
+els.invincible.addEventListener('change', () => runtime.setInvincible(els.invincible.checked));
+els.overlayToggle.addEventListener('change', () => drawOverlay(runtime.session.nearest(state.playhead)));
+els.filter.addEventListener('input', () => renderCatalog());
+els.catalog.addEventListener('click', e => { const b = e.target.closest('button[data-event]'); if (b) focusEvent(b.dataset.event); });
+els.inNearby.addEventListener('click', e => { const b = e.target.closest('button[data-occ]'); if (b) select(b.dataset.occ); });
+els.inDesign.addEventListener('click', () => designSelected('design'));
+els.inFoley.addEventListener('click', () => designSelected('foley'));
+els.inPlay.addEventListener('click', () => bench.playInContext({ mode: 'original', target: state.selectedId, design: null }).catch(showError));
+els.emitters.addEventListener('click', e => { const b = e.target.closest('button[data-em]'); if (b) stepEmitter(Number(b.dataset.em)); });
+els.tlPlay.addEventListener('click', () => playFromHere().catch(showError));
+els.tlStop.addEventListener('click', () => bench.stop());
+els.tlHearGame.addEventListener('click', () => setHear('game'));
+els.tlHearDesigns.addEventListener('click', () => setHear('designs'));
+els.tlRangeClear.addEventListener('click', () => bench.setRange(null));
+els.tlLoop.addEventListener('change', () => bench.setLoop(els.tlLoop.checked));
+els.tlVolume.addEventListener('input', () => {
+  bench.setVolume(Number(els.tlVolume.value) / 100);
+  try { localStorage.setItem('rdx.soundlab.volume', els.tlVolume.value); } catch { /* private mode */ }
+});
+els.inPrev.addEventListener('click', () => stepSibling(-1));
+els.inNext.addEventListener('click', () => stepSibling(1));
+$('tl-in').addEventListener('click', () => timeline.zoom(0.66));
+$('tl-out').addEventListener('click', () => timeline.zoom(1.5));
+$('tl-all').addEventListener('click', () => timeline.showAll());
+els.save.addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(runtime.session.toJSON())], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `soundlab-session-${roomId(runtime.session.start.submap)}-${Date.now()}.json`;
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+els.load.addEventListener('change', async () => {
+  const file = els.load.files?.[0]; els.load.value = '';
+  if (!file) return;
+  try { await replaySession(JSON.parse(await file.text())); } catch (error) { showError(error); }
+});
+els.rom.addEventListener('change', async () => {
+  const file = els.rom.files?.[0]; els.rom.value = '';
+  if (!file) return;
+  try { await runtime.loadRomFile(file); els.romLabel.hidden = true; await startSession(); } catch (error) { showError(error); }
+});
+
+function stepSibling(delta) {
+  const o = runtime.session.occurrence(state.selectedId);
+  const peers = siblings(o);
+  const next = peers[peers.findIndex(p => p.id === o?.id) + delta];
+  if (next) select(next.id);
+}
+
+/* Game input goes to the game only while its canvas has focus, so typing in
+ * the filter never moves Rick. Global shortcuts work everywhere else. */
+els.screen.addEventListener('keydown', e => { if (e.repeat) return; runtime.keyDown(e.code); if (gameKey(e.code)) e.preventDefault(); });
+els.screen.addEventListener('keyup', e => runtime.keyUp(e.code));
+els.screen.addEventListener('blur', () => runtime.clearKeys());
+els.screen.addEventListener('pointerdown', () => els.screen.focus());
+document.addEventListener('keydown', e => {
+  if (e.target === els.screen || document.querySelector('dialog[open]')) return;
+  if (e.target.closest('textarea, select, input:not([type=range]):not([type=checkbox])')) return;
+  if (e.key === 'Escape') { bench.stop(); return; }
+  if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); playFromHere().catch(showError); return; }
+  if (e.target.matches('input[type=range]')) return;
+  if (e.key === 'p' || e.key === 'P') { setPlaying(!runtime.playing); e.preventDefault(); }
+  else if (e.key === '.') { goLive(); runtime.step(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    const d = e.key === 'ArrowLeft' ? -1 : 1;
+    if (!e.shiftKey && stepEmitter(d)) e.preventDefault();
+    else if (state.selectedId) { stepSibling(d); e.preventDefault(); }
+  }
+});
+function gameKey(code) { return /^(Arrow|Space|Key[WASDXC])/.test(code); }
+
+function inputName(mask) {
+  const m = Number(mask) || 0;
+  if (!m) return 'none';
+  if (m === 0x18) return 'gun (fire+up)';
+  if (m === 0x14) return 'dynamite (fire+down)';
+  return [m & 1 && 'right', m & 2 && 'left', m & 4 && 'down', m & 8 && 'up', m & 16 && 'fire'].filter(Boolean).join('+');
+}
+function roomId(submap) { return `SM${Number(submap).toString(16).toUpperCase().padStart(2, '0')}`; }
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function showError(error) {
+  console.error(error);
+  els.status.textContent = error?.message || String(error);
+  toast(error?.message || String(error), { kind: 'error', ms: 6000 });
+  if (error?.code === 'ROM_REQUIRED') els.romLabel.hidden = false;
+}
+
+async function loadRooms() {
+  let rooms = [];
+  try {
+    const manifest = await (await fetch('rdx/data/levels/resolved/manifest.json')).json();
+    rooms = (manifest.rooms || []).map(r => ({ submap: Number(r.submap), id: r.id })).sort((a, b) => a.submap - b.submap);
+  } catch { rooms = Array.from({ length: 47 }, (_, i) => ({ submap: i, id: roomId(i) })); }
+  els.room.innerHTML = rooms.map(r => `<option value="${r.submap}">${r.id}</option>`).join('');
+}
+
+/* ---------- WebMCP ---------- */
+
+const app = {
+  summary, session: () => runtime.session, startSession, runFrames, setPlaying, seek,
+  inspect: id => { const data = runtime.session.inspect(id); if (!data) throw new Error(`Unknown occurrence ${id}`); select(id); return data; },
+  findOccurrences, frameDetail, replaySession, bench, panels,
+  selectTab, playFromHere, setHear,
+  setPlaybackOptions: ({ volume, loop } = {}) => { if (volume != null) bench.setVolume(volume); if (loop != null) bench.setLoop(loop); return { volume: bench.volume, loop: bench.loop }; },
+  emitters: async eventId => (await refreshEmitters(eventId))?.list || [],
+  gotoEmitter
+};
+let agentCalls = 0, agentTimer = 0;
+function agentBusy(tool) {
+  agentCalls += 1; clearTimeout(agentTimer);
+  els.agent.hidden = false; els.agentText.textContent = `Agent: ${tool.title || tool.name}`;
+  return () => { agentCalls -= 1; if (!agentCalls) agentTimer = setTimeout(() => { els.agent.hidden = true; }, 2500); };
+}
+
+/* ---------- boot ---------- */
+
+(async function boot() {
+  installTooltips();
+  for (const el of document.querySelectorAll('[data-icon]')) el.outerHTML = icon(el.dataset.icon);
+  els.inPrev.innerHTML = icon('prev'); els.inNext.innerHTML = icon('next');
+  els.tlStop.innerHTML = icon('stop');
+  renderTransport(); renderRange(null);
+  try { const v = localStorage.getItem('rdx.soundlab.volume'); if (v != null) els.tlVolume.value = v; } catch { /* private mode */ }
+  bench.setVolume(Number(els.tlVolume.value) / 100);
+  timeline.setSession(runtime.session);
+  renderCatalog();
+  await loadRooms();
+  await library.init();
+  renderReviewCount();
+  try {
+    await runtime.init();
+    await startSession(0);
+  } catch (error) {
+    showError(error);
+  }
+  await installWebMcpTools({ namespace: 'rdr.soundlab', tools: soundlabWebMcpTools(app), beforeExecute: agentBusy });
+  globalThis.soundlab = app; /* console and test access */
+})();
+
+export { StudioSession };

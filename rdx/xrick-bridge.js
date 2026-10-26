@@ -127,6 +127,8 @@ export class XrickWasmBridge {
       soundSfxEventLogicalId: wrap1('xrick_rdx_sound_sfx_event_logical_id'),
       soundSfxEventScreenX: wrap1('xrick_rdx_sound_sfx_event_screen_x'),
       soundSfxEventSuppressed: wrap1('xrick_rdx_sound_sfx_event_suppressed'),
+      soundSfxEventField: wrapN('xrick_rdx_sound_sfx_event_field', 2),
+      soundSfxEventCapacity: wrap0('xrick_rdx_sound_sfx_event_capacity'),
       soundSource: wrap0('xrick_rdx_sound_source'),
       soundSetSource: wrap1('xrick_rdx_sound_set_source'),
       soundQuality: wrap0('xrick_rdx_sound_quality'),
@@ -1625,27 +1627,46 @@ export class XrickWasmBridge {
 
   soundSfxEventSerial() { return this.api.soundSfxEventSerial() >>> 0; }
 
+  soundSfxEventCapacity() { return (this.api.soundSfxEventCapacity?.() >>> 0) || 32; }
+
   soundSfxEventsSince(afterSerial = 0, maxEvents = 32) {
     const latest = this.soundSfxEventSerial();
+    const capacity = this.soundSfxEventCapacity();
     let cursor = Number(afterSerial) >>> 0;
     if (!latest || latest === cursor) return [];
-    /* The native ring retains the latest 32 requests. If the browser was
-     * paused/throttled longer than that, resume from the oldest retained row
-     * rather than fabricating missing event identities. */
+    /* The native ring retains the latest `capacity` requests. If the browser
+     * was paused/throttled longer than that, resume from the oldest retained
+     * row rather than fabricating missing event identities. */
     const distance = (latest - cursor) >>> 0;
-    if (!cursor || distance > 32) cursor = (latest - Math.min(32, latest)) >>> 0;
+    if (!cursor || distance > capacity) cursor = (latest - Math.min(capacity, latest)) >>> 0;
     const out = [];
-    const limit = Math.max(1, Math.min(32, Number(maxEvents) || 32));
+    const limit = Math.max(1, Math.min(capacity, Number(maxEvents) || 32));
+    const field = this.api.soundSfxEventField;
     while (cursor !== latest && out.length < limit) {
       cursor = (cursor + 1) >>> 0;
       const logicalId = this.api.soundSfxEventLogicalId(cursor) >>> 0;
       if (logicalId === 0xffffffff) continue;
-      out.push({
+      const row = {
         serial: cursor,
         logicalId,
         screenX: this.api.soundSfxEventScreenX(cursor) | 0,
         suppressed: !!this.api.soundSfxEventSuppressed(cursor)
-      });
+      };
+      if (typeof field === 'function') {
+        const sourceSlot = field(cursor, 2) | 0;
+        Object.assign(row, {
+          tick: field(cursor, 0) | 0,
+          submap: field(cursor, 1) | 0,
+          source: sourceSlot === 0xff || sourceSlot < 0 ? null : {
+            slot: sourceSlot,
+            type: field(cursor, 3) | 0,
+            mark: field(cursor, 4) | 0,
+            x: (field(cursor, 5) << 16) >> 16,
+            y: field(cursor, 6) | 0
+          }
+        });
+      }
+      out.push(row);
     }
     return out;
   }
