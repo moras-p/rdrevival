@@ -43,13 +43,13 @@
       "nativeControllerAuthority": "xrick-runtime"
     },
     "fingerprints": {
-      "adjustments": "72bf451bc99797fe2dcaa2caccd7e4d72e6e594dd0e6686d879accc799a74929",
+      "adjustments": "87e5737d041f9eb1fc796b1e3d02d881bca282584fbc9e7a90c137c012377627",
       "alignment": "136228a2b9ac914b6a4b0e1319cf3ce1b15c85407abf835ab5bb2478562dbf8e",
       "presentationDepth": "6512172f0926990561c99e2ffae2ea9aa89d46efcd43d942b800faf912f25d99",
       "presentationOcclusion": "eb22dea9343b1d6e495a72d5032e7b71ed5ad422e4fee8b2eb83949964fdfbd4",
-      "resolved": "d54e16cee8ad9f0b700fccb4d0d866d17cdfafddee59dc2e337f1aa46e98df63",
+      "resolved": "a2e7094c97136aeb2e57e33972234a2dc87456bfb3999493b08d0e819c0cedcc",
       "reviewed": "5076323a8b89847b1eb18561feeef4fb4916747b5460e39055fb75772b0d2033",
-      "semantic": "cd9807a29d8d50b07320880cd96b4846e74c19ccc6cc44bea978b8f64e1d9ab0",
+      "semantic": "d6cd47e8f9fcf6de2e7bb1977f90dcefd51fc9fde1a15d6e0f7e90c31d194fbc",
       "sourceClassic": "1e68546a33277f7a26b7b1ffd78db02af3cc9d19735a123091d08af5bd8f86e0",
       "sourceRdx": "86b137cd3532c8c57092c60f8138c907e4bbe4296c3f3293ffebdfd01dceac8f",
       "structural": "60033e91afc24c2c196c0288994e4237dd7152dbe879b4e0fd9e6148ad2ba282",
@@ -62,18 +62,35 @@
         "operations": [
           {
             "evidence": {
-              "authority": "canonical-rdx-fixed-contact-base",
+              "authority": "reviewed-solid-floor-contact",
+              "baseOrigin": [
+                216,
+                144
+              ],
               "entity": 18,
-              "legacyBaseCompensationRetired": true
+              "revivalIdolFootAnchorY": 22,
+              "supportCells": {
+                "columns": [
+                  26,
+                  27
+                ],
+                "grid": "g8",
+                "plane": "B",
+                "row": 19
+              },
+              "targetOrigin": [
+                216,
+                152
+              ]
             },
             "id": "SM04.collectible.mark-43.position",
             "operation": {
               "dxPx": 0,
-              "dyPx": 0,
+              "dyPx": 8,
               "type": "translate"
             },
             "property": "position",
-            "provenance": "All-room fixed-contact parity audit: canonical RDX phase-zero origin now owns base pickup placement; retire the legacy Classic-controller compensation and keep only reviewed Layer-F visual residuals.",
+            "provenance": "User-reviewed MD0007 idol placement: lower mark:43 by 8 px so the Revival PN27 opaque foot rests at y=152 on Plane B full-solid cells g8:x26-27:y19. Preserve RDX canonical x=216 and Classic pickup lifecycle.",
             "target": "SM04.collectible.mark-43"
           },
           {
@@ -1114,11 +1131,11 @@
                 "id": "SM04.collectible.mark-43.position",
                 "operation": {
                   "dxPx": 0,
-                  "dyPx": 0,
+                  "dyPx": 8,
                   "type": "translate"
                 },
                 "property": "position",
-                "provenance": "All-room fixed-contact parity audit: canonical RDX phase-zero origin now owns base pickup placement; retire the legacy Classic-controller compensation and keep only reviewed Layer-F visual residuals."
+                "provenance": "User-reviewed MD0007 idol placement: lower mark:43 by 8 px so the Revival PN27 opaque foot rests at y=152 on Plane B full-solid cells g8:x26-27:y19. Preserve RDX canonical x=216 and Classic pickup lifecycle."
               }
             ],
             "alignedBaseline": {
@@ -1181,13 +1198,13 @@
               ],
               "presentationOrigin": [
                 216,
-                144
+                152
               ],
               "supportBounds": null,
               "triggerBounds": null,
               "visualAnchor": [
                 201,
-                117
+                125
               ],
               "visualBounds": null
             },
